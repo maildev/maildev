@@ -1,0 +1,17 @@
+{
+  "name": "angular-sanitize",
+  "version": "1.0.5",
+  "main": "./angular-sanitize.js",
+  "dependencies": {
+    "angular": "1.0.5"
+  },
+  "gitHead": "c4a2a5ba3bf7bffbbdac7f10506c6f2e501b7b0b",
+  "readme": "bower-angular-sanitize\n======================\n\nangular-sanitize bower repo",
+  "readmeFilename": "README.md",
+  "_id": "angular-sanitize@1.0.5",
+  "description": "bower-angular-sanitize ======================",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/angular/bower-angular-sanitize.git"
+  }
+}

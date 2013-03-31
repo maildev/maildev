@@ -1,0 +1,21 @@
+<div>
+	<h3>
+		{{item.subject}}
+	</h3>
+</div>
+<p>
+	From: {{item.from.0.name}} <{{item.from.0.address}}><br>
+	To: {{item.to.0.name}} <{{item.to.0.address}}>
+</p>
+
+<div class="btn-group">
+	<span class="btn btn-mini" ng-click="show('html')">HTML</span>
+	<span class="btn btn-mini" ng-click="show('plain')">Plain Text</span>
+	<span class="btn btn-mini" ng-click="delete(item)">Delete</span>
+</div>
+
+<hr>
+
+<iframe src="{{item.iframeUrl}}" class="preview-iframe {{item.iframeVisibility}}"></iframe>
+
+<div class="plain-text {{item.plainTextVisibility}}">{{item.text}}</div>

@@ -1,12 +1,30 @@
 // Nodemine by DJF
 
 @import "compass_twitter_bootstrap";
-// @import "compass_twitter_bootstrap_responsive";
+@import "compass/css3/font-face";
+
+// Fonts
+@include font-face("Open Sans",
+	font-files("OpenSans-Regular-webfont.woff", woff, 
+		"OpenSans-Regular-webfont.otf", opentype), 
+		"OpenSans-Regular-webfont.eot", normal);
+@include font-face("Open Sans",
+	font-files("OpenSans-Italic-webfont.woff", woff, 
+		"OpenSans-Italic-webfont.otf", opentype), 
+		"OpenSans-Italic-webfont.eot", normal, italic);
+@include font-face("Open Sans",
+	font-files("OpenSans-Bold-webfont.woff", woff, 
+		"OpenSans-Bold-webfont.otf", opentype), 
+		"OpenSans-Bold-webfont.eot", bold);
+@include font-face("Open Sans",
+	font-files("OpenSans-BoldItalic-webfont.woff", woff, 
+		"OpenSans-BoldItalic-webfont.otf", opentype), 
+		"OpenSans-BoldItalic-webfont.eot", bold, italic);
 
 // Variables
 $padVert: 8px;
 $padHoriz: 14px;
-$brand: #7697B0;
+$brand: #7697B0; 
 $brandLight: #ABC2D3;
 $brandLighter: #F4F8FA;
 
@@ -38,7 +56,7 @@ textarea { resize:none; }
 // Item list
 .item-container {}
 .column-header {
-	padding:$padVert $padHoriz+2; background-color: $grayLighter; font-weight:600;
+	padding:$padVert $padHoriz+2; background-color: $grayLighter; font-weight:bold;
 }
 .item-list {
 	margin:0; height:100%; list-style: none; background:$grayLightest; overflow-y:scroll;

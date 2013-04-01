@@ -236,6 +236,7 @@ module.exports = function (grunt) {
             '.htaccess',
             'components/**/*',
             'images/*',
+            'styles/fonts/*',
             '*.html',
             'views/*.html'
           ]
@@ -245,8 +246,6 @@ module.exports = function (grunt) {
   });
 
   grunt.renameTask('regarde', 'watch');
-  // remove when mincss task is renamed
-  grunt.renameTask('mincss', 'cssmin');
 
   grunt.registerTask('server', [
     'clean:server',

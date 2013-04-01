@@ -1,7 +1,7 @@
 {
   "name": "maildev",
   "description": "SMTP Server and Web Interface for reading and testing emails during development",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "keywords": ["email", "e-mail", "mail"],
   "author": "Dan Farrelly",
   "maintainers": [
@@ -31,7 +31,7 @@
     "grunt-contrib-uglify": "*",
     "grunt-contrib-compass": "*",
     "grunt-contrib-jshint": "*",
-    "grunt-contrib-mincss": "*",
+    "grunt-contrib-cssmin": "*",
     "grunt-contrib-connect": "*",
     "grunt-contrib-clean": "*",
     "grunt-contrib-htmlmin": "*",

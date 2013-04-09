@@ -49,7 +49,7 @@ deleteMail = (id) ->
     return false
 
 deleteAllMail = ->
-  mailStore = []
+  mailStore.length = 0
   return true
 
 

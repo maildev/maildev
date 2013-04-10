@@ -26,5 +26,6 @@ Bootstrap.$inject = ['$rootScope']
 
 angular.module('nodemineApp', ['ngResource'])
   .config(Routes)
+  .filter('newLines', NewLineFilter)
   .factory('Item', Item)
   .run(Bootstrap)

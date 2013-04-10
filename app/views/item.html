@@ -18,4 +18,4 @@
 
 <iframe src="{{item.iframeUrl}}" class="preview-iframe {{item.iframeVisibility}}"></iframe>
 
-<div class="plain-text {{item.plainTextVisibility}}">{{item.text}}</div>
+<div class="plain-text {{item.plainTextVisibility}}" ng-bind-html-unsafe="item.text|newLines"></div>

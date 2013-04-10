@@ -56,8 +56,13 @@ NavCtrl = ($scope, $rootScope, Item) ->
 NavCtrl.$inject = ['$scope', '$rootScope', 'Item']
 
 
-  # Homepage controller, currently unused
+# Homepage controller, currently unused
 HomeCtrl = ($scope) ->
 
   console.log "Home Controller"
+
+# Filter to convert new line characters to br tags
+NewLineFilter = ->
+  return (text) ->
+    return text.replace(/\n/g, '<br>')
 

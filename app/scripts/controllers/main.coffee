@@ -41,7 +41,7 @@ MainCtrl = ($scope, $rootScope, Item) ->
 MainCtrl.$inject = ['$scope', '$rootScope', 'Item']
 
 
-NavCtrl = ($scope, $rootScope, Item) ->
+NavCtrl = ($scope, $rootScope, $location, Item) ->
 
   console.log "Nav Controller"
 
@@ -51,9 +51,10 @@ NavCtrl = ($scope, $rootScope, Item) ->
   $scope.deleteAll = ->
     Item.delete({ id: "all" }, (email) ->
       $rootScope.$emit("Refresh")
+      $location.path '/'
     )
 
-NavCtrl.$inject = ['$scope', '$rootScope', 'Item']
+NavCtrl.$inject = ['$scope', '$rootScope', '$location', 'Item']
 
 
 # Homepage controller, currently unused
@@ -64,5 +65,5 @@ HomeCtrl = ($scope) ->
 # Filter to convert new line characters to br tags
 NewLineFilter = ->
   return (text) ->
-    return text.replace(/\n/g, '<br>')
+    return text.replace(/\n/g, '<br>') if text and text.length
 

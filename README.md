@@ -24,10 +24,16 @@ Point your project to port `1025` and open `localhost:1080`.
 
 * Write tests for server and client
 * Add websockets for pushing email to the browser
-* Add sqlite or JSON storage
+* Add sqlite or JSON storage w/ possibility to persist data after restarts
 * Add button to display email headers
 * Publish to NPM for quick installation and running
 * Write grunt task for quick drop into projects using grunt
+
+## Ideas
+* Live preview of HTML emails
+* Check CSS compatibility of emails using http://www.campaignmonitor.com/css/
+* Forward email to real email address for device/application testing
+* Add ability to test email media queries
 
 ## Contribution
 

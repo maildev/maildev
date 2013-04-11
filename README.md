@@ -18,7 +18,7 @@ Run the app
 
 Point your project to port `1025` and open `localhost:1080`.
 
-![MailDev Screenshot](https://dl.dropboxusercontent.com/s/dxym73zkohpz477/maildev-03-31-13.png)
+![MailDev Screenshot](https://dl.dropboxusercontent.com/s/dxym73zkohpz477/maildev-04-11-13.png)
 
 ## Roadmap
 

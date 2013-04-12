@@ -40,11 +40,19 @@ $brandLightGrey: #B8C5CF;
 		color:#fff;
 		background-color: darken($brandLight, 10);
 	}
+	// Click active
 	&:active {
 		border-bottom:0;
 		box-shadow: none;
-		background-color: darken($brandLight, 10);	
+		background-color: darken($brandLight, 10);
 	}
+	// State active
+	&.active {
+		color:#fff;
+		box-shadow: none;
+		background-color: darken($brandLight, 10);
+	}
+
 	&.disabled {
 		&:hover, &:active, & { 
 			color:#555; background-color:lighten($brandLight, 10);
@@ -93,21 +101,15 @@ textarea { resize:none; }
 		&.selected { background-color: $grayLighter; }
 		&:last-child { margin-bottom: 80px; }
 
+		&.read a { border-color:$brandLightGrey; }
+
 		a {
 			display: block; padding:$padVert $padHoriz;
 			color:$grayDark; cursor:pointer;
-			border-left:8px solid $brandLight;
-
-			&.read-true { border-color:$white; }
+			border-left:8px solid $brand;
 
 			&:hover { text-decoration: none; background-color:$brandLighter;  }
-
-			// &.priority-1 { border-left-color: $red; }
-			// &.priority-2 { border-left-color: $orange; }
-			// &.priority-3 { border-left-color: $yellow; }
-			// &.priority-4 { border-left-color: $blue; }
 		}
-		// .delete-button { display:  }
 	}
 }
 

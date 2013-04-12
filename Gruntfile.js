@@ -200,11 +200,6 @@ module.exports = function (grunt) {
         }]
       }
     },
-    cdnify: {
-      dist: {
-        html: ['<%= yeoman.dist %>/*.html']
-      }
-    },
     ngmin: {
       dist: {
         files: [{
@@ -284,7 +279,6 @@ module.exports = function (grunt) {
     'useminPrepare',
     'cssmin',
     'concat',
-    'cdnify',
     'usemin',
     // 'ngmin',
     // 'uglify'

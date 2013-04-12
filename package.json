@@ -1,7 +1,7 @@
 {
   "name": "maildev",
   "description": "SMTP Server and Web Interface for reading and testing emails during development",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "keywords": ["email", "e-mail", "mail"],
   "author": "Dan Farrelly",
   "maintainers": [
@@ -43,7 +43,6 @@
     "gruntacular": "~0.1.1",
     "grunt-open": "~0.1.0",
     "matchdep": "~0.1.1",
-    "grunt-google-cdn": "~0.1.0",
     "grunt-ngmin": "~0.0.1"
   },
   "engines": {

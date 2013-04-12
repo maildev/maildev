@@ -1,6 +1,6 @@
 # MailDev
 
-**MailDev** is a simple way to test your projects's generated emails during development with an easy to use web interface that runs on your machine.  **MailDev** is built on using great open source projects including [Express](http://expressjs.com), [AngularJS](http://angularjs.org/), [Yeoman](http://yeoman.io/), [Bootstrap](http://twitter.github.com/bootstrap/), and two great projects from [Andris Reinman](https://github.com/andris9), [Simple SMTP](https://github.com/andris9/simplesmtp) and [Mailparser](https://github.com/andris9/mailparser).
+**MailDev** is a simple way to test your projects's generated emails during development with an easy to use web interface that runs on your machine.  **MailDev** is built on using great open source projects including [Express](http://expressjs.com), [AngularJS](http://angularjs.org/), [Yeoman](http://yeoman.io/), [Bootstrap](http://twitter.github.com/bootstrap/), and two great projects from [Andris Reinman](https://github.com/andris9): [Simple SMTP](https://github.com/andris9/simplesmtp) and [Mailparser](https://github.com/andris9/mailparser).
 
 ## Install
 
@@ -18,22 +18,24 @@ Run the app
 
 Point your project to port `1025` and open `localhost:1080`.
 
-![MailDev Screenshot](https://dl.dropboxusercontent.com/u/50627698/maildev-04-11-13.png)
+![MailDev Screenshot](https://dl.dropboxusercontent.com/u/50627698/maildev-04-12-13.png)
+
+## Features
+
+* Toggle between HTML, plain text views as well as view email headers
+* Test Responsive Emails w/ resizeable preview pane available for 320/480/600px screen sizes
 
 ## Roadmap
 
 * Write tests for server and client
 * Add websockets for pushing email to the browser
 * Add sqlite or JSON storage w/ possibility to persist data after restarts
-* Add button to display email headers
-* Publish to NPM for quick installation and running
+* Package up for download or publish to NPM for quick installation and running
 * Write grunt task for quick drop into projects using grunt
 
 ## Ideas
-* Live preview of HTML emails
 * Check CSS compatibility of emails using http://www.campaignmonitor.com/css/
 * Forward email to real email address for device/application testing
-* Add ability to test email media queries
 
 ## Contribution
 

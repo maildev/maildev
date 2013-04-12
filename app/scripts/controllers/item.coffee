@@ -19,7 +19,7 @@ ItemCtrl = ($scope, $rootScope, $routeParams, $location, Item) ->
       else
         $scope.htmlView = 'disabled'
         $scope.panelVisibility = "plain"
-        
+
     , (error) ->
       console.error "404: Email not found"
       # Redirect
@@ -77,6 +77,7 @@ ItemCtrl = ($scope, $rootScope, $routeParams, $location, Item) ->
   $scope.resize = (newSize) ->
     iframe.style.width = if newSize then newSize else '100%'
     fixIframeHeight()
+    $scope.iframeSize = newSize
 
 
 

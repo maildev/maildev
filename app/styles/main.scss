@@ -27,6 +27,40 @@ $padHoriz: 14px;
 $brand: #7697B0; 
 $brandLight: #ABC2D3;
 $brandLighter: #F4F8FA;
+$brandLightGrey: #B8C5CF;
+
+// Buttons
+
+.btn-brand-light {
+	color:#fff; text-shadow:0 1px 1px rgba(0,0,0,0.15); 
+	border:0; border-bottom:1px solid rgba(68,68,68,0.3);
+	background-image: none; background-color: $brandLight;
+	font-weight:bold;
+	&:hover { 
+		color:#fff;
+		background-color: darken($brandLight, 10);
+	}
+	// Click active
+	&:active {
+		border-bottom:0;
+		box-shadow: none;
+		background-color: darken($brandLight, 10);
+	}
+	// State active
+	&.active {
+		color:#fff;
+		box-shadow: none;
+		background-color: darken($brandLight, 10);
+	}
+
+	&.disabled {
+		&:hover, &:active, & { 
+			color:#555; background-color:lighten($brandLight, 10);
+			border-bottom:1px solid 1px solid rgba(68,68,68,0.3);
+		}
+	}
+}
+
 
 // Fill the browser vertically
 html, body { height:100%; overflow:hidden; }
@@ -67,21 +101,15 @@ textarea { resize:none; }
 		&.selected { background-color: $grayLighter; }
 		&:last-child { margin-bottom: 80px; }
 
+		&.read a { border-color:$brandLightGrey; }
+
 		a {
 			display: block; padding:$padVert $padHoriz;
 			color:$grayDark; cursor:pointer;
-			border-left:8px solid $brandLight;
-
-			&.read-true { border-color:$white; }
+			border-left:8px solid $brand;
 
 			&:hover { text-decoration: none; background-color:$brandLighter;  }
-
-			// &.priority-1 { border-left-color: $red; }
-			// &.priority-2 { border-left-color: $orange; }
-			// &.priority-3 { border-left-color: $yellow; }
-			// &.priority-4 { border-left-color: $blue; }
 		}
-		// .delete-button { display:  }
 	}
 }
 
@@ -94,9 +122,23 @@ textarea { resize:none; }
 .view-panel {
 	.title-input { width:90%; color:$grayDark; }
 	.wide-input { width:90%; }
+
+	.btn-group, .btn-group-label { display: inline-block; vertical-align: middle; }
+	.btn-group-label { margin-left:20px; margin-right:4px; }
+
 }
 
-.preview-iframe { border:0; width:100%; min-height:600px; }
+[class*="panel-visible-"] {
+	[class*="panel-"] { display: none; }
+}
+.panel-visible-html .panel-html { display: block; }
+.panel-visible-plain .panel-plain { display: block; }
+.panel-visible-headers .panel-headers { display: block; }
+
+.preview-iframe { 
+	border:0; width:100%; min-height:600px;
+	position: relative; // set position for resize rendering issue
+}
 
 // .view-edit-toggle {
 // 	// .view { display:  }

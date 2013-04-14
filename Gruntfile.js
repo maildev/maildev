@@ -9,10 +9,13 @@ module.exports = function (grunt) {
   // load all grunt tasks
   require('matchdep').filterDev('grunt-*').concat(['gruntacular']).forEach(grunt.loadNpmTasks);
 
+  var packageJSON = grunt.file.readJSON('package.json');
+
   // configurable paths
   var yeomanConfig = {
     app: 'app',
-    dist: 'dist'
+    dist: 'dist',
+    packaged: packageJSON.name + "-" + packageJSON.version
   };
 
   try {
@@ -236,7 +239,25 @@ module.exports = function (grunt) {
             'views/*.html'
           ]
         }]
+      },
+      packaged: {
+        files: [
+          {src:'<%= yeoman.dist %>/**', dest:'<%= yeoman.packaged %>/' },
+          {
+            expand: true,
+            dest: '<%= yeoman.packaged %>',
+            src: [
+              '*.coffee',
+              'LICENSE',
+              'package.json',
+              'README.md'
+            ]
+          }
+        ]
       }
+    },
+    zip: {
+      '<%= yeoman.packaged %>.zip': ['<%= yeoman.packaged %>/**']
     }
   });
 
@@ -267,6 +288,11 @@ module.exports = function (grunt) {
     'compass',
     'connect:test',
     'testacular'
+  ]);
+
+  grunt.registerTask('package', [
+    'build',
+    'copy:packaged'
   ]);
 
   grunt.registerTask('build', [

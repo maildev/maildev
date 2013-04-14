@@ -14,6 +14,10 @@ Run the app
 
 	$ coffee server.coffee
 
+_or_
+
+Download the prepackaged `.zip` file [here](https://dl.dropboxusercontent.com/u/50627698/maildev/maildev-0.2.0.zip). Run `$ npm install --production` then `$ coffee server.coffee`.
+
 ## Usage
 
 Point your project to port `1025` and open `localhost:1080`.

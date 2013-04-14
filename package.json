@@ -43,7 +43,8 @@
     "gruntacular": "~0.1.1",
     "grunt-open": "~0.1.0",
     "matchdep": "~0.1.1",
-    "grunt-ngmin": "~0.0.1"
+    "grunt-ngmin": "~0.0.1",
+    "grunt-zip": "*"
   },
   "engines": {
     "node": ">=0.8.0"

@@ -1,9 +1,18 @@
 simplesmtp = require "simplesmtp"
 MailParser = require("mailparser").MailParser
+Stream = require("stream").Stream
 
 exports.store = mailStore = []
 tempMailStream = new MailParser()
 port = 1025
+
+# class rawStream extends stream.Stream
+#   constructor: ->
+#     @writeable = true
+#   write: (chunk, encoding) ->
+#     @emit 'data', chunk
+#   end: ->
+#     @emit 'end'
 
 
 exports.start = ->
@@ -23,7 +32,7 @@ exports.start = ->
   smtp.on("startData", (connection) ->
 
     try 
-      connection.saveStream = new MailParser()
+      connection.saveStream = new rawStream() = new MailParser()
     catch e
       console.error e
 

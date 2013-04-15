@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
-    <title>Maildev by djfarrelly</title>
+    <title>MailDev</title>
 
-    <link rel="stylesheet" href="stylesheets/styles.css">
-    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <link rel="stylesheet" href="stylesheets/style.css">
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300' rel='stylesheet' type='text/css'>
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
     <!--[if lt IE 9]>
     <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
@@ -15,66 +15,100 @@
   <body>
     <div class="wrapper">
       <header>
-        <h1>Maildev</h1>
-        <p>SMTP Server and Web Interface for reading and testing emails during development.</p>
+        <div class="inner">
+          <h1 class="branding">MailDev</h1>
 
-        <p class="view"><a href="https://github.com/djfarrelly/MailDev">View the Project on GitHub <small>djfarrelly/MailDev</small></a></p>
+          <div class="description">
+            <p>SMTP Server and Web Interface for reading and testing emails during development.</p>
+          </div>
+        </div>
 
+      </header>
+
+      <a class="github-ribbon" href="https://github.com/djfarrelly/MailDev">Fork me on Github</a>
+
+      <section>
+
+        <div class="jumbotron">
+
+          <img class="jumbotron-image" src="https://dl.dropboxusercontent.com/u/50627698/maildev-04-12-13.png">
+
+        </div>
+
+        <div class="content">
+
+          <div class="description-main">
+            <p><strong>MailDev</strong> is a simple way to test your projects's generated emails during development with an easy to use web interface that runs on your machine.</p>
+          </div>
+
+          <h2>Features</h2>
+
+          * Responsive testing.  Updates your `@media (min-device-width: 300px)` to work on the desktop
+          * View HTML, Plain text, headers and the source of each email
+          * Forward to a real email address for email client and device testing
+          * Websockets for pushing email to app
+          
+
+
+
+
+
+        <h2>Install</h2>
+
+        <p>Clone the repo and run this to download all dependencies and build the project:</p>
 
         <ul>
           <li><a href="https://github.com/djfarrelly/MailDev/zipball/master">Download <strong>ZIP File</strong></a></li>
           <li><a href="https://github.com/djfarrelly/MailDev/tarball/master">Download <strong>TAR Ball</strong></a></li>
           <li><a href="https://github.com/djfarrelly/MailDev">View On <strong>GitHub</strong></a></li>
         </ul>
-      </header>
-      <section>
-        
-<p><strong>MailDev</strong> is a simple way to test your projects's generated emails during development with an easy to use web interface that runs on your machine.  <strong>MailDev</strong> is built on using great open source projects including <a href="http://expressjs.com">Express</a>, <a href="http://angularjs.org/">AngularJS</a>, <a href="http://yeoman.io/">Yeoman</a>, <a href="http://twitter.github.com/bootstrap/">Bootstrap</a>, and two great projects from <a href="https://github.com/andris9">Andris Reinman</a>, <a href="https://github.com/andris9/simplesmtp">Simple SMTP</a> and <a href="https://github.com/andris9/mailparser">Mailparser</a>.</p>
 
-<h2>Install</h2>
-
-<p>Clone the repo and run this to download all dependencies and build the project:</p>
-
-<pre><code>$ npm install
-$ gem install compass
-$ grunt build
+<pre><code>
+  $ npm install
+  $ gem install compass
+  $ grunt build
 </code></pre>
 
-<p>Run the app</p>
+        <p>Run the app</p>
 
-<pre><code>$ coffee server.coffee
+<pre><code>
+  $ coffee server.coffee
+
 </code></pre>
 
-<h2>Usage</h2>
+        <h2>Usage</h2>
 
-<p>Point your project to port <code>1025</code> and open <code>localhost:1080</code>.</p>
+        <p>Point your project to port <code>1025</code> and open <code>localhost:1080</code>.</p>
 
-<p><img src="https://dl.dropboxusercontent.com/s/dxym73zkohpz477/maildev-03-31-13.png" alt="MailDev Screenshot"></p>
 
-<h2>Roadmap</h2>
 
-<ul>
-<li>Write tests for server and client</li>
-<li>Add websockets for pushing email to the browser</li>
-<li>Add sqlite or JSON storage</li>
-<li>Add button to display email headers</li>
-<li>Publish to NPM for quick installation and running</li>
-<li>Write grunt task for quick drop into projects using grunt</li>
-</ul><h2>Contribution</h2>
+        <h2>Roadmap</h2>
 
-<p>This initial release is rough and has room for improvement, if you find any errors, please try to describe them and file and issue. If you choose to run <strong>MailDev</strong> in development mode run <code>coffee server.coffee --dev</code> and <code>grunt watch</code>.  Please create a pull request for any changes or big fixes.</p>
+        <ul>
+        <li>Write tests for server and client</li>
+        <li>Add websockets for pushing email to the browser</li>
+        <li>Add sqlite or JSON storage</li>
+        <li>Add button to display email headers</li>
+        <li>Publish to NPM for quick installation and running</li>
+        <li>Write grunt task for quick drop into projects using grunt</li>
+        </ul><h2>Contribution</h2>
 
-<h2>Thanks</h2>
+        <p>This initial release is rough and has room for improvement, if you find any errors, please try to describe them and file and issue. If you choose to run <strong>MailDev</strong> in development mode run <code>coffee server.coffee --dev</code> and <code>grunt watch</code>.  Please create a pull request for any changes or big fixes.</p>
 
-<p>Thanks to <a href="https://github.com/andris9">Andris Reinman</a> for creating his easy to use projects that are the backbone of this app.</p>
+        <h2>Thanks</h2>
 
-<h2>License</h2>
+        <p>Thanks to <a href="https://github.com/andris9">Andris Reinman</a> for creating his easy to use projects that are the backbone of this app.</p>
 
-<p>MIT</p>
+        <h2>License</h2>
+
+        <p>MIT</p>
+
+        </div><!-- end .content -->
+
       </section>
       <footer>
-        <p>This project is maintained by <a href="https://github.com/djfarrelly">djfarrelly</a></p>
-        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+        <p>This project is maintained by <a href="https://github.com/djfarrelly">Dan Farrelly</a></p>
+        <p><small>Hosted on GitHub Pages</p>
       </footer>
     </div>
     <script src="javascripts/scale.fix.js"></script>

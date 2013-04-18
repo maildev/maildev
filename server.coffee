@@ -4,6 +4,7 @@ mailserver = require "./mailserver.coffee"
 # Start the Mailserver & start catching emails
 mailserver.start()
 mailStore = mailserver.store
+sendMail = mailserver.sendMail
 
 # Webserver shit
 app = module.exports = express()
@@ -88,6 +89,18 @@ app.delete('/email/:id', (req, res, next) ->
 app.get('/email/:id/html', (req, res, next) ->
   id = req.params.id
   res.send( getMail(id).html )
+)
+app.post('/email/:id/send', (req, res, next) ->
+  id = req.params.id
+
+  
+  mail = getMail(id)
+  mailserver.sendMail(mail)
+  # try
+  # catch err
+  #   console.log err
+
+  res.json(true)
 )
 
 

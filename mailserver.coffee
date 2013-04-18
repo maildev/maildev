@@ -1,9 +1,47 @@
 simplesmtp = require "simplesmtp"
+MailComposer = require("mailcomposer").MailComposer
 MailParser = require("mailparser").MailParser
 
 exports.store = mailStore = []
 tempMailStream = new MailParser()
 port = 1025
+
+
+# Testing sending email
+# pool = simplesmtp.pool
+
+gmailOptions =
+  name: 'Gmail'
+  secureConnection: true
+  auth:
+    user: 'daniel.j.farrelly@gmail.com'
+    pass: 'patapsco53'
+  debug: true
+
+
+pool = simplesmtp.createClientPool(465, 'smtp.gmail.com', gmailOptions)
+
+console.log "pool", pool
+
+exports.sendMail = (mail) ->
+
+  # Create a new mailcomposer object
+  newEmail = new MailComposer()
+  newEmail.setMessageOption(
+    from: gmailOptions.auth.user
+    to: gmailOptions.auth.user
+    subject: mail.subject
+    body: mail.body
+    html: mail.html
+    )
+  
+  sending = pool.sendMail(newEmail, (err, responseObj) ->
+    if err
+      console.error "Mail Delivery Error: ", err
+    else
+      console.log "Mail Delivered: ", mail.subject
+    )
+  return true
 
 
 exports.start = ->

@@ -47,7 +47,7 @@
           * View HTML, Plain text, headers and the source of each email
           * Forward to a real email address for email client and device testing
           * Websockets for pushing email to app
-          
+
 
 
 
@@ -55,18 +55,19 @@
 
         <h2>Install</h2>
 
-        <p>Clone the repo and run this to download all dependencies and build the project:</p>
-
-        <ul>
+        <ul class="button-link-list">
           <li><a href="https://github.com/djfarrelly/MailDev/zipball/master">Download <strong>ZIP File</strong></a></li>
           <li><a href="https://github.com/djfarrelly/MailDev/tarball/master">Download <strong>TAR Ball</strong></a></li>
           <li><a href="https://github.com/djfarrelly/MailDev">View On <strong>GitHub</strong></a></li>
         </ul>
 
+        <p>Clone the repo and run this to download all dependencies and build the project:</p>
+
 <pre><code>
   $ npm install
   $ gem install compass
   $ grunt build
+
 </code></pre>
 
         <p>Run the app</p>
@@ -79,6 +80,25 @@
         <h2>Usage</h2>
 
         <p>Point your project to port <code>1025</code> and open <code>localhost:1080</code>.</p>
+
+        <h3>Setup</h3>
+        <ul>
+          <li>Node</li>
+          <li>
+            Django &mdash; add <code>EMAIL_PORT = 1025</code> in your settings file <a href="https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-EMAIL_PORT">[source]</a>
+          </li>
+          <li>
+            Rails &mdash; add the port to your config settings:<br>
+<pre>
+<code>config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = {
+    :address => "localhost",
+    :port => 1025
+  }
+</code></pre>
+          </li>
+          <li>PHP</li>
+        </ul>
 
 
 

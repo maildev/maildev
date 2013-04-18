@@ -15,7 +15,7 @@ module.exports = function (grunt) {
   var yeomanConfig = {
     app: 'app',
     dist: 'dist',
-    packaged: packageJSON.name + "-" + packageJSON.version
+    packaged: packageJSON.name + '-' + packageJSON.version
   };
 
   try {

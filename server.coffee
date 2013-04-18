@@ -90,6 +90,19 @@ app.get('/email/:id/html', (req, res, next) ->
   res.send( getMail(id).html )
 )
 
+# Forwrad the email
+app.post('/email/:id/send', (req, res, next) ->
+  id = req.params.id
+
+  try
+    mail = getMail(id)
+    mailserver.sendMail(mail)
+    res.json true
+  catch err
+    console.log err
+    res.json 500, err
+)
+
 
 serverPort = 1080
 app.listen(serverPort)

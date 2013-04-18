@@ -21,7 +21,8 @@
     "coffee-script": "1.6",
     "express": "3.x",
     "simplesmtp": "*",
-    "mailparser": "*"
+    "mailparser": "*",
+    "mailcomposer": "*"
   },
   "devDependencies": {
     "grunt": ">=0.4.1",

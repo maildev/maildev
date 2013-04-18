@@ -1,6 +1,6 @@
 'use strict';
 
-ItemCtrl = ($scope, $rootScope, $routeParams, $location, Item) ->
+ItemCtrl = ($scope, $rootScope, $routeParams, $location, Item, $http) ->
 
   console.log "Item Controller: ", $routeParams.itemId
 
@@ -79,7 +79,12 @@ ItemCtrl = ($scope, $rootScope, $routeParams, $location, Item) ->
     fixIframeHeight()
     $scope.iframeSize = newSize
 
+  $scope.forward = (item) ->
+    $http({ method: 'POST', url: "/email/#{item.id}/send"})
+      .success( (data, status) ->
+        console.log data, status
+        )
 
 
-ItemCtrl.$inject = ['$scope', '$rootScope', '$routeParams', '$location', 'Item']
+ItemCtrl.$inject = ['$scope', '$rootScope', '$routeParams', '$location', 'Item', '$http']
 

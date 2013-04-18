@@ -1,10 +1,54 @@
 simplesmtp = require "simplesmtp"
 MailParser = require("mailparser").MailParser
+MailComposer = require("mailcomposer").MailComposer
+fs = require "fs"
 Stream = require("stream").Stream
 
 exports.store = mailStore = []
 tempMailStream = new MailParser()
 port = 1025
+
+settings = JSON.parse(fs.readFileSync('./settings.json'))
+
+try
+  if settings.email.user and settings.email.pass
+    # Forward Mail options
+    gmailOptions =
+      name: 'Gmail'
+      secureConnection: true
+      auth:
+        user: settings.email.user
+        pass: settings.email.pass
+      debug: true
+
+    pool = simplesmtp.createClientPool(465, 'smtp.gmail.com', gmailOptions)
+catch err
+  console.error "Error connecting to SMTP Server for outgoing mail", err
+  pool = null
+
+exports.sendMail = (mail) ->
+
+  if not pool
+    return false
+
+  # Create a new mailcomposer object
+  newEmail = new MailComposer()
+  newEmail.setMessageOption(
+    from: gmailOptions.auth.user
+    to: gmailOptions.auth.user
+    subject: mail.subject
+    body: mail.body
+    html: mail.html
+    )
+  
+  pool.sendMail(newEmail, (err, responseObj) ->
+    if err
+      console.error "Mail Delivery Error: ", err
+    else
+      console.log "Mail Delivered: ", mail.subject
+    )
+
+  return true
 
 # class rawStream extends stream.Stream
 #   constructor: ->
@@ -32,7 +76,8 @@ exports.start = ->
   smtp.on("startData", (connection) ->
 
     try 
-      connection.saveStream = new rawStream() = new MailParser()
+      connection.saveStream = new MailParser()
+      # connection.saveStream = new rawStream() = new MailParser()
     catch e
       console.error e
 
@@ -74,7 +119,7 @@ makeId = (length = 8) ->
 clone = (obj) ->
   return JSON.parse(JSON.stringify(obj))
 
-''' NOT USED '''
+### NOT USED ###
 
 # So we don't store more than 20 emails
 trimArray = (array) ->

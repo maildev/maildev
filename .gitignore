@@ -1,8 +1,9 @@
 .DS_Store
 .sass-cache
-.tmp
 node_modules
 dist
 .zip
 maildev-*
 settings.json
+*.sublime-project
+*.sublime-workspace

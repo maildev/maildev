@@ -9,7 +9,7 @@
     <title>MailDev</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
-    <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+
     <link rel="stylesheet" href="styles/main.css">
   </head>
   <body ng-app="nodemineApp">
@@ -40,6 +40,7 @@
                   </a>
                 </li>
 
+                <!-- Future settings/config page -->
                 <!--<li>
                   <a herf="#/settings">
                     <i class="icon-cog icon-white"></i> 
@@ -64,7 +65,7 @@
           
           <div class="column-header">
             Items:
-            <!-- Add filter link here later-->
+            <!-- TODO - Add filter link here later-->
           </div>
 
           <ul class="item-list">
@@ -93,24 +94,14 @@
 
     </div>
 
-
     <script src="components/angular/angular.js"></script>
     <script src="components/angular-resource/angular-resource.js"></script>
     <script src="components/angular-sanitize/angular-sanitize.js"></script>
 
-    <!-- build:js(.tmp) scripts/scripts.js -->
     <script src="scripts/controllers/main.js"></script>
     <script src="scripts/controllers/item.js"></script>
     <script src="scripts/services.js"></script>
     <script src="scripts/app.js"></script>
-    <!-- endbuild -->
 
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-    <script>
-      // var _gaq=[['_setAccount','UA-XXXXX-X'],['_trackPageview']];
-      // (function(d,t){var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-      // g.src=('https:'==location.protocol?'//ssl':'//www')+'.google-analytics.com/ga.js';
-      // s.parentNode.insertBefore(g,s)}(document,'script'));
-    </script>
   </body>
 </html>

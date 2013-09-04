@@ -4,8 +4,8 @@
 
 ## Install & Run
 	
-	$ npm install maildev
-	$ node index.js
+	$ sudo npm install -g maildev
+	$ maildev
 
 ## Usage
 

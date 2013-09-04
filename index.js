@@ -14,7 +14,6 @@ mailserver.start();
 var app = module.exports = express();
 
 app.use(express.bodyParser());
-app.use(express.logger('dev'));
 app.use('/', express.static(__dirname + '/app'));
 
 
@@ -68,4 +67,4 @@ app.post('/email/:id/send', function(req, res){
 */
 
 app.listen(1080);
-console.log("MailDev running on 127.0.0.1:1080");
+console.log("MailDev app running at 127.0.0.1:1080");

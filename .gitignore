@@ -5,5 +5,4 @@ dist
 .zip
 maildev-*
 settings.json
-*.sublime-project
-*.sublime-workspace
+*.sublime-*

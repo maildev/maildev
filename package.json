@@ -11,6 +11,10 @@
       "type" : "git", 
       "url" : "http://github.com/djfarrelly/maildev.git"
   },
+  "main": "./index",
+  "bin":{
+    "maildev": "./bin/maildev"
+  },
   "licenses" : [
     {
       "type": "MIT",

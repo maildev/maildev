@@ -1,0 +1,4 @@
+.git*
+assets/
+*.sublime-project
+*.sublime-workspace

@@ -2,14 +2,9 @@
 
 **MailDev** is a simple way to test your project's generated emails during development with an easy to use web interface that runs on your machine.  **MailDev** is built on using great open source projects including [Express](http://expressjs.com), [AngularJS](http://angularjs.org/), and two great projects from [Andris Reinman](https://github.com/andris9): [Simple SMTP](https://github.com/andris9/simplesmtp) and [Mailparser](https://github.com/andris9/mailparser).
 
-## Install
-
-Clone the repo and run this to download all dependencies:
+## Install & Run
 	
-	$ npm install --production
-
-Run the app
-
+	$ npm install maildev
 	$ node index.js
 
 ## Usage

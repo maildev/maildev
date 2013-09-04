@@ -343,6 +343,14 @@ body {
   color: #555555;
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
 
+a {
+  color: #597e9a;
+  -webkit-transition: all 150ms linear;
+  -moz-transition: all 150ms linear;
+  transition: all 150ms linear; }
+  a:hover {
+    color: #7697b0; }
+
 header {
   position: fixed;
   z-index: 900;
@@ -369,14 +377,10 @@ footer {
   background-color: #7697b0;
   color: #ffffff;
   padding: 1em 0; }
-
-a {
-  color: #597e9a;
-  -webkit-transition: all 150ms linear;
-  -moz-transition: all 150ms linear;
-  transition: all 150ms linear; }
-  a:hover {
-    color: #7697b0; }
+  footer a {
+    color: #f4f8fa; }
+    footer a:hover {
+      color: #fff; }
 
 .github-ribbon {
   width: 220px;

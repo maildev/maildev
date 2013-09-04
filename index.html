@@ -19,7 +19,7 @@
           <h1 class="branding">MailDev</h1>
 
           <div class="description">
-            <p>SMTP Server and Web Interface for reading and testing emails during development.</p>
+            <p>SMTP Server + Web Interface for viewing and testing emails during development.</p>
           </div>
         </div>
 
@@ -38,20 +38,15 @@
         <div class="content">
 
           <div class="description-main">
-            <p><strong>MailDev</strong> is a simple way to test your projects's generated emails during development with an easy to use web interface that runs on your machine.</p>
+            <p><strong>MailDev</strong> is a simple way to test your projects's emails during development with an easy to use web interface that runs on your machine.</p>
           </div>
 
           <h2>Features</h2>
 
-          * Responsive testing.  Updates your `@media (min-device-width: 300px)` to work on the desktop
-          * View HTML, Plain text, headers and the source of each email
-          * Forward to a real email address for email client and device testing
-          * Websockets for pushing email to app
-
-
-
-
-
+          <ul>
+            <li>Toggle between HTML, plain text views as well as view email headers</li>
+            <li>Test Responsive Emails w/ resizeable preview pane available for 320/480/600px screen sizes</li>
+          </ul>
 
         <h2>Install</h2>
 
@@ -61,29 +56,36 @@
           <li><a href="https://github.com/djfarrelly/MailDev">View On <strong>GitHub</strong></a></li>
         </ul>
 
-        <p>Clone the repo and run this to download all dependencies and build the project:</p>
+        <p>Or just use <a href="https://npmjs.org/">npm</a> to download and install dependencies:</p>
 
 <pre><code>
-  $ npm install
-  $ gem install compass
-  $ grunt build
+  $ npm install maildev
 
 </code></pre>
 
         <p>Run the app</p>
 
 <pre><code>
-  $ coffee server.coffee
+  $ node index.js
 
 </code></pre>
 
         <h2>Usage</h2>
 
-        <p>Point your project to port <code>1025</code> and open <code>localhost:1080</code>.</p>
+        <p>Configure your application to send emails via port <code>1025</code> and open <code>localhost:1080</code>.</p>
 
-        <h3>Setup</h3>
+        <h3>Example Setups</h3>
+
         <ul>
-          <li>Node</li>
+          <li>
+            Node &mdash; <a href="https://github.com/andris9/Nodemailer" target="_blank">Nodemailer</a>:
+<pre>
+<code>var transport = nodemailer.createTransport("SMTP", {
+  port: 1025
+  // other settings...
+});
+</code></pre>
+          </li>
           <li>
             Django &mdash; add <code>EMAIL_PORT = 1025</code> in your settings file <a href="https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-EMAIL_PORT">[source]</a>
           </li>
@@ -97,27 +99,25 @@
   }
 </code></pre>
           </li>
-          <li>PHP</li>
         </ul>
-
-
 
         <h2>Roadmap</h2>
 
         <ul>
-        <li>Write tests for server and client</li>
-        <li>Add websockets for pushing email to the browser</li>
-        <li>Add sqlite or JSON storage</li>
-        <li>Add button to display email headers</li>
-        <li>Publish to NPM for quick installation and running</li>
-        <li>Write grunt task for quick drop into projects using grunt</li>
-        </ul><h2>Contribution</h2>
+          <li>Add forwarding via Gmail for device &amp; email client testing</li>
+          <li>Add websockets for pushing email to the browser</li>
+          <li>Add sqlite or JSON storage</li>
+          <li>Write tests for server and client</li>
+          <li>Write grunt task for quick drop into projects using grunt</li>
+        </ul>
 
-        <p>This initial release is rough and has room for improvement, if you find any errors, please try to describe them and file and issue. If you choose to run <strong>MailDev</strong> in development mode run <code>coffee server.coffee --dev</code> and <code>grunt watch</code>.  Please create a pull request for any changes or big fixes.</p>
+        <h2>Contribution</h2>
+
+        <p>This initial release has room for improvement, if you find any errors, please try to describe them and file and issue. If you choose to run <strong>MailDev</strong> in development mode run <code>grunt watch</code>.  Please create a pull request for any changes or big fixes.</p>
 
         <h2>Thanks</h2>
 
-        <p>Thanks to <a href="https://github.com/andris9">Andris Reinman</a> for creating his easy to use projects that are the backbone of this app.</p>
+        <p>Thanks to <a href="https://github.com/andris9">Andris Reinman</a> for creating his projects that are the backbone of this app.</p>
 
         <h2>License</h2>
 

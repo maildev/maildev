@@ -13,6 +13,13 @@ body {
 	background: #fafafa; color:$text;
 	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+a {
+	color:darken($brand, 10);
+	-webkit-transition:all 150ms linear;
+	-moz-transition:all 150ms linear;
+	transition:all 150ms linear;
+	&:hover { color:$brand; }
+}
 
 header {
 	position: fixed; z-index:900;
@@ -25,14 +32,12 @@ header {
 footer {
 	width:100%; text-align: center; background-color: $brand; color:#ffffff;
 	padding:1em 0;
+	a {
+		color:$brandLighter;
+		&:hover { color:#fff; }
+	}
 }
-a {
-	color:darken($brand, 10);
-	-webkit-transition:all 150ms linear;
-	-moz-transition:all 150ms linear;
-	transition:all 150ms linear;
-	&:hover { color:$brand; }
-}
+
 .github-ribbon {
 	width:220px; font-size:0.8em; background-color:rgba(255,255,255,0.8); color:darken($brand, 10);
 	position: absolute; top:50px; right:-50px; z-index:1000; display: block; padding:0.3em 0;

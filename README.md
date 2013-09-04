@@ -21,7 +21,6 @@ Configure your application to send emails via port `1025` and open `localhost:10
 
 ## Roadmap
 
-* Package up for download or publish to NPM for quick installation and running
 * Add websockets for pushing email to the browser
 * Add sqlite or JSON storage w/ possibility to persist data after restarts
 * Write tests for server and client

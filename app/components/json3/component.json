@@ -1,8 +1,0 @@
-{
-  "name": "json3",
-  "version": "3.2.4",
-  "repository": {
-    "type": "git",
-    "url": "git://github.com/bestiejs/json3.git"
-  }
-}

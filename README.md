@@ -1,22 +1,20 @@
 # MailDev
 
-**MailDev** is a simple way to test your projects's generated emails during development with an easy to use web interface that runs on your machine.  **MailDev** is built on using great open source projects including [Express](http://expressjs.com), [AngularJS](http://angularjs.org/), [Yeoman](http://yeoman.io/), [Bootstrap](http://twitter.github.com/bootstrap/), and two great projects from [Andris Reinman](https://github.com/andris9): [Simple SMTP](https://github.com/andris9/simplesmtp) and [Mailparser](https://github.com/andris9/mailparser).
+**MailDev** is a simple way to test your project's generated emails during development with an easy to use web interface that runs on your machine.  **MailDev** is built on using great open source projects including [Express](http://expressjs.com), [AngularJS](http://angularjs.org/), and two great projects from [Andris Reinman](https://github.com/andris9): [Simple SMTP](https://github.com/andris9/simplesmtp) and [Mailparser](https://github.com/andris9/mailparser).
 
 ## Install
 
-Clone the repo and run this to download all dependencies and build the project:
+Clone the repo and run this to download all dependencies:
 	
-	$ npm install
-	$ gem install compass
-	$ grunt build
+	$ npm install --production
 
 Run the app
 
-	$ coffee server.coffee
+	$ node index.js
 
 ## Usage
 
-Point your project to port `1025` and open `localhost:1080`.
+Configure your application to send emails via port `1025` and open `localhost:1080`.
 
 ![MailDev Screenshot](https://dl.dropboxusercontent.com/u/50627698/maildev-04-12-13.png)
 
@@ -28,10 +26,10 @@ Point your project to port `1025` and open `localhost:1080`.
 
 ## Roadmap
 
-* Write tests for server and client
+* Package up for download or publish to NPM for quick installation and running
 * Add websockets for pushing email to the browser
 * Add sqlite or JSON storage w/ possibility to persist data after restarts
-* Package up for download or publish to NPM for quick installation and running
+* Write tests for server and client
 * Write grunt task for quick drop into projects using grunt
 
 ## Ideas
@@ -40,11 +38,11 @@ Point your project to port `1025` and open `localhost:1080`.
 
 ## Contribution
 
-This initial release is rough and has room for improvement, if you find any errors, please try to describe them and file and issue. If you choose to run **MailDev** in development mode run `coffee server.coffee --dev` and `grunt watch`.  Please create a pull request for any changes or big fixes.
+This initial release is rough and has room for improvement, if you find any errors, please try to describe them and file and issue. If you choose to run **MailDev** in development mode run `grunt watch`.  Please create a pull request for any changes or big fixes.
 
 ## Thanks
 
-Thanks to [Andris Reinman](https://github.com/andris9) for creating his easy to use projects that are the backbone of this app.
+Thanks to [Andris Reinman](https://github.com/andris9) for creating his projects that are the backbone of this app.
 
 ## License
 

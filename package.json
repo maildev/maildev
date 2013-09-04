@@ -1,7 +1,7 @@
 {
   "name": "maildev",
   "description": "SMTP Server and Web Interface for reading and testing emails during development",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "keywords": ["email", "e-mail", "mail"],
   "author": "Dan Farrelly",
   "maintainers": [
@@ -18,34 +18,25 @@
     }
   ],
   "dependencies": {
-    "coffee-script": "1.6",
     "express": "3.x",
     "simplesmtp": "*",
-    "mailparser": "*"
+    "mailparser": "*",
+    "mailcomposer": "*"
   },
   "devDependencies": {
     "grunt": ">=0.4.1",
+    "grunt-contrib-watch": "*",
     "grunt-contrib-copy": "*",
-    "grunt-contrib-concat": "*",
     "grunt-contrib-coffee": "*",
-    "grunt-contrib-uglify": "*",
     "grunt-contrib-compass": "*",
     "grunt-contrib-jshint": "*",
-    "grunt-contrib-cssmin": "*",
     "grunt-contrib-connect": "*",
-    "grunt-contrib-clean": "*",
-    "grunt-contrib-htmlmin": "*",
-    "grunt-contrib-imagemin": "*",
     "grunt-contrib-livereload": "*",
-    "grunt-bower-hooks": "~0.2.0",
-    "grunt-usemin": "~0.1.10",
-    "grunt-regarde": "~0.1.1",
-    "gruntacular": "~0.1.1",
     "grunt-open": "~0.1.0",
     "matchdep": "~0.1.1",
-    "grunt-ngmin": "~0.0.1"
+    "grunt-zip": "*"
   },
   "engines": {
-    "node": ">=0.8.0"
+    "node": ">=0.10.0"
   }
 }

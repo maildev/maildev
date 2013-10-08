@@ -4,7 +4,7 @@
 
 ## Install & Run
 	
-	$ sudo npm install -g maildev
+	$ npm install -g maildev
 	$ maildev
 
 ## Usage
@@ -17,11 +17,10 @@ Configure your application to send emails via port `1025` and open `localhost:10
 
 * Toggle between HTML, plain text views as well as view email headers
 * Test Responsive Emails w/ resizeable preview pane available for 320/480/600px screen sizes
->>>>>>> Develop
+* Websockets keep the interface in sync once emails are received
 
 ## Roadmap
 
-* Add websockets for pushing email to the browser
 * Add sqlite or JSON storage w/ possibility to persist data after restarts
 * Write tests for server and client
 * Write grunt task for quick drop into projects using grunt
@@ -36,7 +35,7 @@ This initial release is rough and has room for improvement, if you find any erro
 
 ## Thanks
 
-Thanks to [Andris Reinman](https://github.com/andris9) for creating his projects that are the backbone of this app.
+Thanks to [Andris Reinman](https://github.com/andris9) for creating his projects that are the backbone of this app and [MailCatcher](http://mailcatcher.me/) for the inspiration.
 
 ## License
 

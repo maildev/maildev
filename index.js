@@ -3,15 +3,18 @@
  * MailDev - index.js
  */
 
-var express = require("express")
-  , mailserver = require("./lib/mailserver");
+var express = require('express')
+  , app = express()
+  , server = require('http').createServer(app)
+  , io = require('socket.io').listen(server)
+  , mailserver = require('./lib/mailserver');
 
 
 // Start the Mailserver & Express
 
 mailserver.start();
 
-var app = module.exports = express();
+module.exports = app;
 
 app.use(express.bodyParser());
 app.use('/', express.static(__dirname + '/app'));
@@ -38,9 +41,9 @@ app.get('/email/:id', function(req, res){
 // Delete emails
 app.delete('/email/:id', function(req, res){
   var id = req.params.id;
-  console.log("Deleting " + id);
+  console.log('Deleting ' + id);
 
-  if (id === "all"){
+  if (id === 'all'){
     res.send(mailserver.deleteAllMail(id));
   } else {
     res.send(mailserver.deleteMail(id));
@@ -66,5 +69,17 @@ app.post('/email/:id/send', function(req, res){
 });
 */
 
-app.listen(1080);
-console.log("MailDev app running at 127.0.0.1:1080");
+// Socket.io :::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+io.sockets.on('connection', function(socket){
+  
+  // When a new email arrives, the 'new' event will be emitted
+  mailserver.eventEmitter.on('new', function(){
+    socket.emit('newMail', { hello: 'world' });
+  });
+
+});
+
+
+server.listen(1080);
+console.log('MailDev app running at 127.0.0.1:1080');

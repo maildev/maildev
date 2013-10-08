@@ -71,6 +71,10 @@ app.post('/email/:id/send', function(req, res){
 
 // Socket.io :::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
+io.configure(function(){
+  io.set('log level', 0);
+});
+
 io.sockets.on('connection', function(socket){
   
   // When a new email arrives, the 'new' event will be emitted

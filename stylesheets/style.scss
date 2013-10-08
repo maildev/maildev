@@ -21,12 +21,15 @@ a {
 	&:hover { color:$brand; }
 }
 
+h2 { margin:1.0em 0; }
+
 header {
 	position: fixed; z-index:900;
 	background:$brand; color:#fff; height:50px; width:100%;
 	padding:1em 0;
 	.inner { margin:0 auto; width:100%; max-width: 960px; }
 	.branding { float: left; font-weight: 300; margin:0; }
+	.branding .version-number { font-size:0.4em; }
 	.description { float: right; font-weight: 300; }
 }
 footer {

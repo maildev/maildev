@@ -351,6 +351,9 @@ a {
   a:hover {
     color: #7697b0; }
 
+h2 {
+  margin: 1.0em 0; }
+
 header {
   position: fixed;
   z-index: 900;
@@ -367,6 +370,8 @@ header {
     float: left;
     font-weight: 300;
     margin: 0; }
+  header .branding .version-number {
+    font-size: 0.4em; }
   header .description {
     float: right;
     font-weight: 300; }

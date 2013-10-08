@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>MailDev</title>
+    <meta name="description" content="SMTP Server + Web Interface for viewing and testing emails during development.">
 
     <link rel="stylesheet" href="stylesheets/style.css">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300' rel='stylesheet' type='text/css'>
@@ -16,7 +17,10 @@
     <div class="wrapper">
       <header>
         <div class="inner">
-          <h1 class="branding">MailDev</h1>
+          <h1 class="branding">
+            MailDev
+            <span class="version-number">v.0.3.1</span>
+          </h1>
 
           <div class="description">
             <p>SMTP Server + Web Interface for viewing and testing emails during development.</p>
@@ -46,6 +50,7 @@
           <ul>
             <li>Toggle between HTML, plain text views as well as view email headers</li>
             <li>Test Responsive Emails w/ resizeable preview pane available for 320/480/600px screen sizes</li>
+            <li>New emails appear instantly in interface when received (via Websockets)</li>
           </ul>
 
         <h2>Install</h2>
@@ -105,7 +110,6 @@
 
         <ul>
           <li>Add forwarding via Gmail for device &amp; email client testing</li>
-          <li>Add websockets for pushing email to the browser</li>
           <li>Add sqlite or JSON storage</li>
           <li>Write tests for server and client</li>
           <li>Write grunt task for quick drop into projects using grunt</li>
@@ -113,15 +117,24 @@
 
         <h2>Contribution</h2>
 
-        <p>This initial release has room for improvement, if you find any errors, please try to describe them and file and issue. If you choose to run <strong>MailDev</strong> in development mode run <code>grunt watch</code>.  Please create a pull request for any changes or big fixes.</p>
+        <p>This initial release has room for improvement, if you find any errors, please try to describe them and <a href="https://github.com/djfarrelly/MailDev/issues">file an issue</a>. If you choose to run <strong>MailDev</strong> in development mode run <code>grunt watch</code>.  Please create a pull request for any changes or big fixes.</p>
+
+        <h2>Changelog</h2>
+
+        <p>
+          <strong>0.3.1</strong> - Added Socket.io to notify interface of new email
+        </p>
+        <p>
+          <strong>0.3.0</strong> - Initial open source release
+        </p>
 
         <h2>Thanks</h2>
 
-        <p>Thanks to <a href="https://github.com/andris9">Andris Reinman</a> for creating his projects that are the backbone of this app.</p>
+        <p>Thanks to <a href="https://github.com/andris9">Andris Reinman</a> for creating his projects that are the backbone of this app and <a href="http://mailcatcher.me/" target="_blank">MailCatcher</a> for the inspiration.</p>
 
         <h2>License</h2>
 
-        <p>MIT</p>
+        <p>MailDev is released under the <a href="https://github.com/djfarrelly/MailDev/blob/master/LICENSE">MIT license</a></p>
 
         </div><!-- end .content -->
 

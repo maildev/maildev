@@ -18,6 +18,12 @@ Routes.$inject = ['$routeProvider']
 
 Bootstrap = ($rootScope) ->
 
+  # Socket.io script is loaded in the template
+  socket = io.connect('http://localhost')
+  socket.on('newMail', (data) ->
+    $rootScope.$emit('Refresh')
+  )
+
   $rootScope.$on("Refresh", ->
     console.log "Refresh event called."
     )

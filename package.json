@@ -1,9 +1,10 @@
 {
   "name": "maildev",
   "description": "SMTP Server and Web Interface for reading and testing emails during development",
-  "version": "0.3.0",
-  "keywords": ["email", "e-mail", "mail"],
+  "version": "0.3.1",
+  "keywords": ["email", "e-mail", "mail", "mailcatcher"],
   "author": "Dan Farrelly",
+  "homepage": "http://djfarrelly.github.io/MailDev/",
   "maintainers": [
     { "name": "Dan Farrelly", "email": "daniel.j.farrelly@gmail.com" }
   ],
@@ -25,7 +26,8 @@
     "express": "3.x",
     "simplesmtp": "*",
     "mailparser": "*",
-    "mailcomposer": "*"
+    "mailcomposer": "*",
+    "socket.io": "*"
   },
   "devDependencies": {
     "grunt": ">=0.4.1",

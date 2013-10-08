@@ -16,6 +16,12 @@ Routes = function($routeProvider) {
 Routes.$inject = ['$routeProvider'];
 
 Bootstrap = function($rootScope) {
+  var socket;
+
+  socket = io.connect('http://localhost');
+  socket.on('newMail', function(data) {
+    return $rootScope.$emit('Refresh');
+  });
   return $rootScope.$on("Refresh", function() {
     return console.log("Refresh event called.");
   });

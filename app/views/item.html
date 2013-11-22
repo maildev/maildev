@@ -29,8 +29,13 @@
 		  ng-class="{ active: panelVisibility == 'headers' }">
 		Headers
 	</span>
+    <span class="btn btn-small btn-brand-light"
+          ng-click="show('attachments')"
+          ng-class="{ active: panelVisibility == 'attachments' }">
+		Attachments
+	</span>
 </div>
-
+        
 <div class="btn-group-label">
 	Device width: 
 </div>
@@ -65,9 +70,11 @@
 
 	<iframe src="{{item.iframeUrl}}" class="preview-iframe panel-html"></iframe>
 
-	<div class="plain-text panel-plain" ng-bind-html=" item.text|newLines ">
-
-	</div>
+	<div class="plain-text panel-plain" ng-bind-html=" item.text|newLines "></div>
+    
+    <div class="panel-attachments">
+        HERE ATTACHMENTS
+    </div>
 
 	<div class="panel-headers">
 		<table class="table">

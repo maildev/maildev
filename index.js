@@ -7,7 +7,8 @@ var express = require('express')
   , app = express()
   , server = require('http').createServer(app)
   , io = require('socket.io').listen(server)
-  , mailserver = require('./lib/mailserver');
+  , mailserver = require('./lib/mailserver')
+  ,fs = require('fs');
 
 
 // Start the Mailserver & Express
@@ -53,6 +54,40 @@ app.delete('/email/:id', function(req, res){
 // Get Email HTML
 app.get('/email/:id/html', function(req, res){
   res.send(mailserver.getMail(req.params.id).html);
+});
+
+// Serve Attachements
+app.get('/attachment/:msgId/:filename', function(req, res){
+    try {
+        // get mail by id
+        var mail = mailserver.getMail(req.params.msgId);
+        var attachment = null;
+        // get the attachment we want by its generatedFileName (unique)
+        mail.attachments.forEach(function(a){
+            if(a.generatedFileName == req.params.filename){
+                attachment = a;
+            }
+        });
+       
+        // if attachment is available
+        if(attachment){
+            // try to read and serve it
+            fs.readFile('tmp/'+attachment.contentId,function(err,data){
+                if(err) {
+                    console.log(err)
+                }
+                res.contentType(attachment.contentType);
+                res.end(data);
+            });
+        } else {
+            // the attachment is not available
+            res.json(404, 'File not found');    
+        }
+    } catch (err) {
+        console.log(err);
+        res.json(404, 'File not found');
+    }
+    
 });
 
 /*

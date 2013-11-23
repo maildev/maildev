@@ -71,9 +71,11 @@
 	<iframe src="{{item.iframeUrl}}" class="preview-iframe panel-html"></iframe>
 
 	<div class="plain-text panel-plain" ng-bind-html=" item.text|newLines "></div>
-    
+
     <div class="panel-attachments">
-        HERE ATTACHMENTS
+        <span ng-repeat="attachment in item.attachments">
+            <strong><a target="_blank" href="/attachment/{{item.id}}/{{attachment.generatedFileName}}">{{attachment.generatedFileName}}</a></strong><br/>
+        </span>
     </div>
 
 	<div class="panel-headers">

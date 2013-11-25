@@ -6491,6 +6491,10 @@ textarea {
   display: block;
 }
 
+.panel-visible-attachments .panel-attachments {
+    display:block;
+}
+
 /* line 138, main.scss */
 .preview-iframe {
   border: 0;

@@ -1,32 +1,47 @@
-'use strict';
-var Bootstrap, Routes;
+/* global angular, io */
 
-Routes = function($routeProvider) {
-  return $routeProvider.when('/', {
-    templateUrl: 'views/main.html',
-    controller: 'MainCtrl'
-  }).when('/email/:itemId', {
-    templateUrl: 'views/item.html',
-    controller: 'ItemCtrl'
-  }).otherwise({
-    redirectTo: '/'
-  });
-};
+/**
+ * App Config
+ */
 
-Routes.$inject = ['$routeProvider'];
+var app = angular.module('mailDevApp', ['ngRoute', 'ngResource',  'ngSanitize']);
 
-Bootstrap = function($rootScope) {
-  var socket;
+app.config(['$routeProvider', function($routeProvider){
 
-  socket = io.connect('http://localhost');
+  $routeProvider
+    .when('/', { templateUrl: 'views/main.html', controller: 'MainCtrl' })
+    .when('/email/:itemId', { templateUrl: 'views/item.html', controller: 'ItemCtrl' })
+    .otherwise({ redirectTo: '/' });
+
+}]);
+
+app.run(['$rootScope', function($rootScope){
+  
+  // Connect Socket.io
+  var socket = io.connect('http://localhost');
+
   socket.on('newMail', function(data) {
-    return $rootScope.$emit('Refresh');
+    $rootScope.$emit('Refresh');
   });
-  return $rootScope.$on("Refresh", function() {
-    return console.log("Refresh event called.");
+  
+  $rootScope.$on('Refresh', function() {
+    console.log('Refresh event called.');
   });
-};
 
-Bootstrap.$inject = ['$rootScope'];
+}]);
 
-angular.module('nodemineApp', ['ngResource']).config(Routes).filter('newLines', NewLineFilter).factory('Item', Item).run(Bootstrap);
+/**
+ * NewLineFilter -- Converts new line characters to br tags
+ */
+
+app.filter('NewLineFilter', function() {
+  
+  return function(text) {
+
+    return text && text.replace(/\n/g, '<br>') || '';
+    // if (text && text.length) {
+    //   return text.replace(/\n/g, '<br>');
+    // }
+  };
+
+});

@@ -32,15 +32,9 @@
   "devDependencies": {
     "grunt": ">=0.4.1",
     "grunt-contrib-watch": "*",
-    "grunt-contrib-copy": "*",
-    "grunt-contrib-coffee": "*",
     "grunt-contrib-compass": "*",
     "grunt-contrib-jshint": "*",
-    "grunt-contrib-connect": "*",
-    "grunt-contrib-livereload": "*",
-    "grunt-open": "~0.1.0",
-    "matchdep": "~0.1.1",
-    "grunt-zip": "*"
+    "matchdep": "~0.1.1"
   },
   "engines": {
     "node": ">=0.10.0"

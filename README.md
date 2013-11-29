@@ -21,7 +21,7 @@ Configure your application to send emails via port `1025` and open `localhost:10
 
 ## Roadmap
 
-* Add sqlite or JSON storage w/ possibility to persist data after restarts
+* Add sqlite or [NeDB](https://github.com/louischatriot/nedb) storage w/ possibility to persist data after restarts
 * Write tests for server and client
 * Write grunt task for quick drop into projects using grunt
 
@@ -29,9 +29,13 @@ Configure your application to send emails via port `1025` and open `localhost:10
 * Check CSS compatibility of emails using http://www.campaignmonitor.com/css/
 * Forward email to real email address for device/application testing
 
-## Contribution
+# Contributing to MailDev
 
-This initial release is rough and has room for improvement, if you find any errors, please try to describe them and file and issue. If you choose to run **MailDev** in development mode run `grunt watch`.  Please create a pull request for any changes or big fixes.
+Bugs and new features should be submitted using [Github issues](https://github.com/djfarrelly/MailDev/issues/new). Include a description of the item and the expected behavior.
+
+* Try to keep in the coding style already established in this project: 2 space soft-tabs, Single quotes
+* Make all changes on the `develop` branch or even better, create a new branch for your changes, i.e. `git checkout -b some-new-feature`
+* Lint your code by running `grunt jshint` (Install [Grunt](http://www.gruntjs.com) via `npm install -g grunt-cli`)
 
 ## Thanks
 

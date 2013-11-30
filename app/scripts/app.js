@@ -34,14 +34,10 @@ app.run(['$rootScope', function($rootScope){
  * NewLineFilter -- Converts new line characters to br tags
  */
 
-app.filter('NewLineFilter', function() {
+app.filter('newLines', function() {
   
   return function(text) {
-
     return text && text.replace(/\n/g, '<br>') || '';
-    // if (text && text.length) {
-    //   return text.replace(/\n/g, '<br>');
-    // }
   };
 
 });

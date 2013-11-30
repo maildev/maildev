@@ -34,7 +34,7 @@ Configure your application to send emails via port `1025` and open `localhost:10
 Bugs and new features should be submitted using [Github issues](https://github.com/djfarrelly/MailDev/issues/new). Include a description of the item and the expected behavior.
 
 * Try to keep in the coding style already established in this project: 2 space soft-tabs, Single quotes
-* Make all changes on the `develop` branch or even better, create a new branch for your changes, i.e. `git checkout -b some-new-feature`
+* Make all changes on the `Develop` branch or even better, create a new branch for your changes, i.e. `git checkout -b some-new-feature`
 * Lint your code by running `grunt jshint` (Install [Grunt](http://www.gruntjs.com) via `npm install -g grunt-cli`)
 
 ## Thanks

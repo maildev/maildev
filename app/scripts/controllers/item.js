@@ -1,4 +1,4 @@
-/* global app */
+/* global angular, app */
 
 /**
  * Email item Controller -- The UI for the email pane
@@ -50,7 +50,8 @@ app.controller('ItemCtrl', [
         // Append <base target="_blank" /> to <head> in the iframe so all links open in new window
         baseEl.setAttribute('target', '_blank');
 
-        title.parentNode.insertBefore(baseEl, title);
+        if (title)
+          title.parentNode.insertBefore(baseEl, title);
 
         replaceMediaQueries();
         fixIframeHeight();
@@ -70,9 +71,8 @@ app.controller('ItemCtrl', [
 
     // Updates all media query rules to use 'width' instead of device width
     replaceMediaQueries = function(){
-
-      iframe.contentDocument.styleSheets.forEach(function(styleSheet){
-        styleSheet.cssRules.forEach(function(rule){
+      angular.forEach(iframe.contentDocument.styleSheets, function(styleSheet){
+        angular.forEach(styleSheet.cssRules, function(rule){
           if (rule.media && rule.media.mediaText){
             // TODO -- Add future warning if email doesn't use '[max|min]-device-width' media queries
             rule.media.mediaText = rule.media.mediaText.replace('device-width', 'width');
@@ -116,5 +116,8 @@ app.controller('ItemCtrl', [
         });
     };
 
+
+    // Initialize the view by getting the email
+    getItem();
   }
 ]);

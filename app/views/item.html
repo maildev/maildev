@@ -65,7 +65,9 @@
 
 	<iframe src="{{item.iframeUrl}}" class="preview-iframe panel-html"></iframe>
 
-	<div class="plain-text panel-plain" ng-bind-html-unsafe="item.text|newLines"></div>
+	<div class="plain-text panel-plain" ng-bind-html=" item.text|newLines ">
+
+	</div>
 
 	<div class="panel-headers">
 		<table class="table">

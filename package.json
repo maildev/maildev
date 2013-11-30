@@ -2,21 +2,29 @@
   "name": "maildev",
   "description": "SMTP Server and Web Interface for reading and testing emails during development",
   "version": "0.3.1",
-  "keywords": ["email", "e-mail", "mail", "mailcatcher"],
+  "keywords": [
+    "email",
+    "e-mail",
+    "mail",
+    "mailcatcher"
+  ],
   "author": "Dan Farrelly",
   "homepage": "http://djfarrelly.github.io/MailDev/",
   "maintainers": [
-    { "name": "Dan Farrelly", "email": "daniel.j.farrelly@gmail.com" }
+    {
+      "name": "Dan Farrelly",
+      "email": "daniel.j.farrelly@gmail.com"
+    }
   ],
-  "repository" : {
-      "type" : "git", 
-      "url" : "http://github.com/djfarrelly/maildev.git"
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/djfarrelly/maildev.git"
   },
   "main": "./index",
-  "bin":{
+  "bin": {
     "maildev": "./bin/maildev"
   },
-  "licenses" : [
+  "licenses": [
     {
       "type": "MIT",
       "url": "http://github.com/djfarrelly/maildev/blob/master/LICENSE"
@@ -32,15 +40,11 @@
   "devDependencies": {
     "grunt": ">=0.4.1",
     "grunt-contrib-watch": "*",
-    "grunt-contrib-copy": "*",
-    "grunt-contrib-coffee": "*",
     "grunt-contrib-compass": "*",
     "grunt-contrib-jshint": "*",
-    "grunt-contrib-connect": "*",
-    "grunt-contrib-livereload": "*",
-    "grunt-open": "~0.1.0",
     "matchdep": "~0.1.1",
-    "grunt-zip": "*"
+    "async": "~0.2.9",
+    "nodemailer": "~0.5.11"
   },
   "engines": {
     "node": ">=0.10.0"

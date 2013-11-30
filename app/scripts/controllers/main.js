@@ -1,50 +1,54 @@
-'use strict';
-var HomeCtrl, MainCtrl, NavCtrl, NewLineFilter;
+/* global app */
 
-MainCtrl = function($scope, $rootScope, Item) {
-  var loadData;
+/**
+ * Main App Controller -- Manage all emails visible in the list
+ */
 
-  console.log("Main Controller");
-  $scope.items = [];
-  loadData = function() {
-    return $scope.items = Item.query();
-  };
-  loadData();
-  $scope.markRead = function(item) {
-    return item.read = true;
-  };
-  return $rootScope.$on("Refresh", function(e, d) {
-    return loadData();
-  });
-};
+app.controller('MainCtrl', [
+  '$scope', '$rootScope', 'Email',
+  function($scope, $rootScope, Email) {
 
-MainCtrl.$inject = ['$scope', '$rootScope', 'Item'];
+    // Load all emails
+    var loadData = function() {
+      $scope.items = Email.query();
+    };
 
-NavCtrl = function($scope, $rootScope, $location, Item) {
-  console.log("Nav Controller");
-  $scope.refreshList = function() {
-    return $rootScope.$emit("Refresh");
-  };
-  return $scope.deleteAll = function() {
-    return Item["delete"]({
-      id: "all"
-    }, function(email) {
-      $rootScope.$emit("Refresh");
-      return $location.path('/');
+    // Initially load all emails
+    $scope.items = [];
+    loadData();
+
+
+    $scope.markRead = function(email) {
+      email.read = true;
+    };
+    
+    $rootScope.$on('Refresh', function(e, d) {
+      loadData();
     });
-  };
-};
 
-NavCtrl.$inject = ['$scope', '$rootScope', '$location', 'Item'];
+  }
+]);
 
-HomeCtrl = function($scope) {
-  return console.log("Home Controller");
-};
+/**
+ * Navigation Controller
+ */
 
-NewLineFilter = function() {
-  return function(text) {
-    if (text && text.length) {
-      return text.replace(/\n/g, '<br>');
-    }
-  };
-};
+app.controller('NavCtrl', [
+  '$scope', '$rootScope', '$location', 'Email',
+  function($scope, $rootScope, $location, Email) {
+  
+    $scope.refreshList = function() {
+      $rootScope.$emit('Refresh');
+    };
+
+    $scope.deleteAll = function() {
+
+      Email.delete({ id: 'all' }, function(email) {
+        $rootScope.$emit('Refresh');
+        $location.path('/');
+      });
+
+    };
+
+  }
+]);

@@ -1,7 +1,7 @@
 {
-  "name": "angular-sanitize",
+  "name": "angular-route",
   "version": "1.2.3",
-  "main": "./angular-sanitize.js",
+  "main": "./angular-route.js",
   "dependencies": {
     "angular": "1.2.3"
   }

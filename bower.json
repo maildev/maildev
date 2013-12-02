@@ -1,6 +1,6 @@
 {
   "name": "MailDev",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "dependencies": {
     "angular": "1.2.3",
     "angular-resource": "1.2.3",

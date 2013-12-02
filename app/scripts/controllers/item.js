@@ -83,7 +83,7 @@ app.controller('ItemCtrl', [
 
     // Toggle what format is viewable
     $scope.show = function(type) {
-      if (type === 'html' || type === 'attachments' && !$scope.item[type]) return;
+      if ((type === 'html' || type === 'attachments') && !$scope.item[type]) return;
 
       $scope.panelVisibility = type;
     };

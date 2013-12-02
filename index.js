@@ -1,6 +1,9 @@
 
 /**
  * MailDev - index.js
+ *
+ * Author: Dan Farrelly <daniel.j.farrelly@gmail.com>
+ * Licensed under the MIT License.
  */
 
 var express     = require('express')
@@ -8,6 +11,7 @@ var express     = require('express')
   , server      = require('http').createServer(app)
   , io          = require('socket.io').listen(server)
   , mailserver  = require('./lib/mailserver')
+  , fs          = require('fs')
   ;
 
 
@@ -17,7 +21,8 @@ mailserver.start();
 
 module.exports = app;
 
-app.use(express.bodyParser());
+app.use(express.json());
+app.use(express.urlencoded());
 app.use('/', express.static(__dirname + '/app'));
 
 
@@ -42,7 +47,6 @@ app.get('/email/:id', function(req, res){
 // Delete emails
 app.delete('/email/:id', function(req, res){
   var id = req.params.id;
-  console.log('Deleting ' + id);
 
   if (id === 'all'){
     res.send(mailserver.deleteAllMail(id));
@@ -54,6 +58,18 @@ app.delete('/email/:id', function(req, res){
 // Get Email HTML
 app.get('/email/:id/html', function(req, res){
   res.send(mailserver.getMail(req.params.id).html);
+});
+
+// Serve Attachments
+app.get('/email/:id/attachment/:filename', function(req, res){
+
+  mailserver.getAttachmentInfo(req.params.id, req.params.filename, function(err, attachment){
+    if (err) return res.json(404, 'File not found');
+
+    res.contentType(attachment.contentType);
+    mailserver.attachmentReadStream(attachment).pipe(res);
+  });
+
 });
 
 /*
@@ -76,11 +92,19 @@ io.configure(function(){
   io.set('log level', 0);
 });
 
+function emitNewMail(socket){
+  return function(){
+    socket.emit('newMail', { hello: 'world' });
+  };
+}
+
 io.sockets.on('connection', function(socket){
   
   // When a new email arrives, the 'new' event will be emitted
-  mailserver.eventEmitter.on('new', function(){
-    socket.emit('newMail', { hello: 'world' });
+  mailserver.eventEmitter.on('new', emitNewMail(socket));
+
+  socket.on('disconnect', function(){
+    mailserver.eventEmitter.removeListener('new', emitNewMail(socket));
   });
 
 });

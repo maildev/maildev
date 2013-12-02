@@ -1,6 +1,9 @@
 
 /**
- * MailDev - test/send.js send a few emails for testing
+ * MailDev - send.js -- send a few emails for testing
+ *
+ * Run this to send emails to port 1025 for testing MailDev during development
+ *   node test/send.js
  */
 
 var nodemailer = require('nodemailer')
@@ -38,9 +41,6 @@ var messages = [
         'X-some-header': 1000
       }
     , text: 'They are surfers.'
-    , html: '<!DOCTYPE html><html><head></head><body>' +
-            '<p><strong>They are surfers.</strong></p>' +
-            '</body></html>'
     }
   , {
       from: 'Bodhi <bodhi@gmail.com>'

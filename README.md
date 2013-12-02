@@ -12,15 +12,16 @@
 Configure your application to send emails via port `1025` and open `localhost:1080`.
 
 **Nodemailer**
+
     var transport = nodemailer.createTransport("SMTP", {
         port: 1025,
         // other settings...
     });
 
-**Django**
-Add `EMAIL_PORT = 1025` in your settings file [[source]](https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-EMAIL_PORT)
+**Django** -- Add `EMAIL_PORT = 1025` in your settings file [[source]](https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-EMAIL_PORT)
 
-**Rails** - config settings:
+**Rails** -- config settings:
+
     config.action_mailer.delivery_method = :smtp
         config.action_mailer.smtp_settings = {
             :address => "localhost",
@@ -52,15 +53,17 @@ Add `EMAIL_PORT = 1025` in your settings file [[source]](https://docs.djangoproj
 
 Bugs and new features should be submitted using [Github issues](https://github.com/djfarrelly/MailDev/issues/new). Include a description of the item and the expected behavior.
 
-* Try to keep in the coding style already established in this project: 2 space soft-tabs, Single quotes
+* Code style: 2 space soft-tabs, Single quotes
 * Make all changes on the `Develop` branch or even better, create a new branch for your changes, i.e. `git checkout -b some-new-feature`
-* Lint your code before committing by running `grunt jshint` (Install [Grunt](http://www.gruntjs.com) via `npm install -g grunt-cli`)
-* For CSS changes, you must have [Compass](http://compass-style.org/) installed and run `grunt compass` or `grunt watch` to pickup live changes
+* `grunt jshint` to lint your code (Install [Grunt](http://www.gruntjs.com) via `npm install -g grunt-cli`)
+* `grunt compass` for CSS changes. You must have [Compass](http://compass-style.org/) installed. Run `grunt watch` to pickup live changes
 
 ## Changelog
 
 0.4.0 - Add ability to receive and view attachments
+
 0.3.1 - Add Socket.io for immediate email arrival to interface
+
 0.3.0 - Initial open source release
 
 ## Thanks

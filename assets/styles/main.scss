@@ -112,6 +112,13 @@ textarea { resize:none; }
 		}
 	}
 }
+.icon-attachment {
+	height: 10px; width: 18px; margin-left: 4px;
+	vertical-align: baseline;
+
+	background-image: url('/images/paperclip.png');
+	background-position: top left;
+}
 
 
 .view-panel-inner {
@@ -134,6 +141,7 @@ textarea { resize:none; }
 .panel-visible-html .panel-html { display: block; }
 .panel-visible-plain .panel-plain { display: block; }
 .panel-visible-headers .panel-headers { display: block; }
+.panel-visible-attachments .panel-attachments { display:block; }
 
 .preview-iframe { 
 	border:0; width:100%; min-height:600px;
@@ -146,4 +154,8 @@ textarea { resize:none; }
 // }
 
 
-
+// AngularJS Helpers
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak,
+.ng-hide {
+	display: none !important;
+}

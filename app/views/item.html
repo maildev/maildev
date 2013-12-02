@@ -14,9 +14,9 @@
 	View:
 </div>
 <div class="btn-group">
-	<span class="btn btn-small btn-brand-light {{htmlView}}"
+	<span class="btn btn-small btn-brand-light"
 		  ng-click="show('html')" 
-		  ng-class="{ active: panelVisibility == 'html' }">
+		  ng-class="{ active: panelVisibility == 'html', disabled: !item.html }">
 		HTML
 	</span>
 	<span class="btn btn-small btn-brand-light"
@@ -29,8 +29,13 @@
 		  ng-class="{ active: panelVisibility == 'headers' }">
 		Headers
 	</span>
+    <span class="btn btn-small btn-brand-light"
+          ng-click="show('attachments')"
+          ng-class="{ active: panelVisibility == 'attachments', disabled: !item.attachments }">
+		Attachments
+	</span>
 </div>
-
+        
 <div class="btn-group-label">
 	Device width: 
 </div>
@@ -65,9 +70,16 @@
 
 	<iframe src="{{item.iframeUrl}}" class="preview-iframe panel-html"></iframe>
 
-	<div class="plain-text panel-plain" ng-bind-html=" item.text|newLines ">
+	<div class="plain-text panel-plain" ng-bind-html=" item.text|newLines "></div>
 
-	</div>
+    <div class="panel-attachments">
+        <span ng-repeat="attachment in item.attachments">
+            <a target="_blank" href="/email/{{item.id}}/attachment/{{attachment.generatedFileName}}">
+            	<strong>{{attachment.generatedFileName}}</strong>
+            </a>
+            <br>
+        </span>
+    </div>
 
 	<div class="panel-headers">
 		<table class="table">

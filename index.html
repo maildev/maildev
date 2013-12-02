@@ -19,7 +19,7 @@
         <div class="inner">
           <h1 class="branding">
             MailDev
-            <span class="version-number">v.0.3.1</span>
+            <span class="version-number">v.0.4.0</span>
           </h1>
 
           <div class="description">
@@ -50,6 +50,7 @@
           <ul>
             <li>Toggle between HTML, plain text views as well as view email headers</li>
             <li>Test Responsive Emails w/ resizeable preview pane available for 320/480/600px screen sizes</li>
+            <li>Receive and view email attachments</li>
             <li>New emails appear instantly in interface when received (via Websockets)</li>
           </ul>
 
@@ -109,18 +110,22 @@
         <h2>Roadmap</h2>
 
         <ul>
-          <li>Add forwarding via Gmail for device &amp; email client testing</li>
-          <li>Add sqlite or JSON storage</li>
+          <li>Add command line options for ports, logging, ability to run as daemon, etc.</li>
+          <li>Forward email to real email address for device &amp; email client testing</li>
           <li>Write tests for server and client</li>
           <li>Write grunt task for quick drop into projects using grunt</li>
+          <li>Add sqlite or JSON storage</li>
         </ul>
 
-        <h2>Contribution</h2>
+        <h2>Contributing</h2>
 
-        <p>This initial release has room for improvement, if you find any errors, please try to describe them and <a href="https://github.com/djfarrelly/MailDev/issues">file an issue</a>. If you choose to run <strong>MailDev</strong> in development mode run <code>grunt watch</code>.  Please create a pull request for any changes or big fixes.</p>
+        <p>Please submit pull requests and issues on github. If you'd like to contribute check the project's <a href="https://github.com/djfarrelly/MailDev/blob/Develop/README.md#contributing-to-maildev">README</a> or reach out to me on twitter for questions/comments: <a href="https://twitter.com/djfarrelly">@djfarrelly</a></p>
 
         <h2>Changelog</h2>
 
+        <p>
+          <strong>0.4.0</strong> - Add ability to receive and view attachments
+        </p>
         <p>
           <strong>0.3.1</strong> - Added Socket.io to notify interface of new email
         </p>

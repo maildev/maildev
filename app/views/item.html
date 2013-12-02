@@ -14,9 +14,9 @@
 	View:
 </div>
 <div class="btn-group">
-	<span class="btn btn-small btn-brand-light {{htmlView}}"
+	<span class="btn btn-small btn-brand-light"
 		  ng-click="show('html')" 
-		  ng-class="{ active: panelVisibility == 'html' }">
+		  ng-class="{ active: panelVisibility == 'html', disabled: !item.html }">
 		HTML
 	</span>
 	<span class="btn btn-small btn-brand-light"
@@ -31,7 +31,7 @@
 	</span>
     <span class="btn btn-small btn-brand-light"
           ng-click="show('attachments')"
-          ng-class="{ active: panelVisibility == 'attachments' }">
+          ng-class="{ active: panelVisibility == 'attachments', disabled: !item.attachments }">
 		Attachments
 	</span>
 </div>
@@ -74,7 +74,10 @@
 
     <div class="panel-attachments">
         <span ng-repeat="attachment in item.attachments">
-            <strong><a target="_blank" href="/attachment/{{item.id}}/{{attachment.generatedFileName}}">{{attachment.generatedFileName}}</a></strong><br/>
+            <a target="_blank" href="/email/{{item.id}}/attachment/{{attachment.generatedFileName}}">
+            	<strong>{{attachment.generatedFileName}}</strong>
+            </a>
+            <br>
         </span>
     </div>
 

@@ -1,6 +1,9 @@
 
 /**
  * MailDev - index.js
+ *
+ * Author: Dan Farrelly <daniel.j.farrelly@gmail.com>
+ * Licensed under the MIT License.
  */
 
 var express     = require('express')
@@ -18,7 +21,8 @@ mailserver.start();
 
 module.exports = app;
 
-app.use(express.bodyParser());
+app.use(express.json());
+app.use(express.urlencoded());
 app.use('/', express.static(__dirname + '/app'));
 
 
@@ -43,7 +47,6 @@ app.get('/email/:id', function(req, res){
 // Delete emails
 app.delete('/email/:id', function(req, res){
   var id = req.params.id;
-  console.log('Deleting ' + id);
 
   if (id === 'all'){
     res.send(mailserver.deleteAllMail(id));
@@ -57,38 +60,16 @@ app.get('/email/:id/html', function(req, res){
   res.send(mailserver.getMail(req.params.id).html);
 });
 
-// Serve Attachements
-app.get('/attachment/:msgId/:filename', function(req, res){
-    try {
-        // get mail by id
-        var mail = mailserver.getMail(req.params.msgId);
-        var attachment = null;
-        // get the attachment we want by its generatedFileName (unique)
-        mail.attachments.forEach(function(a){
-            if(a.generatedFileName == req.params.filename){
-                attachment = a;
-            }
-        });
-       
-        // if attachment is available
-        if(attachment){
-            // try to read and serve it
-            fs.readFile('tmp/'+attachment.contentId,function(err,data){
-                if(err) {
-                    console.log(err)
-                }
-                res.contentType(attachment.contentType);
-                res.end(data);
-            });
-        } else {
-            // the attachment is not available
-            res.json(404, 'File not found');    
-        }
-    } catch (err) {
-        console.log(err);
-        res.json(404, 'File not found');
-    }
-    
+// Serve Attachments
+app.get('/email/:id/attachment/:filename', function(req, res){
+
+  mailserver.getAttachmentInfo(req.params.id, req.params.filename, function(err, attachment){
+    if (err) return res.json(404, 'File not found');
+
+    res.contentType(attachment.contentType);
+    mailserver.attachmentReadStream(attachment).pipe(res);
+  });
+
 });
 
 /*
@@ -111,11 +92,19 @@ io.configure(function(){
   io.set('log level', 0);
 });
 
+function emitNewMail(socket){
+  return function(){
+    socket.emit('newMail', { hello: 'world' });
+  };
+}
+
 io.sockets.on('connection', function(socket){
   
   // When a new email arrives, the 'new' event will be emitted
-  mailserver.eventEmitter.on('new', function(){
-    socket.emit('newMail', { hello: 'world' });
+  mailserver.eventEmitter.on('new', emitNewMail(socket));
+
+  socket.on('disconnect', function(){
+    mailserver.eventEmitter.removeListener('new', emitNewMail(socket));
   });
 
 });

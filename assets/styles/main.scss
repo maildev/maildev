@@ -112,6 +112,13 @@ textarea { resize:none; }
 		}
 	}
 }
+.icon-attachment {
+	height: 10px; width: 18px; margin-left: 4px;
+	vertical-align: baseline;
+
+	background-image: url('/images/paperclip.png');
+	background-position: top left;
+}
 
 
 .view-panel-inner {
@@ -147,4 +154,8 @@ textarea { resize:none; }
 // }
 
 
-
+// AngularJS Helpers
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak,
+.ng-hide {
+	display: none !important;
+}

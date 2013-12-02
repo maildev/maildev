@@ -66,10 +66,13 @@
           </div>
 
           <ul class="item-list">
-            <li ng-repeat="item in items | orderBy:'time':!reverse" ng-class="{ read: item.read }">
+            <li ng-repeat="item in items | orderBy:'time':!reverse" ng-class="{ read: item.read }" class="ng-cloak">
 
               <a href="#/email/{{item.id}}" class="email-{{item.id}}" ng-click="markRead(item)">
-                <div class="title">{{item.subject}}</div>
+                <div class="title">
+                  {{item.subject}}
+                  <span class="icon-attachment" ng-hide="!item.attachments"></span>
+                </div>
                 <div class="subline clearfix">
                   <span class="pull-left">{{item.to.0.address}}</span>
                   <span class="pull-right">{{item.time | date:'short' }}</span>

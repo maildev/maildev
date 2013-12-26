@@ -8,23 +8,29 @@ app.controller('MainCtrl', [
   '$scope', '$rootScope', 'Email',
   function($scope, $rootScope, Email) {
 
+    $scope.items = [];
+    $scope.configOpen = false;
+
     // Load all emails
     var loadData = function() {
       $scope.items = Email.query();
     };
 
     // Initially load all emails
-    $scope.items = [];
     loadData();
 
-
-    $scope.markRead = function(email) {
-      email.read = true;
-    };
-    
     $rootScope.$on('Refresh', function(e, d) {
       loadData();
     });
+
+    // Click event handlers
+    $scope.markRead = function(email) {
+      email.read = true;
+    };
+
+    $scope.showConfig = function(){
+      $scope.configOpen = !$scope.configOpen;
+    };
 
   }
 ]);

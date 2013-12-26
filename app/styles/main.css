@@ -6397,14 +6397,27 @@ textarea {
   visibility: hidden;
 }
 
-/* line 92, ../../assets/styles/main.scss */
+/* line 91, ../../assets/styles/main.scss */
+.slide-container {
+  overflow: hidden;
+  max-height: 0px;
+  -webkit-transition: max-height 500ms ease-in-out;
+  -moz-transition: max-height 500ms ease-in-out;
+  transition: max-height 500ms ease-in-out;
+}
+/* line 98, ../../assets/styles/main.scss */
+.slide-container.open {
+  max-height: 1000px;
+}
+
+/* line 105, ../../assets/styles/main.scss */
 .column-header {
   padding: 8px 16px;
   background-color: #eeeeee;
   font-weight: bold;
 }
 
-/* line 95, ../../assets/styles/main.scss */
+/* line 108, ../../assets/styles/main.scss */
 .item-list {
   margin: 0;
   height: 100%;
@@ -6412,25 +6425,25 @@ textarea {
   background: #f6f6f6;
   overflow-y: scroll;
 }
-/* line 97, ../../assets/styles/main.scss */
+/* line 110, ../../assets/styles/main.scss */
 .item-list li {
   background-color: white;
   line-height: 1.3em;
   border-bottom: 1px solid #eeeeee;
 }
-/* line 101, ../../assets/styles/main.scss */
+/* line 114, ../../assets/styles/main.scss */
 .item-list li.selected {
   background-color: #eeeeee;
 }
-/* line 102, ../../assets/styles/main.scss */
+/* line 115, ../../assets/styles/main.scss */
 .item-list li:last-child {
   margin-bottom: 80px;
 }
-/* line 104, ../../assets/styles/main.scss */
+/* line 117, ../../assets/styles/main.scss */
 .item-list li.read a {
   border-color: #b8c5cf;
 }
-/* line 106, ../../assets/styles/main.scss */
+/* line 119, ../../assets/styles/main.scss */
 .item-list li a {
   display: block;
   padding: 8px 14px;
@@ -6438,13 +6451,13 @@ textarea {
   cursor: pointer;
   border-left: 8px solid #7697b0;
 }
-/* line 111, ../../assets/styles/main.scss */
+/* line 124, ../../assets/styles/main.scss */
 .item-list li a:hover {
   text-decoration: none;
   background-color: #f4f8fa;
 }
 
-/* line 115, ../../assets/styles/main.scss */
+/* line 128, ../../assets/styles/main.scss */
 .icon-attachment {
   height: 10px;
   width: 18px;
@@ -6454,59 +6467,59 @@ textarea {
   background-position: top left;
 }
 
-/* line 124, ../../assets/styles/main.scss */
+/* line 137, ../../assets/styles/main.scss */
 .view-panel-inner {
   padding: 8px 14px;
   overflow-y: scroll;
   border-left: 1px solid #ccc;
 }
 
-/* line 130, ../../assets/styles/main.scss */
+/* line 143, ../../assets/styles/main.scss */
 .view-panel .title-input {
   width: 90%;
   color: #333333;
 }
-/* line 131, ../../assets/styles/main.scss */
+/* line 144, ../../assets/styles/main.scss */
 .view-panel .wide-input {
   width: 90%;
 }
-/* line 133, ../../assets/styles/main.scss */
+/* line 146, ../../assets/styles/main.scss */
 .view-panel .btn-group, .view-panel .btn-group-label {
   display: inline-block;
   vertical-align: middle;
 }
-/* line 134, ../../assets/styles/main.scss */
+/* line 147, ../../assets/styles/main.scss */
 .view-panel .btn-group-label {
   margin-left: 20px;
   margin-right: 4px;
 }
 
-/* line 139, ../../assets/styles/main.scss */
+/* line 152, ../../assets/styles/main.scss */
 [class*="panel-visible-"] [class*="panel-"] {
   display: none;
 }
 
-/* line 141, ../../assets/styles/main.scss */
+/* line 154, ../../assets/styles/main.scss */
 .panel-visible-html .panel-html {
   display: block;
 }
 
-/* line 142, ../../assets/styles/main.scss */
+/* line 155, ../../assets/styles/main.scss */
 .panel-visible-plain .panel-plain {
   display: block;
 }
 
-/* line 143, ../../assets/styles/main.scss */
+/* line 156, ../../assets/styles/main.scss */
 .panel-visible-headers .panel-headers {
   display: block;
 }
 
-/* line 144, ../../assets/styles/main.scss */
+/* line 157, ../../assets/styles/main.scss */
 .panel-visible-attachments .panel-attachments {
   display: block;
 }
 
-/* line 146, ../../assets/styles/main.scss */
+/* line 159, ../../assets/styles/main.scss */
 .preview-iframe {
   border: 0;
   width: 100%;
@@ -6514,7 +6527,7 @@ textarea {
   position: relative;
 }
 
-/* line 159, ../../assets/styles/main.scss */
+/* line 172, ../../assets/styles/main.scss */
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak,
 .ng-hide {
   display: none !important;

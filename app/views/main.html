@@ -1,5 +1,5 @@
 <h2>
-    Now receiving all emails on port 1025
+    Now receiving all emails on port {{ config.smtpPort }}
 </h2>
 
 <p>
@@ -14,7 +14,7 @@
     <div class="clearfix">
         <pre class="span10">
 var transport = nodemailer.createTransport("SMTP", {
-    port: <strong>1025</strong>,
+    port: <strong>{{ config.smtpPort }}</strong>,
     // other settings...
 });
 </pre>
@@ -23,7 +23,7 @@ var transport = nodemailer.createTransport("SMTP", {
 
     <h4>Django</h4>
     <p>
-        Add <code>EMAIL_PORT = 1025</code> in your settings file (<a href="https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-EMAIL_PORT" target="_blank">source</a>)
+        Add <code>EMAIL_PORT = {{ config.smtpPort }}</code> in your settings file (<a href="https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-EMAIL_PORT" target="_blank">source</a>)
     </p>
 
     <h4>Rails</h4>
@@ -34,7 +34,7 @@ var transport = nodemailer.createTransport("SMTP", {
 config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
         :address => <strong>"localhost"</strong>,
-        :port => <strong>1025</strong>
+        :port => <strong>{{ config.smtpPort }}</strong>
     }
 </pre>
     </div>
@@ -49,5 +49,5 @@ config.action_mailer.delivery_method = :smtp
 
 <br>
 <p>
-    <small>You are running MailDev v.0.4.0</small>
+    <small>You are running MailDev v.{{ config.version }}</small>
 </p>

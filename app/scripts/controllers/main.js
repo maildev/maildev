@@ -5,8 +5,8 @@
  */
 
 app.controller('MainCtrl', [
-  '$scope', '$rootScope', 'Email',
-  function($scope, $rootScope, Email) {
+  '$scope', '$rootScope', '$http', 'Email',
+  function($scope, $rootScope, $http, Email) {
 
     $scope.items = [];
     $scope.configOpen = false;
@@ -15,9 +15,6 @@ app.controller('MainCtrl', [
     var loadData = function() {
       $scope.items = Email.query();
     };
-
-    // Initially load all emails
-    loadData();
 
     $rootScope.$on('Refresh', function(e, d) {
       loadData();
@@ -31,6 +28,14 @@ app.controller('MainCtrl', [
     $scope.showConfig = function(){
       $scope.configOpen = !$scope.configOpen;
     };
+
+    // Initialize the view
+    loadData();
+
+    $http({method: 'GET', url: '/config'})
+      .success(function(data){
+        $scope.config = data;
+      });
 
   }
 ]);

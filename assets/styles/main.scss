@@ -87,6 +87,19 @@ textarea { resize:none; }
 
 .hidden { display: none; visibility: hidden; }
 
+// Main page
+.slide-container {
+	overflow: hidden;
+	max-height: 0px;
+	-webkit-transition: max-height 500ms ease-in-out;
+	   -moz-transition: max-height 500ms ease-in-out;
+			transition: max-height 500ms ease-in-out;
+
+	&.open {
+		max-height: 1000px;
+	}
+}
+
 // Item list
 .item-container {}
 .column-header {

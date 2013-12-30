@@ -40,18 +40,17 @@ app.controller('ItemCtrl', [
     prepIframe = function() {
       // Wait for iframe to load
       setTimeout(function() {
-        var baseEl, head, title;
+        var baseEl, head;
 
         iframe  = document.getElementsByTagName('iframe')[0];
         head    = iframe.contentDocument.getElementsByTagName('head')[0];
-        title   = iframe.contentDocument.getElementsByTagName('title')[0];
         baseEl  = iframe.contentDocument.createElement('base');
 
         // Append <base target="_blank" /> to <head> in the iframe so all links open in new window
         baseEl.setAttribute('target', '_blank');
 
-        if (title)
-          title.parentNode.insertBefore(baseEl, title);
+        if (head)
+          head.appendChild(baseEl);
 
         replaceMediaQueries();
         fixIframeHeight();
@@ -83,7 +82,7 @@ app.controller('ItemCtrl', [
 
     // Toggle what format is viewable
     $scope.show = function(type) {
-      if (type === 'html' || type === 'attachments' && !$scope.item[type]) return;
+      if ((type === 'html' || type === 'attachments') && !$scope.item[type]) return;
 
       $scope.panelVisibility = type;
     };

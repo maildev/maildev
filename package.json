@@ -35,7 +35,9 @@
     "simplesmtp": "*",
     "mailparser": "*",
     "mailcomposer": "*",
-    "socket.io": "*"
+    "socket.io": "*",
+    "commander": "~2.1.0",
+    "open": "0.0.4"
   },
   "devDependencies": {
     "grunt": ">=0.4.1",

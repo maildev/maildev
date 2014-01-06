@@ -16,13 +16,15 @@ module.exports = function (grunt) {
     watch: {
       compass: {
         files: ['<%= path.assets %>/styles/{,*/}*.{scss,sass}'],
-        tasks: ['compass']
+        tasks: ['sass']
       }
     },
 
-    open: {
+    nodemon: {
       dev: {
-        url: 'http://localhost:1080'
+        options: {
+          ignoredFiles: ['app/**', 'assets/**', 'test/**']
+        }
       }
     },
 
@@ -38,31 +40,33 @@ module.exports = function (grunt) {
       ]
     },
 
-    compass: {
-      options: {
-        sassDir: '<%= path.assets %>/styles',
-        cssDir: '<%= path.app %>/styles',
-        javascriptsDir: '<%= path.app %>/scripts',
-        fontsDir: 'styles/fonts',
-        importPath: '<%= path.app %>/components',
-        relativeAssets: false
-      },
-      dist: {},
-      server: {
+    sass: {
+      app: {
+        files: {
+          '<%= path.app %>/styles/style.css': '<%= path.assets %>/styles/style.scss'
+        },
         options: {
-          debugInfo: true
+          outputStyle: 'compressed'
         }
       }
     },
+
+    concurrent: {
+      dev: {
+        tasks: ['nodemon', 'watch'],
+        options: {
+          logConcurrentOutput: true
+        }
+      }
+    }
+
   });
 
   // Load all grunt tasks
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
   grunt.registerTask('dev', [
-    'compass:server',
-    'open:dev',
-    'watch'
+    'concurrent'
   ]);
 
   grunt.registerTask('build', [

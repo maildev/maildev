@@ -1,103 +1,134 @@
-<div>
-	<h3>
-		{{item.subject}}
-	</h3>
-</div>
-<p>
-	From: {{item.from.0.name}} <{{item.from.0.address}}><br>
-	To: {{item.to.0.name}} <{{item.to.0.address}}>
-</p>
+<ul class="toolbar email-toolbar on-light">
 
-<span class="btn btn-small btn-brand-light" ng-click="delete(item)">Delete</span>
+    <li class="dropdown-container">
+      <a href="" class="dropdown-trigger"
+        ng-click="toggleDropdown($event, 'display')"
+        ng-class="{ open: dropdownOpen == 'display' }">
+        <i class="fa fa-file-o"></i>
+        Display
+      </a>
+      <ul class="dropdown-menu">
+        <li>
+            <a href="" class=""
+              ng-click="show('html')" 
+              ng-class="{ active: panelVisibility == 'html', disabled: !item.html }">
+                <i class="fa fa-code"></i>
+                HTML
+            </a>
+        </li>
+        <li>
+            <a href="" class=""
+              ng-click="show('plain')"
+              ng-class="{ active: panelVisibility == 'plain' }">
+                <i class="fa fa-file-text-o"></i>
+                Plain Text
+            </a>
+        </li>
+        <li>
+            <a href="" class=""
+              ng-click="show('headers')"
+              ng-class="{ active: panelVisibility == 'headers' }">
+                <i class="fa fa-list"></i>
+                Headers
+            </a>
+        </li>
+      </ul>
+    </li>
 
-<div class="btn-group-label">
-	View:
-</div>
-<div class="btn-group">
-	<span class="btn btn-small btn-brand-light"
-		  ng-click="show('html')" 
-		  ng-class="{ active: panelVisibility == 'html', disabled: !item.html }">
-		HTML
-	</span>
-	<span class="btn btn-small btn-brand-light"
-		  ng-click="show('plain')"
-		  ng-class="{ active: panelVisibility == 'plain' }">
-		Plain Text
-	</span>
-	<span class="btn btn-small btn-brand-light"
-		  ng-click="show('headers')"
-		  ng-class="{ active: panelVisibility == 'headers' }">
-		Headers
-	</span>
-    <span class="btn btn-small btn-brand-light"
+    <li class="dropdown-container">
+      <a href="" class="dropdown-trigger" 
+        ng-click="toggleDropdown($event, 'viewport')"
+        ng-class="{ open: dropdownOpen == 'viewport' }">
+        <i class="fa fa-tablet"></i>
+        Viewport
+      </a>
+      <ul class="dropdown-menu">
+        <li>
+          <a href="" class=""
+            ng-click="resize('320px')"
+            ng-class="{ active: iframeSize == '320px' }">
+              <i class="fa fa-mobile fa-mobile-smaller"></i>
+              320px
+          </a>
+      </li>
+      <li>
+          <a href="" class=""
+            ng-click="resize('480px')"
+            ng-class="{ active: iframeSize == '480px' }">
+              <i class="fa fa-mobile"></i>
+              480px
+          </a>
+      </li>
+      <li>
+          <a href="" class=""
+            ng-click="resize('600px')"
+            ng-class="{ active: iframeSize == '600px' }">
+              <i class="fa fa-tablet"></i>
+              600px
+          </a>
+      </li>
+      <li>
+          <a href="" class=""
+            ng-click="resize()"
+            ng-class="{ active: iframeSize == null }">
+              <i class="fa fa-desktop"></i>
+              Full
+          </a>
+      </li>
+      </ul>
+    </li>
+
+    
+    <li>
+        <a href="" class=""
           ng-click="show('attachments')"
           ng-class="{ active: panelVisibility == 'attachments', disabled: !item.attachments }">
-		Attachments
-	</span>
-</div>
-        
-<div class="btn-group-label">
-	Device width: 
-</div>
-<div class="btn-group">
-	<span class="btn btn-small btn-brand-light"
-		  ng-click="resize('320px')"
-		  ng-class="{ active: iframeSize == '320px' }">
-		320px
-	</span>
-	<span class="btn btn-small btn-brand-light"
-		  ng-click="resize('480px')"
-		  ng-class="{ active: iframeSize == '480px' }">
-		480px
-	</span>
-	<span class="btn btn-small btn-brand-light"
-		  ng-click="resize('600px')"
-		  ng-class="{ active: iframeSize == '600px' }">
-		600px
-	</span>
-	<span class="btn btn-small btn-brand-light"
-		  ng-click="resize()"
-		  ng-class="{ active: iframeSize == null }">
-		Full
-	</span>
-</div>
-<!-- TODO - The forward feature is experimental
-<span class="btn btn-small btn-brand-light" ng-click="forward(item)">Forward</span>
--->
-<hr>
+            <i class="fa fa-paperclip"></i>
+            Attachments
+        </a>
+    </li>
+    <li>
+        <a href="" class=""
+          ng-click="delete(item)">
+            <i class="fa fa-trash-o"></i>
+            Delete
+        </a>
+    </li>
+    
+</ul>
 
-<div class="panel-visible-{{panelVisibility}}">
+<div class="email-content">
 
-	<iframe src="{{item.iframeUrl}}" class="preview-iframe panel-html"></iframe>
+    <iframe src="{{ item.iframeUrl }}" class="preview-iframe panel-html" ng-hide=" panelVisibility != 'html' "></iframe>
 
-	<div class="plain-text panel-plain" ng-bind-html=" item.text|newLines "></div>
+    <div class="plain-text panel-plain" ng-bind-html=" item.text|newLines " ng-hide=" panelVisibility != 'plain' "></div>
 
-    <div class="panel-attachments">
+    <div class="panel-attachments" ng-hide=" panelVisibility != 'attachments' ">
         <span ng-repeat="attachment in item.attachments">
             <a target="_blank" href="/email/{{item.id}}/attachment/{{attachment.generatedFileName}}">
-            	<strong>{{attachment.generatedFileName}}</strong>
+                <strong>{{attachment.generatedFileName}}</strong>
             </a>
             <br>
         </span>
     </div>
 
-	<div class="panel-headers">
-		<table class="table">
-			<thead>
-				<tr>
-					<th>Key</th>
-					<th>Value</th>
-				</tr>
-			</thead>
-			<tr ng-repeat="(headerKey, headerValue) in item.headers">
-				<td class="span3">
-					<strong>{{headerKey}}</strong>
-				</td>
-				<td>
-					{{headerValue}}
-				</td>
-			</tr>
-		</table>
-	</div>
+    <div class="panel-headers" ng-hide=" panelVisibility != 'headers' ">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Key</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            <tr ng-repeat="(headerKey, headerValue) in item.headers">
+                <td class="span3">
+                    <strong>{{headerKey}}</strong>
+                </td>
+                <td>
+                    {{headerValue}}
+                </td>
+            </tr>
+        </table>
+    </div>
 
 </div>

@@ -6,109 +6,48 @@
  * Licensed under the MIT License.
  */
 
-var express     = require('express')
-  , app         = express()
-  , server      = require('http').createServer(app)
-  , io          = require('socket.io').listen(server)
+var program     = require('commander')
+  , pkg         = require('./package.json')
+  , web         = require('./lib/web')
   , mailserver  = require('./lib/mailserver')
-  , fs          = require('fs')
+  , logger      = require('./lib/logger')
   ;
 
+module.exports = {};
 
-// Start the Mailserver & Express
-
-mailserver.start();
-
-module.exports = app;
-
-app.use(express.json());
-app.use(express.urlencoded());
-app.use('/', express.static(__dirname + '/app'));
-
-
-// Requests :::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-// Get all emails
-app.get('/email', function(req, res){
-  res.json( mailserver.getAllMail() );
-});
-
-// Get single email
-app.get('/email/:id', function(req, res){
-  var mail = mailserver.getMail(req.params.id);
-  if (mail){
-    mail.read = true;
-    res.json(mail);
-  } else {
-    res.send(404, false);
-  }
-});
-
-// Delete emails
-app.delete('/email/:id', function(req, res){
-  var id = req.params.id;
-
-  if (id === 'all'){
-    res.send(mailserver.deleteAllMail(id));
-  } else {
-    res.send(mailserver.deleteMail(id));
-  }
-});
-
-// Get Email HTML
-app.get('/email/:id/html', function(req, res){
-  res.send(mailserver.getMail(req.params.id).html);
-});
-
-// Serve Attachments
-app.get('/email/:id/attachment/:filename', function(req, res){
-
-  mailserver.getAttachmentInfo(req.params.id, req.params.filename, function(err, attachment){
-    if (err) return res.json(404, 'File not found');
-
-    res.contentType(attachment.contentType);
-    mailserver.attachmentReadStream(attachment).pipe(res);
-  });
-
-});
-
-/*
-// Forward the email
-app.post('/email/:id/send', function(req, res){
-  try {
-    var mail = mailserver.getMail(req.params.id);
-    mailserver.sendMail(mail);
-    res.json(true);
-  } catch (err){
-    console.log(err);
-    res.json(500, err);
-  }
-});
-*/
-
-// Socket.io :::::::::::::::::::::::::::::::::::::::::::::::::::::::
-
-io.configure(function(){
-  io.set('log level', 0);
-});
-
-function emitNewMail(socket){
-  return function(){
-    socket.emit('newMail', { hello: 'world' });
-  };
-}
-
-io.sockets.on('connection', function(socket){
+module.exports.run = function(args){
   
-  // When a new email arrives, the 'new' event will be emitted
-  mailserver.eventEmitter.on('new', emitNewMail(socket));
+  var version = pkg.version;
 
-  socket.on('disconnect', function(){
-    mailserver.eventEmitter.removeListener('new', emitNewMail(socket));
-  });
+  args = args || process.argv;
 
-});
+  // CLI
+  program
+    .version(version)
+    .option('-s, --smtp [port]', 'SMTP port to catch emails [1025]', '1025')
+    .option('-w, --web [port]', 'Port to run the Web GUI [1080]', '1080')
+    .option('-o, --open', 'Open the Web GUI after startup')
+    .option('-v, --verbose')
+    .parse(args);
 
 
-server.listen(1080);
-console.log('MailDev app running at 127.0.0.1:1080');
+  if (parseInt(program.smtp, 10) < 1000 || parseInt(program.web, 10) < 1000){
+    throw new Error('Please choose a port above 1000');
+  }
+
+  if (program.verbose){
+    logger.init(true);
+  }
+  
+  // Start the Mailserver & Web GUI
+  mailserver.listen( program.smtp );
+  web.listen( program.web );
+
+  logger.info('MailDev app running at 127.0.0.1:%s', program.web);
+
+  if (program.open){
+    var open = require('open');
+    open('http://localhost:' + program.web);
+  }
+
+};

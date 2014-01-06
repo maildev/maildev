@@ -1,109 +1,116 @@
 <!doctype html>
 <html>
-  <head>
-    <meta charset="utf-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-    <title>MailDev</title>
-    <meta name="description" content="SMTP Server + Web Interface for viewing and testing emails during development.">
-    <meta name="viewport" content="width=device-width">
+    <head>
+        <meta charset="utf-8"/>
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
+        <title>MailDev</title>
+        <meta name="description" content="SMTP Server + Web Interface for viewing and testing emails during development.">
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" href="styles/style.css">
+    </head>
+    <body ng-app="mailDevApp">
 
-    <link rel="stylesheet" href="styles/main.css">
-  </head>
-  <body ng-app="mailDevApp">
-
-    <div class="navbar nav-bar-fluid navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container-fluid">
-          <div class="row-fluid">
-
-            <div class="span4">
-              <a href="#/" class="brand">MailDev <i class="icon-envelope icon-white"></i></a>
-            </div>
-
+        <div class="application-conatiner">
             
-              <ul class="nav" ng-controller="NavCtrl">
+            <div class="sidebar" ng-controller="MainCtrl">
                 
-                <li>
-                  <a ng-click="refreshList()">
-                    <i class="icon-refresh icon-white"></i> 
-                    Refresh
-                  </a>
-                </li>
-
-                <li>
-                  <a ng-click="deleteAll()">
-                    <i class="icon-trash icon-white"></i> 
-                    Delete All
-                  </a>
-                </li>
-
-                <!-- Future settings/config page -->
-                <!--<li>
-                  <a herf="#/settings">
-                    <i class="icon-cog icon-white"></i> 
-                    Settings
-                  </a>
-                </li>-->
-
-              </ul>
-
-
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="container-fluid main">
-
-      <div class="row-fluid">
-
-        <div class="span4 item-container" ng-controller="MainCtrl">
-          
-          <div class="column-header">
-            Items:
-            <!-- TODO - Add filter link here later-->
-          </div>
-
-          <ul class="item-list">
-            <li ng-repeat="item in items | orderBy:'time':!reverse" ng-class="{ read: item.read }" class="ng-cloak">
-
-              <a href="#/email/{{item.id}}" class="email-{{item.id}}" ng-click="markRead(item)">
-                <div class="title">
-                  {{item.subject}}
-                  <span class="icon-attachment" ng-hide="!item.attachments"></span>
+                <div class="sidebar-header">
+                    <div class="brand-container">
+                        <a href="#/" class="brand">
+                            <i class="fa fa-envelope a"></i>
+                            MailDev
+                        </a>
+                    </div>
+                    <div class="search-container">
+                        <input type="text" ng-model="search" class="search-input" placeholder="Search">
+                        <i class="fa fa-search search-icon"></i>
+                    </div>
                 </div>
-                <div class="subline clearfix">
-                  <span class="pull-left">{{item.to.0.address}}</span>
-                  <span class="pull-right">{{item.time | date:'short' }}</span>
+
+                <!-- <div class="sidebar-content"> -->
+                    <div class="sidebar-scrollable-content">
+                        <ul class="email-list">
+                            <li ng-repeat="item in items | orderBy:'time':!reverse | filter: search " class="ng-cloak">
+
+                                <a href="#/email/{{item.id}}" class="email-item email-{{item.id}}" ng-click="markRead(item)">
+                                    <span class="title">
+                                        {{item.subject}}
+                                        <i class="fa fa-paperclip" ng-hide="!item.attachments"></i>
+                                        <i class="fa fa-circle unread-icon" ng-hide="item.read"></i>
+                                    </span>
+                                    <span class="subline clearfix">
+                                        <span class="subline-from">{{item.to.0.address}}</span>
+                                        <span class="subline-time">{{item.time | date:'short' }}</span>
+                                    </span>
+                                </a>
+
+                            </li>
+                        </ul>
+                    </div>
+                <!-- </div> -->
+
+            </div><!-- END .item-container -->
+
+            <div class="main-container">
+                
+                <div class="application-toolbar">
+                    <ul class="toolbar" ng-controller="NavCtrl">
+                    
+                        <li>
+                            <a ng-click="refreshList()" href="" >
+                                <i class="fa fa-refresh"></i> 
+                                Refresh
+                            </a>
+                        </li>
+
+                        <li>
+                            <a ng-click="deleteAll()" href="">
+                                <i class="fa fa-inbox"></i> 
+                                Clear Inbox
+                            </a>
+                        </li>
+
+                    </ul>
+
+                    <ul class="toolbar toolbar-right" ng-controller="NavCtrl">
+                        
+                        <!-- FUTURE SETTINGS PAGE:
+                        <li>
+                            <a href="#/settings">
+                                <i class="fa fa-cog"></i> 
+                                Settings
+                            </a>
+                        </li>-->
+
+                        <li>
+                            <a href="#/">
+                                <i class="fa fa-info-circle"></i> 
+                                Info
+                            </a>
+                        </li>
+
+                    </ul>
+                </div><!-- END .application-toolbar -->
+
+                <div class="email-container" ng-view>
+
+
                 </div>
-              </a>
 
-            </li>
-          </ul>
+            </div><!-- END .main-container -->
 
-        </div>
+        </div><!-- END .application-container -->
 
-        <div class="span8 no-gutter view-panel">
-          <div class="view-panel-inner" ng-view>
+        <script src="/components/angular/angular.min.js"></script>
+        <script src="/components/angular-resource/angular-resource.min.js"></script>
+        <script src="/components/angular-route/angular-route.min.js"></script>
+        <script src="/components/angular-sanitize/angular-sanitize.min.js"></script>
+        <script src="/socket.io/socket.io.js"></script>
 
-          </div>
-        </div>
+        <script src="/scripts/app.js"></script>
+        <script src="/scripts/services.js"></script>
+        <script src="/scripts/controllers/main.js"></script>
+        <script src="/scripts/controllers/item.js"></script>
 
-      </div>
-
-    </div>
-
-    <script src="components/angular/angular.min.js"></script>
-    <script src="components/angular-resource/angular-resource.min.js"></script>
-    <script src="components/angular-route/angular-route.min.js"></script>
-    <script src="components/angular-sanitize/angular-sanitize.min.js"></script>
-    <script src="/socket.io/socket.io.js"></script>
-
-    <script src="scripts/app.js"></script>
-    <script src="scripts/services.js"></script>
-    <script src="scripts/controllers/main.js"></script>
-    <script src="scripts/controllers/item.js"></script>
-
-  </body>
+    </body>
 </html>

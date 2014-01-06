@@ -1,53 +1,54 @@
-<h2>
-    Now receiving all emails on port 1025
-</h2>
+<div class="main-content">
+    <h2>
+        Now receiving all emails on port {{ config.smtpPort }}
+    </h2>
 
-<p>
-    For info on configuring your application <a href ng-click="showConfig()">click here</a>.
-</p>
-
-
-<div class="slide-container" ng-class="{ open: configOpen }">
-
-    <h4>Nodemailer</h4>
-
-    <div class="clearfix">
-        <pre class="span10">
-var transport = nodemailer.createTransport("SMTP", {
-    port: <strong>1025</strong>,
-    // other settings...
-});
-</pre>
-
-    </div>
-
-    <h4>Django</h4>
     <p>
-        Add <code>EMAIL_PORT = 1025</code> in your settings file (<a href="https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-EMAIL_PORT" target="_blank">source</a>)
+        For info on configuring your application <a href ng-click="showConfig()">click here</a>.
     </p>
 
-    <h4>Rails</h4>
+
+    <div class="slide-container" ng-class="{ open: configOpen }">
+
+        <h4>Nodemailer</h4>
+
+        <div class="clearfix">
+            <pre class="code">
+var transport = nodemailer.createTransport("SMTP", {
+    port: <strong>{{ config.smtpPort }}</strong>,
+    // other settings...
+});</pre>
+
+        </div>
+
+        <h4>Django</h4>
+        <p>
+            Add <code>EMAIL_PORT = {{ config.smtpPort }}</code> in your settings file (<a href="https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-EMAIL_PORT" target="_blank">source</a>)
+        </p>
+
+        <h4>Rails</h4>
 
 
-    <div class="clearfix">
-        <pre class="span10">
+        <div class="clearfix">
+            <pre class="code">
 config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
         :address => <strong>"localhost"</strong>,
-        :port => <strong>1025</strong>
-    }
-</pre>
+        :port => <strong>{{ config.smtpPort }}</strong>
+    }</pre>
+        </div>
+        
+        <br>
+
     </div>
-    
+
+    <p>
+    	For questions, feature requests or to report issues <a href="https://github.com/djfarrelly/MailDev" target="_blank">visit this project on GitHub</a>.
+    </p>
+
     <br>
+    <p>
+        <small>You are running MailDev v.{{ config.version }}</small>
+    </p>
 
 </div>
-
-<p>
-	For questions, feature requests or to report issues <a href="https://github.com/djfarrelly/MailDev" target="_blank">visit this project on GitHub</a>.
-</p>
-
-<br>
-<p>
-    <small>You are running MailDev v.0.4.0</small>
-</p>

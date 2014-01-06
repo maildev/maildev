@@ -6,3 +6,4 @@ dist
 maildev-*
 settings.json
 *.sublime-*
+.nodemonignore

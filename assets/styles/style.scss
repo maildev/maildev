@@ -1,0 +1,373 @@
+
+/**
+ * MailDev - style.css
+ *
+ * Author: Dan Farrelly <daniel.j.farrelly@gmail.com>
+ * Licensed under the MIT License.
+ */
+
+
+@import 'normalize';
+@import 'fonts';
+@import 'mixins';
+@import 'font-awesome/font-awesome';
+
+/**
+ * Variables
+ */
+
+$brand:             rgb(73, 148, 206); 
+$brandLight:        lighten($brand, 20);
+$brandLighter:      lighten($brand, 40);
+$brandDark:         darken($brand, 20);
+
+
+$white:             rgb(255,255,255);
+$whiteSemiTrans:    rgba(255,255,255,0.8);
+
+$greyXLight:        rgb(250,250,250);
+$greyLight:         rgb(220,220,220);
+$greyMedium:        rgb(140,140,140);
+$greyDark:          rgb(80,80,80);
+$greyXDark:         rgb(40,40,40);
+
+$toolbarHeight:     2.8em;
+
+
+/**
+ * Generic & Helper Classes
+ */
+
+.plain-text { font-family: Monaco, Menlo, Consolas, "Courier New", monospace; }
+
+.clearfix:before,
+.clearfix:after { content:""; display:table; }
+.clearfix:after { clear:both; }
+.clearfix { zoom:1; }
+
+.hidden {
+    display: none !important;
+}
+
+// AngularJS:
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide {
+    display: none !important;
+}
+
+th, td {
+    padding: 0.4em 0.6em;
+    &:first-child { padding-left: 0; }
+    &:last-child { padding-right: 0; }
+}
+
+
+/**
+ * Basic layout and main elements
+ */
+
+html, body, .application-conatiner { height: 100%; width: 100%; overflow: hidden; }
+
+body {
+    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    -webkit-font-smoothing:antialiased;
+}
+
+.application-conatiner {
+    @include displayFlex();
+
+    flex-flow: row nowrap;
+    align-items: stretch;
+}
+
+.sidebar {
+    @include flex(1 30%);
+
+    max-width: 26em; height: 100%;
+    background-color: $greyXLight;
+}
+
+.main-container {
+    @include flex(1 70%);
+    overflow-y: scroll;
+}
+
+.sidebar-header {
+    position: absolute; top: 0; left: 0; width:30%; max-width: 26em;
+    min-height: 2 * $toolbarHeight; // 2 toolbar height = 2.8 * 2 = 5.6
+    background-color: $brand;
+}
+
+.sidebar-content {
+    height:100%;
+}
+
+.sidebar-scrollable-content {
+    margin-top: 2 * $toolbarHeight;
+    overflow-y: scroll; overflow-x: hidden;
+
+    // > *:first-child { margin-top: 5.6em; }
+}
+
+.brand-container {
+    padding: 0.5em 1em;
+}
+
+.brand {
+    font-size:20px;
+    color:rgb(255,255,255);
+    text-decoration: none;
+
+    .brand-icon {
+        margin-right: 6px;
+    }
+}
+
+
+.application-toolbar {
+    width: 100%; position: fixed; z-index: 10;
+    background-color: $brand;
+}
+
+.email-list {
+    margin: 0; padding: 0;
+    list-style: none;
+}
+
+.email-item {
+    display: block;
+    padding: 0.6em 1em 1em; //0.6 to offset the line height of the email title
+
+    background-color: $greyXLight;
+    border-bottom: 1px solid $greyLight;
+    color: $greyXDark; text-decoration: none;
+    font-size: 12px; line-height: 14px;
+
+    &:hover {
+        background-color: $white;
+    }
+
+    .title {
+        display: block; position: relative;
+        margin-bottom: 0.5em; padding-right: 1em;
+        font-size:14px; line-height: 1.5em;
+    }
+    .unread-icon {
+        position: absolute; top:0.5em; right: 0;
+        color: $brandLight;
+        font-size: 10px;
+        line-height: 14px;
+    }
+    .subline {
+        display: block;
+    }
+    .subline-from {
+        float:left;
+    }
+    .subline-time {
+        float:right;
+    }
+
+    @media (max-width: 800px) {
+        .subline-time { display: none; }   
+    }
+}
+
+.email-container {
+    padding-top: $toolbarHeight;
+}
+
+.email-toolbar {
+    position: fixed; z-index: 10;
+    width: 100%; background-color: $white;
+}
+
+.email-content {
+    position: inherit; z-index: 1;
+    margin: 1em; padding-top: $toolbarHeight;
+} 
+
+
+.main-content {
+    margin: $toolbarHeight 2em 0;
+
+    a, a:visited {
+        color: $brand;
+    }
+    a:hover {
+        color: $brandDark;
+    }
+}
+
+
+/**
+ * Re-usable UI elements
+ */
+
+.toolbar {
+    margin: 0; padding: 0.2em 0; height: $toolbarHeight - 0.4em; // Total height: 2.8em
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    list-style: none;
+
+    font-size: 14px;
+
+    li {
+        padding: 0 0.5em;
+    }
+
+    .fa {
+        vertical-align: top;
+        margin-right: 4px;
+        font-size: 20px;
+
+        &.fa-mobile-smaller {
+            font-size: 16px;
+            line-height: 20px;
+        }
+    }
+
+    a {
+        padding: 0.3em 0.2em;
+        text-decoration: none;
+        &, &:visited {
+            color: $whiteSemiTrans;
+        }
+        &:hover {
+            color: $white;
+        }
+
+        &.disabled {
+            color: $greyMedium !important; cursor: default;
+        }
+    }
+
+    &.on-light {
+        a {
+            color: $greyDark;
+            &:hover {
+                // color: $brandDark;
+                color: $brand;
+            }
+            &.active {
+                color: $brandDark;
+            }
+        }
+    }
+}
+
+.toolbar-right {
+    position: fixed; top:0; right:0;
+}
+
+.dropdown-container {
+    position: relative;
+}
+
+.dropdown-trigger {
+    &:focus { outline: none; }
+    &.open {
+        color: $brand !important;
+        + .dropdown-menu {
+            display: block;
+        }
+    }
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute; top: 2em; left: 0; z-index: 10;
+    padding:0 0.5em; min-width: 10em;
+    list-style: none;
+    background-color: $white;
+    box-shadow: 0 2px 2px 0px rgba(50,50,50,0.1);
+
+    li {
+        padding:0.4em 0;
+    }
+}
+
+.slide-container {
+    overflow: hidden;
+    max-height: 0px;
+    -webkit-transition: max-height 500ms ease-in-out;
+       -moz-transition: max-height 500ms ease-in-out;
+            transition: max-height 500ms ease-in-out;
+
+    &.open {
+        max-height: 1000px;
+    }
+}
+
+.code {
+    background-color: $greyXLight;
+    border:1px solid $greyLight;
+    padding: 1em 1em;
+}
+code {
+    background-color: $greyXLight;
+    border:1px solid $greyLight;
+    padding: 0.1em 0.3em;
+}
+
+/**
+ * Specific Styles
+ */
+.search-container {
+    position: relative;
+    padding: 0.3em 0.8em 0;
+}
+
+.search-icon {
+    position: absolute;
+    top: 0.7em; left: 1.3em;
+    color: $whiteSemiTrans;
+}
+
+.search-input {
+    display: block;
+    margin: 0;
+    padding: 0.3em 0.2em;
+    width: 98%;
+
+    text-indent: 1.9em;
+    background-color: $brand;
+    border: 0;
+    color: $white;
+    -webkit-font-smoothing: antialiased;
+
+    &:focus {
+        outline: none;
+        background-color: darken($brand, 10);
+        + .search-icon {
+            color: $white;
+        }
+    }
+}
+
+
+
+::-webkit-input-placeholder {
+    -webkit-font-smoothing: antialiased;
+    color: $whiteSemiTrans;
+    -webkit-transition: color 250ms linear;
+            transition: color 250ms linear;
+}
+::-moz-placeholder { // Firefox 19+
+    color: $whiteSemiTrans;
+    -moz-transition: color 250ms linear;
+         transition: color 250ms linear;
+}
+::-ms-placeholder, // IE10+
+::placeholder {
+    -webkit-font-smoothing: antialiased;
+    color: $whiteSemiTrans;
+    transition:color 250ms linear;
+}
+
+.preview-iframe { 
+    border:0; width:100%; min-height:600px;
+    position: relative; // set position for resize rendering issue
+}
+

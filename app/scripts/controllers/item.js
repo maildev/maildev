@@ -55,6 +55,8 @@ app.controller('ItemCtrl', [
         replaceMediaQueries();
         fixIframeHeight();
 
+        addHideDropdownHanlder(  iframe.contentDocument.getElementsByTagName('body')[0] );
+
       }, 500);
     };
 
@@ -79,6 +81,29 @@ app.controller('ItemCtrl', [
         });
       });
     };
+
+    // NOTE: This is kind of a hack to get these dropdowns working. Should be revisited in the future
+
+    // Toggle a dropdown open/closed by toggling a class on the trigger itself
+    $scope.toggleDropdown = function($event, dropdownName) {
+      $event.stopPropagation();
+      $scope.dropdownOpen = dropdownName === $scope.dropdownOpen ? '' : dropdownName;
+    };
+
+    function hideDropdown(e){
+      $scope.$apply(function(){
+        $scope.dropdownOpen = '';
+      });
+    }
+
+    function addHideDropdownHanlder(element){
+      angular.element( element )
+        .off('click', hideDropdown)
+        .on('click', hideDropdown);
+    }
+
+    addHideDropdownHanlder( window );
+
 
     // Toggle what format is viewable
     $scope.show = function(type) {

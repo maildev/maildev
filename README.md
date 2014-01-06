@@ -2,7 +2,9 @@
 
 [![NPM version](https://badge.fury.io/js/maildev.png)](http://badge.fury.io/js/maildev)
 
-**MailDev** is a simple way to test your project's generated emails during development with an easy to use web interface that runs on your machine.  **MailDev** is built on using great open source projects including [Express](http://expressjs.com), [AngularJS](http://angularjs.org/), and two great projects from [Andris Reinman](https://github.com/andris9): [Simple SMTP](https://github.com/andris9/simplesmtp) and [Mailparser](https://github.com/andris9/mailparser).
+**MailDev** is a simple way to test your project's generated emails during development with an easy to use web interface that runs on your machine built on top of [Node.js](http://www.nodejs.org).
+
+![MailDev Screenshot](https://dl.dropboxusercontent.com/u/50627698/maildev-04-12-13.png)
 
 ## Install & Run
 	
@@ -11,7 +13,18 @@
 
 ## Usage
 
-Configure your application to send emails via port `1025` and open `localhost:1080`.
+    Options:
+
+      -h, --help         output usage information
+      -V, --version      output the version number
+      -s, --smtp [port]  SMTP port to catch emails [1025]
+      -w, --web [port]   Port to run the Web GUI [1080]
+      -o, --open         Open the Web GUI after startup
+      -v, --verbose
+
+## Configure your project
+
+Configure your application to send emails via port `1025` and open `localhost:1080` in your browser.
 
 **Nodemailer**
 
@@ -30,37 +43,41 @@ Configure your application to send emails via port `1025` and open `localhost:10
             :port => 1025
       }
 
-
-![MailDev Screenshot](https://dl.dropboxusercontent.com/u/50627698/maildev-04-12-13.png)
-
 ## Features
 
 * Toggle between HTML, plain text views as well as view email headers
 * Test Responsive Emails w/ resizeable preview pane available for 320/480/600px screen sizes
 * Ability to receive and view email attachments
 * Websockets keep the interface in sync once emails are received
+* Command line interface for configuring SMTP and Web interface ports
 
 ## Roadmap
 
-* Add command line options for ports, logging, ability to run as daemon, etc.
 * Forward email to real email address for device/application testing
 * Write tests for server and client
 
 ## Ideas
-* Write grunt task for quick drop into projects using grunt
-* Add sqlite or [NeDB](https://github.com/louischatriot/nedb) storage w/ possibility to persist data after restarts
-* Check CSS compatibility of emails using http://www.campaignmonitor.com/css/
 
-## Contributing to MailDev
+Please submit any ideas or feature requests [here](https://github.com/djfarrelly/MailDev/issues/new) or contact me on [twitter](http://www.twitter.com/djfarrelly).
 
-Bugs and new features should be submitted using [Github issues](https://github.com/djfarrelly/MailDev/issues/new). Include a description of the item and the expected behavior.
+## Contributing
 
-* Code style: 2 space soft-tabs, Single quotes
-* Make all changes on the `Develop` branch or even better, create a new branch for your changes, i.e. `git checkout -b some-new-feature`
-* `grunt jshint` to lint your code (Install [Grunt](http://www.gruntjs.com) via `npm install -g grunt-cli`)
-* `grunt compass` for CSS changes. You must have [Compass](http://compass-style.org/) installed. Run `grunt watch` to pickup live changes
+Please submit bugs and new features using [Github issues](https://github.com/djfarrelly/MailDev/issues/new). To run **MailDev** during development:
+
+    # grunt-cli is needed by grunt; ignore this if already installed
+    npm install -g grunt-cli
+    npm install
+    grunt dev
+
+The `grunt dev` task will run the project using nodemon and restart automatically when changes are detected. SASS files will be compiled automatically on save also. To trigger some emails for testing run `node test/send.js` in a separate shell. Other notes:
+
+* Please make changes on a new branch, i.e. `git checkout -b some-new-feature`
+* Try to be consistent with the coding style of the project
+* Please lint your code before submitting a pull request: Run `grunt jshint`
 
 ## Changelog
+
+0.5.0 - Add command line interface. Web UI redesign.
 
 0.4.0 - Add ability to receive and view attachments
 
@@ -70,7 +87,7 @@ Bugs and new features should be submitted using [Github issues](https://github.c
 
 ## Thanks
 
-Thanks to [Andris Reinman](https://github.com/andris9) for creating his projects that are the backbone of this app and [MailCatcher](http://mailcatcher.me/) for the inspiration.
+**MailDev** is built on using great open source projects including [Express](http://expressjs.com), [AngularJS](http://angularjs.org/), [Font Awesome](http://fontawesome.io/)and two great projects from [Andris Reinman](https://github.com/andris9): [Simple SMTP](https://github.com/andris9/simplesmtp) and [Mailparser](https://github.com/andris9/mailparser). Many thanks to Andris as his projects are the backbone of this app and to [MailCatcher](http://mailcatcher.me/) for the inspiration.
 
 ## License
 

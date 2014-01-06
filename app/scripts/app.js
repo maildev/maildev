@@ -41,3 +41,35 @@ app.filter('newLines', function() {
   };
 
 });
+
+/**
+ * Sidebar scrollbar fixed height
+ */
+
+(function(){
+
+  var sidebar             = document.querySelector('.sidebar')
+    , sidebarHeader       = document.querySelector('.sidebar-header')
+    , emailList           = document.querySelector('.email-list')
+    , sidebarHeaderHeight = sidebarHeader.getBoundingClientRect().height
+    , resizeTimeout       = null
+    ;
+
+  function adjustEmailListHeight(){
+    var newEmailListHeight = sidebar.getBoundingClientRect().height - sidebarHeaderHeight;
+    emailList.style.height = newEmailListHeight + 'px';
+  }
+
+  adjustEmailListHeight();
+
+  window.onresize = function(){
+    if (resizeTimeout){
+      clearTimeout(resizeTimeout);
+    }
+    resizeTimeout = window.setTimeout(function(){
+      adjustEmailListHeight();
+      resizeTimeout = null;
+    }, 300);
+  };
+
+})();

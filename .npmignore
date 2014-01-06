@@ -2,3 +2,4 @@
 assets/
 *.sublime-project
 *.sublime-workspace
+.nodemonignore

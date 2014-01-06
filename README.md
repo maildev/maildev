@@ -4,7 +4,7 @@
 
 **MailDev** is a simple way to test your project's generated emails during development with an easy to use web interface that runs on your machine built on top of [Node.js](http://www.nodejs.org).
 
-![MailDev Screenshot](https://dl.dropboxusercontent.com/u/50627698/maildev-04-12-13.png)
+![MailDev Screenshot](https://dl.dropboxusercontent.com/u/50627698/maildev-01-05-14.png)
 
 ## Install & Run
 	

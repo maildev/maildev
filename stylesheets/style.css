@@ -344,12 +344,15 @@ body {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
 
 a {
-  color: #597e9a;
+  color: #307ab4;
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
   transition: all 150ms linear; }
   a:hover {
-    color: #7697b0; }
+    color: #4994ce; }
+
+h1, h2, h3 {
+  font-weight: 400; }
 
 h2 {
   margin: 1.0em 0; }
@@ -357,7 +360,7 @@ h2 {
 header {
   position: fixed;
   z-index: 900;
-  background: #7697b0;
+  background: #4994ce;
   color: #fff;
   height: 50px;
   width: 100%;
@@ -379,25 +382,25 @@ header {
 footer {
   width: 100%;
   text-align: center;
-  background-color: #7697b0;
+  background-color: #4994ce;
   color: #ffffff;
   padding: 1em 0; }
   footer a {
-    color: #f4f8fa; }
+    color: #eaf2f9; }
     footer a:hover {
       color: #fff; }
 
 .github-ribbon {
   width: 220px;
-  font-size: 0.8em;
-  background-color: rgba(255, 255, 255, 0.8);
-  color: #597e9a;
   position: absolute;
   top: 50px;
   right: -50px;
   z-index: 1000;
   display: block;
   padding: 0.3em 0;
+  font-size: 0.8em;
+  background-color: rgba(255, 255, 255, 0.8);
+  color: #307ab4;
   text-decoration: none;
   text-align: center;
   -webkit-transform: rotate(45deg);
@@ -405,10 +408,10 @@ footer {
   transform: rotate(45deg); }
   .github-ribbon:hover {
     background-color: white;
-    color: #7697b0; }
+    color: #4994ce; }
 
 .jumbotron {
-  background: #7697b0;
+  background: #4994ce;
   width: 100%;
   padding-top: 80px;
   height: 400px;
@@ -427,12 +430,12 @@ footer {
 
 pre {
   padding: 8px 15px;
-  background: #eeeeee;
+  background: rgba(255, 255, 255, 0.8);
   color: #3b3b3b;
   overflow-x: auto; }
 
 code {
-  background: #eeeeee;
+  background: rgba(255, 255, 255, 0.8);
   color: #3b3b3b; }
 
 p code, li code {
@@ -457,6 +460,6 @@ p code, li code {
     padding: 0.4em 1em;
     color: #ffffff;
     text-decoration: none;
-    background-color: #abc2d3; }
+    background-color: #99c3e4; }
     .button-link-list a:hover {
-      background-color: #7697b0; }
+      background-color: #265f8b; }

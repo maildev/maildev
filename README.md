@@ -58,22 +58,20 @@ Configure your application to send emails via port `1025` and open `localhost:10
 
 ## Ideas
 
-Please submit any ideas or feature requests [here](https://github.com/djfarrelly/MailDev/issues/new) or contact me on [twitter](http://www.twitter.com/djfarrelly).
+If you're using MailDev and you have a great idea, I'd love to hear it. If you're not using MailDev because it lacks a feature, I'd love to hear that too. Add an issue to the repo [here](https://github.com/djfarrelly/MailDev/issues/new) or contact me on [twitter](http://www.twitter.com/djfarrelly).
 
 ## Contributing
 
-Please submit bugs and new features using [Github issues](https://github.com/djfarrelly/MailDev/issues/new). To run **MailDev** during development:
+Any help on MailDev would be awesome. There is plenty of room for improvement. Feel free to [create a Pull Request](https://github.com/djfarrelly/MailDev/issues/new) from small to big changes. 
+
+To run **MailDev** during development:
 
     # grunt-cli is needed by grunt; ignore this if already installed
     npm install -g grunt-cli
     npm install
     grunt dev
 
-The `grunt dev` task will run the project using nodemon and restart automatically when changes are detected. SASS files will be compiled automatically on save also. To trigger some emails for testing run `node test/send.js` in a separate shell. Other notes:
-
-* Please make changes on a new branch, i.e. `git checkout -b some-new-feature`
-* Try to be consistent with the coding style of the project
-* Please lint your code before submitting a pull request: Run `grunt jshint`
+The `grunt dev` task will run the project using nodemon and restart automatically when changes are detected. SASS files will be compiled automatically on save also. To trigger some emails for testing run `node test/send.js` in a separate shell. Please run jshint to your lint code before submitting a pull request; run `grunt jshint`.
 
 ## Changelog
 

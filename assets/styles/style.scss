@@ -1,4 +1,3 @@
-
 /**
  * MailDev - style.css
  *
@@ -215,6 +214,10 @@ body {
 
     li {
         padding: 0 0.5em;
+        display: inline-block;
+    }
+    .dropdown-menu li {
+        display: block;
     }
 
     .fa {

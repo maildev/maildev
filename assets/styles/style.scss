@@ -76,7 +76,7 @@ body {
     @include displayFlex();
 
     flex-flow: row nowrap;
-    align-items: stretch;
+    @include align-items(stretch);
 }
 
 .sidebar {
@@ -204,20 +204,20 @@ body {
  */
 
 .toolbar {
-    margin: 0; padding: 0.2em 0; height: $toolbarHeight - 0.4em; // Total height: 2.8em
-    display: flex;
+    margin: 0;
+    padding: 0.2em 0;
+    height: $toolbarHeight - 0.4em; // Total height: 2.8em
+
+    @include displayFlex();
     flex-flow: row nowrap;
-    align-items: center;
+    @include align-items(center);
+
     list-style: none;
 
     font-size: 14px;
 
     li {
         padding: 0 0.5em;
-        display: inline-block;
-    }
-    .dropdown-menu li {
-        display: block;
     }
 
     .fa {

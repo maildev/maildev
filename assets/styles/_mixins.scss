@@ -14,3 +14,8 @@
   -ms-flex:  $values;
   flex:  $values;
 }
+
+@mixin align-items($value){
+  -webkit-align-items: $value;
+  align-items: $value;
+}

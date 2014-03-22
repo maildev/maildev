@@ -75,6 +75,8 @@ The `grunt dev` task will run the project using nodemon and restart automaticall
 
 ## Changelog
 
+0.5.1 - Fix menu layout issue in Safari
+
 0.5.0 - Add command line interface. Web UI redesign.
 
 0.4.0 - Add ability to receive and view attachments

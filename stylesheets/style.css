@@ -428,17 +428,19 @@ footer {
   max-width: 1000px;
   margin: 0 auto; }
 
-pre {
-  padding: 8px 15px;
-  background: rgba(255, 255, 255, 0.8);
-  color: #3b3b3b;
-  overflow-x: auto; }
-
+pre,
 code {
   background: rgba(255, 255, 255, 0.8);
   color: #3b3b3b; }
 
-p code, li code {
+pre {
+  padding: 8px 15px;
+  overflow-x: auto; }
+  pre code {
+    background: none; }
+
+p code,
+li code {
   padding: 0.1em 0.4em;
   font-size: 0.95em; }
 

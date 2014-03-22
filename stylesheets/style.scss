@@ -75,12 +75,22 @@ footer {
 
 .content { width:90%; max-width: 1000px; margin:0 auto; }
 
+pre,
+code {
+	background: $whiteSemiTrans;
+	color:darken($text, 10%);
+}
+
 pre {
 	padding: 8px 15px; 
-	background: $whiteSemiTrans; color:darken($text, 10%); overflow-x: auto;
+	overflow-x: auto;
+	
+	code {
+		background: none;
+	}
 }
-code { background:$whiteSemiTrans; color:darken($text, 10%); }
-p code, li code { padding:0.1em 0.4em; font-size:0.95em; }
+p code,
+li code { padding:0.1em 0.4em; font-size:0.95em; }
 
 .description-main { 
 	font-size:1.3em; width:74%; margin:1.5em auto; text-align: center;

@@ -35,7 +35,7 @@
     "simplesmtp": "*",
     "mailparser": "*",
     "mailcomposer": "*",
-    "socket.io": "*",
+    "socket.io": "~0.9.17",
     "commander": "~2.1.0",
     "open": "0.0.4"
   },

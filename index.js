@@ -26,6 +26,11 @@ module.exports.run = function(args){
     .version(version)
     .option('-s, --smtp [port]', 'SMTP port to catch emails [1025]', '1025')
     .option('-w, --web [port]', 'Port to run the Web GUI [1080]', '1080')
+    .option('--forward-host <host>', 'SMTP host to forward emails')
+    .option('--forward-port <port>', 'SMTP port to forward emails')
+    .option('--forward-user <user>', 'SMTP user to forward emails')
+    .option('--forward-pass <pass>', 'SMTP password to forward emails')
+    .option('--forward-secure', 'Use SMTP SSL to forward emails')
     .option('-o, --open', 'Open the Web GUI after startup')
     .option('-v, --verbose')
     .parse(args);
@@ -41,6 +46,21 @@ module.exports.run = function(args){
   
   // Start the Mailserver & Web GUI
   mailserver.listen( program.smtp );
+  if (
+      program.forwardHost ||
+      program.forwardPort ||
+      program.forwardUser ||
+      program.forwardPass ||
+      program.forwardSecure
+      ){
+    mailserver.setupForwarding(
+        program.forwardHost
+      , parseInt(program.forwardPort)
+      , program.forwardUser
+      , program.forwardPass
+      , program.forwardSecure
+    );
+  }
   web.listen( program.web );
 
   logger.info('MailDev app running at 127.0.0.1:%s', program.web);

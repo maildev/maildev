@@ -129,7 +129,7 @@ app.controller('ItemCtrl', [
       $scope.iframeSize = newSize;
     };
     
-    // TODO -- Future implementation of forwarding emails via gmail
+    // Forward (send) email
     $scope.forward = function(item) {
       $http({
         method: 'POST',

@@ -26,7 +26,15 @@
 
 Configure your application to send emails via port `1025` and open `localhost:1080` in your browser.
 
-**Nodemailer**
+**Nodemailer (v1.0+)**
+
+    var transport = nodemailer.createTransport({
+        port: 1025,
+        ignoreTLS: true,
+        // other settings...
+    });
+
+**Nodemailer (v0.7)**
 
     var transport = nodemailer.createTransport("SMTP", {
         port: 1025,

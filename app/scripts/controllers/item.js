@@ -129,11 +129,11 @@ app.controller('ItemCtrl', [
       $scope.iframeSize = newSize;
     };
     
-    // Forward (send) email
-    $scope.forward = function(item) {
+    // Relay email
+    $scope.relay = function(item) {
       $http({
         method: 'POST',
-        url: '/email/' + item.id + '/send'
+        url: '/email/' + item.id + '/relay'
       })
         .success(function(data, status) {
           console.log(data, status);

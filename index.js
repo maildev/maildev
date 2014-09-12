@@ -26,11 +26,11 @@ module.exports.run = function(args){
     .version(version)
     .option('-s, --smtp [port]', 'SMTP port to catch emails [1025]', '1025')
     .option('-w, --web [port]', 'Port to run the Web GUI [1080]', '1080')
-    .option('--forward-host <host>', 'SMTP host to forward emails')
-    .option('--forward-port <port>', 'SMTP port to forward emails')
-    .option('--forward-user <user>', 'SMTP user to forward emails')
-    .option('--forward-pass <pass>', 'SMTP password to forward emails')
-    .option('--forward-secure', 'Use SMTP SSL to forward emails')
+    .option('--outgoing-host <host>', 'SMTP host for outgoing emails')
+    .option('--outgoing-port <port>', 'SMTP port for outgoing emails')
+    .option('--outgoing-user <user>', 'SMTP user for outgoing emails')
+    .option('--outgoing-pass <pass>', 'SMTP password for outgoing emails')
+    .option('--outgoing-secure', 'Use SMTP SSL for outgoing emails')
     .option('-o, --open', 'Open the Web GUI after startup')
     .option('-v, --verbose')
     .parse(args);
@@ -47,18 +47,18 @@ module.exports.run = function(args){
   // Start the Mailserver & Web GUI
   mailserver.listen( program.smtp );
   if (
-      program.forwardHost ||
-      program.forwardPort ||
-      program.forwardUser ||
-      program.forwardPass ||
-      program.forwardSecure
+      program.outgoingHost ||
+      program.outgoingPort ||
+      program.outgoingUser ||
+      program.outgoingPass ||
+      program.outgoingSecure
       ){
-    mailserver.setupForwarding(
-        program.forwardHost
-      , parseInt(program.forwardPort)
-      , program.forwardUser
-      , program.forwardPass
-      , program.forwardSecure
+    mailserver.setupOutgoing(
+        program.outgoingHost
+      , parseInt(program.outgoingPort)
+      , program.outgoingUser
+      , program.outgoingPass
+      , program.outgoingSecure
     );
   }
   web.listen( program.web );

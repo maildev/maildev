@@ -145,7 +145,11 @@ app.controller('ItemCtrl', [
           url: '/email/' + item.id + '/relay'
         })
           .success(function(data, status) {
-            console.log(data, status);
+            console.log('Relay result: ', data, status);
+            window.alert('Relay successful');
+          })
+          .error(function(data) {
+            window.alert('Relay failed: ' + data.error);
           });
 
       }

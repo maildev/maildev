@@ -131,13 +131,24 @@ app.controller('ItemCtrl', [
     
     // Relay email
     $scope.relay = function(item) {
-      $http({
-        method: 'POST',
-        url: '/email/' + item.id + '/relay'
-      })
-        .success(function(data, status) {
-          console.log(data, status);
-        });
+
+      if (
+          window.confirm(
+            'Are you sure you want to REALLY SEND email to ' +
+            item.to.map(function(to){return to.address;}).join() + ' through ' +
+            $rootScope.config.outgoingHost + '?'
+          )
+        ) {
+
+        $http({
+          method: 'POST',
+          url: '/email/' + item.id + '/relay'
+        })
+          .success(function(data, status) {
+            console.log(data, status);
+          });
+
+      }
     };
 
 

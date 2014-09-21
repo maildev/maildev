@@ -15,12 +15,27 @@
 
     maildev [options]
 
-      -h, --help         output usage information
-      -V, --version      output the version number
-      -s, --smtp [port]  SMTP port to catch emails [1025]
-      -w, --web [port]   Port to run the Web GUI [1080]
-      -o, --open         Open the Web GUI after startup
+      -h, --help              output usage information
+      -V, --version           output the version number
+      -s, --smtp [port]       SMTP port to catch emails [1025]
+      -w, --web [port]        Port to run the Web GUI [1080]
+      --outgoing-host <host>  SMTP host for outgoing emails
+      --outgoing-port <port>  SMTP port for outgoing emails
+      --outgoing-user <user>  SMTP user for outgoing emails
+      --outgoing-pass <pass>  SMTP password for outgoing emails
+      --outgoing-secure       Use SMTP SSL for outgoing emails
+      -o, --open              Open the Web GUI after startup
       -v, --verbose
+
+## Outgoing email
+
+Maildev optionally supports selectively relaying email to an outgoing SMTP server.  If you configure outgoing
+email with the --outgoing-xxx options you can click "Relay" on an individual email to relay through MailDev out
+to a real SMTP service that will really send the email.
+
+  Example:
+
+    $ maildev --outgoing-host smtp.gmail.com --outgoing-secure --outgoing-user 'you@gmail.com' --outgoing-pass '<pass>'
 
 ## Configure your project
 
@@ -58,6 +73,7 @@ Configure your application to send emails via port `1025` and open `localhost:10
 * Ability to receive and view email attachments
 * Websockets keep the interface in sync once emails are received
 * Command line interface for configuring SMTP and Web interface ports
+* Ability to relay email to an upstream SMTP server
 
 ## Roadmap
 

@@ -26,6 +26,11 @@ module.exports.run = function(args){
     .version(version)
     .option('-s, --smtp [port]', 'SMTP port to catch emails [1025]', '1025')
     .option('-w, --web [port]', 'Port to run the Web GUI [1080]', '1080')
+    .option('--outgoing-host <host>', 'SMTP host for outgoing emails')
+    .option('--outgoing-port <port>', 'SMTP port for outgoing emails')
+    .option('--outgoing-user <user>', 'SMTP user for outgoing emails')
+    .option('--outgoing-pass <pass>', 'SMTP password for outgoing emails')
+    .option('--outgoing-secure', 'Use SMTP SSL for outgoing emails')
     .option('-o, --open', 'Open the Web GUI after startup')
     .option('-v, --verbose')
     .parse(args);
@@ -41,6 +46,21 @@ module.exports.run = function(args){
   
   // Start the Mailserver & Web GUI
   mailserver.listen( program.smtp );
+  if (
+      program.outgoingHost ||
+      program.outgoingPort ||
+      program.outgoingUser ||
+      program.outgoingPass ||
+      program.outgoingSecure
+      ){
+    mailserver.setupOutgoing(
+        program.outgoingHost
+      , parseInt(program.outgoingPort)
+      , program.outgoingUser
+      , program.outgoingPass
+      , program.outgoingSecure
+    );
+  }
   web.listen( program.web );
 
   logger.info('MailDev app running at 127.0.0.1:%s', program.web);

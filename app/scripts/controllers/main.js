@@ -34,6 +34,7 @@ app.controller('MainCtrl', [
 
     $http({method: 'GET', url: '/config'})
       .success(function(data){
+        $rootScope.config = data;
         $scope.config = data;
       });
 

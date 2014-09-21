@@ -129,15 +129,30 @@ app.controller('ItemCtrl', [
       $scope.iframeSize = newSize;
     };
     
-    // TODO -- Future implementation of forwarding emails via gmail
-    $scope.forward = function(item) {
-      $http({
-        method: 'POST',
-        url: '/email/' + item.id + '/send'
-      })
-        .success(function(data, status) {
-          console.log(data, status);
-        });
+    // Relay email
+    $scope.relay = function(item) {
+
+      if (
+          window.confirm(
+            'Are you sure you want to REALLY SEND email to ' +
+            item.to.map(function(to){return to.address;}).join() + ' through ' +
+            $rootScope.config.outgoingHost + '?'
+          )
+        ) {
+
+        $http({
+          method: 'POST',
+          url: '/email/' + item.id + '/relay'
+        })
+          .success(function(data, status) {
+            console.log('Relay result: ', data, status);
+            window.alert('Relay successful');
+          })
+          .error(function(data) {
+            window.alert('Relay failed: ' + data.error);
+          });
+
+      }
     };
 
 

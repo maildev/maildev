@@ -14,7 +14,7 @@ module.exports = function (grunt) {
     },
 
     watch: {
-      compass: {
+      sass: {
         files: ['<%= path.assets %>/styles/{,*/}*.{scss,sass}'],
         tasks: ['sass']
       }
@@ -71,7 +71,7 @@ module.exports = function (grunt) {
 
   grunt.registerTask('build', [
     'jshint',
-    'compass:dist'
+    'sass'
   ]);
 
   grunt.registerTask('default', ['build']);

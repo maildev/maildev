@@ -65,11 +65,11 @@ module.exports = function (grunt) {
   // Load all grunt tasks
   require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
 
-  grunt.registerTask('dev', [
+  grunt.registerTask('dev', 'Run the app and watch SCSS files for changes', [
     'concurrent'
   ]);
 
-  grunt.registerTask('build', [
+  grunt.registerTask('build', 'Lint JavaScript + compile SCSS', [
     'jshint',
     'sass'
   ]);

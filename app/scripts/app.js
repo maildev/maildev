@@ -18,7 +18,7 @@ app.config(['$routeProvider', function($routeProvider){
 app.run(['$rootScope', function($rootScope){
   
   // Connect Socket.io
-  var socket = io.connect('http://localhost');
+  var socket = io('http://localhost');
 
   socket.on('newMail', function(data) {
     $rootScope.$emit('Refresh');

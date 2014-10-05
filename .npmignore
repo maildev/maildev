@@ -1,5 +1,13 @@
 .git*
 assets/
+test/
+docs/
 *.sublime-project
 *.sublime-workspace
+
 .nodemonignore
+.jshintrc
+.bowerrc
+.gitignore
+Gruntfile.js
+bower.json

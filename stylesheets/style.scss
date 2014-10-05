@@ -1,5 +1,7 @@
 @import "normalize";
 
+// $ node-sass -w stylesheets/style.scss stylesheets/style.css
+
 // Variables
 $padVert: 8px;
 $padHoriz: 14px;
@@ -21,9 +23,11 @@ $greyXDark:         rgb(40,40,40);
 $text: 				#555555;
 
 body {
-	background: $greyXLight; color:$text;
+	background: $greyXLight;
+	color:$text;
 	font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
+
 a {
 	color:darken($brand, 10);
 	-webkit-transition:all 150ms linear;
@@ -31,23 +35,35 @@ a {
 	transition:all 150ms linear;
 	&:hover { color:$brand; }
 }
+
 h1, h2, h3 { font-weight: 400; }
 
 h2 { margin:1.0em 0; }
 
 header {
-	position: fixed; z-index:900;
-	background:$brand; color:#fff; height:50px; width:100%;
+	position: fixed;
+	z-index:900;
+	height:50px;
+	width:100%;
 	padding:1em 0;
+
+	background:$brand;
+	color:#fff;	
 
 	.inner { margin:0 auto; width:100%; max-width: 960px; }
 	.branding { float: left; font-weight: 300; margin:0; }
 	.branding .version-number { font-size:0.4em; }
 	.description { float: right; font-weight: 300; }
 }
+
 footer {
-	width:100%; text-align: center; background-color: $brand; color:#ffffff;
+	width:100%;
 	padding:1em 0;
+
+	text-align: center;
+	background-color: $brand;
+	color:#ffffff;
+	
 	a {
 		color:$brandLighter;
 		&:hover { color:#fff; }
@@ -56,24 +72,49 @@ footer {
 
 .github-ribbon {
 	width:220px;
-	position: absolute; top:50px; right:-50px; z-index:1000; display: block; padding:0.3em 0;
-	font-size:0.8em; background-color:rgba(255,255,255,0.8); color:darken($brand, 10);
-	text-decoration: none; text-align: center;
+	position: absolute;
+	top:50px;
+	right:-50px;
+	z-index:1000;
+	display: block;
+	padding:0.3em 0;
+	font-size:0.8em;
+	background-color:rgba(255,255,255,0.8);
+	color:darken($brand, 10);
+	text-decoration: none;
+	text-align: center;
 
 	-webkit-transform:rotate(45deg);
 	-moz-transform:rotate(45deg);
 	transform:rotate(45deg);
 
-	&:hover { background-color:rgba(255,255,255,1.0); color:$brand; }
+	&:hover {
+		background-color:rgba(255,255,255,1.0);
+		color:$brand;
+	}
 }
 
 .jumbotron {
-	background: $brand; width:100%; padding-top:80px;
-	height:400px; overflow: hidden;
-}
-.jumbotron-image { display: block; margin:0 auto; max-width:800px; width:80%; }
+	width:100%;
+	padding-top:80px;
+	height:400px;
 
-.content { width:90%; max-width: 1000px; margin:0 auto; }
+	background-color: $brand;
+	overflow: hidden;
+}
+
+.jumbotron-screenshot {
+	display: block; 
+	margin:0 auto;
+	max-width:800px;
+	width:80%;
+}
+
+.content {
+	width:90%;
+	max-width: 1000px;
+	margin:0 auto;
+}
 
 pre,
 code {
@@ -82,29 +123,72 @@ code {
 }
 
 pre {
-	padding: 8px 15px; 
+	padding: 15px; 
 	overflow-x: auto;
+	border: 1px solid #eee;
 	
 	code {
 		background: none;
 	}
 }
+
 p code,
-li code { padding:0.1em 0.4em; font-size:0.95em; }
+li code {
+	padding:0.1em 0.4em;
+	font-size:0.95em;
+}
 
 .description-main { 
-	font-size:1.3em; width:74%; margin:1.5em auto; text-align: center;
+	font-size:1.3em;
+	width:74%;
+	margin:1.5em auto;
+	text-align: center;
 }
 .button-link-list {
-	list-style: none; padding:0; margin:1em 0;
+	list-style: none;
+	padding:0;
+	margin:1em 0;
 
-	li { margin-right:0.1em; display: inline-block; }
+	li {
+		margin-right: 0.1em;
+		display: inline-block;
+	}
 
 	a {
-		display: block; padding:0.4em 1em; color:#ffffff;
-		text-decoration: none; background-color: $brandLight;
-		&:hover { background-color: $brandDark;  }
+		display: block;
+		padding:0.4em 1em;
+		color:#ffffff;
+		text-decoration: none;
+		background-color: $brandLight;
+
+		&:hover {
+			background-color: $brandDark;
+		}
 	}
 }
 
+@media screen and (max-width: 800px) {
+
+	header {
+		position: inherit;
+		height: auto;
+		text-align: center;
+		
+		.branding {
+			float: none;
+		}
+		
+		.description {
+			float: none;
+			max-width: 70%;
+			margin: 0 auto;
+		}
+	}
+
+	.jumbotron {
+		padding: 0;
+		height: auto;
+	}
+
+}
 

@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="chrome=1">
     <title>MailDev - an open source project</title>
-    <meta name="description" content="SMTP Server + Web Interface for viewing and testing emails during development.">
+    <meta name="description" content="SMTP Server + Web Interface for viewing and testing emails during development. An open source project originally created by Dan Farrelly.">
 
     <link rel="stylesheet" href="stylesheets/style.css">
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,400,300' rel='stylesheet' type='text/css'>
@@ -20,7 +20,7 @@
         <div class="inner">
           <h1 class="branding">
             MailDev
-            <span class="version-number">v0.5.1</span>
+            <span class="version-number">v0.6.0</span>
           </h1>
 
           <div class="description">
@@ -36,7 +36,7 @@
 
         <div class="jumbotron">
 
-          <img class="jumbotron-image" src="https://dl.dropboxusercontent.com/u/50627698/maildev-01-05-14.png">
+          <img class="jumbotron-screenshot" src="https://dl.dropboxusercontent.com/u/50627698/maildev-01-05-14.png">
 
         </div>
 
@@ -55,41 +55,62 @@
             <li>New emails appear instantly in interface when received (via Websockets)</li>
             <li>Command line interface for configuring SMTP and Web interface ports</li>
             <li>Build on Node.js &amp; hosted on <a href="https://www.npmjs.org/package/maildev">NPM</a></li>
+            <li>Ability to relay email to an upstream SMTP server</li>
           </ul>
 
           <h2>Requirements - <a href="http://nodejs.org/">Node.js</a></h2>
 
           <h2>Install &amp; Run</h2>
 
-          <p>Use <a href="https://npmjs.org/">npm</a> to download and install MailDev.</p>
+          <p>Use <a href="https://npmjs.org/">npm</a> to download and install MailDev or just grab the source off <a href="https://github.com/djfarrelly/MailDev"><strong>GitHub</strong></a></p>
 
-<pre><code>
+<pre>
   $ npm install -g maildev
-
-</code></pre>
+</pre>
 
         <p>Run the app</p>
 
-<pre><code>
+<pre>
   $ maildev
-
-</code></pre>
-
-        <p>
-          Alternately, you can download MailDev as a <a href="https://github.com/djfarrelly/MailDev/zipball/master"><strong>ZIP File</strong></a>, <a href="https://github.com/djfarrelly/MailDev/tarball/master"><strong>TAR Ball</strong></a>, or just grab the source off <a href="https://github.com/djfarrelly/MailDev"><strong>GitHub</strong></a>.
-        </p>
+</pre>
 
         <h2>Usage</h2>
+
+        <p>On the command line:</p>
 
 <pre>
   maildev [options]
 
-    -h, --help         output usage information
-    -V, --version      output the version number
-    -s, --smtp [port]  SMTP port to catch emails [1025]
-    -w, --web [port]   Port to run the Web GUI [1080]
-    -o, --open         Open the Web GUI after startup
+    -h, --help              output usage information
+    -V, --version           output the version number
+    -s, --smtp [port]       SMTP port to catch emails [1025]
+    -w, --web [port]        Port to run the Web GUI [1080]
+    --outgoing-host <host>  SMTP host for outgoing emails
+    --outgoing-port <port>  SMTP port for outgoing emails
+    --outgoing-user <user>  SMTP user for outgoing emails
+    --outgoing-pass <pass>  SMTP password for outgoing emails
+    --outgoing-secure       Use SMTP SSL for outgoing emails
+    -o, --open              Open the Web GUI after startup
     -v, --verbose
+</pre>
+
+        <p>Or in your Node.js project:</p>
+
+<pre>
+  var MailDev = require('maildev');
+
+  var maildev = new MailDev();
+
+  // Handle new emails as they come in
+  maildev.on('new', function(email){
+    console.log('Received new email with subject: %s', email.subject);
+  });
+
+  // Get all emails
+  maildev.getAllEmail(function(err, emails){
+    if (err) return console.log(err);
+    console.log('There are %s emails', emails.length);
+  });
 </pre>
 
         <h2>Configure your project</h2>
@@ -102,11 +123,12 @@
           <li>
             Node &mdash; <a href="https://github.com/andris9/Nodemailer" target="_blank">Nodemailer</a>:
 <pre>
-<code>var transport = nodemailer.createTransport("SMTP", {
-  port: 1025
-  // other settings...
-});
-</code></pre>
+  var transport = nodemailer.createTransport({
+    port: 1025,
+    ignoreTLS: true,
+    // other settings...
+  });
+</pre>
           </li>
           <li>
             Django &mdash; add <code>EMAIL_PORT = 1025</code> in your settings file <a href="https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-EMAIL_PORT">[source]</a>
@@ -114,28 +136,30 @@
           <li>
             Rails &mdash; add the port to your config settings:<br>
 <pre>
-<code>config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = {
-    :address => "localhost",
-    :port => 1025
-  }
-</code></pre>
+  config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+      :address => "localhost",
+      :port => 1025
+    }
+</pre>
           </li>
         </ul>
 
-        <h2>Roadmap</h2>
+        <h2>Ideas, Issues or Contributions?</h2>
 
-        <ul>
-          <li>Forward email to real email address for device/application testing</li>
-          <li>Write tests for server and client</li>
-          <li>Have an idea or feature request? I would love to here it. Create an issue on <a href="https://github.com/djfarrelly/MailDev/issues/new">github</a> or contact me on twitter <a href="https://twitter.com/djfarrelly">@djfarrelly</a></li>
-        </ul>
+        <p>
+          Have an idea or feature request? I would love to here it. Create an issue on <a href="https://github.com/djfarrelly/MailDev/issues">github</a> or contact me on twitter <a href="https://twitter.com/djfarrelly">@djfarrelly</a>
+        </p>
 
 
         <h2>Changelog</h2>
 
         <p>
-          <strong>0.5.1</strong> -  Fix menu layout issue in Safari/Webkit
+          <strong>0.6.0</strong> - Add relay option to send outgoing emails. Refactor for new API.
+        </p>
+
+        <p>
+          <strong>0.5.1</strong> - Fix menu layout issue in Safari/Webkit
         </p>
 
         <p>

@@ -1,30 +1,17 @@
-/* normalize.css v2.1.1 | MIT License | git.io/normalize */
+/*! normalize.css v2.1.1 | MIT License | git.io/normalize */
 /* ==========================================================================
    HTML5 display definitions
    ========================================================================== */
 /**
  * Correct `block` display not defined in IE 8/9.
  */
-article,
-aside,
-details,
-figcaption,
-figure,
-footer,
-header,
-hgroup,
-main,
-nav,
-section,
-summary {
+article, aside, details, figcaption, figure, footer, header, hgroup, main, nav, section, summary {
   display: block; }
 
 /**
  * Correct `inline-block` display not defined in IE 8/9.
  */
-audio,
-canvas,
-video {
+audio, canvas, video {
   display: inline-block; }
 
 /**
@@ -83,8 +70,7 @@ a:focus {
 /**
  * Improve readability when focused and also mouse hovered in all browsers.
  */
-a:active,
-a:hover {
+a:active, a:hover {
   outline: 0; }
 
 /* ==========================================================================
@@ -107,8 +93,7 @@ abbr[title] {
 /**
  * Address style set to `bolder` in Firefox 4+, Safari 5, and Chrome.
  */
-b,
-strong {
+b, strong {
   font-weight: bold; }
 
 /**
@@ -135,10 +120,7 @@ mark {
 /**
  * Correct font family set oddly in Safari 5 and Chrome.
  */
-code,
-kbd,
-pre,
-samp {
+code, kbd, pre, samp {
   font-family: monospace, serif;
   font-size: 1em; }
 
@@ -163,8 +145,7 @@ small {
 /**
  * Prevent `sub` and `sup` affecting `line-height` in all browsers.
  */
-sub,
-sup {
+sub, sup {
   font-size: 75%;
   line-height: 0;
   position: relative;
@@ -226,10 +207,7 @@ legend {
  * 2. Correct font size not being inherited in all browsers.
  * 3. Address margins set differently in Firefox 4+, Safari 5, and Chrome.
  */
-button,
-input,
-select,
-textarea {
+button, input, select, textarea {
   font-family: inherit;
   /* 1 */
   font-size: 100%;
@@ -241,8 +219,7 @@ textarea {
  * Address Firefox 4+ setting `line-height` on `input` using `!important` in
  * the UA stylesheet.
  */
-button,
-input {
+button, input {
   line-height: normal; }
 
 /**
@@ -251,8 +228,7 @@ input {
  * Correct `button` style inheritance in Chrome, Safari 5+, and IE 8+.
  * Correct `select` style inheritance in Firefox 4+ and Opera.
  */
-button,
-select {
+button, select {
   text-transform: none; }
 
 /**
@@ -262,10 +238,7 @@ select {
  * 3. Improve usability and consistency of cursor style between image-type
  *    `input` and others.
  */
-button,
-html input[type="button"],
-input[type="reset"],
-input[type="submit"] {
+button, html input[type="button"], input[type="reset"], input[type="submit"] {
   -webkit-appearance: button;
   /* 2 */
   cursor: pointer;
@@ -274,16 +247,14 @@ input[type="submit"] {
 /**
  * Re-set default cursor for disabled elements.
  */
-button[disabled],
-html input[disabled] {
+button[disabled], html input[disabled] {
   cursor: default; }
 
 /**
  * 1. Address box sizing set to `content-box` in IE 8/9.
  * 2. Remove excess padding in IE 8/9.
  */
-input[type="checkbox"],
-input[type="radio"] {
+input[type="checkbox"], input[type="radio"] {
   box-sizing: border-box;
   /* 1 */
   padding: 0;
@@ -306,15 +277,13 @@ input[type="search"] {
  * Remove inner padding and search cancel button in Safari 5 and Chrome
  * on OS X.
  */
-input[type="search"]::-webkit-search-cancel-button,
-input[type="search"]::-webkit-search-decoration {
+input[type="search"]::-webkit-search-cancel-button, input[type="search"]::-webkit-search-decoration {
   -webkit-appearance: none; }
 
 /**
  * Remove inner padding and border in Firefox 4+.
  */
-button::-moz-focus-inner,
-input::-moz-focus-inner {
+button::-moz-focus-inner, input::-moz-focus-inner {
   border: 0;
   padding: 0; }
 
@@ -344,7 +313,7 @@ body {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
 
 a {
-  color: #307ab4;
+  color: #307bb4;
   -webkit-transition: all 150ms linear;
   -moz-transition: all 150ms linear;
   transition: all 150ms linear; }
@@ -355,16 +324,16 @@ h1, h2, h3 {
   font-weight: 400; }
 
 h2 {
-  margin: 1.0em 0; }
+  margin: 1em 0; }
 
 header {
   position: fixed;
   z-index: 900;
-  background: #4994ce;
-  color: #fff;
   height: 50px;
   width: 100%;
-  padding: 1em 0; }
+  padding: 1em 0;
+  background: #4994ce;
+  color: #fff; }
   header .inner {
     margin: 0 auto;
     width: 100%;
@@ -381,12 +350,12 @@ header {
 
 footer {
   width: 100%;
+  padding: 1em 0;
   text-align: center;
   background-color: #4994ce;
-  color: #ffffff;
-  padding: 1em 0; }
+  color: #ffffff; }
   footer a {
-    color: #eaf2f9; }
+    color: #eaf3f9; }
     footer a:hover {
       color: #fff; }
 
@@ -400,7 +369,7 @@ footer {
   padding: 0.3em 0;
   font-size: 0.8em;
   background-color: rgba(255, 255, 255, 0.8);
-  color: #307ab4;
+  color: #307bb4;
   text-decoration: none;
   text-align: center;
   -webkit-transform: rotate(45deg);
@@ -411,13 +380,13 @@ footer {
     color: #4994ce; }
 
 .jumbotron {
-  background: #4994ce;
   width: 100%;
   padding-top: 80px;
   height: 400px;
+  background-color: #4994ce;
   overflow: hidden; }
 
-.jumbotron-image {
+.jumbotron-screenshot {
   display: block;
   margin: 0 auto;
   max-width: 800px;
@@ -428,19 +397,18 @@ footer {
   max-width: 1000px;
   margin: 0 auto; }
 
-pre,
-code {
+pre, code {
   background: rgba(255, 255, 255, 0.8);
   color: #3b3b3b; }
 
 pre {
-  padding: 8px 15px;
-  overflow-x: auto; }
+  padding: 15px;
+  overflow-x: auto;
+  border: 1px solid #eee; }
   pre code {
     background: none; }
 
-p code,
-li code {
+p code, li code {
   padding: 0.1em 0.4em;
   font-size: 0.95em; }
 
@@ -465,3 +433,18 @@ li code {
     background-color: #99c3e4; }
     .button-link-list a:hover {
       background-color: #265f8b; }
+
+@media screen and (max-width: 800px) {
+  header {
+    position: inherit;
+    height: auto;
+    text-align: center; }
+    header .branding {
+      float: none; }
+    header .description {
+      float: none;
+      max-width: 70%;
+      margin: 0 auto; }
+  .jumbotron {
+    padding: 0;
+    height: auto; } }

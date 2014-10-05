@@ -30,7 +30,7 @@
 ## API
 
 MailDev can be used in your Node.js application. For more info view the 
-[API docs](https://github.com/djfarrelly/MailDev/docs/api.md).
+[API docs](https://github.com/djfarrelly/MailDev/blob/master/docs/api.md).
 
 ```javascript
 var MailDev = require('maildev');
@@ -43,7 +43,7 @@ maildev.on('new', function(email){
 ```
 
 MailDev also has a **REST API**. For more info 
-[view the docs](https://github.com/djfarrelly/MailDev/docs/rest.md).
+[view the docs](https://github.com/djfarrelly/MailDev/blob/master/docs/rest.md).
 
 ## Outgoing email
 

@@ -5,4 +5,6 @@ var path = require('path')
   ;
 
 var root = path.join(path.dirname(fs.realpathSync(__filename)), '../');
-require(root + '/index.js').run();
+var MailDev = require(root + '/index.js');
+
+new MailDev();

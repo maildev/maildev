@@ -97,6 +97,11 @@ To run **MailDev** during development:
 
 The `grunt dev` task will run the project using nodemon and restart automatically when changes are detected. SASS files will be compiled automatically on save also. To trigger some emails for testing run `node test/send.js` in a separate shell. Please run jshint to your lint code before submitting a pull request; run `grunt jshint`.
 
+To run the test suite, use [Mocha](http://visionmedia.github.io/mocha/):
+
+  $ npm install -g mocha
+  $ mocha
+
 ## Changelog
 
 0.5.2 - Lock down dependency versions

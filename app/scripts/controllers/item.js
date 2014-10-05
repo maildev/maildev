@@ -132,6 +132,15 @@ app.controller('ItemCtrl', [
     // Relay email
     $scope.relay = function(item) {
 
+      if (!$rootScope.config.outgoingHost) {
+        window.alert(
+          'Relay feature has not been configured.\n' +
+          'Run maildev --help for configuration info.'
+        );
+        return;
+      }
+
+
       if (
           window.confirm(
             'Are you sure you want to REALLY SEND email to ' +

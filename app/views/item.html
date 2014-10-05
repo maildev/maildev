@@ -97,7 +97,7 @@
     <li>
         <a href="" class=""
           ng-click="relay(item)"
-          ng-show="!!config.outgoingHost">
+          ng-class="{ disabled: !config.outgoingHost }">
             <i class="fa fa-cloud-upload"></i>
             Relay
         </a>

@@ -27,27 +27,25 @@
                     </div>
                 </div>
 
-                <!-- <div class="sidebar-content"> -->
-                    <div class="sidebar-scrollable-content">
-                        <ul class="email-list">
-                            <li ng-repeat="item in items | orderBy:'time':!reverse | filter: search " class="ng-cloak">
+                <div class="sidebar-scrollable-content">
+                    <ul class="email-list">
+                        <li ng-repeat="item in items | orderBy:'time':!reverse | filter: search " class="ng-cloak">
 
-                                <a href="#/email/{{item.id}}" class="email-item email-{{item.id}}" ng-click="markRead(item)">
-                                    <span class="title">
-                                        {{item.subject}}
-                                        <i class="fa fa-paperclip" ng-hide="!item.attachments"></i>
-                                        <i class="fa fa-circle unread-icon" ng-hide="item.read"></i>
-                                    </span>
-                                    <span class="subline clearfix">
-                                        <span class="subline-from">{{item.to.0.address}}</span>
-                                        <span class="subline-time">{{item.time | date:'short' }}</span>
-                                    </span>
-                                </a>
+                            <a href="#/email/{{item.id}}" class="email-item email-{{item.id}}" ng-click="markRead(item)">
+                                <span class="title">
+                                    {{item.subject}}
+                                    <i class="fa fa-paperclip" ng-hide="!item.attachments"></i>
+                                    <i class="fa fa-circle unread-icon" ng-hide="item.read"></i>
+                                </span>
+                                <span class="subline clearfix">
+                                    <span class="subline-from">{{item.to.0.address}}</span>
+                                    <span class="subline-time">{{item.time | date:'short' }}</span>
+                                </span>
+                            </a>
 
-                            </li>
-                        </ul>
-                    </div>
-                <!-- </div> -->
+                        </li>
+                    </ul>
+                </div>
 
             </div><!-- END .item-container -->
 
@@ -73,14 +71,6 @@
                     </ul>
 
                     <ul class="toolbar toolbar-right" ng-controller="NavCtrl">
-                        
-                        <!-- FUTURE SETTINGS PAGE:
-                        <li>
-                            <a href="#/settings">
-                                <i class="fa fa-cog"></i> 
-                                Settings
-                            </a>
-                        </li>-->
 
                         <li>
                             <a href="#/">

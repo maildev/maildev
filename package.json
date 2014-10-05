@@ -31,13 +31,13 @@
     }
   ],
   "dependencies": {
-    "express": "~3.10.3",
-    "simplesmtp": "~0.3.32",
-    "mailparser": "~0.3.6",
-    "mailcomposer": "~0.2.11",
-    "socket.io": "~0.9.17",
     "commander": "~2.1.0",
-    "open": "~0.0.5"
+    "express": "~4.9.5",
+    "mailcomposer": "~0.2.11",
+    "mailparser": "~0.3.6",
+    "open": "~0.0.5",
+    "simplesmtp": "~0.3.32",
+    "socket.io": "~1.1.0"
   },
   "devDependencies": {
     "async": "~0.2.9",

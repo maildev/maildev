@@ -27,6 +27,24 @@
       -o, --open              Open the Web GUI after startup
       -v, --verbose
 
+## API
+
+MailDev can be used in your Node.js application. For more info view the 
+[API docs](https://github.com/djfarrelly/MailDev/blob/master/docs/api.md).
+
+```javascript
+var MailDev = require('maildev');
+
+var maildev = new MailDev();
+
+maildev.on('new', function(email){
+  // We got a new email!
+});
+```
+
+MailDev also has a **REST API**. For more info 
+[view the docs](https://github.com/djfarrelly/MailDev/blob/master/docs/rest.md).
+
 ## Outgoing email
 
 Maildev optionally supports selectively relaying email to an outgoing SMTP server.  If you configure outgoing
@@ -97,7 +115,14 @@ To run **MailDev** during development:
 
 The `grunt dev` task will run the project using nodemon and restart automatically when changes are detected. SASS files will be compiled automatically on save also. To trigger some emails for testing run `node test/send.js` in a separate shell. Please run jshint to your lint code before submitting a pull request; run `grunt jshint`.
 
+To run the test suite, use [Mocha](http://visionmedia.github.io/mocha/):
+
+  $ npm install -g mocha
+  $ mocha
+
 ## Changelog
+
+0.6.0 - Add relay option to send outgoing emails. Refactor for new API.
 
 0.5.2 - Lock down dependency versions
 

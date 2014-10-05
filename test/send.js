@@ -6,14 +6,12 @@
  *   node test/send.js
  */
 
-var nodemailer = require('nodemailer')
-  , mail       = require('nodemailer').mail
-  , async      = require('async')
-  ;
+var nodemailer = require('nodemailer');
 
 // Create a transport with MailDev's default receiving port
-var transport = nodemailer.createTransport('SMTP', {
-  port: 1025
+var transporter = nodemailer.createTransport({
+  port: 1025,
+  ignoreTLS: true
 });
 
 // Messages list
@@ -60,9 +58,6 @@ var messages = [
   ];
 
 // Send the emails
-async.map(messages, transport.sendMail, function(err){
-  if (err) return console.error(err.message);
-
-  console.log('Messages sent');
-  transport.close();
+messages.forEach(function(message){
+  transporter.sendMail(message);
 });

@@ -13,61 +13,59 @@ var program     = require('commander')
   , logger      = require('./lib/logger')
   ;
 
-module.exports = {};
-
-module.exports.run = function(args){
+module.exports = function(config) {
   
   var version = pkg.version;
 
-  args = args || process.argv;
+  if (!config) {
+    // CLI
+    config = program
+      .version(version)
+      .option('-s, --smtp [port]', 'SMTP port to catch emails [1025]', '1025')
+      .option('-w, --web [port]', 'Port to run the Web GUI [1080]', '1080')
+      .option('--outgoing-host <host>', 'SMTP host for outgoing emails')
+      .option('--outgoing-port <port>', 'SMTP port for outgoing emails')
+      .option('--outgoing-user <user>', 'SMTP user for outgoing emails')
+      .option('--outgoing-pass <pass>', 'SMTP password for outgoing emails')
+      .option('--outgoing-secure', 'Use SMTP SSL for outgoing emails')
+      .option('-o, --open', 'Open the Web GUI after startup')
+      .option('-v, --verbose')
+      .parse(process.argv);
+  }
 
-  // CLI
-  program
-    .version(version)
-    .option('-s, --smtp [port]', 'SMTP port to catch emails [1025]', '1025')
-    .option('-w, --web [port]', 'Port to run the Web GUI [1080]', '1080')
-    .option('--outgoing-host <host>', 'SMTP host for outgoing emails')
-    .option('--outgoing-port <port>', 'SMTP port for outgoing emails')
-    .option('--outgoing-user <user>', 'SMTP user for outgoing emails')
-    .option('--outgoing-pass <pass>', 'SMTP password for outgoing emails')
-    .option('--outgoing-secure', 'Use SMTP SSL for outgoing emails')
-    .option('-o, --open', 'Open the Web GUI after startup')
-    .option('-v, --verbose')
-    .parse(args);
-
-
-  if (parseInt(program.smtp, 10) < 1000 || parseInt(program.web, 10) < 1000){
+  if (parseInt(config.smtp, 10) < 1000 || parseInt(config.web, 10) < 1000){
     throw new Error('Please choose a port above 1000');
   }
 
-  if (program.verbose){
+  if (config.verbose){
     logger.init(true);
   }
   
   // Start the Mailserver & Web GUI
-  mailserver.listen( program.smtp );
+  mailserver.listen( config.smtp );
   if (
-      program.outgoingHost ||
-      program.outgoingPort ||
-      program.outgoingUser ||
-      program.outgoingPass ||
-      program.outgoingSecure
+      config.outgoingHost ||
+      config.outgoingPort ||
+      config.outgoingUser ||
+      config.outgoingPass ||
+      config.outgoingSecure
       ){
     mailserver.setupOutgoing(
-        program.outgoingHost
-      , parseInt(program.outgoingPort)
-      , program.outgoingUser
-      , program.outgoingPass
-      , program.outgoingSecure
+        config.outgoingHost
+      , parseInt(config.outgoingPort)
+      , config.outgoingUser
+      , config.outgoingPass
+      , config.outgoingSecure
     );
   }
-  web.listen( program.web );
+  web.listen( config.web );
 
-  logger.info('MailDev app running at 127.0.0.1:%s', program.web);
+  logger.info('MailDev app running at 127.0.0.1:%s', config.web);
 
-  if (program.open){
+  if (config.open){
     var open = require('open');
-    open('http://localhost:' + program.web);
+    open('http://localhost:' + config.web);
   }
 
+  return mailserver;
 };

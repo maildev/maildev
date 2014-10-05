@@ -93,11 +93,6 @@ Configure your application to send emails via port `1025` and open `localhost:10
 * Command line interface for configuring SMTP and Web interface ports
 * Ability to relay email to an upstream SMTP server
 
-## Roadmap
-
-* Forward email to real email address for device/application testing
-* Write tests for server and client
-
 ## Ideas
 
 If you're using MailDev and you have a great idea, I'd love to hear it. If you're not using MailDev because it lacks a feature, I'd love to hear that too. Add an issue to the repo [here](https://github.com/djfarrelly/MailDev/issues/new) or contact me on [twitter](http://www.twitter.com/djfarrelly).

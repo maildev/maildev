@@ -21,7 +21,7 @@ app.run(['$rootScope', function($rootScope){
   var socket = io('http://localhost');
 
   socket.on('newMail', function(data) {
-    $rootScope.$emit('Refresh');
+    $rootScope.$emit('newMail', data);
   });
   
   $rootScope.$on('Refresh', function() {

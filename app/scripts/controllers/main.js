@@ -20,6 +20,11 @@ app.controller('MainCtrl', [
       loadData();
     });
 
+    $rootScope.$on('newMail', function(e, newEmail) {
+      $scope.items.push(newEmail);
+      $scope.$apply();
+    });
+
     // Click event handlers
     $scope.markRead = function(email) {
       email.read = true;

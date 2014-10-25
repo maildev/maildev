@@ -135,6 +135,9 @@ To run the test suite, use [Mocha](http://visionmedia.github.io/mocha/):
 
 **MailDev** is built on using great open source projects including [Express](http://expressjs.com), [AngularJS](http://angularjs.org/), [Font Awesome](http://fontawesome.io/) and two great projects from [Andris Reinman](https://github.com/andris9): [Simple SMTP](https://github.com/andris9/simplesmtp) and [Mailparser](https://github.com/andris9/mailparser). Many thanks to Andris as his projects are the backbone of this app and to [MailCatcher](http://mailcatcher.me/) for the inspiration.
 
+Additionally, thanks to all the awesome [contributors](https://github.com/djfarrelly/MailDev/graphs/contributors)
+to the project.
+
 ## License
 
 MIT

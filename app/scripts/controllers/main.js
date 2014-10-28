@@ -48,7 +48,7 @@ app.controller('MainCtrl', [
     // Initialize the view
     loadData();
 
-    $http({method: 'GET', url: '/config'})
+    $http({method: 'GET', url: 'config'})
       .success(function(data){
         $rootScope.config = data;
         $scope.config = data;

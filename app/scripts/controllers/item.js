@@ -23,7 +23,7 @@ app.controller('ItemCtrl', [
         $scope.item = new Email(email);
 
         if ($scope.item.html) {
-          $scope.item.iframeUrl = '/email/' + $scope.item.id + '/html';
+          $scope.item.iframeUrl = 'email/' + $scope.item.id + '/html';
           prepIframe();
           $scope.panelVisibility = 'html';
         } else {

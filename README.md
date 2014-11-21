@@ -117,6 +117,8 @@ To run the test suite, use [Mocha](http://visionmedia.github.io/mocha/):
 
 ## Changelog
 
+0.6.2 - Fix module entry point. Bug fixes.
+
 0.6.1 - Bug fixes and improvements
 
 0.6.0 - Add relay option to send outgoing emails. Refactor for new API.

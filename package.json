@@ -1,7 +1,7 @@
 {
   "name": "maildev",
   "description": "SMTP Server and Web Interface for reading and testing emails during development",
-  "version": "0.6.1",
+  "version": "0.6.2",
   "keywords": [
     "email",
     "e-mail",
@@ -20,7 +20,7 @@
     "type": "git",
     "url": "http://github.com/djfarrelly/maildev.git"
   },
-  "main": "bin/maildev",
+  "main": "./index.js",
   "bin": {
     "maildev": "./bin/maildev"
   },

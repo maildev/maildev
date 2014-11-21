@@ -20,7 +20,7 @@
     "type": "git",
     "url": "http://github.com/djfarrelly/maildev.git"
   },
-  "main": "bin/maildev",
+  "main": "./index.js",
   "bin": {
     "maildev": "./bin/maildev"
   },

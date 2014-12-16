@@ -5,11 +5,12 @@
  */
 
 app.controller('MainCtrl', [
-  '$scope', '$rootScope', '$http', 'Email',
-  function($scope, $rootScope, $http, Email) {
+  '$scope', '$rootScope', '$http', 'Email', '$location',
+  function($scope, $rootScope, $http, Email, $location) {
 
     $scope.items = [];
     $scope.configOpen = false;
+    $scope.autoShow = false;
 
     // Load all emails
     var loadData = function() {
@@ -30,6 +31,9 @@ app.controller('MainCtrl', [
       if (!refreshTimeout) {
         refreshTimeout = setTimeout(function() {
           refreshTimeout = null;
+          if ( $scope.autoShow === true ) {
+            $location.path('/email/' + newEmail.id );
+          }          
           $scope.$apply();
         }, 200);
       }
@@ -43,6 +47,10 @@ app.controller('MainCtrl', [
 
     $scope.showConfig = function(){
       $scope.configOpen = !$scope.configOpen;
+    };
+    
+    $scope.toggleAutoShow = function() {
+      $scope.autoShow = !$scope.autoShow;
     };
 
     // Initialize the view

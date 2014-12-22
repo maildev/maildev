@@ -20,6 +20,11 @@
                             <i class="fa fa-envelope a"></i>
                             MailDev
                         </a>
+                        <div class="autoshow-toggle">
+                          <i class="fa" ng-class="{'fa-bell' : autoShow, 'fa-bell-o': !autoShow}" ng-click="toggleAutoShow()" title="Automatically show new emails as they arrive"></i>
+                        </div>
+                    </div>
+                    <div>
                     </div>
                     <div class="search-container">
                         <input type="text" ng-model="search" class="search-input" placeholder="Search">

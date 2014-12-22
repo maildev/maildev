@@ -72,6 +72,10 @@ body {
     -webkit-font-smoothing:antialiased;
 }
 
+a:focus {
+    outline: none;
+}
+
 .application-conatiner {
     @include displayFlex();
 

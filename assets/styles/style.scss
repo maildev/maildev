@@ -374,3 +374,7 @@ code {
     position: relative; // set position for resize rendering issue
 }
 
+.email-item.current {
+  background: $brandLighter;
+}
+

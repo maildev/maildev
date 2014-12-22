@@ -31,7 +31,7 @@
                     <ul class="email-list">
                         <li ng-repeat="item in items | orderBy:'time':!reverse | filter: search " class="ng-cloak">
 
-                            <a href="#/email/{{item.id}}" class="email-item email-{{item.id}}" ng-click="markRead(item)">
+                            <a href="#/email/{{item.id}}" class="email-item email-{{item.id}}" ng-class="{current: item.id === currentItemId}" ng-click="markRead(item)">
                                 <span class="title">
                                     {{item.subject}}
                                     <i class="fa fa-paperclip" ng-hide="!item.attachments"></i>

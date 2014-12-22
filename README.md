@@ -7,9 +7,9 @@
 ![MailDev Screenshot](https://dl.dropboxusercontent.com/u/50627698/maildev-01-05-14.png)
 
 ## Install & Run
-	
-	$ npm install -g maildev
-	$ maildev
+
+    $ npm install -g maildev
+    $ maildev
 
 ## Usage
 
@@ -61,28 +61,34 @@ Configure your application to send emails via port `1025` and open `localhost:10
 
 **Nodemailer (v1.0+)**
 
-    var transport = nodemailer.createTransport({
-        port: 1025,
-        ignoreTLS: true,
-        // other settings...
-    });
+```javascript
+var transport = nodemailer.createTransport({
+  port: 1025,
+  ignoreTLS: true,
+  // other settings...
+});
+```
 
 **Nodemailer (v0.7)**
 
-    var transport = nodemailer.createTransport("SMTP", {
-        port: 1025,
-        // other settings...
-    });
+```javascript
+var transport = nodemailer.createTransport("SMTP", {
+  port: 1025,
+  // other settings...
+});
+```
 
 **Django** -- Add `EMAIL_PORT = 1025` in your settings file [[source]](https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-EMAIL_PORT)
 
 **Rails** -- config settings:
 
-    config.action_mailer.delivery_method = :smtp
-        config.action_mailer.smtp_settings = {
-            :address => "localhost",
-            :port => 1025
-      }
+```ruby
+config.action_mailer.delivery_method = :smtp
+    config.action_mailer.smtp_settings = {
+        :address => "localhost",
+        :port => 1025
+    }
+```
 
 ## Features
 
@@ -103,10 +109,12 @@ Any help on MailDev would be awesome. There is plenty of room for improvement. F
 
 To run **MailDev** during development:
 
+
     # grunt-cli is needed by grunt; ignore this if already installed
     npm install -g grunt-cli
     npm install
     grunt dev
+
 
 The `grunt dev` task will run the project using nodemon and restart automatically when changes are detected. SASS files will be compiled automatically on save also. To trigger some emails for testing run `node test/send.js` in a separate shell. Please run jshint to your lint code before submitting a pull request; run `grunt jshint`.
 

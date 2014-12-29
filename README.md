@@ -120,8 +120,8 @@ The `grunt dev` task will run the project using nodemon and restart automaticall
 
 To run the test suite, use [Mocha](http://visionmedia.github.io/mocha/):
 
-  $ npm install -g mocha
-  $ mocha
+    $ npm install -g mocha
+    $ mocha
 
 ## Changelog
 

@@ -33,10 +33,6 @@ module.exports = function(config) {
       .parse(process.argv);
   }
 
-  if (parseInt(config.smtp, 10) < 1000 || parseInt(config.web, 10) < 1000){
-    throw new Error('Please choose a port above 1000');
-  }
-
   if (config.verbose){
     logger.init(true);
   }

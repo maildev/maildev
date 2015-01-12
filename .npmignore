@@ -7,7 +7,5 @@ docs/
 
 .nodemonignore
 .jshintrc
-.bowerrc
 .gitignore
 Gruntfile.js
-bower.json

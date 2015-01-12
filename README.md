@@ -11,6 +11,8 @@
     $ npm install -g maildev
     $ maildev
 
+If you want to use MailDev with [Docker](https://www.docker.com/), you can use [this image on Docker Hub](https://registry.hub.docker.com/u/stratdat/maildev/).
+
 ## Usage
 
     maildev [options]
@@ -124,6 +126,8 @@ To run the test suite, use [Mocha](http://visionmedia.github.io/mocha/):
     $ mocha
 
 ## Changelog
+
+0.7.0 - Add Docker support
 
 0.6.3 - Add auto-show new email. UI adjustments.
 

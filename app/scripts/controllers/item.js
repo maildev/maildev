@@ -21,6 +21,7 @@ app.controller('ItemCtrl', [
       Email.get({ id: $routeParams.itemId }, function(email) {
 
         $scope.item = new Email(email);
+        $scope.rawEmail = 'email/' + $scope.item.id + '/source';
 
         if ($scope.item.html) {
           $scope.item.iframeUrl = 'email/' + $scope.item.id + '/html';

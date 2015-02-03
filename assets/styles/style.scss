@@ -64,7 +64,7 @@ th, td {
  * Basic layout and main elements
  */
 
-html, body, .application-conatiner { height: 100%; width: 100%; overflow: hidden; }
+html, body, .application-container { height: 100%; width: 100%; overflow: hidden; }
 
 body {
     font-family: 'Open Sans', Helvetica, Arial, sans-serif;
@@ -76,7 +76,7 @@ a:focus {
     outline: none;
 }
 
-.application-conatiner {
+.application-container {
     @include displayFlex();
 
     flex-flow: row nowrap;

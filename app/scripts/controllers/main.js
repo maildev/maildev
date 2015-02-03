@@ -40,7 +40,7 @@ app.controller('MainCtrl', [
           refreshTimeout = null;
           if ( $scope.autoShow === true ) {
             $location.path('/email/' + newEmail.id );
-          }          
+          }
           $scope.$apply();
         }, 200);
       }

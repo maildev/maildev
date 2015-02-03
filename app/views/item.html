@@ -32,6 +32,14 @@
                 Headers
             </a>
         </li>
+        <li>
+            <a href="" class=""
+              ng-click="show('source')"
+              ng-class="{ active: panelVisibility == 'source' }">
+                <i class="fa fa-file"></i>
+                Source
+            </a>
+        </li>
       </ul>
     </li>
 
@@ -138,5 +146,7 @@
             </tr>
         </table>
     </div>
+
+    <iframe src="{{ rawEmail }}" class="preview-iframe panel-source" ng-hide=" panelVisibility != 'source' "></iframe>
 
 </div>

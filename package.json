@@ -1,7 +1,7 @@
 {
   "name": "maildev",
   "description": "SMTP Server and Web Interface for reading and testing emails during development",
-  "version": "0.7.0",
+  "version": "0.8.0",
   "keywords": [
     "email",
     "e-mail",

@@ -127,6 +127,8 @@ To run the test suite, use [Mocha](http://visionmedia.github.io/mocha/):
 
 ## Changelog
 
+0.8.1 - Fix temp directory bug introduced in 0.8.0
+
 0.8.0 - Add view email source. Fix running multiple instances.
 
 0.7.0 - Add Docker support

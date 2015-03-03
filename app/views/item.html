@@ -10,7 +10,7 @@
       <ul class="dropdown-menu">
         <li>
             <a href="" class=""
-              ng-click="show('html')" 
+              ng-click="show('html')"
               ng-class="{ active: panelVisibility == 'html', disabled: !item.html }">
                 <i class="fa fa-code"></i>
                 HTML
@@ -44,7 +44,7 @@
     </li>
 
     <li class="dropdown-container">
-      <a href="" class="dropdown-trigger" 
+      <a href="" class="dropdown-trigger"
         ng-click="toggleDropdown($event, 'viewport')"
         ng-class="{ open: dropdownOpen == 'viewport' }">
         <i class="fa fa-tablet"></i>
@@ -86,7 +86,7 @@
       </ul>
     </li>
 
-    
+
     <li>
         <a href="" class=""
           ng-click="show('attachments')"
@@ -110,7 +110,13 @@
             Relay
         </a>
     </li>
-    
+    <li>
+        <a href="/email/{{item.id}}/download" class=""
+          target="_blank">
+            <i class="fa fa-cloud-download"></i>
+            Download EML
+        </a>
+    </li>
 </ul>
 
 <div class="email-content">

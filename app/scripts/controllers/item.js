@@ -64,7 +64,7 @@ app.controller('ItemCtrl', [
     // Updates the iframe height so it matches it's content
     // This prevents the iframe from having scrollbars
     fixIframeHeight = function() {
-      
+
       var body      = iframe.contentDocument.getElementsByTagName('body')[0]
         , newHeight = body.scrollHeight;
 
@@ -115,7 +115,7 @@ app.controller('ItemCtrl', [
 
     // Sends a DELETE request to the server
     $scope.delete = function(item) {
-      
+
       Email.delete({ id: item.id }, function(email) {
         $rootScope.$emit('Refresh');
         $location.path('/');
@@ -129,7 +129,7 @@ app.controller('ItemCtrl', [
       fixIframeHeight();
       $scope.iframeSize = newSize;
     };
-    
+
     // Relay email
     $scope.relay = function(item) {
 

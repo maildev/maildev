@@ -11,7 +11,7 @@
     $ npm install -g maildev
     $ maildev
 
-If you want to use MailDev with [Docker](https://www.docker.com/), you can use [this image on Docker Hub](https://registry.hub.docker.com/u/stratdat/maildev/).
+If you want to use MailDev with [Docker](https://www.docker.com/), you can use the ['djfarrelly/maildev' image on Docker Hub](https://registry.hub.docker.com/u/djfarrelly/maildev/).
 
 ## Usage
 

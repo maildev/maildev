@@ -20,7 +20,7 @@
         <div class="inner">
           <h1 class="branding">
             MailDev
-            <span class="version-number">v0.6.3</span>
+            <span class="version-number">v0.9.0</span>
           </h1>
 
           <div class="description">
@@ -49,28 +49,43 @@
           <h2>Features</h2>
 
           <ul>
-            <li>Toggle between HTML, plain text views as well as view email headers</li>
+            <li>Toggle between HTML, plain text views as well as view the source or email headers</li>
             <li>Test Responsive Emails w/ resizeable preview pane available for 320/480/600px screen sizes</li>
             <li>Receive and view email attachments</li>
             <li>New emails appear instantly in interface when received (via Websockets)</li>
             <li>Command line interface for configuring SMTP and Web interface ports</li>
             <li>Build on Node.js &amp; hosted on <a href="https://www.npmjs.org/package/maildev">NPM</a></li>
             <li>Ability to relay email to an upstream SMTP server</li>
+            <li>Export .eml files</li>
           </ul>
-
-          <h2>Requirements - <a href="http://nodejs.org/">Node.js</a></h2>
 
           <h2>Install &amp; Run</h2>
 
-          <p>Use <a href="https://npmjs.org/">npm</a> to download and install MailDev or just grab the source off <a href="https://github.com/djfarrelly/MailDev"><strong>GitHub</strong></a></p>
+          <h3>npm</h3>
+
+          <p>With <a href="http://nodejs.org/">Node.js</a> and <a href="https://npmjs.org">npm</a> installed, download, install and run MailDev:</p>
 
 <pre>
   $ npm install -g maildev
+  $ maildev
 </pre>
+          
+          <h3>Docker</h3>
 
-        <p>Run the app</p>
+          <p>Using <a href="https://docs.docker.com/">Docker</a> to run the <a href="https://registry.hub.docker.com/u/djfarrelly/maildev/">official MailDev image</a> in a container. You may choose to change your port mapping or link containers together:</p>
 
 <pre>
+  $ docker pull djfarrelly/maildev
+  $ docker run -p 1080:80 1025:25 djfarrelly/maildev
+</pre>
+
+          <h3>From the source</h3>
+
+          <p>You can also clone the source from <a href="https://github.com/djfarrelly/MailDev"><strong>GitHub</strong></a> and with <a href="http://nodejs.org/">Node.js</a></p>
+
+<pre>
+  $ git clone git@github.com:djfarrelly/MailDev.git
+  $ npm install -g ./maildev
   $ maildev
 </pre>
 
@@ -152,41 +167,7 @@
         </p>
 
 
-        <h2>Changelog</h2>
-
-        <p>
-          <strong>0.6.3</strong> - Add auto-show new email. UI adjustments.
-        </p>
-
-        <p>
-          <strong>0.6.2</strong> - Fix module entry point. Bug fixes.
-        </p>
-
-        <p>
-          <strong>0.6.1</strong> - Bug fixes and improvements.
-        </p>
-
-        <p>
-          <strong>0.6.0</strong> - Add relay option to send outgoing emails. Refactor for new API.
-        </p>
-
-        <p>
-          <strong>0.5.1</strong> - Fix menu layout issue in Safari/Webkit
-        </p>
-
-        <p>
-          <strong>0.5.0</strong> - Add command line interface. Web UI redesign.
-        </p>
-
-        <p>
-          <strong>0.4.0</strong> - Add ability to receive and view attachments
-        </p>
-        <p>
-          <strong>0.3.1</strong> - Added Socket.io to notify interface of new email
-        </p>
-        <p>
-          <strong>0.3.0</strong> - Initial open source release
-        </p>
+        <h2><a href="https://github.com/djfarrelly/MailDev#changelog">Changelog</a></h2>
 
         <h2>Thanks</h2>
 
@@ -200,7 +181,7 @@
 
       </section>
       <footer>
-        <p>This project is maintained by <a href="http://djfarrelly.com">Dan Farrelly</a></p>
+        <p>This project is maintained by <a href="http://danfarrelly.nyc">Dan Farrelly</a></p>
         <p><small>Hosted on GitHub Pages</small></p>
       </footer>
     </div>

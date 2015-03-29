@@ -434,6 +434,9 @@ p code, li code {
     .button-link-list a:hover {
       background-color: #265f8b; }
 
+.gh-star, .twitter-tweet-button, .buffer-button {
+  max-width: 96px !important; }
+
 @media screen and (max-width: 800px) {
   header {
     position: inherit;

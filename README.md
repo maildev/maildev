@@ -127,6 +127,8 @@ To run the test suite, use [Mocha](http://visionmedia.github.io/mocha/):
 
 ## Changelog
 
+0.9.1 - Display unread count in the title
+
 0.9.0 - Add ability to download `.eml` files
 
 0.8.1 - Fix temp directory bug introduced in 0.8.0

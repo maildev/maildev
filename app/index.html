@@ -1,18 +1,18 @@
 <!doctype html>
-<html>
+<html ng-app="mailDevApp" ng-controller="MainCtrl">
     <head>
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1"/>
-        <title>MailDev</title>
+        <title>{{ unreadItems > 0 ? '(' + unreadItems + ') ' : '' }}MailDev</title>
         <meta name="description" content="SMTP Server + Web Interface for viewing and testing emails during development.">
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="styles/style.css">
     </head>
-    <body ng-app="mailDevApp">
+    <body>
 
         <div class="application-container">
             
-            <div class="sidebar" ng-controller="MainCtrl">
+            <div class="sidebar">
                 
                 <div class="sidebar-header">
                     <div class="brand-container">

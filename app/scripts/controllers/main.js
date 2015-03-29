@@ -12,10 +12,20 @@ app.controller('MainCtrl', [
     $scope.configOpen = false;
     $scope.currentItemId = null;
     $scope.autoShow = false;
+    $scope.unreadItems = 0;
+
+    var countUnread = function() {
+      $scope.unreadItems = $scope.items.filter(function(email) {
+        return !email.read;
+      }).length;
+    };
 
     // Load all emails
     var loadData = function() {
       $scope.items = Email.query();
+      $scope.items.$promise.then(function() {
+        countUnread();
+      });
     };
 
     $rootScope.$on('Refresh', function(e, d) {
@@ -33,6 +43,7 @@ app.controller('MainCtrl', [
       
       //update model
       $scope.items.push(newEmail);
+      countUnread();
 
       //update DOM at most 5 times per second
       if (!refreshTimeout) {
@@ -50,6 +61,7 @@ app.controller('MainCtrl', [
     // Click event handlers
     $scope.markRead = function(email) {
       email.read = true;
+      countUnread();
     };
 
     $scope.showConfig = function(){

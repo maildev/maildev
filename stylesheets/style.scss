@@ -55,12 +55,14 @@ header {
 	}
 
 	.branding {
-		margin:0;
+		margin: 0;
 		font-weight: 300; 
 		font-size: 48px;
 	}
 
 	.description {
+		margin: 0 auto;
+		max-width: 70%;
 		font-weight: 300;
 	}
 }
@@ -207,7 +209,18 @@ li code {
 	max-width: 320px;
 }
 
+@media screen and (max-width: 600px) {
+	.features-main {
+		display: block;
+	}
+
+	.feature {
+		margin: 1em auto;
+	}
+}
+
 .feature-screenshot {
+	width: 90%;
 	max-width: 280px;
 	margin: 0 20px;
 	border: 1px solid $greyLight;
@@ -218,30 +231,3 @@ li code {
 	font-size: 0.8em;
 	text-align: center;
 }
-
-// Small screens
-@media screen and (max-width: 800px) {
-
-	header {
-		position: inherit;
-		height: auto;
-		text-align: center;
-		
-		.branding {
-			float: none;
-		}
-		
-		.description {
-			float: none;
-			max-width: 70%;
-			margin: 0 auto;
-		}
-	}
-
-	.jumbotron {
-		padding: 0;
-		height: auto;
-	}
-
-}
-

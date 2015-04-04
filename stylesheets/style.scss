@@ -160,6 +160,10 @@ li code {
 	text-align: center;
 }
 
+.content-section {
+	margin: 3em 0;
+}
+
 .button-link-list {
 	list-style: none;
 	padding:0;
@@ -187,6 +191,11 @@ li code {
 .twitter-tweet-button,
 .buffer-button {
 	max-width: 96px !important;
+}
+
+.npm-badge {
+  vertical-align: middle;
+  margin-left: 0.3em;
 }
 
 .features-main {

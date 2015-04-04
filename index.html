@@ -33,7 +33,7 @@
 
       <a class="github-ribbon" href="https://github.com/djfarrelly/MailDev">Fork me on Github</a>
 
-      <section>
+      <article>
 
         <div class="jumbotron">
 
@@ -43,7 +43,7 @@
 
         <div class="content">
 
-          <div class="description-main">
+          <section class="description-main">
             <p>
               <strong>MailDev</strong> is a simple way to test your projects' emails during development with an easy to use web interface that runs on your machine.
             </p>
@@ -54,9 +54,9 @@
 
             <a href="http://bufferapp.com/add" class="buffer-add-button" data-text="MailDev - a simple way to test your project&#39;s emails during development" data-count="horizontal" ></a>
 
-          </div>
+          </section>
 
-          <div class="features-main">
+          <section class="features-main">
 
             <div class="feature">
               <img class="feature-screenshot" src="images/responsive.jpg">
@@ -77,43 +77,49 @@
               </p>
             </div>
 
-          </div>
+          </section>
 
-          <h2>Features</h2>
+          <section id="features" class="content-section">
 
-          <ul>
-            <li>Toggle between HTML, plain text views as well as view the source or email headers</li>
-            <li>Test Responsive Emails w/ resizeable preview pane available for 320/480/600px viewports</li>
-            <li>Receive and view email attachments</li>
-            <li>New emails appear instantly in interface when received (via Websockets)</li>
-            <li>Command line interface for configuring SMTP and Web interface ports</li>
-            <li>Ability to relay email to an upstream SMTP server (like Gmail)</li>
-            <li>Export .eml files</li>
-          </ul>
+            <h2>Features</h2>
 
-          <h2>Install &amp; Run</h2>
+            <ul>
+              <li>Toggle between HTML, plain text views as well as view the source or email headers</li>
+              <li>Test Responsive Emails w/ resizeable preview pane available for 320/480/600px viewports</li>
+              <li>Receive and view email attachments</li>
+              <li>New emails appear instantly in interface when received (via Websockets)</li>
+              <li>Command line interface for configuring SMTP and Web interface ports</li>
+              <li>Ability to relay email to an upstream SMTP server (like Gmail)</li>
+              <li>Export .eml files</li>
+            </ul>
 
-          <h3>npm</h3>
+          </section>
 
-          <p>With <a href="http://nodejs.org/">Node.js</a> and <a href="https://npmjs.org">npm</a> installed, download, install and run MailDev:</p>
+          <section id="install" class="content-section">
+
+            <h2>Install &amp; Run</h2>
+
+            <h3>npm <img class="npm-badge" src="https://badge.fury.io/js/maildev.png"></h3>
+
+            <p>With <a href="http://nodejs.org/">Node.js</a> and <a href="https://npmjs.org">npm</a> installed, download, install and run MailDev:</p>
 
 <pre>
   $ npm install -g maildev
   $ maildev
 </pre>
-          
-          <h3>Docker</h3>
+            
+            <h3>Docker</h3>
 
-          <p>Using <a href="https://docs.docker.com/">Docker</a> to run the <a href="https://registry.hub.docker.com/u/djfarrelly/maildev/">official MailDev image</a> in a container. You may choose to change your port mapping or link containers together:</p>
+            <p>Using <a href="https://docs.docker.com/">Docker</a> to run the <a href="https://registry.hub.docker.com/u/djfarrelly/maildev/">official MailDev image</a> in a container. You may choose to change your port mapping or link containers together:</p>
 
 <pre>
   $ docker pull djfarrelly/maildev
   $ docker run -p 1080:80 1025:25 djfarrelly/maildev
 </pre>
 
-          <h3>From the source</h3>
+            <h3>From the source</h3>
 
-          <p>You can also clone the source from <a href="https://github.com/djfarrelly/MailDev"><strong>GitHub</strong></a> and with <a href="http://nodejs.org/">Node.js</a></p>
+            <p>You can also clone the source from <a href="https://github.com/djfarrelly/MailDev"><strong>GitHub</strong></a> and with <a href="http://nodejs.org/">Node.js</a></p>
 
 <pre>
   $ git clone git@github.com:djfarrelly/MailDev.git
@@ -121,9 +127,13 @@
   $ maildev
 </pre>
 
-        <h2>Usage</h2>
+        </section>
 
-        <p>On the command line:</p>
+        <section id="usage" class="content-section">
+
+          <h2>Usage</h2>
+
+          <p>On the command line:</p>
 
 <pre>
   maildev [options]
@@ -141,7 +151,7 @@
     -v, --verbose
 </pre>
 
-        <p>Or in your Node.js project:</p>
+          <p>Or within your Node.js project:</p>
 
 <pre>
   var MailDev = require('maildev');
@@ -160,15 +170,19 @@
   });
 </pre>
 
-        <h2>Configure your project</h2>
+        </section>
 
-        <p>Configure your application to send emails via port <code>1025</code> and open <code>localhost:1080</code>.</p>
+        <section id="configure" class="content-section">
 
-        <h3>Example Setups</h3>
+          <h2>Configure your project</h2>
 
-        <ul>
-          <li>
-            Node &mdash; <a href="https://github.com/andris9/Nodemailer" target="_blank">Nodemailer</a>:
+          <p>Configure your application to send emails via port <code>1025</code> and open <code>localhost:1080</code>.</p>
+
+          <h3>Example Setups</h3>
+
+          <ul>
+            <li>
+              Node &mdash; <a href="https://github.com/andris9/Nodemailer" target="_blank">Nodemailer</a>:
 <pre>
   var transport = nodemailer.createTransport({
     port: 1025,
@@ -176,12 +190,12 @@
     // other settings...
   });
 </pre>
-          </li>
-          <li>
-            Django &mdash; add <code>EMAIL_PORT = 1025</code> in your settings file <a href="https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-EMAIL_PORT">[source]</a>
-          </li>
-          <li>
-            Rails &mdash; add the port to your config settings:<br>
+            </li>
+            <li>
+              Django &mdash; add <code>EMAIL_PORT = 1025</code> in your settings file <a href="https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-EMAIL_PORT">[source]</a>
+            </li>
+            <li>
+              Rails &mdash; add the port to your config settings:<br>
 <pre>
   config.action_mailer.delivery_method = :smtp
     config.action_mailer.smtp_settings = {
@@ -189,33 +203,36 @@
       :port => 1025
     }
 </pre>
-          </li>
-        </ul>
+            </li>
+          </ul>
 
-        <h2>Ideas, Issues or Contributions?</h2>
+        </section>
 
-        <p>
-          Have an idea or feature request? I would love to here it. Create an issue on <a href="https://github.com/djfarrelly/MailDev/issues">github</a> or contact me on twitter <a href="https://twitter.com/djfarrelly">@djfarrelly</a>
-        </p>
+        <section id="issues" class="content-section">
 
+          <h2>Ideas, Issues or Contributions?</h2>
 
-        <h2><a href="https://github.com/djfarrelly/MailDev#changelog">Changelog</a></h2>
+          <p>
+            Have an idea or feature request? I would love to here it. Create an issue on <a href="https://github.com/djfarrelly/MailDev/issues">github</a> or contact me on twitter <a href="https://twitter.com/djfarrelly">@djfarrelly</a>
+          </p>
 
-        <h2>Thanks</h2>
+          <p>A list of all releases can be found in the <a href="https://github.com/djfarrelly/MailDev#changelog">changelog</a></p>
 
-        <p>Thanks to <a href="https://github.com/andris9">Andris Reinman</a> for creating his projects that are the backbone of this app and <a href="http://mailcatcher.me/" target="_blank">MailCatcher</a> for the inspiration.</p>
+          <p>Thanks to <a href="https://github.com/andris9">Andris Reinman</a> for creating his projects that are the backbone of this app and <a href="http://mailcatcher.me/" target="_blank">MailCatcher</a> for the inspiration.</p>
 
-        <h2>License</h2>
+          <p>MailDev is released under the <a href="https://github.com/djfarrelly/MailDev/blob/master/LICENSE">MIT license</a></p>
 
-        <p>MailDev is released under the <a href="https://github.com/djfarrelly/MailDev/blob/master/LICENSE">MIT license</a></p>
+        </section>
 
         </div><!-- end .content -->
 
-      </section>
+      </article>
+
       <footer>
         <p>This project is maintained by <a href="http://danfarrelly.nyc">Dan Farrelly</a></p>
         <p><small>Hosted on GitHub Pages</small></p>
       </footer>
+
     </div>
 
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>

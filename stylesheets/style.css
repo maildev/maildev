@@ -384,6 +384,9 @@ footer {
   margin: 0 auto;
   max-width: 80%;
   max-height: 500px; }
+  @media screen and (min-width: 680px) {
+    .jumbotron-screenshot {
+      min-height: 500px; } }
 
 .content {
   width: 90%;
@@ -397,7 +400,7 @@ pre, code {
 pre {
   padding: 15px;
   overflow-x: auto;
-  border: 1px solid #eee; }
+  border: 1px solid gainsboro; }
   pre code {
     background: none; }
 
@@ -406,9 +409,10 @@ p code, li code {
   font-size: 0.95em; }
 
 .description-main {
+  margin: 3em auto;
+  width: 90%;
+  max-width: 780px;
   font-size: 1.3em;
-  width: 74%;
-  margin: 1.5em auto;
   text-align: center; }
 
 .button-link-list {
@@ -429,6 +433,23 @@ p code, li code {
 
 .gh-star, .twitter-tweet-button, .buffer-button {
   max-width: 96px !important; }
+
+.features-main {
+  display: flex;
+  margin: 2em 0; }
+
+.feature {
+  max-width: 320px; }
+
+.feature-screenshot {
+  max-width: 280px;
+  margin: 0 20px;
+  border: 1px solid gainsboro;
+  border-radius: 2px; }
+
+.feature-caption {
+  font-size: 0.8em;
+  text-align: center; }
 
 @media screen and (max-width: 800px) {
   header {

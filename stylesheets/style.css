@@ -405,8 +405,10 @@ pre {
     background: none; }
 
 p code, li code {
-  padding: 0.1em 0.4em;
-  font-size: 0.95em; }
+  padding: 0em 0.3em;
+  font-size: 0.95em;
+  border: 1px solid gainsboro;
+  border-radius: 2px; }
 
 .description-main {
   margin: 3em auto;

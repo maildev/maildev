@@ -1,6 +1,6 @@
 @import "normalize";
 
-// $ node-sass -w stylesheets/style.scss stylesheets/style.css
+// $ node-sass -o stylesheets -w stylesheets/style.scss style.css
 
 // Variables
 $padVert: 8px;
@@ -41,19 +41,28 @@ h1, h2, h3 { font-weight: 400; }
 h2 { margin:1.0em 0; }
 
 header {
-	position: fixed;
-	z-index:900;
-	height:50px;
-	width:100%;
-	padding:1em 0;
+	width: 100%;
+	padding: 2em 0;
 
-	background:$brand;
-	color:#fff;	
+	text-align: center;
+	background: $brand;
+	color: #fff;	
 
-	.inner { margin:0 auto; width:100%; max-width: 960px; }
-	.branding { float: left; font-weight: 300; margin:0; }
-	.branding .version-number { font-size:0.4em; }
-	.description { float: right; font-weight: 300; }
+	.inner {
+		margin:0 auto;
+		width:100%;
+		max-width: 960px;
+	}
+
+	.branding {
+		margin:0;
+		font-weight: 300; 
+		font-size: 48px;
+	}
+
+	.description {
+		font-weight: 300;
+	}
 }
 
 footer {
@@ -96,8 +105,6 @@ footer {
 
 .jumbotron {
 	width:100%;
-	padding-top:80px;
-	height:400px;
 
 	background-color: $brand;
 	overflow: hidden;
@@ -106,8 +113,8 @@ footer {
 .jumbotron-screenshot {
 	display: block; 
 	margin:0 auto;
-	max-width:800px;
-	width:80%;
+	max-width: 80%;
+	max-height: 500px
 }
 
 .content {

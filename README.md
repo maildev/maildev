@@ -26,6 +26,8 @@ If you want to use MailDev with [Docker](https://www.docker.com/), you can use t
       --outgoing-user <user>  SMTP user for outgoing emails
       --outgoing-pass <pass>  SMTP password for outgoing emails
       --outgoing-secure       Use SMTP SSL for outgoing emails
+      --incoming-user <user>  SMTP user for incoming emails
+      --incoming-pass <pass>  SMTP password for incoming emails
       -o, --open              Open the Web GUI after startup
       -v, --verbose
 

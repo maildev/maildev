@@ -117,8 +117,9 @@ app.controller('ItemCtrl', [
     $scope.delete = function(item) {
 
       Email.delete({ id: item.id }, function(email) {
-        $rootScope.$emit('Refresh');
-        $location.path('/');
+        var emailElement = document.getElementsByClassName("email-"+item.id)[0];
+        if (emailElement.classList.contains("current")) $location.path("/");
+        emailElement.parentNode.removeChild(emailElement);
       });
 
     };

@@ -29,6 +29,9 @@ If you want to use MailDev with [Docker](https://www.docker.com/), you can use t
       -o, --open              Open the Web GUI after startup
       -v, --verbose
 
+For grunt, use 
+[grunt-maildev](https://github.com/xavierpriour/grunt-maildev)
+
 ## API
 
 MailDev can be used in your Node.js application. For more info view the 

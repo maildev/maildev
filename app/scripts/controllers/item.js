@@ -117,10 +117,16 @@ app.controller('ItemCtrl', [
     $scope.delete = function(item) {
 
       Email.delete({ id: item.id }, function(email) {
-        $rootScope.$emit('Refresh');
-        $location.path('/');
-      });
+        var idx = $scope.items.indexOf($scope.items.filter(function(item_){return item.id==item_.id})[0]);
 
+        if (idx>0) {
+          $location.path('/email/' + $scope.items[idx-1].id);
+        } else {
+          $location.path('/');
+        }
+        
+        $scope.items.splice(idx,1);
+      });
     };
 
     // Updates iframe to have a width of newSize, i.e. '320px'

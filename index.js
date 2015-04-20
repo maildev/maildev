@@ -56,15 +56,8 @@ module.exports = function(config) {
       config.outgoingSecure
     );
   }
-  
-  if (
-      config.webUser &&
-      config.webPass
-      ){
-      web.enableAuthentication(config.webUser, config.webPass);
-  }
-  web.addRoutes();
-  web.listen( config.web );
+
+  web.start(config.web, mailserver, config.webUser, config.webPass);
 
   logger.info('MailDev app running at 127.0.0.1:%s', config.web);
 

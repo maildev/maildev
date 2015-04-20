@@ -26,7 +26,7 @@ module.exports = function(config) {
       .option('--outgoing-host <host>', 'SMTP host for outgoing emails')
       .option('--outgoing-port <port>', 'SMTP port for outgoing emails')
       .option('--outgoing-user <user>', 'SMTP user for outgoing emails')
-      .option('--outgoing-pass <pass>', 'SMTP password for outgoing emails')
+      .option('--outgoing-pass <password>', 'SMTP password for outgoing emails')
       .option('--outgoing-secure', 'Use SMTP SSL for outgoing emails')
       .option('--web-user <user>', 'HTTP user for GUI')
       .option('--web-pass <password>', 'HTTP password for GUI')

@@ -28,6 +28,8 @@ module.exports = function(config) {
       .option('--outgoing-user <user>', 'SMTP user for outgoing emails')
       .option('--outgoing-pass <pass>', 'SMTP password for outgoing emails')
       .option('--outgoing-secure', 'Use SMTP SSL for outgoing emails')
+      .option('--web-user <user>', 'HTTP user for GUI')
+      .option('--web-pass <password>', 'HTTP password for GUI')
       .option('-o, --open', 'Open the Web GUI after startup')
       .option('-v, --verbose')
       .parse(process.argv);
@@ -55,6 +57,13 @@ module.exports = function(config) {
     );
   }
   
+  if (
+      config.webUser &&
+      config.webPass
+      ){
+      web.enableAuthentication(config.webUser, config.webPass);
+  }
+  web.addRoutes();
   web.listen( config.web );
 
   logger.info('MailDev app running at 127.0.0.1:%s', config.web);

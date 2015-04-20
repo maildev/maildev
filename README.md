@@ -28,6 +28,8 @@ For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierprio
       --outgoing-user <user>  SMTP user for outgoing emails
       --outgoing-pass <pass>  SMTP password for outgoing emails
       --outgoing-secure       Use SMTP SSL for outgoing emails
+      --web-user <user>       HTTP basic auth username
+      --web-pass <pass>       HTTP basic auth password
       -o, --open              Open the Web GUI after startup
       -v, --verbose
 

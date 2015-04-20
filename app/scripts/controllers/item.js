@@ -117,15 +117,22 @@ app.controller('ItemCtrl', [
     $scope.delete = function(item) {
 
       Email.delete({ id: item.id }, function(email) {
-        var idx = $scope.items.indexOf($scope.items.filter(function(item_){return item.id==item_.id})[0]);
 
-        if (idx>0) {
-          $location.path('/email/' + $scope.items[idx-1].id);
+        var idx = $scope.items.reduce(function(p, c, i){
+          if (p !== 0) return p;
+          return c.id === item.id ? i : 0;
+        }, 0);
+
+        var nextIdx = $scope.items.length === 1 ? null :
+                      idx === 0 ? idx + 1 : idx - 1;
+
+        if (nextIdx !== null) {
+          $location.path('/email/' + $scope.items[nextIdx].id);
         } else {
           $location.path('/');
         }
         
-        $scope.items.splice(idx,1);
+        $scope.items.splice(idx, 1);
       });
     };
 

@@ -32,7 +32,7 @@
   ],
   "dependencies": {
     "commander": "~2.8.0",
-    "express": "~4.9.5",
+    "express": "^4.12.3",
     "mailcomposer": "~0.2.11",
     "mailparser": "~0.3.6",
     "open": "~0.0.5",

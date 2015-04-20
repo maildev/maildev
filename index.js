@@ -6,12 +6,12 @@
  * Licensed under the MIT License.
  */
 
-var program     = require('commander')
-  , pkg         = require('./package.json')
-  , web         = require('./lib/web')
-  , mailserver  = require('./lib/mailserver')
-  , logger      = require('./lib/logger')
-  ;
+var program     = require('commander');
+var pkg         = require('./package.json');
+var web         = require('./lib/web');
+var mailserver  = require('./lib/mailserver');
+var logger      = require('./lib/logger');
+
 
 module.exports = function(config) {
   
@@ -39,21 +39,22 @@ module.exports = function(config) {
   
   // Start the Mailserver & Web GUI
   mailserver.listen( config.smtp );
-  if (
-      config.outgoingHost ||
+
+  if (config.outgoingHost ||
       config.outgoingPort ||
       config.outgoingUser ||
       config.outgoingPass ||
-      config.outgoingSecure
-      ){
+      config.outgoingSecure) {
+
     mailserver.setupOutgoing(
-        config.outgoingHost
-      , parseInt(config.outgoingPort)
-      , config.outgoingUser
-      , config.outgoingPass
-      , config.outgoingSecure
+      config.outgoingHost,
+      parseInt(config.outgoingPort),
+      config.outgoingUser,
+      config.outgoingPass,
+      config.outgoingSecure
     );
   }
+  
   web.listen( config.web );
 
   logger.info('MailDev app running at 127.0.0.1:%s', config.web);

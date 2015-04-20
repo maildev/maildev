@@ -8,15 +8,10 @@ app.controller('ItemCtrl', [
   '$scope', '$rootScope', '$routeParams', '$location', 'Email', '$http',
   function($scope, $rootScope, $routeParams, $location, Email, $http) {
 
-    var iframe = null
-      , getItem
-      , prepIframe
-      , fixIframeHeight
-      , replaceMediaQueries;
-
+    var iframe = null;
 
     // Get the item data by route parameter
-    getItem = function() {
+    var getItem = function() {
 
       Email.get({ id: $routeParams.itemId }, function(email) {
 
@@ -38,10 +33,11 @@ app.controller('ItemCtrl', [
     };
 
     // Prepares the iframe for interaction
-    prepIframe = function() {
+    var prepIframe = function() {
       // Wait for iframe to load
       setTimeout(function() {
-        var baseEl, head;
+        var baseEl;
+        var head;
 
         iframe  = document.getElementsByTagName('iframe')[0];
         head    = iframe.contentDocument.getElementsByTagName('head')[0];
@@ -50,8 +46,7 @@ app.controller('ItemCtrl', [
         // Append <base target="_blank" /> to <head> in the iframe so all links open in new window
         baseEl.setAttribute('target', '_blank');
 
-        if (head)
-          head.appendChild(baseEl);
+        if (head) head.appendChild(baseEl);
 
         replaceMediaQueries();
         fixIframeHeight();
@@ -63,16 +58,16 @@ app.controller('ItemCtrl', [
 
     // Updates the iframe height so it matches it's content
     // This prevents the iframe from having scrollbars
-    fixIframeHeight = function() {
+    var fixIframeHeight = function() {
 
-      var body      = iframe.contentDocument.getElementsByTagName('body')[0]
-        , newHeight = body.scrollHeight;
+      var body      = iframe.contentDocument.getElementsByTagName('body')[0];
+      var newHeight = body.scrollHeight;
 
       iframe.height = newHeight;
     };
 
     // Updates all media query rules to use 'width' instead of device width
-    replaceMediaQueries = function(){
+    var replaceMediaQueries = function(){
       angular.forEach(iframe.contentDocument.styleSheets, function(styleSheet){
         angular.forEach(styleSheet.cssRules, function(rule){
           if (rule.media && rule.media.mediaText){

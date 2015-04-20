@@ -48,12 +48,11 @@ app.filter('newLines', function() {
 
 (function(){
 
-  var sidebar             = document.querySelector('.sidebar')
-    , sidebarHeader       = document.querySelector('.sidebar-header')
-    , emailList           = document.querySelector('.email-list')
-    , sidebarHeaderHeight = sidebarHeader.getBoundingClientRect().height
-    , resizeTimeout       = null
-    ;
+  var sidebar             = document.querySelector('.sidebar');
+  var sidebarHeader       = document.querySelector('.sidebar-header');
+  var emailList           = document.querySelector('.email-list');
+  var sidebarHeaderHeight = sidebarHeader.getBoundingClientRect().height;
+  var resizeTimeout       = null;
 
   function adjustEmailListHeight(){
     var newEmailListHeight = sidebar.getBoundingClientRect().height - sidebarHeaderHeight;

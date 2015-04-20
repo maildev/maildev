@@ -4,9 +4,8 @@
  * MailDev - api.js -- test the Node.js API
  */
 
-var assert = require('assert')
-  , nodemailer = require('nodemailer')
-  ;
+var assert = require('assert');
+var nodemailer = require('nodemailer');
 
 var MailDev = require('../index.js');
 
@@ -53,10 +52,10 @@ describe('API', function(){
       });
 
       var emailOpts = {
-          from: 'Angelo Pappas <angelo.pappas@fbi.gov>'
-        , to: 'Johnny Utah <johnny.utah@fbi.gov>'
-        , subject: 'You were right.'
-        , text: 'They are surfers.'
+        from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
+        to: 'Johnny Utah <johnny.utah@fbi.gov>',
+        subject: 'You were right.',
+        text: 'They are surfers.'
       };
 
       transporter.sendMail(emailOpts, function(err, info){
@@ -89,10 +88,10 @@ describe('API', function(){
       });
 
       var emailOpts = {
-          from: 'Angelo Pappas <angelo.pappas@fbi.gov>'
-        , to: 'Johnny Utah <johnny.utah@fbi.gov>'
-        , subject: 'You were right.'
-        , text: 'They are surfers.'
+        from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
+        to: 'Johnny Utah <johnny.utah@fbi.gov>',
+        subject: 'You were right.',
+        text: 'They are surfers.'
       };
 
       maildev.on('new', function(email){

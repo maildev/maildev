@@ -16,48 +16,55 @@ var transporter = nodemailer.createTransport({
 
 // Messages list
 var messages = [
-    {
-      from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
-      to: 'Johnny Utah <johnny.utah@fbi.gov>',
-      subject: 'The ex-presidents are surfers',
-      headers: {
-        'X-some-header': 1000
-      },
-      text: 'The wax at the bank was surfer wax!!!',
-      html: '<!DOCTYPE html><html><head></head><body>' +
-            '<p>The wax at the bank was surfer wax!!!</p>' +
-            '</body></html>',
-      attachments: [
-        { fileName: 'notes.txt', contents: 'Info on surf board wax', contentType: 'text/plain' }
-      ]
+  {
+    from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
+    to: 'Johnny Utah <johnny.utah@fbi.gov>',
+    subject: 'The ex-presidents are surfers',
+    headers: {
+      'X-some-header': 1000
     },
-    {
-      from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
-      to: 'Johnny Utah <johnny.utah@fbi.gov>',
-      subject: 'You were right.',
-      headers: {
-        'X-some-header': 1000
-      },
-      text: 'They are surfers.'
+    text: 'The wax at the bank was surfer wax!!!',
+    html: '<!DOCTYPE html><html><head></head><body>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '</body></html>',
+    attachments: [
+      { fileName: 'notes.txt', contents: 'Info on surf board wax', contentType: 'text/plain' }
+    ]
+  },
+  {
+    from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
+    to: 'Johnny Utah <johnny.utah@fbi.gov>',
+    subject: 'You were right.',
+    headers: {
+      'X-some-header': 1000
     },
-    {
-      from: 'Bodhi <bodhi@gmail.com>',
-      to: 'Johnny Utah <johnny.utah@fbi.gov>',
-      subject: 'The ultimate price',
-      headers: {
-        'X-some-header': 1000
-      },
-      text: 'If you want the ultimate, you\'ve got to be willing to pay the ultimate price. \nIt\'s not tragic to die doing what you love.',
-      html: '<!DOCTYPE html><html><head></head><body style="background:#eee;font-family:sans-serif;padding:2em 2em;">' +
-            '<h1>Point Break</h1>' +
-            '<img src="http://farm8.staticflickr.com/7337/11784709785_bbed9bae7d_m.jpg">' +
-            '<p>If you want the ultimate, you\'ve got to be willing to pay the ultimate price. <br>It\'s not tragic to die doing what you love.</p>' +
-            '<p><strong>- Bodhi</strong></p>' +
-            '</body></html>',
-    }
-  ];
+    text: 'They are surfers.'
+  },
+  {
+    from: 'Bodhi <bodhi@gmail.com>',
+    to: 'Johnny Utah <johnny.utah@fbi.gov>',
+    subject: 'The ultimate price',
+    headers: {
+      'X-some-header': 1000
+    },
+    text: 'If you want the ultimate, you\'ve got to be willing to pay the ultimate price. \nIt\'s not tragic to die doing what you love.',
+    html: '<!DOCTYPE html><html><head></head><body style="background:#eee;font-family:sans-serif;padding:2em 2em;">' +
+          '<h1>Point Break</h1>' +
+          '<img src="http://farm8.staticflickr.com/7337/11784709785_bbed9bae7d_m.jpg">' +
+          '<p>If you want the ultimate, you\'ve got to be willing to pay the ultimate price. <br>It\'s not tragic to die doing what you love.</p>' +
+          '<p><strong>- Bodhi</strong></p>' +
+          '</body></html>',
+  }
+];
 
-// Send the emails
-messages.forEach(function(message){
-  transporter.sendMail(message);
-});
+
+function sendEmails() {
+  messages.forEach(function(message){
+    transporter.sendMail(message);
+  });
+}
+
+module.exports = sendEmails;
+
+// run this once for quick use on command line
+sendEmails();

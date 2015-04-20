@@ -3,6 +3,8 @@
  * MailDev - Gruntfile.js
  */
 
+var sendEmails = require('./test/send.js');
+
 module.exports = function (grunt) {
 
   grunt.initConfig({
@@ -22,8 +24,14 @@ module.exports = function (grunt) {
 
     nodemon: {
       dev: {
+        script: './bin/maildev',
         options: {
-          ignoredFiles: ['app/**', 'assets/**', 'test/**']
+          ignoredFiles: ['app/**', 'assets/**', 'test/**'],
+          callback: function(nodemon) {
+            nodemon.on('start', function() {
+              setTimeout(sendEmails, 1000);
+            });
+          }
         }
       }
     },

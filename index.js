@@ -43,12 +43,7 @@ module.exports = function(config) {
   }
   
   // Start the Mailserver & Web GUI
-  if (config.incomingUser &&
-      config.incomingPass) {
-    mailserver.create( config.smtp, config.ip, config.incomingUser, config.incomingPass );
-  } else {
-    mailserver.create( config.smtp, config.ip );
-  }
+  mailserver.create(config.smtp, config.ip, config.incomingUser, config.incomingPass);
 
   if (config.outgoingHost ||
       config.outgoingPort ||

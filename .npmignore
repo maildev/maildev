@@ -2,10 +2,9 @@
 assets/
 test/
 docs/
-*.sublime-project
-*.sublime-workspace
 
 .nodemonignore
 .jshintrc
 .gitignore
 Gruntfile.js
+.travis.yml

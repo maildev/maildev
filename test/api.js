@@ -126,7 +126,7 @@ describe('API', function() {
         assert.equal(email.text, emailOpts.text);
 
         maildev.end(function() {
-          maildev.off();
+          maildev.removeAllListeners();
           transporter.close();
           done();
         });

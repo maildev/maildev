@@ -32,6 +32,7 @@ module.exports = function(config) {
       .option('--incoming-pass <pass>', 'SMTP password for incoming emails')
       .option('--web-user <user>', 'HTTP user for GUI')
       .option('--web-pass <password>', 'HTTP password for GUI')
+      .option('--bind <ip address>', 'IP Address to bind services to', '0.0.0.0')
       .option('-o, --open', 'Open the Web GUI after startup')
       .option('-v, --verbose')
       .parse(process.argv);
@@ -44,9 +45,9 @@ module.exports = function(config) {
   // Start the Mailserver & Web GUI
   if (config.incomingUser &&
       config.incomingPass) {
-    mailserver.listen( config.smtp, config.incomingUser, config.incomingPass );
+    mailserver.listen( config.smtp, config.bind, config.incomingUser, config.incomingPass );
   } else {
-    mailserver.listen( config.smtp );
+    mailserver.listen( config.smtp, config.bind );
   }
   if (config.outgoingHost ||
       config.outgoingPort ||
@@ -63,13 +64,13 @@ module.exports = function(config) {
     );
   }
 
-  web.start(config.web, mailserver, config.webUser, config.webPass);
+  web.start(config.web, config.bind, mailserver, config.webUser, config.webPass);
 
-  logger.info('MailDev app running at 127.0.0.1:%s', config.web);
+  logger.info('MailDev app running at %s:%s', config.bind, config.web);
 
   if (config.open){
     var open = require('open');
-    open('http://localhost:' + config.web);
+    open('http://' + (config.bind == '0.0.0.0' ? 'localhost' : config.bind) + ':' + config.web);
   }
 
   return mailserver;

@@ -132,37 +132,7 @@ To run the test suite:
 
     $ npm run test
 
-## Changelog
-
-0.9.1 - Display unread count in the title
-
-0.9.0 - Add ability to download `.eml` files
-
-0.8.1 - Fix temp directory bug introduced in 0.8.0
-
-0.8.0 - Add view email source. Fix running multiple instances.
-
-0.7.0 - Add Docker support
-
-0.6.3 - Add auto-show new email. UI adjustments.
-
-0.6.2 - Fix module entry point. Bug fixes.
-
-0.6.1 - Bug fixes and improvements
-
-0.6.0 - Add relay option to send outgoing emails. Refactor for new API.
-
-0.5.2 - Lock down dependency versions
-
-0.5.1 - Fix menu layout issue in Safari
-
-0.5.0 - Add command line interface. Web UI redesign.
-
-0.4.0 - Add ability to receive and view attachments
-
-0.3.1 - Add Socket.io for immediate email arrival to interface
-
-0.3.0 - Initial open source release
+## [Changelog](https://github.com/djfarrelly/MailDev/releases)
 
 ## Thanks
 

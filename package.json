@@ -47,9 +47,13 @@
     "grunt-nodemon": "^0.4.0",
     "grunt-sass": "^0.18.1",
     "matchdep": "^0.3.0",
+    "mocha": "^2.2.5",
     "nodemailer": "^1.3.4"
   },
   "engines": {
     "node": ">=0.10.0"
+  },
+  "scripts": {
+    "test": "./node_modules/mocha/bin/mocha"
   }
 }

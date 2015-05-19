@@ -1,5 +1,6 @@
 # MailDev
 
+[![Build Status](https://api.travis-ci.org/djfarrelly/MailDev.svg)](https://travis-ci.org/djfarrelly/MailDev)
 [![NPM version](https://badge.fury.io/js/maildev.png)](http://badge.fury.io/js/maildev)
 
 **MailDev** is a simple way to test your project's generated emails during development with an easy to use web interface that runs on your machine built on top of [Node.js](http://www.nodejs.org).
@@ -127,10 +128,9 @@ To run **MailDev** during development:
 
 The `grunt dev` task will run the project using nodemon and restart automatically when changes are detected. SASS files will be compiled automatically on save also. To trigger some emails for testing run `node test/send.js` in a separate shell. Please run jshint to your lint code before submitting a pull request; run `grunt jshint`.
 
-To run the test suite, use [Mocha](http://visionmedia.github.io/mocha/):
+To run the test suite:
 
-    $ npm install -g mocha
-    $ mocha
+    $ npm run test
 
 ## Changelog
 

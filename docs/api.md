@@ -11,6 +11,10 @@ var maildev = new MailDev({
   smtp: 1025 // incoming SMTP port - default is 1025
 });
 
+maildev.listen(function(err) {
+  console.log('We can now sent emails to port 1025!');
+});
+
 // Print new emails to the console as they come in
 maildev.on('new', function(email){
   console.log('Received new email with subject: %s', email.subject);
@@ -37,6 +41,8 @@ var maildev = new MailDev({
   outgoingPass: '********'
 });
 
+maildev.listen();
+
 // Print new emails to the console as they come in
 maildev.on('new', function(email){
   
@@ -58,6 +64,10 @@ maildev.on('new', function(email){
 
 *All callbacks follow the Node error-first pattern, ex.* `function(err, data){...`
 
+**listen(callback)** - Starts the smtp server 
+
+**end(callback)** - Stops the smtp server
+
 **on('new', callback)** - Event called when a new email is received. Callback 
 receives single mail object.
 
@@ -77,5 +87,3 @@ readable stream of the file. Example callback:
 
 **relayMail(id, callback)** - If configured, this will relay/send the given
 email to it's "to" address. Also accepts an email object instead of id.
-
-**end()** - Stops the mail server

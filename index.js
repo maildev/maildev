@@ -28,6 +28,8 @@ module.exports = function(config) {
       .option('--outgoing-user <user>', 'SMTP user for outgoing emails')
       .option('--outgoing-pass <password>', 'SMTP password for outgoing emails')
       .option('--outgoing-secure', 'Use SMTP SSL for outgoing emails')
+      .option('--incoming-user <user>', 'SMTP user for incoming emails')
+      .option('--incoming-pass <pass>', 'SMTP password for incoming emails')
       .option('--web-user <user>', 'HTTP user for GUI')
       .option('--web-pass <password>', 'HTTP password for GUI')
       .option('-o, --open', 'Open the Web GUI after startup')
@@ -40,8 +42,12 @@ module.exports = function(config) {
   }
   
   // Start the Mailserver & Web GUI
-  mailserver.listen( config.smtp );
-
+  if (config.incomingUser &&
+      config.incomingPass) {
+    mailserver.listen( config.smtp, config.incomingUser, config.incomingPass );
+  } else {
+    mailserver.listen( config.smtp );
+  }
   if (config.outgoingHost ||
       config.outgoingPort ||
       config.outgoingUser ||

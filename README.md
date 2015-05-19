@@ -1,5 +1,6 @@
 # MailDev
 
+[![Build Status](https://api.travis-ci.org/djfarrelly/MailDev.svg)](https://travis-ci.org/djfarrelly/MailDev)
 [![NPM version](https://badge.fury.io/js/maildev.png)](http://badge.fury.io/js/maildev)
 
 **MailDev** is a simple way to test your project's generated emails during development with an easy to use web interface that runs on your machine built on top of [Node.js](http://www.nodejs.org).

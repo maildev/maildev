@@ -21,8 +21,9 @@ module.exports = function(config) {
     // CLI
     config = program
       .version(version)
-      .option('-s, --smtp [port]', 'SMTP port to catch emails [1025]', '1025')
-      .option('-w, --web [port]', 'Port to run the Web GUI [1080]', '1080')
+      .option('-s, --smtp <port>', 'SMTP port to catch emails [1025]', '1025')
+      .option('-w, --web <port>', 'Port to run the Web GUI [1080]', '1080')
+      .option('--ip <ip address>', 'IP Address to bind services to', '0.0.0.0')
       .option('--outgoing-host <host>', 'SMTP host for outgoing emails')
       .option('--outgoing-port <port>', 'SMTP port for outgoing emails')
       .option('--outgoing-user <user>', 'SMTP user for outgoing emails')
@@ -32,7 +33,6 @@ module.exports = function(config) {
       .option('--incoming-pass <pass>', 'SMTP password for incoming emails')
       .option('--web-user <user>', 'HTTP user for GUI')
       .option('--web-pass <password>', 'HTTP password for GUI')
-      .option('--bind <ip address>', 'IP Address to bind services to', '0.0.0.0')
       .option('-o, --open', 'Open the Web GUI after startup')
       .option('-v, --verbose')
       .parse(process.argv);
@@ -45,9 +45,9 @@ module.exports = function(config) {
   // Start the Mailserver & Web GUI
   if (config.incomingUser &&
       config.incomingPass) {
-    mailserver.create( config.smtp, config.bind, config.incomingUser, config.incomingPass );
+    mailserver.create( config.smtp, config.ip, config.incomingUser, config.incomingPass );
   } else {
-    mailserver.create( config.smtp, config.bind );
+    mailserver.create( config.smtp, config.ip );
   }
 
   if (config.outgoingHost ||
@@ -65,11 +65,11 @@ module.exports = function(config) {
     );
   }
 
-  web.start(config.web, config.bind, mailserver, config.webUser, config.webPass);
+  web.start(config.web, config.ip, mailserver, config.webUser, config.webPass);
 
   if (config.open){
     var open = require('open');
-    open('http://' + (config.bind === '0.0.0.0' ? 'localhost' : config.bind) + ':' + config.web);
+    open('http://' + (config.ip === '0.0.0.0' ? 'localhost' : config.ip) + ':' + config.web);
   }
 
   return mailserver;

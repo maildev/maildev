@@ -67,8 +67,6 @@ module.exports = function(config) {
 
   web.start(config.web, config.bind, mailserver, config.webUser, config.webPass);
 
-  logger.info('MailDev app running at %s:%s', config.bind, config.web);
-
   if (config.open){
     var open = require('open');
     open('http://' + (config.bind === '0.0.0.0' ? 'localhost' : config.bind) + ':' + config.web);

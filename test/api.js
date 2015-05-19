@@ -10,11 +10,11 @@ var nodemailer = require('nodemailer');
 var MailDev = require('../index.js');
 
 
-describe('API', function(){
+describe('API', function() {
 
-  describe('Constructor', function(){
+  describe('Constructor', function() {
     
-    it('should accept arguments', function(done){
+    it('should accept arguments', function() {
 
       var maildev = new MailDev({
         smtp: 1026,
@@ -25,31 +25,42 @@ describe('API', function(){
       assert.equal(maildev.port, 1026);
       assert.equal(maildev.outgoingHost, 'smtp.gmail.com');
 
-      maildev.end(done);
     });
 
-    it('should return mailserver object', function(done){
+    it('should return mailserver object', function() {
 
       var maildev = new MailDev();
 
       assert.equal(typeof maildev.getEmail, 'function');
       assert.equal(typeof maildev.relayMail, 'function');
 
-      maildev.end(done);
     });
 
   });
 
-  describe('Email', function(){
+  describe('listen/end', function() {
 
-    it('should receive emails', function(done){
+    var maildev = new MailDev();
+
+    it('should start the mailserver', function(done) {
+
+      maildev.listen(done);
+
+    });
+
+    it('should stop the mailserver', function(done) {
+
+      maildev.end(done);
+
+    });
+
+  });
+
+  describe('Email', function() {
+
+    it('should receive emails', function(done) {
 
       var maildev = new MailDev();
-
-      var transporter = nodemailer.createTransport({
-        port: 1025,
-        ignoreTLS: true
-      });
 
       var emailOpts = {
         from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
@@ -58,27 +69,43 @@ describe('API', function(){
         text: 'They are surfers.'
       };
 
-      transporter.sendMail(emailOpts, function(err, info){
+      maildev.listen(function(err) {
         if (err) return done(err);
 
-        maildev.getAllEmail(function(err, emails){
+        var transporter = nodemailer.createTransport({
+          port: 1025,
+          ignoreTLS: true
+        });
+
+        transporter.sendMail(emailOpts, function(err, info) {
           if (err) return done(err);
 
-          assert.equal(Array.isArray(emails), true);
-          assert.equal(emails.length, 1);
-          assert.equal(emails[0].text, emailOpts.text);
+          // To ensure this passes consistently, we need a delay
+          setTimeout(function() {
 
-          maildev.end(function(){
-            done();
-            transporter.close();
-          });
+            maildev.getAllEmail(function(err, emails) {
+              if (err) return done(err);
+
+              assert.equal(Array.isArray(emails), true);
+              assert.equal(emails.length, 1);
+              assert.equal(emails[0].text, emailOpts.text);
+
+              maildev.end(function() {
+                done();
+                transporter.close();
+              });
+
+            });
+
+          }, 10);
+
         });
 
       });
 
     });
 
-    it('should emit events when receiving emails', function(done){
+    it('should emit events when receiving emails', function(done) {
 
       var maildev = new MailDev();
 
@@ -94,18 +121,23 @@ describe('API', function(){
         text: 'They are surfers.'
       };
 
-      maildev.on('new', function(email){
+      maildev.on('new', function(email) {
 
         assert.equal(email.text, emailOpts.text);
 
-        maildev.end(function(){
+        maildev.end(function() {
           done();
           transporter.close();
         });
 
       });
 
-      transporter.sendMail(emailOpts);
+      maildev.listen(function(err) {
+        if (err) return done(err);
+
+        transporter.sendMail(emailOpts);
+
+      });
 
     });
 

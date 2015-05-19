@@ -45,9 +45,9 @@ module.exports = function(config) {
   // Start the Mailserver & Web GUI
   if (config.incomingUser &&
       config.incomingPass) {
-    mailserver.listen( config.smtp, config.bind, config.incomingUser, config.incomingPass );
+    mailserver.create( config.smtp, config.bind, config.incomingUser, config.incomingPass );
   } else {
-    mailserver.listen( config.smtp, config.bind );
+    mailserver.create( config.smtp, config.bind );
   }
 
   if (config.outgoingHost ||

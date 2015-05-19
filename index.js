@@ -49,6 +49,7 @@ module.exports = function(config) {
   } else {
     mailserver.listen( config.smtp, config.bind );
   }
+
   if (config.outgoingHost ||
       config.outgoingPort ||
       config.outgoingUser ||
@@ -70,7 +71,7 @@ module.exports = function(config) {
 
   if (config.open){
     var open = require('open');
-    open('http://' + (config.bind == '0.0.0.0' ? 'localhost' : config.bind) + ':' + config.web);
+    open('http://' + (config.bind === '0.0.0.0' ? 'localhost' : config.bind) + ':' + config.web);
   }
 
   return mailserver;

@@ -136,19 +136,24 @@
           <p>On the command line:</p>
 
 <pre>
-  maildev [options]
+maildev [options]
 
-    -h, --help              output usage information
-    -V, --version           output the version number
-    -s, --smtp [port]       SMTP port to catch emails [1025]
-    -w, --web [port]        Port to run the Web GUI [1080]
-    --outgoing-host [host]  SMTP host for outgoing emails
-    --outgoing-port [port]  SMTP port for outgoing emails
-    --outgoing-user [user]  SMTP user for outgoing emails
-    --outgoing-pass [pass]  SMTP password for outgoing emails
-    --outgoing-secure       Use SMTP SSL for outgoing emails
-    -o, --open              Open the Web GUI after startup
-    -v, --verbose
+  -h, --help              output usage information
+  -V, --version           output the version number
+  -s, --smtp &lt;port&gt;       SMTP port to catch emails [1025]
+  -w, --web &lt;port&gt;        Port to run the Web GUI [1080]
+  --ip &lt;ip address&gt;       IP Address to bind services to [0.0.0.0]
+  --outgoing-host &lt;host&gt;  SMTP host for outgoing emails
+  --outgoing-port &lt;port&gt;  SMTP port for outgoing emails
+  --outgoing-user &lt;user&gt;  SMTP user for outgoing emails
+  --outgoing-pass &lt;pass&gt;  SMTP password for outgoing emails
+  --outgoing-secure       Use SMTP SSL for outgoing emails
+  --incoming-user &lt;user&gt;  SMTP user for incoming emails
+  --incoming-pass &lt;pass&gt;  SMTP password for incoming emails
+  --web-user &lt;user&gt;       HTTP basic auth username
+  --web-pass &lt;pass&gt;       HTTP basic auth password
+  -o, --open              Open the Web GUI after startup
+  -v, --verbose
 </pre>
 
           <p>Or within your Node.js project:</p>
@@ -157,6 +162,8 @@
   var MailDev = require('maildev');
 
   var maildev = new MailDev();
+
+  maildev.listen();
 
   // Handle new emails as they come in
   maildev.on('new', function(email){
@@ -213,10 +220,10 @@
           <h2>Ideas, Issues or Contributions?</h2>
 
           <p>
-            Have an idea or feature request? I would love to here it. Create an issue on <a href="https://github.com/djfarrelly/MailDev/issues">github</a> or contact me on twitter <a href="https://twitter.com/djfarrelly">@djfarrelly</a>
+            Have an idea or feature request? I would love to here it. <a href="https://github.com/djfarrelly/MailDev/issues">File an issue</a> or contact me on twitter <a href="https://twitter.com/djfarrelly">@djfarrelly</a>
           </p>
 
-          <p>A list of all releases can be found in the <a href="https://github.com/djfarrelly/MailDev#changelog">changelog</a></p>
+          <p>A list of all releases can be found <a href="https://github.com/djfarrelly/MailDev/releases">here on github</a></p>
 
           <p>Thanks to <a href="https://github.com/andris9">Andris Reinman</a> for creating his projects that are the backbone of this app and <a href="http://mailcatcher.me/" target="_blank">MailCatcher</a> for the inspiration.</p>
 

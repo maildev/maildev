@@ -59,22 +59,27 @@ app.controller('MainCtrl', [
     });
     
     $rootScope.$on('deleteMail', function(e, email) {
-      var idx = $scope.items.reduce(function(p, c, i){
-        if (p !== 0) return p;
-        return c.id === email.id ? i : 0;
-      }, 0);
-
-      var nextIdx = $scope.items.length === 1 ? null :
-                    idx === 0 ? idx + 1 : idx - 1;
-      if (nextIdx !== null) {
-        $location.path('/email/' + $scope.items[nextIdx].id);
-      } else {
+      if (email.id == 'all') {
+        $rootScope.$emit('Refresh');
         $location.path('/');
+      } else {
+        var idx = $scope.items.reduce(function(p, c, i){
+          if (p !== 0) return p;
+          return c.id === email.id ? i : 0;
+        }, 0);
+
+        var nextIdx = $scope.items.length === 1 ? null :
+                      idx === 0 ? idx + 1 : idx - 1;
+        if (nextIdx !== null) {
+          $location.path('/email/' + $scope.items[nextIdx].id);
+        } else {
+          $location.path('/');
+        }
+        
+        $scope.items.splice(idx, 1);
+        countUnread();
+        $scope.$apply();
       }
-      
-      $scope.items.splice(idx, 1);
-      countUnread();
-      $scope.$apply();
     });
 
     // Click event handlers
@@ -117,10 +122,7 @@ app.controller('NavCtrl', [
 
     $scope.deleteAll = function() {
 
-      Email.delete({ id: 'all' }, function(email) {
-        $rootScope.$emit('Refresh');
-        $location.path('/');
-      });
+      Email.delete({ id: 'all' });
 
     };
 

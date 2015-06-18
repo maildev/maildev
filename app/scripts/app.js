@@ -23,6 +23,10 @@ app.run(['$rootScope', function($rootScope){
   socket.on('newMail', function(data) {
     $rootScope.$emit('newMail', data);
   });
+
+  socket.on('deleteMail', function(data) {
+    $rootScope.$emit('deleteMail', data);
+  })
   
   $rootScope.$on('Refresh', function() {
     console.log('Refresh event called.');

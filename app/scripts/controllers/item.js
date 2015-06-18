@@ -111,24 +111,7 @@ app.controller('ItemCtrl', [
     // Sends a DELETE request to the server
     $scope.delete = function(item) {
 
-      Email.delete({ id: item.id }, function(email) {
-
-        var idx = $scope.items.reduce(function(p, c, i){
-          if (p !== 0) return p;
-          return c.id === item.id ? i : 0;
-        }, 0);
-
-        var nextIdx = $scope.items.length === 1 ? null :
-                      idx === 0 ? idx + 1 : idx - 1;
-
-        if (nextIdx !== null) {
-          $location.path('/email/' + $scope.items[nextIdx].id);
-        } else {
-          $location.path('/');
-        }
-        
-        $scope.items.splice(idx, 1);
-      });
+      Email.delete({ id: item.id });
     };
 
     // Updates iframe to have a width of newSize, i.e. '320px'

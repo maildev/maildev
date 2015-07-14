@@ -28,7 +28,7 @@ var messages = [
           '<p>The wax at the bank was surfer wax!!!</p>' +
           '</body></html>',
     attachments: [
-      { fileName: 'notes.txt', contents: 'Info on surf board wax', contentType: 'text/plain' }
+      { fileName: 'notes.txt', content: 'Info on surf board wax', contentType: 'text/plain' }
     ]
   },
   {

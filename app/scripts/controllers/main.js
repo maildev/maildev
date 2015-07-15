@@ -59,7 +59,7 @@ app.controller('MainCtrl', [
     });
     
     $rootScope.$on('deleteMail', function(e, email) {
-      if (email.id == 'all') {
+      if (email.id === 'all') {
         $rootScope.$emit('Refresh');
         $location.path('/');
       } else {

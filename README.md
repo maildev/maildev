@@ -20,22 +20,23 @@ For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierprio
 
     maildev [options]
 
-      -h, --help              output usage information
-      -V, --version           output the version number
-      -s, --smtp <port>       SMTP port to catch emails [1025]
-      -w, --web <port>        Port to run the Web GUI [1080]
-      --ip <ip address>       IP Address to bind services to [0.0.0.0]
-      --outgoing-host <host>  SMTP host for outgoing emails
-      --outgoing-port <port>  SMTP port for outgoing emails
-      --outgoing-user <user>  SMTP user for outgoing emails
-      --outgoing-pass <pass>  SMTP password for outgoing emails
-      --auto-relay            Use auto relay mode
-      --outgoing-secure       Use SMTP SSL for outgoing emails
-      --incoming-user <user>  SMTP user for incoming emails
-      --incoming-pass <pass>  SMTP password for incoming emails
-      --web-user <user>       HTTP basic auth username
-      --web-pass <pass>       HTTP basic auth password
-      -o, --open              Open the Web GUI after startup
+      -h, --help                    output usage information
+      -V, --version                 output the version number
+      -s, --smtp <port>             SMTP port to catch emails [1025]
+      -w, --web <port>              Port to run the Web GUI [1080]
+      --ip <ip address>             IP Address to bind services to [0.0.0.0]
+      --outgoing-host <host>        SMTP host for outgoing emails
+      --outgoing-port <port>        SMTP port for outgoing emails
+      --outgoing-user <user>        SMTP user for outgoing emails
+      --outgoing-pass <pass>        SMTP password for outgoing emails
+      --auto-relay                  Use auto relay mode
+      --auto-relay-rules <file>     Filter rules for auto relay mode
+      --outgoing-secure             Use SMTP SSL for outgoing emails
+      --incoming-user <user>        SMTP user for incoming emails
+      --incoming-pass <pass>        SMTP password for incoming emails
+      --web-user <user>             HTTP basic auth username
+      --web-pass <pass>             HTTP basic auth password
+      -o, --open                    Open the Web GUI after startup
       -v, --verbose
 
 ## API
@@ -67,6 +68,27 @@ to a real SMTP service that will really send the email.
   Example:
 
     $ maildev --outgoing-host smtp.gmail.com --outgoing-secure --outgoing-user 'you@gmail.com' --outgoing-pass '<pass>'
+
+### Auto relay mode
+
+The auto relay mode sends automatically the received emails. It require to enable outgoing option.
+
+The rules allow you to configure filters to select the messages to allow output.
+
+  Example:
+
+    $ maildev --outgoing-host smtp.gmail.com --outgoing-secure --outgoing-user 'you@gmail.com' --outgoing-pass '<pass>' --auto-relay --auto-relay-rules file.json
+
+  Rules example file:
+```javascript
+[
+	{ 'allow': '*' },
+	{ 'deny':  '*@test.com' },
+	{ 'allow': 'test@test.com' } 
+	{ 'deny':  '*@foobar.com' },
+	{ 'allow': 'test@foobar.com' },
+]
+```
 
 ## Configure your project
 

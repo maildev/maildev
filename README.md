@@ -63,7 +63,7 @@ MailDev also has a **REST API**. For more info
 
 Maildev optionally supports selectively relaying email to an outgoing SMTP server.  If you configure outgoing
 email with the --outgoing-* options you can click "Relay" on an individual email to relay through MailDev out
-to a real SMTP service that will really send the email.
+to a real SMTP service that will *actually* send the email to the recipient.
 
   Example:
 

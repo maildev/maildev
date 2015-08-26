@@ -56,13 +56,13 @@ maildev.on('new', function(email){
 });
 ```
 
-MailDev also has a **REST API**. For more info 
+MailDev also has a **REST API**. For more info
 [view the docs](https://github.com/djfarrelly/MailDev/blob/master/docs/rest.md).
 
 ## Outgoing email
 
 Maildev optionally supports selectively relaying email to an outgoing SMTP server.  If you configure outgoing
-email with the --outgoing-xxx options you can click "Relay" on an individual email to relay through MailDev out
+email with the --outgoing-* options you can click "Relay" on an individual email to relay through MailDev out
 to a real SMTP service that will really send the email.
 
   Example:

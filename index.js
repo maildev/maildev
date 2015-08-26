@@ -14,7 +14,7 @@ var logger      = require('./lib/logger');
 
 
 module.exports = function(config) {
-  
+
   var version = pkg.version;
 
   if (!config) {
@@ -42,7 +42,7 @@ module.exports = function(config) {
   if (config.verbose){
     logger.init(true);
   }
-  
+
   // Start the Mailserver & Web GUI
   mailserver.create(config.smtp, config.ip, config.incomingUser, config.incomingPass);
 
@@ -61,7 +61,9 @@ module.exports = function(config) {
     );
   }
 
-  web.start(config.web, config.webIp ? config.webIp : config.ip, mailserver, config.webUser, config.webPass);
+  // Default to run on same IP as smtp
+  var webIp = config.webIp ? config.webIp : config.ip;
+  web.start(config.web, webIp, mailserver, config.webUser, config.webPass);
 
   if (config.open){
     var open = require('open');

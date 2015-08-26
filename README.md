@@ -32,6 +32,7 @@ For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierprio
       --outgoing-secure       Use SMTP SSL for outgoing emails
       --incoming-user <user>  SMTP user for incoming emails
       --incoming-pass <pass>  SMTP password for incoming emails
+      --web-ip <ip address>   IP Address to bind HTTP service to, defaults to --ip
       --web-user <user>       HTTP basic auth username
       --web-pass <pass>       HTTP basic auth password
       -o, --open              Open the Web GUI after startup
@@ -39,7 +40,7 @@ For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierprio
 
 ## API
 
-MailDev can be used in your Node.js application. For more info view the 
+MailDev can be used in your Node.js application. For more info view the
 [API docs](https://github.com/djfarrelly/MailDev/blob/master/docs/api.md).
 
 ```javascript
@@ -54,7 +55,7 @@ maildev.on('new', function(email){
 });
 ```
 
-MailDev also has a **REST API**. For more info 
+MailDev also has a **REST API**. For more info
 [view the docs](https://github.com/djfarrelly/MailDev/blob/master/docs/rest.md).
 
 ## Outgoing email
@@ -117,7 +118,7 @@ If you're using MailDev and you have a great idea, I'd love to hear it. If you'r
 
 ## Contributing
 
-Any help on MailDev would be awesome. There is plenty of room for improvement. Feel free to [create a Pull Request](https://github.com/djfarrelly/MailDev/issues/new) from small to big changes. 
+Any help on MailDev would be awesome. There is plenty of room for improvement. Feel free to [create a Pull Request](https://github.com/djfarrelly/MailDev/issues/new) from small to big changes.
 
 To run **MailDev** during development:
 

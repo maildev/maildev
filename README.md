@@ -74,9 +74,13 @@ to a real SMTP service that will *actually* send the email to the recipient.
 
 ### Auto relay mode
 
-The auto relay mode sends automatically the received emails. It require to enable outgoing option.
+Enabling the auto relay mode will automatically send each email to it's recipient
+without the need to click the "Relay" button mentioned above.
+The outgoing email options are required to enable this feature.
 
-The rules allow you to configure filters to select the messages to allow output.
+Additionally, you can pass a valid json file with additional configuration for
+what email addresses you would like to `allow` or `deny`. The last matching
+rule in the array will be the rule MailDev will follow.
 
   Example:
 
@@ -92,11 +96,13 @@ The rules allow you to configure filters to select the messages to allow output.
 [
 	{ "allow": "*" },
 	{ "deny":  "*@test.com" },
-	{ "allow": "test@test.com" },
-	{ "deny":  "*@foobar.com" },
-	{ "allow": "test@foobar.com" }
+	{ "allow": "ok@test.com" },
+	{ "deny":  "*@utah.com" },
+	{ "allow": "johnny@utah.com" }
 ]
 ```
+  This would allow `angelo@fbi.gov`, `ok@test.com`, `johnny@utah.com`, but deny
+  `bodhi@test.com`.
 
 ## Configure your project
 

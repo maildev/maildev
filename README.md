@@ -82,11 +82,11 @@ The rules allow you to configure filters to select the messages to allow output.
   Rules example file:
 ```javascript
 [
-	{ 'allow': '*' },
-	{ 'deny':  '*@test.com' },
-	{ 'allow': 'test@test.com' } 
-	{ 'deny':  '*@foobar.com' },
-	{ 'allow': 'test@foobar.com' },
+	{ "allow": "*" },
+	{ "deny":  "*@test.com" },
+	{ "allow": "test@test.com" },
+	{ "deny":  "*@foobar.com" },
+	{ "allow": "test@foobar.com" }
 ]
 ```
 

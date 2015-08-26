@@ -14,7 +14,7 @@ var logger      = require('./lib/logger');
 
 
 module.exports = function(config) {
-  
+
   var version = pkg.version;
 
   if (!config) {
@@ -23,14 +23,17 @@ module.exports = function(config) {
       .version(version)
       .option('-s, --smtp <port>', 'SMTP port to catch emails [1025]', '1025')
       .option('-w, --web <port>', 'Port to run the Web GUI [1080]', '1080')
-      .option('--ip <ip address>', 'IP Address to bind services to', '0.0.0.0')
+      .option('--ip <ip address>', 'IP Address to bind SMTP service to', '0.0.0.0')
       .option('--outgoing-host <host>', 'SMTP host for outgoing emails')
       .option('--outgoing-port <port>', 'SMTP port for outgoing emails')
       .option('--outgoing-user <user>', 'SMTP user for outgoing emails')
       .option('--outgoing-pass <password>', 'SMTP password for outgoing emails')
       .option('--outgoing-secure', 'Use SMTP SSL for outgoing emails')
+      .option('--auto-relay', 'Use auto-relay mode')
+      .option('--auto-relay-rules <file>', 'Filter rules for auto relay mode')
       .option('--incoming-user <user>', 'SMTP user for incoming emails')
       .option('--incoming-pass <pass>', 'SMTP password for incoming emails')
+      .option('--web-ip <ip address>', 'IP Address to bind HTTP service to, defaults to --ip')
       .option('--web-user <user>', 'HTTP user for GUI')
       .option('--web-pass <password>', 'HTTP password for GUI')
       .option('-o, --open', 'Open the Web GUI after startup')
@@ -41,7 +44,7 @@ module.exports = function(config) {
   if (config.verbose){
     logger.init(true);
   }
-  
+
   // Start the Mailserver & Web GUI
   mailserver.create(config.smtp, config.ip, config.incomingUser, config.incomingPass);
 
@@ -60,7 +63,13 @@ module.exports = function(config) {
     );
   }
 
-  web.start(config.web, config.ip, mailserver, config.webUser, config.webPass);
+  if (config.autoRelay){
+    mailserver.setAutoRelayMode(true, config.autoRelayRules);
+  }
+
+  // Default to run on same IP as smtp
+  var webIp = config.webIp ? config.webIp : config.ip;
+  web.start(config.web, webIp, mailserver, config.webUser, config.webPass);
 
   if (config.open){
     var open = require('open');

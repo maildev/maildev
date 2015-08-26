@@ -29,9 +29,9 @@ For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierprio
       --outgoing-port <port>        SMTP port for outgoing emails
       --outgoing-user <user>        SMTP user for outgoing emails
       --outgoing-pass <pass>        SMTP password for outgoing emails
+      --outgoing-secure             Use SMTP SSL for outgoing emails
       --auto-relay                  Use auto relay mode
       --auto-relay-rules <file>     Filter rules for auto relay mode
-      --outgoing-secure             Use SMTP SSL for outgoing emails
       --incoming-user <user>        SMTP user for incoming emails
       --incoming-pass <pass>        SMTP password for incoming emails
       --web-user <user>             HTTP basic auth username

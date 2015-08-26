@@ -29,6 +29,8 @@ module.exports = function(config) {
       .option('--outgoing-user <user>', 'SMTP user for outgoing emails')
       .option('--outgoing-pass <password>', 'SMTP password for outgoing emails')
       .option('--outgoing-secure', 'Use SMTP SSL for outgoing emails')
+      .option('--auto-relay', 'Use auto-relay mode')
+      .option('--auto-relay-rules <file>', 'Filter rules for auto relay mode')
       .option('--incoming-user <user>', 'SMTP user for incoming emails')
       .option('--incoming-pass <pass>', 'SMTP password for incoming emails')
       .option('--web-ip <ip address>', 'IP Address to bind HTTP service to, defaults to --ip')
@@ -59,6 +61,10 @@ module.exports = function(config) {
       config.outgoingPass,
       config.outgoingSecure
     );
+  }
+
+  if (config.autoRelay){
+    mailserver.setAutoRelayMode(true, config.autoRelayRules);
   }
 
   // Default to run on same IP as smtp

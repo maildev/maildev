@@ -67,7 +67,10 @@ to a real SMTP service that will *actually* send the email to the recipient.
 
   Example:
 
-    $ maildev --outgoing-host smtp.gmail.com --outgoing-secure --outgoing-user 'you@gmail.com' --outgoing-pass '<pass>'
+    $ maildev --outgoing-host smtp.gmail.com \
+              --outgoing-secure \
+              --outgoing-user 'you@gmail.com' \
+              --outgoing-pass '<pass>'
 
 ### Auto relay mode
 
@@ -77,7 +80,12 @@ The rules allow you to configure filters to select the messages to allow output.
 
   Example:
 
-    $ maildev --outgoing-host smtp.gmail.com --outgoing-secure --outgoing-user 'you@gmail.com' --outgoing-pass '<pass>' --auto-relay --auto-relay-rules file.json
+    $ maildev --outgoing-host smtp.gmail.com \
+              --outgoing-secure \
+              --outgoing-user 'you@gmail.com' \
+              --outgoing-pass '<pass>' \
+              --auto-relay \
+              --auto-relay-rules file.json
 
   Rules example file:
 ```javascript

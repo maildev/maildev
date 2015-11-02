@@ -6,11 +6,11 @@
  * Licensed under the MIT License.
  */
 
-var program     = require('commander');
-var pkg         = require('./package.json');
-var web         = require('./lib/web');
-var mailserver  = require('./lib/mailserver');
-var logger      = require('./lib/logger');
+var program = require('commander');
+var pkg = require('./package.json');
+var web = require('./lib/web');
+var mailserver = require('./lib/mailserver');
+var logger = require('./lib/logger');
 
 
 module.exports = function(config) {

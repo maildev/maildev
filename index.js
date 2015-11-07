@@ -38,11 +38,14 @@ module.exports = function(config) {
       .option('--web-pass <password>', 'HTTP password for GUI')
       .option('-o, --open', 'Open the Web GUI after startup')
       .option('-v, --verbose')
+      .option('--silent')
       .parse(process.argv);
   }
 
-  if (config.verbose){
-    logger.init(true);
+  if (config.verbose) {
+    logger.setLevel(2);
+  } else if (config.silent) {
+    logger.setLevel(0);
   }
 
   // Start the Mailserver & Web GUI

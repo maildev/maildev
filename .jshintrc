@@ -18,7 +18,7 @@
   "trailing": true,
   "smarttabs": true,
   "indent": 2,
-  "globals": {},
+  "latedef": "nofunc",
   "-W093": false,
   "-W030": false,
   "-W049": false,

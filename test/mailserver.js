@@ -13,12 +13,13 @@ var MailDev = require('../index.js');
 describe('mailserver', function() {
 
   describe('smtp authentication', function() {
-    
+
     it('should require authentication', function(done) {
 
       var maildev = new MailDev({
         incomingUser: 'bodhi',
-        incomingPass: 'surfing'
+        incomingPass: 'surfing',
+        silent: true
       });
 
       maildev.listen(function(err) {
@@ -49,7 +50,7 @@ describe('mailserver', function() {
             connection.close();
             maildev.end(done);
           });
-          
+
         });
 
       });
@@ -60,7 +61,8 @@ describe('mailserver', function() {
 
       var maildev = new MailDev({
         incomingUser: 'bodhi',
-        incomingPass: 'surfing'
+        incomingPass: 'surfing',
+        silent: true
       });
 
       maildev.listen(function(err) {

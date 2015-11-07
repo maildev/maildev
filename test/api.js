@@ -13,23 +13,26 @@ var MailDev = require('../index.js');
 describe('API', function() {
 
   describe('Constructor', function() {
-    
+
     it('should accept arguments', function() {
 
       var maildev = new MailDev({
         smtp: 1026,
         web: 9000,
-        outgoingHost: 'smtp.gmail.com'
+        outgoingHost: 'smtp.gmail.com',
+        silent: true
       });
 
       assert.equal(maildev.port, 1026);
-      assert.equal(maildev.outgoingHost, 'smtp.gmail.com');
+      assert.equal(maildev.getOutgoingHost(), 'smtp.gmail.com');
 
     });
 
     it('should return mailserver object', function() {
 
-      var maildev = new MailDev();
+      var maildev = new MailDev({
+        silent: true
+      });
 
       assert.equal(typeof maildev.getEmail, 'function');
       assert.equal(typeof maildev.relayMail, 'function');
@@ -40,7 +43,9 @@ describe('API', function() {
 
   describe('listen/end', function() {
 
-    var maildev = new MailDev();
+    var maildev = new MailDev({
+      silent: true
+    });
 
     it('should start the mailserver', function(done) {
 
@@ -60,7 +65,9 @@ describe('API', function() {
 
     it('should receive emails', function(done) {
 
-      var maildev = new MailDev();
+      var maildev = new MailDev({
+        silent: true
+      });
 
       var emailOpts = {
         from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
@@ -107,7 +114,9 @@ describe('API', function() {
 
     it('should emit events when receiving emails', function(done) {
 
-      var maildev = new MailDev();
+      var maildev = new MailDev({
+        silent: true
+      });
 
       var transporter = nodemailer.createTransport({
         port: 1025,

@@ -16,6 +16,8 @@ var transporter = nodemailer.createTransport({
 
 // Messages list
 var messages = [
+
+  // Email w/ simple attachment and basic header
   {
     from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
     to: 'Johnny Utah <johnny.utah@fbi.gov>',
@@ -31,22 +33,20 @@ var messages = [
       { fileName: 'notes.txt', content: 'Info on surf board wax', contentType: 'text/plain' }
     ]
   },
+
+  // Plain text email
   {
-    from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
-    to: 'Johnny Utah <johnny.utah@fbi.gov>',
+    from: 'Johnny Utah <johnny.utah@fbi.gov>',
+    to: 'Angelo Pappas <angelo.pappas@fbi.gov>',
     subject: 'You were right.',
-    headers: {
-      'X-some-header': 1000
-    },
     text: 'They are surfers.'
   },
+
+  // HTML email w/ image
   {
     from: 'Bodhi <bodhi@gmail.com>',
     to: 'Johnny Utah <johnny.utah@fbi.gov>',
     subject: 'The ultimate price',
-    headers: {
-      'X-some-header': 1000
-    },
     text: 'If you want the ultimate, you\'ve got to be willing to pay the ultimate price. \nIt\'s not tragic to die doing what you love.',
     html: '<!DOCTYPE html><html><head></head><body style="background:#eee;font-family:sans-serif;padding:2em 2em;">' +
           '<h1>Point Break</h1>' +
@@ -54,13 +54,33 @@ var messages = [
           '<p>If you want the ultimate, you\'ve got to be willing to pay the ultimate price. <br>It\'s not tragic to die doing what you love.</p>' +
           '<p><strong>- Bodhi</strong></p>' +
           '</body></html>',
+  },
+
+  // Email w/ embedded image
+  {
+    from: 'Johnny Utah <johnny.utah@fbi.gov>',
+    to: 'Bodhi <bodhi@gmail.com>',
+    subject: 'Where\'s Tyler?',
+    html: 'Here she is:<br><img src="cid:12345"/>',
+    attachments: [
+      {
+        filename: 'tyler.jpg',
+        path: __dirname + '/tyler.jpg',
+        cid: '12345'
+      }
+    ]
   }
+
 ];
 
 
 function sendEmails() {
   messages.forEach(function(message){
-    transporter.sendMail(message);
+    transporter.sendMail(message, function(err, info) {
+      if (err)
+        return console.log('Test email error: ', err);
+      console.log('Test email sent: ' + info.response);
+    });
   });
 }
 

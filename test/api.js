@@ -24,7 +24,7 @@ describe('API', function() {
       });
 
       assert.equal(maildev.port, 1026);
-      assert.equal(maildev.outgoingHost, 'smtp.gmail.com');
+      assert.equal(maildev.getOutgoingHost(), 'smtp.gmail.com');
 
     });
 

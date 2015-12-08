@@ -1,7 +1,7 @@
 {
   "name": "maildev",
   "description": "SMTP Server and Web Interface for reading and testing emails during development",
-  "version": "0.12.1",
+  "version": "0.12.2",
   "keywords": [
     "email",
     "e-mail",
@@ -39,7 +39,7 @@
     "simplesmtp": "^0.3.35",
     "smtp-connection": "^1.3.1",
     "smtp-server": "^1.4.0",
-    "socket.io": "^1.3.5",
+    "socket.io": "^1.3.7",
     "wildstring": "0.0.2"
   },
   "devDependencies": {

@@ -48,17 +48,18 @@ var maildev = new MailDev({
   middleware: '/maildev'
 });
 
-// Maildev available at localhost:1080/maildev
+// Maildev running on localhost:1080/maildev
 maildev.listen(function(err) {
   console.log('We can now sent emails to port 1025!');
 });
 
+// proxy all maildev requests to the maildev app
 const proxy = proxyMiddleware('/maildev', {
   target: `http://localhost:1080`,
   ws: true,
 });
 
-// Maildev is now available at the specified route /maildev
+// Maildev available at the specified route '/maildev'
 app.use(proxy);
 ```
 

@@ -72,7 +72,7 @@ module.exports = function(config) {
 
   // Default to run on same IP as smtp
   var webIp = config.webIp ? config.webIp : config.ip;
-  web.start(config.web, webIp, mailserver, config.webUser, config.webPass, config.middleware);
+  web.start(config.web, webIp, mailserver, config.webUser, config.webPass, config.basePathname);
 
   if (config.open){
     var open = require('open');

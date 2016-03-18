@@ -30,7 +30,7 @@ maildev.getAllEmail(function(err, emails){
 ## Use Maildev as a middleware
 
 We can use maildev within an existing app by giving an additional parameter
-`middleware` to the options object. We use a proxy to redirect all maildev requests
+`basePathname` to the options object. We use a proxy to redirect all maildev requests
 to the maildev app.
 
 Here is an exemple to achieve this:
@@ -43,12 +43,12 @@ var app = express();
 
 // some business with the existing app
 
-// Define a route for the middleware (path)
+// Define a route for the base path
 var maildev = new MailDev({
-  middleware: '/maildev'
+  basePathname: '/maildev'
 });
 
-// Maildev running on localhost:1080/maildev
+// Maildev now running on localhost:1080/maildev
 maildev.listen(function(err) {
   console.log('We can now sent emails to port 1025!');
 });

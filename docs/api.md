@@ -27,6 +27,45 @@ maildev.getAllEmail(function(err, emails){
 });
 ```
 
+## Use Maildev as a middleware
+
+We can use maildev within an existing app by giving an additional parameter
+`middleware` to the options object. We use a proxy to redirect all maildev requests
+to the maildev app.
+
+Here is an exemple to achieve this:
+
+```javascript
+var express = require('express');
+var proxyMiddleware = require('http-proxy-middleware');
+var MailDev = require('maildev');
+var app = express();
+
+// some business with the existing app
+
+// Define a route for the middleware (path)
+var maildev = new MailDev({
+  middleware: '/maildev'
+});
+
+// Maildev available at localhost:1080/maildev
+maildev.listen(function(err) {
+  console.log('We can now sent emails to port 1025!');
+});
+
+const proxy = proxyMiddleware('/maildev', {
+  target: `http://localhost:1080`,
+  ws: true,
+});
+
+// Maildev is now available at the specified route /maildev
+app.use(proxy);
+```
+
+The maildev app will be running at `http://localhost:1080/maildev`
+but we'll be able to reach it directly from our existing webapp
+via the specified route we defined `localhost:3000/maildev`
+
 ## Relay emails
 
 MailDev can relay a given email to the given "to" address. This example will

@@ -24,12 +24,7 @@
   "bin": {
     "maildev": "./bin/maildev"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "http://github.com/djfarrelly/maildev/blob/master/LICENSE"
-    }
-  ],
+  "license": "MIT",
   "dependencies": {
     "async": "^1.4.2",
     "commander": "~2.8.0",

@@ -3,7 +3,7 @@
  * MailDev - send.js -- send a few emails for testing
  *
  * Run this to send emails to port 1025 for testing MailDev during development
- *   node test/send.js
+ *   node test/scripts/send.js
  */
 
 var nodemailer = require('nodemailer');

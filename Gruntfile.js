@@ -3,7 +3,7 @@
  * MailDev - Gruntfile.js
  */
 
-var sendEmails = require('./test/send.js');
+var sendEmails = require('./test/scripts/send.js');
 
 module.exports = function (grunt) {
 

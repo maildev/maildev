@@ -74,17 +74,18 @@ var messages = [
 ];
 
 
-function sendEmails() {
+function sendEmails(logErrors) {
   messages.forEach(function(message){
     transporter.sendMail(message, function(err, info) {
-      if (err)
+      if (logErrors && err)
         return console.log('Test email error: ', err);
       console.log('Test email sent: ' + info.response);
     });
   });
 }
 
-module.exports = sendEmails;
-
-// run this once for quick use on command line
-sendEmails();
+// Run once if called directly, otherwise export
+if (require.main === module) 
+  sendEmails(true);
+else
+  module.exports = sendEmails;

@@ -26,8 +26,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "async": "^1.4.2",
-    "commander": "~2.8.0",
+    "async": "^1.5.1",
+    "commander": "^2.9.0",
     "express": "^4.13.4",
     "mailparser": "^0.5.3",
     "open": "~0.0.5",
@@ -35,7 +35,7 @@
     "smtp-connection": "^2.3.1",
     "smtp-server": "^1.4.0",
     "socket.io": "^1.4.5",
-    "wildstring": "0.0.2"
+    "wildstring": "^1.0.8"
   },
   "devDependencies": {
     "grunt": "^0.4.5",

@@ -44,9 +44,11 @@
     "grunt-contrib-watch": "^1.0.0",
     "grunt-nodemon": "^0.4.0",
     "grunt-sass": "^1.1.0",
+    "http-proxy-middleware": "^0.12.0",
     "matchdep": "^1.0.1",
     "mocha": "^2.2.5",
-    "nodemailer": "^2.3.0"
+    "nodemailer": "^2.3.0",
+    "request": "^2.69.0"
   },
   "engines": {
     "node": ">=0.10.0"

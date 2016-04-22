@@ -1,5 +1,5 @@
 FROM alpine:3.3
-MAINTAINER "Tony Cheneau <tony.cheneau@amnesiak.org>"
+MAINTAINER "Dan Farrelly <daniel.j.farrelly@gmail.com>"
 
 ENV NODE_ENV production
 

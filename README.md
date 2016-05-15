@@ -145,6 +145,8 @@ config.action_mailer.delivery_method = :smtp
     }
 ```
 
+**Drupal** -- Install and configure [SMTP](https://www.drupal.org/project/smtp) module or use a library like [SwiftMailer](http://swiftmailer.org/).
+
 ## Features
 
 * Toggle between HTML, plain text views as well as view email headers

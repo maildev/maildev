@@ -7,6 +7,7 @@
  */
 
 var program = require('commander');
+var async = require('async');
 var pkg = require('./package.json');
 var web = require('./lib/web');
 var mailserver = require('./lib/mailserver');
@@ -78,6 +79,16 @@ module.exports = function(config) {
     var open = require('open');
     open('http://' + (config.ip === '0.0.0.0' ? 'localhost' : config.ip) + ':' + config.web);
   }
+
+  process.on('SIGTERM', function () {
+    async.parallel([
+      mailserver.end,
+      web.close
+    ], function(err, results) {
+      logger.info('Shutting down...');
+      process.exit(0);
+    });
+  });
 
   return mailserver;
 };

@@ -37,6 +37,7 @@ module.exports = function(config) {
       .option('--web-ip <ip address>', 'IP Address to bind HTTP service to, defaults to --ip')
       .option('--web-user <user>', 'HTTP user for GUI')
       .option('--web-pass <password>', 'HTTP password for GUI')
+      .option('--base-pathname <path>', 'base path for URLs')
       .option('-o, --open', 'Open the Web GUI after startup')
       .option('-v, --verbose')
       .option('--silent')

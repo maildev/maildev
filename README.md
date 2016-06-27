@@ -1,6 +1,7 @@
 # MailDev
 
 [![Build Status](https://api.travis-ci.org/djfarrelly/MailDev.svg)](https://travis-ci.org/djfarrelly/MailDev)
+[![codecov](https://codecov.io/gh/djfarrelly/MailDev/branch/master/graph/badge.svg)](https://codecov.io/gh/djfarrelly/MailDev)
 [![NPM Version](https://img.shields.io/npm/v/maildev.svg)](https://www.npmjs.com/package/maildev)
 
 **MailDev** is a simple way to test your project's generated emails during development with an easy to use web interface that runs on your machine built on top of [Node.js](http://www.nodejs.org).
@@ -12,9 +13,9 @@
     $ npm install -g maildev
     $ maildev
 
-If you want to use MailDev with [Docker](https://www.docker.com/), you can use the 
+If you want to use MailDev with [Docker](https://www.docker.com/), you can use the
 [**djfarrelly/maildev** image on Docker Hub](https://registry.hub.docker.com/u/djfarrelly/maildev/).
-For a guide for usage with Docker, 
+For a guide for usage with Docker,
 [checkout the docs](https://github.com/djfarrelly/MailDev/blob/master/docs/docker.md).
 
     $ docker run -p 1080:80 djfarrelly/maildev

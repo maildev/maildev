@@ -5,8 +5,8 @@
  */
 
 app.controller('ItemCtrl', [
-  '$scope', '$rootScope', '$routeParams', '$location', 'Email', '$http',
-  function($scope, $rootScope, $routeParams, $location, Email, $http) {
+  '$scope', '$rootScope', '$routeParams', '$location', 'Email', '$http', '$cookies',
+  function($scope, $rootScope, $routeParams, $location, Email, $http, $cookies) {
 
     var iframe = null;
 
@@ -98,6 +98,11 @@ app.controller('ItemCtrl', [
         .on('click', hideDropdown);
     }
 
+    function validateEmail(email) {
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
+    }
+
     addHideDropdownHanlder( window );
 
 
@@ -121,8 +126,27 @@ app.controller('ItemCtrl', [
       $scope.iframeSize = newSize;
     };
 
+    // Relay email to
+    $scope.relayTo = function(item){
+
+      var lastRelayTo = $cookies.relayTo;
+
+      var relayTo = prompt("Please enter email address to relay", lastRelayTo);
+
+      if (relayTo){
+        if (validateEmail(relayTo)){
+          $scope.relay(item, relayTo);
+          $cookies.relayTo = relayTo;
+        }
+        else {
+          window.alert('The specified email address is not correct.');
+        }
+      }
+
+    };
+
     // Relay email
-    $scope.relay = function(item) {
+    $scope.relay = function(item, relayTo) {
 
       if (!$rootScope.config.isOutgoingEnabled) {
         window.alert(
@@ -134,16 +158,17 @@ app.controller('ItemCtrl', [
 
 
       if (
+
           window.confirm(
             'Are you sure you want to REALLY SEND email to ' +
-            item.to.map(function(to){return to.address;}).join() + ' through ' +
+            (relayTo ? relayTo : item.to.map(function(to){return to.address;}).join()) + ' through ' +
             $rootScope.config.outgoingHost + '?'
           )
         ) {
 
         $http({
           method: 'POST',
-          url: 'email/' + item.id + '/relay'
+          url: 'email/' + item.id + '/relay' + (relayTo ? '/' + relayTo : '')
         })
           .success(function(data, status) {
             console.log('Relay result: ', data, status);

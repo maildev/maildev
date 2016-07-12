@@ -20,6 +20,9 @@
     "type": "git",
     "url": "http://github.com/djfarrelly/maildev.git"
   },
+  "scripts": {
+    "test": "./node_modules/.bin/istanbul cover _mocha"
+  },
   "main": "./index.js",
   "bin": {
     "maildev": "./bin/maildev"
@@ -45,6 +48,7 @@
     "grunt-nodemon": "^0.4.0",
     "grunt-sass": "^1.1.0",
     "http-proxy-middleware": "^0.12.0",
+    "istanbul": "^0.4.4",
     "matchdep": "^1.0.1",
     "mocha": "^2.2.5",
     "nodemailer": "^2.3.0",
@@ -52,8 +56,5 @@
   },
   "engines": {
     "node": ">=0.10.0"
-  },
-  "scripts": {
-    "test": "./node_modules/mocha/bin/mocha"
   }
 }

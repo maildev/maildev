@@ -47,7 +47,7 @@ describe('email', function() {
 
         assert.equal(html, '<img src="/email/' + email.id + '/attachment/tyler.jpg"/>');
 
-        // Pass baseUrl 
+        // Pass baseUrl
         maildev.getEmailHTML(email.id, 'localhost:8080', function(err, html) {
 
           assert.equal(html, '<img src="//localhost:8080/email/' + email.id + '/attachment/tyler.jpg"/>');

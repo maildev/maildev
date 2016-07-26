@@ -120,7 +120,7 @@
 
 <div class="email-content">
 
-    <iframe src="{{ item.iframeUrl }}" class="preview-iframe panel-html" ng-hide=" panelVisibility != 'html' "></iframe>
+    <iframe ng-src="{{ item.iframeUrl }}" class="preview-iframe panel-html" ng-hide=" panelVisibility != 'html' "></iframe>
 
     <div class="plain-text panel-plain" ng-bind-html=" item.text|newLines " ng-hide=" panelVisibility != 'plain' "></div>
 
@@ -152,6 +152,6 @@
         </table>
     </div>
 
-    <iframe src="{{ rawEmail }}" class="preview-iframe panel-source" ng-hide=" panelVisibility != 'source' "></iframe>
+    <iframe ng-src="{{ rawEmail }}" class="preview-iframe panel-source" ng-hide=" panelVisibility != 'source' "></iframe>
 
 </div>

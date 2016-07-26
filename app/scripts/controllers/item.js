@@ -143,7 +143,7 @@ app.controller('ItemCtrl', [
 
         $http({
           method: 'POST',
-          url: '/email/' + item.id + '/relay'
+          url: 'email/' + item.id + '/relay'
         })
           .success(function(data, status) {
             console.log('Relay result: ', data, status);

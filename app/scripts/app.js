@@ -4,7 +4,7 @@
  * App Config
  */
 
-var app = angular.module('mailDevApp', ['ngRoute', 'ngResource',  'ngSanitize']);
+var app = angular.module('mailDevApp', ['ngRoute', 'ngResource',  'ngSanitize', 'ngCookies']);
 
 app.config(['$routeProvider', function($routeProvider){
 

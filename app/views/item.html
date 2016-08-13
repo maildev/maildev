@@ -111,6 +111,14 @@
         </a>
     </li>
     <li>
+        <a href="" class=""
+           ng-click="relayTo(item)"
+           ng-class="{ disabled: !config.isOutgoingEnabled }">
+            <i class="fa fa-share"></i>
+            Relay to
+        </a>
+    </li>
+    <li>
         <a href="email/{{item.id}}/download" class="">
             <i class="fa fa-cloud-download"></i>
             Download EML

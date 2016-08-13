@@ -15,7 +15,7 @@
  * Variables
  */
 
-$brand:             rgb(73, 148, 206); 
+$brand:             rgb(73, 148, 206);
 $brandLight:        lighten($brand, 20);
 $brandLighter:      lighten($brand, 40);
 $brandDark:         darken($brand, 20);
@@ -106,10 +106,9 @@ a:focus {
 }
 
 .sidebar-scrollable-content {
+    height: calc(100% - #{2 * $toolbarHeight});
     margin-top: 2 * $toolbarHeight;
     overflow-y: scroll; overflow-x: hidden;
-
-    // > *:first-child { margin-top: 5.6em; }
 }
 
 .brand-container {
@@ -172,7 +171,7 @@ a:focus {
     }
 
     @media (max-width: 800px) {
-        .subline-time { display: none; }   
+        .subline-time { display: none; }
     }
 }
 
@@ -188,7 +187,7 @@ a:focus {
 .email-content {
     position: inherit; z-index: 1;
     margin: 1em; padding-top: $toolbarHeight;
-} 
+}
 
 
 .main-content {
@@ -373,7 +372,7 @@ code {
     transition:color 250ms linear;
 }
 
-.preview-iframe { 
+.preview-iframe {
     border:0; width:100%; min-height:600px;
     position: relative; // set position for resize rendering issue
 }

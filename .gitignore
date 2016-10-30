@@ -8,3 +8,6 @@ maildev-*
 settings.json
 *.sublime-*
 .nodemonignore
+
+# Ignore npm debug log
+npm-debug.log

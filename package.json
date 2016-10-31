@@ -33,6 +33,7 @@
     "async": "1.5.1",
     "commander": "2.9.0",
     "express": "4.13.4",
+    "js-yaml": "^3.6.1",
     "mailparser": "0.5.3",
     "open": "0.0.5",
     "simplesmtp": "0.3.35",

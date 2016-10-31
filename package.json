@@ -21,7 +21,8 @@
     "url": "http://github.com/djfarrelly/maildev.git"
   },
   "scripts": {
-    "validate:swagger": "./node_modules/.bin/swagger-tools validate ./api/swagger.yaml",
+    "swagger:validate": "./node_modules/.bin/swagger-tools validate ./api/swagger.yaml",
+    "swagger:md-docs" : "./node_modules/.bin/swagger-markdown -i ./api/swagger.yaml -o ./docs/swagger.md",
     "test": "./node_modules/.bin/istanbul cover _mocha"
   },
   "main": "./index.js",
@@ -55,7 +56,8 @@
     "matchdep": "1.0.1",
     "mocha": "2.2.5",
     "nodemailer": "2.3.0",
-    "request": "2.69.0"
+    "request": "2.69.0",
+    "swagger-markdown": "^0.1.7"
   },
   "engines": {
     "node": ">=0.10.0"

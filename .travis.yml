@@ -7,5 +7,5 @@ node_js:
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 script:
-  - npm run validate:swagger
+  - npm run swagger:validate
   - npm test

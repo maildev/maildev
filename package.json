@@ -21,6 +21,7 @@
     "url": "http://github.com/djfarrelly/maildev.git"
   },
   "scripts": {
+    "validate:swagger": "./node_modules/.bin/swagger-tools validate ./api/swagger.yaml",
     "test": "./node_modules/.bin/istanbul cover _mocha"
   },
   "main": "./index.js",
@@ -38,6 +39,7 @@
     "smtp-connection": "2.3.1",
     "smtp-server": "1.4.0",
     "socket.io": "1.4.5",
+    "swagger-tools": "^0.10.1",
     "wildstring": "1.0.8"
   },
   "devDependencies": {

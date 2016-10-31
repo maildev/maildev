@@ -6,3 +6,6 @@ node_js:
   - "0.10"
 after_success:
   - bash <(curl -s https://codecov.io/bash)
+script:
+  - npm run validate:swagger
+  - npm test

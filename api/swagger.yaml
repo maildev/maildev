@@ -1,0 +1,195 @@
+swagger: "2.0"
+
+################################################################################
+#                              API Information                                 #
+################################################################################
+info:
+  version: <<from package.json>>
+  title: MailDev
+  description: MailDev provides an API to use in your Node.js applications.
+consumes:
+  - application/json
+produces:
+  - application/json
+
+################################################################################
+#                                   Parameters                                 #
+################################################################################
+parameters:
+  email-id:
+    name: email-id
+    in: path
+    description: The email identifier number
+    type: string
+    required: true
+
+################################################################################
+#                                  Definitions                                 #
+################################################################################
+definitions:
+  Error:
+    type: object
+    properties:
+      error:
+        type: string
+
+################################################################################
+#                                           Paths                              #
+################################################################################
+paths:
+  /email:
+    get:
+      tags:
+        - email
+      description: "Get all emails"
+      responses:
+        200:
+          description: "OK"
+  /email/{email-id}:
+    get:
+      tags:
+        - email
+      description: "Get a given email by id"
+      parameters:
+        - $ref: '#/parameters/email-id'
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "Email can't be found"
+          schema:
+            $ref: '#/definitions/Error'
+    delete:
+      tags:
+        - email
+      description: "Delete a given email by id"
+      parameters:
+        - $ref: '#/parameters/email-id'
+      responses:
+        200:
+          description: "OK"
+        500:
+          description: "Can't remove the email"
+          schema:
+            $ref: '#/definitions/Error'
+  /email/all:
+    delete:
+      tags:
+        - email
+      description: "Delete all emails"
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "Emails can't be deleted"
+          schema:
+            $ref: '#/definitions/Error'
+  /email/{email-id}/html:
+    get:
+      tags:
+        - email
+      description: "Get a given emails html body"
+      produces:
+        - text/html
+      parameters:
+        - $ref: '#/parameters/email-id'
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "Email can't be found"
+          schema:
+            $ref: '#/definitions/Error'
+  /email/{email-id}/attachment/{filename}:
+    get:
+      tags:
+        - email
+      description: "Get a given email's file attachment"
+      produces:
+        - application/octet-stream
+      parameters:
+        - $ref: '#/parameters/email-id'
+        - name: filename
+          in: path
+          description: Attachment filename
+          type: string
+          required: true
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "Attachment be found"
+          schema:
+            $ref: '#/definitions/Error'
+  /email/{email-id}/source:
+    get:
+      tags:
+        - email
+      description: "Get email source from .eml file"
+      parameters:
+        - $ref: '#/parameters/email-id'
+      produces:
+        - text/html
+      responses:
+        200:
+          description: "OK"
+        404:
+          description: "Email be found"
+          schema:
+            $ref: '#/definitions/Error'
+  /email/{email-id}/relay:
+    post:
+      tags:
+        - relay
+      description: "If configured, relay a given email to it's real 'to' address."
+      parameters:
+        - $ref: '#/parameters/email-id'
+      responses:
+        201:
+          description: "OK"
+        404:
+          description: "Email not found"
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: "Can't relay the email"
+          schema:
+            $ref: '#/definitions/Error'
+  /email/{email-id}/relay/{relay-to}:
+    post:
+      tags:
+        - relay
+      description: |
+        If configured, relay a given email to it's real 'to' address.
+        This version has additional parameter {relay-to} which can be used to override 'to' email address
+      parameters:
+        - $ref: '#/parameters/email-id'
+        - name: relay-to
+          in: path
+          description: "New 'to' email address"
+          type: string
+          required: true
+      responses:
+        201:
+          description: "OK"
+        400:
+          description: "Incorrect email address provided "
+          schema:
+            $ref: '#/definitions/Error'
+        404:
+          description: "Email not found"
+          schema:
+            $ref: '#/definitions/Error'
+        500:
+          description: "Can't relay the email"
+          schema:
+            $ref: '#/definitions/Error'
+  /config:
+    get:
+      tags:
+        - config
+      description: "Get the application configuration."
+      responses:
+        200:
+          description: "OK"
+

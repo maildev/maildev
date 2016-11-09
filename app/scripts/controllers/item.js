@@ -16,7 +16,6 @@ app.controller('ItemCtrl', [
       Email.get({ id: $routeParams.itemId }, function(email) {
 
         $scope.item = new Email(email);
-        $scope.rawEmail = 'email/' + $scope.item.id + '/source';
 
         if ($scope.item.html) {
           $scope.item.iframeUrl = 'email/' + $scope.item.id + '/html';
@@ -31,6 +30,13 @@ app.controller('ItemCtrl', [
         $location.path('/');
       });
     };
+    
+    // Get email source
+    var getSource = function() {
+      if (typeof $scope.rawEmail === 'undefined') {
+        $scope.rawEmail = 'email/' + $scope.item.id + '/source';
+      }
+    }
 
     // Prepares the iframe for interaction
     var prepIframe = function() {
@@ -109,6 +115,7 @@ app.controller('ItemCtrl', [
     // Toggle what format is viewable
     $scope.show = function(type) {
       if ((type === 'html' || type === 'attachments') && !$scope.item[type]) return;
+      if (type === 'source') getSource();
 
       $scope.panelVisibility = type;
     };

@@ -3,6 +3,9 @@
 var path = require('path');
 var fs = require('fs');
 
+process.on('SIGINT', process.exit); // Handle ctrl-c when running via docker run
+process.on('SIGTERM', process.exit); // Handle when we docker rm the container
+
 var root = path.join(path.dirname(fs.realpathSync(__filename)), '../');
 var MailDev = require(root + '/index.js');
 

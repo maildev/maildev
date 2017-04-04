@@ -38,7 +38,8 @@
     "smtp-connection": "2.3.1",
     "smtp-server": "1.4.0",
     "socket.io": "1.4.5",
-    "wildstring": "1.0.8"
+    "wildstring": "1.0.8",
+    "expect": "1.20.2"
   },
   "devDependencies": {
     "grunt": "0.4.5",

@@ -27,7 +27,7 @@ describe('mailserver', function() {
 
       expect(spy).toHaveBeenCalled();
       spy.restore();
-      maildev.end(done);
+      done();
     });
   });
 

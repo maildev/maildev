@@ -34,6 +34,7 @@ module.exports = function(config) {
       .option('--auto-relay-rules <file>', 'Filter rules for auto relay mode')
       .option('--incoming-user <user>', 'SMTP user for incoming emails')
       .option('--incoming-pass <pass>', 'SMTP password for incoming emails')
+      .option('--no-web', 'Disable the use of the web interface, useful for unit testing')
       .option('--web-ip <ip address>', 'IP Address to bind HTTP service to, defaults to --ip')
       .option('--web-user <user>', 'HTTP user for GUI')
       .option('--web-pass <password>', 'HTTP password for GUI')
@@ -72,20 +73,24 @@ module.exports = function(config) {
     mailserver.setAutoRelayMode(true, config.autoRelayRules);
   }
 
-  // Default to run on same IP as smtp
-  var webIp = config.webIp ? config.webIp : config.ip;
-  web.start(config.web, webIp, mailserver, config.webUser, config.webPass, config.basePathname);
+  if (!config.noWeb) {
+    // Default to run on same IP as smtp
+    var webIp = config.webIp ? config.webIp : config.ip;
+    web.start(config.web, webIp, mailserver, config.webUser, config.webPass, config.basePathname);
 
-  if (config.open){
-    var open = require('open');
-    open('http://' + (config.ip === '0.0.0.0' ? 'localhost' : config.ip) + ':' + config.web);
+    if (config.open){
+      var open = require('open');
+      open('http://' + (config.ip === '0.0.0.0' ? 'localhost' : config.ip) + ':' + config.web);
+    }
   }
 
   process.on('SIGTERM', function () {
-    async.parallel([
-      mailserver.end,
-      web.close
-    ], function(err, results) {
+    var tasks = [mailserver.end];
+    if(web) {
+      tasks.push(web.close);
+    }
+    
+    async.parallel(tasks, function(err, results) {
       logger.info('Shutting down...');
       process.exit(0);
     });

@@ -6,11 +6,30 @@
 
 var assert = require('assert');
 var SMTPConnection = require('smtp-connection');
+var SMTPServer = require('smtp-server').SMTPServer;
+var expect = require('expect');
 
 var MailDev = require('../index.js');
 
 
 describe('mailserver', function() {
+
+  describe('smtp error handling', function() {
+
+    it('Error should be thrown, because listening to server did not work', function(done) {
+
+      var maildev = new MailDev({
+        silent: true
+      });
+      var spy = expect.createSpy();
+      spy = expect.spyOn(process, 'emit');
+      maildev.smtp.emit("error", {address: "someAddress", port: 11111});
+
+      expect(spy).toHaveBeenCalled();
+      spy.restore();
+      done();
+    });
+  });
 
   describe('smtp authentication', function() {
 

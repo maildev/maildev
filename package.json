@@ -52,7 +52,8 @@
     "matchdep": "1.0.1",
     "mocha": "2.2.5",
     "nodemailer": "2.3.0",
-    "request": "2.69.0"
+    "request": "2.69.0",
+    "expect": "1.20.2"
   },
   "engines": {
     "node": ">=0.10.0"

@@ -81,15 +81,18 @@ module.exports = function(config) {
     open('http://' + (config.ip === '0.0.0.0' ? 'localhost' : config.ip) + ':' + config.web);
   }
 
-  process.on('SIGTERM', function () {
+  function shutdown () {
+    logger.info(`Recieved shutdown signal, shutting down now...`);
     async.parallel([
       mailserver.end,
       web.close
     ], function(err, results) {
-      logger.info('Shutting down...');
       process.exit(0);
     });
-  });
+  }
+
+  process.on('SIGTERM', shutdown);
+  process.on('SIGINT', shutdown);
 
   return mailserver;
 };

@@ -34,11 +34,11 @@ module.exports = function(config) {
       .option('--auto-relay-rules <file>', 'Filter rules for auto relay mode')
       .option('--incoming-user <user>', 'SMTP user for incoming emails')
       .option('--incoming-pass <pass>', 'SMTP password for incoming emails')
-      .option('--no-web', 'Disable the use of the web interface, useful for unit testing')
       .option('--web-ip <ip address>', 'IP Address to bind HTTP service to, defaults to --ip')
       .option('--web-user <user>', 'HTTP user for GUI')
       .option('--web-pass <password>', 'HTTP password for GUI')
       .option('--base-pathname <path>', 'base path for URLs')
+      .option('--disable-web', 'Disable the use of the web interface. Useful for unit testing')
       .option('-o, --open', 'Open the Web GUI after startup')
       .option('-v, --verbose')
       .option('--silent')
@@ -73,7 +73,7 @@ module.exports = function(config) {
     mailserver.setAutoRelayMode(true, config.autoRelayRules);
   }
 
-  if (!config.noWeb) {
+  if (!config.disableWeb) {
     // Default to run on same IP as smtp
     var webIp = config.webIp ? config.webIp : config.ip;
     web.start(config.web, webIp, mailserver, config.webUser, config.webPass, config.basePathname);

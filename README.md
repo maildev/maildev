@@ -40,6 +40,7 @@ For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierprio
       --auto-relay-rules <file>     Filter rules for auto relay mode
       --incoming-user <user>        SMTP user for incoming emails
       --incoming-pass <pass>        SMTP password for incoming emails
+      --no-web                      Disables the use of web interface, useful for automated unit testing
       --web-ip <ip address>         IP Address to bind HTTP service to, defaults to --ip
       --web-user <user>             HTTP basic auth username
       --web-pass <pass>             HTTP basic auth password

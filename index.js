@@ -34,6 +34,7 @@ module.exports = function(config) {
       .option('--auto-relay-rules <file>', 'Filter rules for auto relay mode')
       .option('--incoming-user <user>', 'SMTP user for incoming emails')
       .option('--incoming-pass <pass>', 'SMTP password for incoming emails')
+      .option('--limit-messages <amount>', 'Limit the number of messages in the box')
       .option('--web-ip <ip address>', 'IP Address to bind HTTP service to, defaults to --ip')
       .option('--web-user <user>', 'HTTP user for GUI')
       .option('--web-pass <password>', 'HTTP password for GUI')
@@ -66,6 +67,10 @@ module.exports = function(config) {
       config.outgoingPass,
       config.outgoingSecure
     );
+  }
+
+  if (config.limitMessages){
+    mailserver.setMessagesLimit(parseInt(config.limitMessages));
   }
 
   if (config.autoRelay){

@@ -4,45 +4,39 @@
  * MailDev - mailserver.js -- test the mailserver options
  */
 
-var assert = require('assert');
-var SMTPConnection = require('smtp-connection');
-var SMTPServer = require('smtp-server').SMTPServer;
-var expect = require('expect');
+var assert = require('assert')
+var SMTPConnection = require('smtp-connection')
+var SMTPServer = require('smtp-server').SMTPServer
+var expect = require('expect')
 
-var MailDev = require('../index.js');
+var MailDev = require('../index.js')
 
-
-describe('mailserver', function() {
-
-  describe('smtp error handling', function() {
-
-    it('Error should be thrown, because listening to server did not work', function(done) {
-
+describe('mailserver', function () {
+  describe('smtp error handling', function () {
+    it('Error should be thrown, because listening to server did not work', function (done) {
       var maildev = new MailDev({
         silent: true
-      });
-      var spy = expect.createSpy();
-      spy = expect.spyOn(process, 'emit');
-      maildev.smtp.emit("error", {address: "someAddress", port: 11111});
+      })
+      var spy = expect.createSpy()
+      spy = expect.spyOn(process, 'emit')
+      maildev.smtp.emit('error', {address: 'someAddress', port: 11111})
 
-      expect(spy).toHaveBeenCalled();
-      spy.restore();
-      done();
-    });
-  });
+      expect(spy).toHaveBeenCalled()
+      spy.restore()
+      done()
+    })
+  })
 
-  describe('smtp authentication', function() {
-
-    it('should require authentication', function(done) {
-
+  describe('smtp authentication', function () {
+    it('should require authentication', function (done) {
       var maildev = new MailDev({
         incomingUser: 'bodhi',
         incomingPass: 'surfing',
         silent: true
-      });
+      })
 
-      maildev.listen(function(err) {
-        if (err) return done(err);
+      maildev.listen(function (err) {
+        if (err) return done(err)
 
         var connection = new SMTPConnection({
           port: maildev.port,
@@ -50,42 +44,37 @@ describe('mailserver', function() {
           tls: {
             rejectUnauthorized: false
           }
-        });
+        })
 
-        connection.connect(function(err) {
-          if (err) return done(err);
+        connection.connect(function (err) {
+          if (err) return done(err)
 
           var envelope = {
             from: 'angelo.pappas@fbi.gov',
             to: 'johnny.utah@fbi.gov'
-          };
+          }
 
-          connection.send(envelope, 'They are surfers.', function(err) {
-
+          connection.send(envelope, 'They are surfers.', function (err) {
             // This should return an error since we're not authenticating
-            assert.notEqual(typeof err, 'undefined');
-            assert.equal(err.code, 'EENVELOPE');
+            assert.notEqual(typeof err, 'undefined')
+            assert.equal(err.code, 'EENVELOPE')
 
-            connection.close();
-            maildev.end(done);
-          });
+            connection.close()
+            maildev.end(done)
+          })
+        })
+      })
+    })
 
-        });
-
-      });
-
-    });
-
-    it('should authenticate', function(done) {
-
+    it('should authenticate', function (done) {
       var maildev = new MailDev({
         incomingUser: 'bodhi',
         incomingPass: 'surfing',
         silent: true
-      });
+      })
 
-      maildev.listen(function(err) {
-        if (err) return done(err);
+      maildev.listen(function (err) {
+        if (err) return done(err)
 
         var connection = new SMTPConnection({
           port: maildev.port,
@@ -93,42 +82,35 @@ describe('mailserver', function() {
           tls: {
             rejectUnauthorized: false
           }
-        });
+        })
 
-        connection.connect(function(err) {
-          if (err) return done(err);
+        connection.connect(function (err) {
+          if (err) return done(err)
 
           connection.login({
             user: 'bodhi',
             pass: 'surfing'
-          }, function(err) {
-
-            assert.equal(err, null, 'Login should not return error');
+          }, function (err) {
+            assert.equal(err, null, 'Login should not return error')
 
             var envelope = {
               from: 'angelo.pappas@fbi.gov',
               to: 'johnny.utah@fbi.gov'
-            };
+            }
 
-            connection.send(envelope, 'They are surfers.', function(err, info) {
-              if (err) return done(err);
+            connection.send(envelope, 'They are surfers.', function (err, info) {
+              if (err) return done(err)
 
-              assert.notEqual(typeof info, 'undefined');
-              assert.equal(info.accepted.length, 1);
-              assert.equal(info.rejected.length, 0);
+              assert.notEqual(typeof info, 'undefined')
+              assert.equal(info.accepted.length, 1)
+              assert.equal(info.rejected.length, 0)
 
-              connection.close();
-              maildev.end(done);
-            });
-
-          });
-
-        });
-
-      });
-
-    });
-
-  });
-
-});
+              connection.close()
+              maildev.end(done)
+            })
+          })
+        })
+      })
+    })
+  })
+})

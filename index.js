@@ -6,15 +6,15 @@
  * Licensed under the MIT License.
  */
 
-var program = require('commander')
-var async = require('async')
-var pkg = require('./package.json')
-var web = require('./lib/web')
-var mailserver = require('./lib/mailserver')
-var logger = require('./lib/logger')
+const program = require('commander')
+const async = require('async')
+const pkg = require('./package.json')
+const web = require('./lib/web')
+const mailserver = require('./lib/mailserver')
+const logger = require('./lib/logger')
 
 module.exports = function (config) {
-  var version = pkg.version
+  const version = pkg.version
 
   if (!config) {
     // CLI
@@ -76,11 +76,11 @@ module.exports = function (config) {
 
   if (!config.disableWeb) {
     // Default to run on same IP as smtp
-    var webIp = config.webIp ? config.webIp : config.ip
+    const webIp = config.webIp ? config.webIp : config.ip
     web.start(config.web, webIp, mailserver, config.webUser, config.webPass, config.basePathname)
 
     if (config.open) {
-      var open = require('open')
+      const open = require('open')
       open('http://' + (config.ip === '0.0.0.0' ? 'localhost' : config.ip) + ':' + config.web)
     }
   }

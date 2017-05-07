@@ -73,7 +73,7 @@ describe('API', function() {
         from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
         to: 'Johnny Utah <johnny.utah@fbi.gov>',
         subject: 'You were right.',
-        text: 'They are surfers.'
+        text: 'They are surfers.\n'
       };
 
       maildev.listen(function(err) {
@@ -127,7 +127,7 @@ describe('API', function() {
         from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
         to: 'Johnny Utah <johnny.utah@fbi.gov>',
         subject: 'You were right.',
-        text: 'They are surfers.'
+        text: 'They are surfers.\n'
       };
 
       maildev.on('new', function(email) {

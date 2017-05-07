@@ -58,15 +58,15 @@ MailDev can be used in your Node.js application. For more info view the
 [API docs](https://github.com/djfarrelly/MailDev/blob/master/docs/api.md).
 
 ```javascript
-var MailDev = require('maildev');
+const MailDev = require('maildev')
 
-var maildev = new MailDev();
+const maildev = new MailDev()
 
-maildev.listen();
+maildev.listen()
 
-maildev.on('new', function(email){
+maildev.on('new', function (email) {
   // We got a new email!
-});
+})
 ```
 
 MailDev also has a **REST API**. For more info
@@ -124,20 +124,20 @@ Configure your application to send emails via port `1025` and open `localhost:10
 **Nodemailer (v1.0+)**
 
 ```javascript
-var transport = nodemailer.createTransport({
+const transport = nodemailer.createTransport({
   port: 1025,
   ignoreTLS: true,
   // other settings...
-});
+})
 ```
 
 **Nodemailer (v0.7)**
 
 ```javascript
-var transport = nodemailer.createTransport("SMTP", {
+const transport = nodemailer.createTransport('SMTP', {
   port: 1025,
   // other settings...
-});
+})
 ```
 
 **Django** -- Add `EMAIL_PORT = 1025` in your settings file [[source]](https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-EMAIL_PORT)

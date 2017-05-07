@@ -36,7 +36,7 @@
     "open": "0.0.5",
     "simplesmtp": "0.3.35",
     "smtp-connection": "2.3.1",
-    "smtp-server": "1.4.0",
+    "smtp-server": "1.16.1",
     "socket.io": "1.7.3",
     "wildstring": "1.0.8"
   },

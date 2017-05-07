@@ -21,7 +21,7 @@
     "url": "http://github.com/djfarrelly/maildev.git"
   },
   "scripts": {
-    "test": "./node_modules/.bin/istanbul cover _mocha"
+    "test": "standard && istanbul cover _mocha"
   },
   "main": "./index.js",
   "bin": {
@@ -41,6 +41,7 @@
     "wildstring": "1.0.8"
   },
   "devDependencies": {
+    "expect": "1.20.2",
     "grunt": "0.4.5",
     "grunt-concurrent": "2.2.1",
     "grunt-contrib-jshint": "1.0.0",
@@ -53,7 +54,7 @@
     "mocha": "2.2.5",
     "nodemailer": "2.3.0",
     "request": "2.69.0",
-    "expect": "1.20.2"
+    "standard": "^10.0.2"
   },
   "engines": {
     "node": ">=4.0.0"

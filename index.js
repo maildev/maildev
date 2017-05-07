@@ -83,6 +83,9 @@ module.exports = function (config) {
       const open = require('open')
       open('http://' + (config.ip === '0.0.0.0' ? 'localhost' : config.ip) + ':' + config.web)
     }
+
+    // Close the web server when the mailserver closes
+    mailserver.on('close', web.close)
   }
 
   function shutdown () {
@@ -90,7 +93,7 @@ module.exports = function (config) {
     async.parallel([
       mailserver.close,
       web.close
-    ], function (_, results) {
+    ], function () {
       process.exit(0)
     })
   }

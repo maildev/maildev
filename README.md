@@ -3,6 +3,7 @@
 [![Build Status](https://api.travis-ci.org/djfarrelly/MailDev.svg)](https://travis-ci.org/djfarrelly/MailDev)
 [![codecov](https://codecov.io/gh/djfarrelly/MailDev/branch/master/graph/badge.svg)](https://codecov.io/gh/djfarrelly/MailDev)
 [![NPM Version](https://img.shields.io/npm/v/maildev.svg)](https://www.npmjs.com/package/maildev)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 **MailDev** is a simple way to test your project's generated emails during development with an easy to use web interface that runs on your machine built on top of [Node.js](http://www.nodejs.org).
 
@@ -172,18 +173,20 @@ Any help on MailDev would be awesome. There is plenty of room for improvement. F
 
 To run **MailDev** during development:
 
-
-    # grunt-cli is needed by grunt; ignore this if already installed
-    npm install -g grunt-cli
     npm install
-    grunt dev
+    npm run dev
 
+The "dev" task will run MailDev using nodemon and restart automatically when
+changes are detected. On `*.scss` file save, the css will also be recompiled.
+Using `test/send.js`, a few test emails will be sent every time the application
+restarts.
 
-The `grunt dev` task will run the project using nodemon and restart automatically when changes are detected. SASS files will be compiled automatically on save also. To trigger some emails for testing run `node test/send.js` in a separate shell. Please run jshint to your lint code before submitting a pull request; run `grunt jshint`.
+The project uses the [JavaScript Standard coding style](https://standardjs.com).
+To lint your code before submitting your PR, run `npm run lint`.
 
 To run the test suite:
 
-    $ npm run test
+    $ npm test
 
 ## [Changelog](https://github.com/djfarrelly/MailDev/releases)
 

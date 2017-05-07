@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 
-var path = require('path');
-var fs = require('fs');
+var path = require('path')
+var fs = require('fs')
 
-var root = path.join(path.dirname(fs.realpathSync(__filename)), '../');
-var MailDev = require(root + '/index.js');
+var root = path.join(path.dirname(fs.realpathSync(__filename)), '../')
+var MailDev = require(root + '/index.js')
 
-var maildev = new MailDev();
-maildev.listen();
+var maildev = new MailDev()
+maildev.listen()

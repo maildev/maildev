@@ -6,17 +6,15 @@
  * Licensed under the MIT License.
  */
 
-var program = require('commander');
-var async = require('async');
-var pkg = require('./package.json');
-var web = require('./lib/web');
-var mailserver = require('./lib/mailserver');
-var logger = require('./lib/logger');
+var program = require('commander')
+var async = require('async')
+var pkg = require('./package.json')
+var web = require('./lib/web')
+var mailserver = require('./lib/mailserver')
+var logger = require('./lib/logger')
 
-
-module.exports = function(config) {
-
-  var version = pkg.version;
+module.exports = function (config) {
+  var version = pkg.version
 
   if (!config) {
     // CLI
@@ -39,64 +37,66 @@ module.exports = function(config) {
       .option('--web-pass <password>', 'HTTP password for GUI')
       .option('--base-pathname <path>', 'base path for URLs')
       .option('--disable-web', 'Disable the use of the web interface. Useful for unit testing')
-      .option('--hide-extensions <extensions>', 'Comma separated list of SMTP extensions to NOT advertise (STARTTLS, SMTPUTF8, PIPELINING, 8BITMIME)', function(val) { return val.split(','); })
+      .option('--hide-extensions <extensions>',
+        'Comma separated list of SMTP extensions to NOT advertise (STARTTLS, SMTPUTF8, PIPELINING, 8BITMIME)',
+        function (val) { return val.split(',') }
+      )
       .option('-o, --open', 'Open the Web GUI after startup')
       .option('-v, --verbose')
       .option('--silent')
-      .parse(process.argv);
+      .parse(process.argv)
   }
 
   if (config.verbose) {
-    logger.setLevel(2);
+    logger.setLevel(2)
   } else if (config.silent) {
-    logger.setLevel(0);
+    logger.setLevel(0)
   }
 
   // Start the Mailserver & Web GUI
-  mailserver.create(config.smtp, config.ip, config.incomingUser, config.incomingPass, config.hideExtensions);
+  mailserver.create(config.smtp, config.ip, config.incomingUser, config.incomingPass, config.hideExtensions)
 
   if (config.outgoingHost ||
       config.outgoingPort ||
       config.outgoingUser ||
       config.outgoingPass ||
       config.outgoingSecure) {
-
     mailserver.setupOutgoing(
       config.outgoingHost,
       parseInt(config.outgoingPort),
       config.outgoingUser,
       config.outgoingPass,
       config.outgoingSecure
-    );
+    )
   }
 
-  if (config.autoRelay){
-    mailserver.setAutoRelayMode(true, config.autoRelayRules);
+  if (config.autoRelay) {
+    mailserver.setAutoRelayMode(true, config.autoRelayRules)
   }
 
   if (!config.disableWeb) {
     // Default to run on same IP as smtp
-    var webIp = config.webIp ? config.webIp : config.ip;
-    web.start(config.web, webIp, mailserver, config.webUser, config.webPass, config.basePathname);
+    var webIp = config.webIp ? config.webIp : config.ip
+    web.start(config.web, webIp, mailserver, config.webUser, config.webPass, config.basePathname)
 
-    if (config.open){
-      var open = require('open');
-      open('http://' + (config.ip === '0.0.0.0' ? 'localhost' : config.ip) + ':' + config.web);
+    if (config.open) {
+      var open = require('open')
+      open('http://' + (config.ip === '0.0.0.0' ? 'localhost' : config.ip) + ':' + config.web)
     }
   }
 
   function shutdown () {
-    logger.info(`Recieved shutdown signal, shutting down now...`);
+    logger.info(`Recieved shutdown signal, shutting down now...`)
     async.parallel([
       mailserver.end,
       web.close
-    ], function(err, results) {
-      process.exit(0);
-    });
+    ], function (_, results) {
+      process.exit(0)
+    })
   }
 
-  process.on('SIGTERM', shutdown);
-  process.on('SIGINT', shutdown);
+  process.on('SIGTERM', shutdown)
+  process.on('SIGINT', shutdown)
 
-  return mailserver;
-};
+  return mailserver
+}

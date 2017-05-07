@@ -4,86 +4,76 @@
  * MailDev - middleware.js -- test using MailDev as middleware
  */
 
-var assert = require('assert');
-var nodemailer = require('nodemailer');
-var express = require('express');
-var proxyMiddleware = require('http-proxy-middleware');
-var request = require('request');
+var assert = require('assert')
+var nodemailer = require('nodemailer')
+var express = require('express')
+var proxyMiddleware = require('http-proxy-middleware')
+var request = require('request')
 
-var MailDev = require('../index.js');
+var MailDev = require('../index.js')
 
 var defaultNodemailerOpts = {
   port: 1025,
   ignoreTLS: true
-};
+}
 
-describe('middleware', function() {
+describe('middleware', function () {
+  var server
+  var maildev
 
-  var server;
-  var maildev;
+  before(function (done) {
+    var app = express()
 
-  before(function(done) {
-    
-    var app = express();
-
-    app.get('/', function(req, res) {
-      res.send('root');
-    });
+    app.get('/', function (req, res) {
+      res.send('root')
+    })
 
     maildev = new MailDev({
       silent: true,
       basePathname: '/maildev'
-    });
+    })
 
     // proxy all maildev requests to the maildev app
     var proxy = proxyMiddleware('/maildev', {
       target: 'http://localhost:1080',
       ws: true,
       logLevel: 'silent'
-    });
+    })
 
     // Maildev available at the specified route '/maildev'
-    app.use(proxy); 
+    app.use(proxy)
 
-    server = app.listen(8080, function(err) {
-      maildev.listen(done);
-    });
-     
-  });
+    server = app.listen(8080, function (err) {
+      maildev.listen(done)
+    })
+  })
 
-  after(function(done) {
-    maildev.end(function() {
-      maildev.removeAllListeners();
-      server.close(done);
-    });
-  });
+  after(function (done) {
+    maildev.end(function () {
+      maildev.removeAllListeners()
+      server.close(done)
+    })
+  })
 
-  it('should run as middleware in another express app', function(done) {
-
+  it('should run as middleware in another express app', function (done) {
     // Request to the express app
-    request.get('http://localhost:8080/', function(err, res, body) {
-
-      assert.equal(body, 'root');
+    request.get('http://localhost:8080/', function (err, res, body) {
+      assert.equal(body, 'root')
 
       // Request to the maildev api
-      request.get('http://localhost:8080/maildev/email', function(err, res, body) {
+      request.get('http://localhost:8080/maildev/email', function (err, res, body) {
+        assert.equal(res.statusCode, 200)
 
-        assert.equal(res.statusCode, 200);
+        var json = JSON.parse(body)
+        assert(Array.isArray(json))
 
-        var json = JSON.parse(body);
-        assert(Array.isArray(json));
+        done()
+      })
+    })
+  })
 
-        done();
-      });
-
-    });
-
-  });
-
-
-  it('should serve email attachments with working urls', function(done) {
-
-    var transporter = nodemailer.createTransport(defaultNodemailerOpts);
+  it('should serve email attachments with working urls', function (done) {
+    var transporter = nodemailer.createTransport(defaultNodemailerOpts)
 
     var emailOpts = {
       from: 'johnny.utah@fbi.gov',
@@ -97,21 +87,17 @@ describe('middleware', function() {
           cid: '12345'
         }
       ]
-    };
+    }
 
-    transporter.sendMail(emailOpts);
+    transporter.sendMail(emailOpts)
 
-    maildev.on('new', function(email) {
+    maildev.on('new', function (email) {
+      request.get('http://localhost:8080/maildev/email/' + email.id + '/html', function (err, res, body) {
+        assert.equal(body, '<img src="//localhost:8080/maildev/email/' + email.id + '/attachment/tyler.jpg"/>')
 
-      request.get('http://localhost:8080/maildev/email/' + email.id + '/html', function(err, res, body) {
-        
-        assert.equal(body, '<img src="//localhost:8080/maildev/email/' + email.id + '/attachment/tyler.jpg"/>');
-
-        maildev.removeAllListeners();
+        maildev.removeAllListeners()
         done()
-      });
-    });
-
-  });
-
-});
+      })
+    })
+  })
+})

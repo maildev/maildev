@@ -1,18 +1,20 @@
-/* global describe, it */
+/* global describe, it, before, after */
+'use strict'
 
 /**
  * MailDev - middleware.js -- test using MailDev as middleware
  */
 
-var assert = require('assert')
-var nodemailer = require('nodemailer')
-var express = require('express')
-var proxyMiddleware = require('http-proxy-middleware')
-var request = require('request')
+const assert = require('assert')
+const path = require('path')
+const nodemailer = require('nodemailer')
+const express = require('express')
+const proxyMiddleware = require('http-proxy-middleware')
+const request = require('request')
 
-var MailDev = require('../index.js')
+const MailDev = require('../index.js')
 
-var defaultNodemailerOpts = {
+const defaultNodemailerOpts = {
   port: 1025,
   ignoreTLS: true
 }
@@ -34,7 +36,7 @@ describe('middleware', function () {
     })
 
     // proxy all maildev requests to the maildev app
-    var proxy = proxyMiddleware('/maildev', {
+    const proxy = proxyMiddleware('/maildev', {
       target: 'http://localhost:1080',
       ws: true,
       logLevel: 'silent'
@@ -43,7 +45,7 @@ describe('middleware', function () {
     // Maildev available at the specified route '/maildev'
     app.use(proxy)
 
-    server = app.listen(8080, function (err) {
+    server = app.listen(8080, function (_) {
       maildev.listen(done)
     })
   })
@@ -57,14 +59,14 @@ describe('middleware', function () {
 
   it('should run as middleware in another express app', function (done) {
     // Request to the express app
-    request.get('http://localhost:8080/', function (err, res, body) {
+    request.get('http://localhost:8080/', function (_, res, body) {
       assert.equal(body, 'root')
 
       // Request to the maildev api
-      request.get('http://localhost:8080/maildev/email', function (err, res, body) {
+      request.get('http://localhost:8080/maildev/email', function (_, res, body) {
         assert.equal(res.statusCode, 200)
 
-        var json = JSON.parse(body)
+        const json = JSON.parse(body)
         assert(Array.isArray(json))
 
         done()
@@ -83,7 +85,7 @@ describe('middleware', function () {
       attachments: [
         {
           filename: 'tyler.jpg',
-          path: __dirname + '/scripts/tyler.jpg',
+          path: path.join(__dirname, '/scripts/tyler.jpg'),
           cid: '12345'
         }
       ]
@@ -92,7 +94,7 @@ describe('middleware', function () {
     transporter.sendMail(emailOpts)
 
     maildev.on('new', function (email) {
-      request.get('http://localhost:8080/maildev/email/' + email.id + '/html', function (err, res, body) {
+      request.get('http://localhost:8080/maildev/email/' + email.id + '/html', function (_, res, body) {
         assert.equal(body, '<img src="//localhost:8080/maildev/email/' + email.id + '/attachment/tyler.jpg"/>')
 
         maildev.removeAllListeners()

@@ -1,15 +1,15 @@
 /* global describe, it */
+'use strict'
 
 /**
  * MailDev - mailserver.js -- test the mailserver options
  */
 
-var assert = require('assert')
-var SMTPConnection = require('smtp-connection')
-var SMTPServer = require('smtp-server').SMTPServer
-var expect = require('expect')
+const assert = require('assert')
+const SMTPConnection = require('smtp-connection')
+const expect = require('expect')
 
-var MailDev = require('../index.js')
+const MailDev = require('../index.js')
 
 describe('mailserver', function () {
   describe('smtp error handling', function () {

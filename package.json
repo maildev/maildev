@@ -24,8 +24,8 @@
     "test": "standard && istanbul cover _mocha",
     "lint": "standard",
     "dev": "node ./scripts/dev.js & npm run css-watch",
-    "css": "node-sass --output-style compressed assets/styles/style.scss > app/styles/style.css",
-    "css-watch": "node-sass --watch --output-style compressed assets/styles/style.scss > app/styles/style.css"
+    "css": "node-sass --output-style compressed -o app/styles assets/styles/style.scss",
+    "css-watch": "node-sass -wr --output-style compressed -o app/styles assets/styles/style.scss"
   },
   "main": "./index.js",
   "bin": {

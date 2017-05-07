@@ -12,7 +12,8 @@ const nodemailer = require('nodemailer')
 const MailDev = require('../index.js')
 
 const defaultMailDevOpts = {
-  silent: true
+  silent: true,
+  disableWeb: true
 }
 
 const defaultNodemailerOpts = {
@@ -22,10 +23,10 @@ const defaultNodemailerOpts = {
 
 describe('email', function () {
   it('should handle embedded images with cid', function (done) {
-    var maildev = new MailDev(defaultMailDevOpts)
-    var transporter = nodemailer.createTransport(defaultNodemailerOpts)
+    const maildev = new MailDev(defaultMailDevOpts)
+    const transporter = nodemailer.createTransport(defaultNodemailerOpts)
 
-    var emailOpts = {
+    const emailOpts = {
       from: 'johnny.utah@fbi.gov',
       to: 'bodhi@gmail.com',
       subject: 'Test cid replacement',
@@ -48,7 +49,7 @@ describe('email', function () {
         maildev.getEmailHTML(email.id, 'localhost:8080', function (_, html) {
           assert.equal(html, '<img src="//localhost:8080/email/' + email.id + '/attachment/tyler.jpg"/>')
 
-          maildev.end(function () {
+          maildev.close(function () {
             maildev.removeAllListeners()
             transporter.close()
             done()

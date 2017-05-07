@@ -14,31 +14,33 @@ const MailDev = require('../index.js')
 describe('mailserver', function () {
   describe('smtp error handling', function () {
     it('Error should be thrown, because listening to server did not work', function (done) {
-      var maildev = new MailDev({
-        silent: true
+      const maildev = new MailDev({
+        silent: true,
+        disableWeb: true
       })
-      var spy = expect.createSpy()
+      let spy = expect.createSpy()
       spy = expect.spyOn(process, 'emit')
-      maildev.smtp.emit('error', {address: 'someAddress', port: 11111})
+      maildev.smtp.emit('error', { address: 'someAddress', port: 11111 })
 
       expect(spy).toHaveBeenCalled()
       spy.restore()
-      done()
+      maildev.close(done)
     })
   })
 
   describe('smtp authentication', function () {
     it('should require authentication', function (done) {
-      var maildev = new MailDev({
+      const maildev = new MailDev({
         incomingUser: 'bodhi',
         incomingPass: 'surfing',
-        silent: true
+        silent: true,
+        disableWeb: true
       })
 
       maildev.listen(function (err) {
         if (err) return done(err)
 
-        var connection = new SMTPConnection({
+        const connection = new SMTPConnection({
           port: maildev.port,
           host: maildev.host,
           tls: {
@@ -49,7 +51,7 @@ describe('mailserver', function () {
         connection.connect(function (err) {
           if (err) return done(err)
 
-          var envelope = {
+          const envelope = {
             from: 'angelo.pappas@fbi.gov',
             to: 'johnny.utah@fbi.gov'
           }
@@ -60,23 +62,24 @@ describe('mailserver', function () {
             assert.equal(err.code, 'EENVELOPE')
 
             connection.close()
-            maildev.end(done)
+            maildev.close(done)
           })
         })
       })
     })
 
     it('should authenticate', function (done) {
-      var maildev = new MailDev({
+      const maildev = new MailDev({
         incomingUser: 'bodhi',
         incomingPass: 'surfing',
-        silent: true
+        silent: true,
+        disableWeb: true
       })
 
       maildev.listen(function (err) {
         if (err) return done(err)
 
-        var connection = new SMTPConnection({
+        const connection = new SMTPConnection({
           port: maildev.port,
           host: maildev.host,
           tls: {
@@ -93,7 +96,7 @@ describe('mailserver', function () {
           }, function (err) {
             assert.equal(err, null, 'Login should not return error')
 
-            var envelope = {
+            const envelope = {
               from: 'angelo.pappas@fbi.gov',
               to: 'johnny.utah@fbi.gov'
             }
@@ -106,7 +109,7 @@ describe('mailserver', function () {
               assert.equal(info.rejected.length, 0)
 
               connection.close()
-              maildev.end(done)
+              maildev.close(done)
             })
           })
         })

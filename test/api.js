@@ -12,31 +12,38 @@ const MailDev = require('../index.js')
 
 describe('API', function () {
   describe('Constructor', function () {
-    it('should accept arguments', function () {
-      var maildev = new MailDev({
+    it('should accept arguments', function (done) {
+      const maildev = new MailDev({
         smtp: 1026,
         web: 9000,
         outgoingHost: 'smtp.gmail.com',
-        silent: true
+        silent: true,
+        disableWeb: true
       })
 
       assert.equal(maildev.port, 1026)
       assert.equal(maildev.getOutgoingHost(), 'smtp.gmail.com')
+
+      maildev.close(done)
     })
 
-    it('should return mailserver object', function () {
-      var maildev = new MailDev({
-        silent: true
+    it('should return mailserver object', function (done) {
+      const maildev = new MailDev({
+        silent: true,
+        disableWeb: true
       })
 
       assert.equal(typeof maildev.getEmail, 'function')
       assert.equal(typeof maildev.relayMail, 'function')
+
+      maildev.close(done)
     })
   })
 
   describe('listen/end', function () {
-    var maildev = new MailDev({
-      silent: true
+    const maildev = new MailDev({
+      silent: true,
+      disableWeb: true
     })
 
     it('should start the mailserver', function (done) {
@@ -44,17 +51,18 @@ describe('API', function () {
     })
 
     it('should stop the mailserver', function (done) {
-      maildev.end(done)
+      maildev.close(done)
     })
   })
 
   describe('Email', function () {
     it('should receive emails', function (done) {
-      var maildev = new MailDev({
-        silent: true
+      const maildev = new MailDev({
+        silent: true,
+        disableWeb: true
       })
 
-      var emailOpts = {
+      const emailOpts = {
         from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
         to: 'Johnny Utah <johnny.utah@fbi.gov>',
         subject: 'You were right.',
@@ -64,7 +72,7 @@ describe('API', function () {
       maildev.listen(function (err) {
         if (err) return done(err)
 
-        var transporter = nodemailer.createTransport({
+        const transporter = nodemailer.createTransport({
           port: 1025,
           ignoreTLS: true
         })
@@ -81,7 +89,7 @@ describe('API', function () {
               assert.equal(emails.length, 1)
               assert.equal(emails[0].text, emailOpts.text)
 
-              maildev.end(function () {
+              maildev.close(function () {
                 done()
                 transporter.close()
               })
@@ -92,16 +100,17 @@ describe('API', function () {
     })
 
     it('should emit events when receiving emails', function (done) {
-      var maildev = new MailDev({
-        silent: true
+      const maildev = new MailDev({
+        silent: true,
+        disableWeb: true
       })
 
-      var transporter = nodemailer.createTransport({
+      const transporter = nodemailer.createTransport({
         port: 1025,
         ignoreTLS: true
       })
 
-      var emailOpts = {
+      const emailOpts = {
         from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
         to: 'Johnny Utah <johnny.utah@fbi.gov>',
         subject: 'You were right.',
@@ -111,7 +120,7 @@ describe('API', function () {
       maildev.on('new', function (email) {
         assert.equal(email.text, emailOpts.text)
 
-        maildev.end(function () {
+        maildev.close(function () {
           maildev.removeAllListeners()
           transporter.close()
           done()

@@ -1,13 +1,14 @@
 /* global describe, it */
+'use strict'
 
 /**
  * MailDev - api.js -- test the Node.js API
  */
 
-var assert = require('assert')
-var nodemailer = require('nodemailer')
+const assert = require('assert')
+const nodemailer = require('nodemailer')
 
-var MailDev = require('../index.js')
+const MailDev = require('../index.js')
 
 describe('API', function () {
   describe('Constructor', function () {

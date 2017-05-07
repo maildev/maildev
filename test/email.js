@@ -1,19 +1,21 @@
 /* global describe, it */
+'use strict'
 
 /**
  * MailDev - email.js -- test the email output
  */
 
-var assert = require('assert')
-var nodemailer = require('nodemailer')
+const assert = require('assert')
+const path = require('path')
+const nodemailer = require('nodemailer')
 
-var MailDev = require('../index.js')
+const MailDev = require('../index.js')
 
-var defaultMailDevOpts = {
+const defaultMailDevOpts = {
   silent: true
 }
 
-var defaultNodemailerOpts = {
+const defaultNodemailerOpts = {
   port: 1025,
   ignoreTLS: true
 }
@@ -31,7 +33,7 @@ describe('email', function () {
       attachments: [
         {
           filename: 'tyler.jpg',
-          path: __dirname + '/scripts/tyler.jpg',
+          path: path.join(__dirname, '/scripts/tyler.jpg'),
           cid: '12345'
         }
       ]
@@ -39,11 +41,11 @@ describe('email', function () {
 
     maildev.on('new', function (email) {
       // Simple replacement to root url
-      maildev.getEmailHTML(email.id, function (err, html) {
+      maildev.getEmailHTML(email.id, function (_, html) {
         assert.equal(html, '<img src="/email/' + email.id + '/attachment/tyler.jpg"/>')
 
         // Pass baseUrl
-        maildev.getEmailHTML(email.id, 'localhost:8080', function (err, html) {
+        maildev.getEmailHTML(email.id, 'localhost:8080', function (_, html) {
           assert.equal(html, '<img src="//localhost:8080/email/' + email.id + '/attachment/tyler.jpg"/>')
 
           maildev.end(function () {

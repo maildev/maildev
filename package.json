@@ -22,7 +22,10 @@
   },
   "scripts": {
     "test": "standard && istanbul cover _mocha",
-    "lint": "standard"
+    "lint": "standard",
+    "dev": "node ./scripts/dev.js & npm run css-watch",
+    "css": "node-sass --output-style compressed assets/styles/style.scss > app/styles/style.css",
+    "css-watch": "node-sass --watch --output-style compressed assets/styles/style.scss > app/styles/style.css"
   },
   "main": "./index.js",
   "bin": {
@@ -43,16 +46,10 @@
   },
   "devDependencies": {
     "expect": "1.20.2",
-    "grunt": "0.4.5",
-    "grunt-concurrent": "2.2.1",
-    "grunt-contrib-jshint": "1.0.0",
-    "grunt-contrib-watch": "1.0.0",
-    "grunt-nodemon": "0.4.1",
-    "grunt-sass": "1.1.0",
     "http-proxy-middleware": "0.12.0",
     "istanbul": "0.4.4",
-    "matchdep": "1.0.1",
     "mocha": "2.2.5",
+    "node-sass": "^4.5.2",
     "nodemailer": "2.3.0",
     "request": "2.69.0",
     "standard": "^10.0.2"

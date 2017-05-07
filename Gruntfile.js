@@ -3,10 +3,9 @@
  * MailDev - Gruntfile.js
  */
 
-var sendEmails = require('./test/scripts/send.js');
+var sendEmails = require('./test/scripts/send.js')
 
 module.exports = function (grunt) {
-
   grunt.initConfig({
 
     // Path config:
@@ -28,10 +27,10 @@ module.exports = function (grunt) {
         options: {
           args: ['--verbose'],
           ignoredFiles: ['app/**', 'assets/**', 'test/**'],
-          callback: function(nodemon) {
-            nodemon.on('start', function() {
-              setTimeout(sendEmails, 1000);
-            });
+          callback: function (nodemon) {
+            nodemon.on('start', function () {
+              setTimeout(sendEmails, 1000)
+            })
           }
         }
       }
@@ -69,19 +68,19 @@ module.exports = function (grunt) {
       }
     }
 
-  });
+  })
 
   // Load all grunt tasks
-  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks);
+  require('matchdep').filterDev('grunt-*').forEach(grunt.loadNpmTasks)
 
   grunt.registerTask('dev', 'Run the app and watch SCSS files for changes', [
     'concurrent'
-  ]);
+  ])
 
-  grunt.registerTask('build', 'Lint JavaScript + compile SCSS', [
+  grunt.registerTask('build', 'Compile SCSS', [
     'jshint',
     'sass'
-  ]);
+  ])
 
-  grunt.registerTask('default', ['build']);
-};
+  grunt.registerTask('default', ['build'])
+}

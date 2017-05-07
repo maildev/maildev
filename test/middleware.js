@@ -24,7 +24,7 @@ describe('middleware', function () {
   var maildev
 
   before(function (done) {
-    var app = express()
+    const app = express()
 
     app.get('/', function (req, res) {
       res.send('root')
@@ -51,7 +51,7 @@ describe('middleware', function () {
   })
 
   after(function (done) {
-    maildev.end(function () {
+    maildev.close(function () {
       maildev.removeAllListeners()
       server.close(done)
     })

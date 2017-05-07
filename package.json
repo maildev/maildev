@@ -51,6 +51,7 @@
     "mocha": "2.2.5",
     "node-sass": "^4.5.2",
     "nodemailer": "2.3.0",
+    "nodemon": "^1.11.0",
     "request": "2.69.0",
     "standard": "^10.0.2"
   },

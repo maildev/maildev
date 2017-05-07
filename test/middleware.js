@@ -10,7 +10,7 @@ const path = require('path')
 const nodemailer = require('nodemailer')
 const express = require('express')
 const proxyMiddleware = require('http-proxy-middleware')
-const request = require('request')
+const got = require('got')
 
 const MailDev = require('../index.js')
 
@@ -59,25 +59,27 @@ describe('middleware', function () {
 
   it('should run as middleware in another express app', function (done) {
     // Request to the express app
-    request.get('http://localhost:8080/', function (_, res, body) {
-      assert.equal(body, 'root')
+    got('http://localhost:8080/')
+      .then(function (res) {
+        assert.equal(res.body, 'root')
+        return got('http://localhost:8080/maildev/email')
+          .then(function (res) {
+            assert.equal(res.statusCode, 200)
 
-      // Request to the maildev api
-      request.get('http://localhost:8080/maildev/email', function (_, res, body) {
-        assert.equal(res.statusCode, 200)
+            const json = JSON.parse(res.body)
+            assert(Array.isArray(json))
 
-        const json = JSON.parse(body)
-        assert(Array.isArray(json))
-
-        done()
+            done()
+          })
+          .catch(done)
       })
-    })
+      .catch(done)
   })
 
   it('should serve email attachments with working urls', function (done) {
-    var transporter = nodemailer.createTransport(defaultNodemailerOpts)
+    const transporter = nodemailer.createTransport(defaultNodemailerOpts)
 
-    var emailOpts = {
+    const emailOpts = {
       from: 'johnny.utah@fbi.gov',
       to: 'bodhi@gmail.com',
       subject: 'Test cid replacement for use w/ middleware',
@@ -94,12 +96,16 @@ describe('middleware', function () {
     transporter.sendMail(emailOpts)
 
     maildev.on('new', function (email) {
-      request.get('http://localhost:8080/maildev/email/' + email.id + '/html', function (_, res, body) {
-        assert.equal(body, '<img src="//localhost:8080/maildev/email/' + email.id + '/attachment/tyler.jpg"/>')
-
-        maildev.removeAllListeners()
-        done()
-      })
+      got(`http://localhost:8080/maildev/email/${email.id}/html`)
+        .then(function (res) {
+          assert.equal(
+            res.body,
+            `<img src="//localhost:8080/maildev/email/${email.id}/attachment/tyler.jpg"/>`
+          )
+          maildev.removeAllListeners()
+          done()
+        })
+        .catch(done)
     })
   })
 })

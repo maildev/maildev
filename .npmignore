@@ -1,10 +1,15 @@
-.git*
-assets/
-test/
-docs/
+.git
+assets
+coverage
+docs
+scripts
+test
 
-.nodemonignore
-.jshintrc
+.DS_Store
+.editorconfig
 .gitignore
-Gruntfile.js
 .travis.yml
+.nodemonignore
+.npmignore
+Dockerfile
+rules.json

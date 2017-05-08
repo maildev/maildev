@@ -57,6 +57,8 @@ describe('mailserver', function () {
           }
 
           connection.send(envelope, 'They are surfers.', function (err) {
+            if (err) return done(err)
+
             // This should return an error since we're not authenticating
             assert.notEqual(typeof err, 'undefined')
             assert.equal(err.code, 'EENVELOPE')

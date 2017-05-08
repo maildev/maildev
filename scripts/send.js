@@ -65,7 +65,7 @@ var messages = [
     attachments: [
       {
         filename: 'tyler.jpg',
-        path: path.join(__dirname, '/tyler.jpg'),
+        path: path.join(__dirname, '/../test/tyler.jpg'),
         cid: '12345'
       }
     ]

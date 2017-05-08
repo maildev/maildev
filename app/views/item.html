@@ -90,7 +90,7 @@
     <li>
         <a href="" class=""
           ng-click="show('attachments')"
-          ng-class="{ active: panelVisibility == 'attachments', disabled: !item.attachments }">
+          ng-class="{ active: panelVisibility == 'attachments', disabled: !item.attachments.length }">
             <i class="fa fa-paperclip"></i>
             Attachments
         </a>
@@ -134,8 +134,8 @@
 
     <div class="panel-attachments" ng-hide=" panelVisibility != 'attachments' ">
         <span ng-repeat="attachment in item.attachments">
-            <a target="_blank" href="email/{{item.id}}/attachment/{{attachment.generatedFileName}}">
-                <strong>{{attachment.generatedFileName}}</strong>
+            <a target="_blank" href="email/{{item.id}}/attachment/{{attachment.filename}}">
+                <strong>{{attachment.filename}}</strong>
             </a>
             <br>
         </span>

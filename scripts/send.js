@@ -3,7 +3,7 @@
  * MailDev - send.js -- send a few emails for testing
  *
  * Run this to send emails to port 1025 for testing MailDev during development
- *   node test/scripts/send.js
+ *   node scripts/send.js
  */
 const path = require('path')
 const nodemailer = require('nodemailer')
@@ -20,7 +20,7 @@ var messages = [
   // Email w/ simple attachment and basic header
   {
     from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
-    to: 'Johnny Utah <johnny.utah@fbi.gov>',
+    to: ['Johnny Utah <johnny.utah@fbi.gov>', 'Test Guy <testing@fbi.gov>'],
     subject: 'The ex-presidents are surfers',
     headers: {
       'X-some-header': 1000

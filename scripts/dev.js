@@ -1,5 +1,5 @@
 const nodemon = require('nodemon')
-const sendEmails = require('../test/scripts/send.js')
+const sendEmails = require('./send')
 
 nodemon({
   script: './bin/maildev',

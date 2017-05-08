@@ -40,7 +40,7 @@ describe('API', function () {
     })
   })
 
-  describe('listen/end', function () {
+  describe('listen/close', function () {
     const maildev = new MailDev({
       silent: true,
       disableWeb: true

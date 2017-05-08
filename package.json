@@ -36,7 +36,7 @@
     "async": "1.5.1",
     "commander": "2.9.0",
     "express": "4.13.4",
-    "mailparser": "0.5.3",
+    "mailparser": "0.6.2",
     "open": "0.0.5",
     "smtp-connection": "2.3.1",
     "smtp-server": "1.16.1",

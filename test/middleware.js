@@ -6,18 +6,11 @@
  */
 
 const assert = require('assert')
-const path = require('path')
-const nodemailer = require('nodemailer')
 const express = require('express')
 const proxyMiddleware = require('http-proxy-middleware')
 const got = require('got')
 
 const MailDev = require('../index.js')
-
-const defaultNodemailerOpts = {
-  port: 1025,
-  ignoreTLS: true
-}
 
 describe('middleware', function () {
   var server
@@ -74,38 +67,5 @@ describe('middleware', function () {
           .catch(done)
       })
       .catch(done)
-  })
-
-  it('should serve email attachments with working urls', function (done) {
-    const transporter = nodemailer.createTransport(defaultNodemailerOpts)
-
-    const emailOpts = {
-      from: 'johnny.utah@fbi.gov',
-      to: 'bodhi@gmail.com',
-      subject: 'Test cid replacement for use w/ middleware',
-      html: '<img src="cid:12345"/>',
-      attachments: [
-        {
-          filename: 'tyler.jpg',
-          path: path.join(__dirname, '/scripts/tyler.jpg'),
-          cid: '12345'
-        }
-      ]
-    }
-
-    transporter.sendMail(emailOpts)
-
-    maildev.on('new', function (email) {
-      got(`http://localhost:8080/maildev/email/${email.id}/html`)
-        .then(function (res) {
-          assert.equal(
-            res.body,
-            `<img src="//localhost:8080/maildev/email/${email.id}/attachment/tyler.jpg"/>`
-          )
-          maildev.removeAllListeners()
-          done()
-        })
-        .catch(done)
-    })
   })
 })

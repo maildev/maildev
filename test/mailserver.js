@@ -7,7 +7,6 @@
 
 const assert = require('assert')
 const SMTPConnection = require('smtp-connection')
-const expect = require('expect')
 
 const MailDev = require('../index.js')
 
@@ -18,13 +17,10 @@ describe('mailserver', function () {
         silent: true,
         disableWeb: true
       })
-      let spy = expect.createSpy()
-      spy = expect.spyOn(process, 'emit')
-      maildev.smtp.emit('error', { address: 'someAddress', port: 11111 })
 
-      expect(spy).toHaveBeenCalled()
-      spy.restore()
-      maildev.close(done)
+      // The server should shutdown gracefully when an smtp error is received
+      maildev.once('close', done)
+      maildev.smtp.emit('error', { address: 'someAddress', port: 11111 })
     })
   })
 
@@ -57,8 +53,6 @@ describe('mailserver', function () {
           }
 
           connection.send(envelope, 'They are surfers.', function (err) {
-            if (err) return done(err)
-
             // This should return an error since we're not authenticating
             assert.notEqual(typeof err, 'undefined')
             assert.equal(err.code, 'EENVELOPE')

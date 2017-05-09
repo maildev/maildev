@@ -6,7 +6,11 @@
     "email",
     "e-mail",
     "mail",
-    "mailcatcher"
+    "maildev",
+    "mailcatcher",
+    "testing",
+    "development",
+    "smtp"
   ],
   "author": "Dan Farrelly",
   "homepage": "http://djfarrelly.github.io/MailDev/",

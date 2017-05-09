@@ -10,7 +10,8 @@ describe('utils', () => {
     })
 
     it('should be alphanumeric', () => {
-      expect(utils.makeId()).toMatch(/^[a-z0-9]+$/i)
+      const alphaNumericRegex = /^[a-z0-9]+$/i
+      expect(utils.makeId()).toMatch(alphaNumericRegex)
     })
   })
 })

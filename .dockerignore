@@ -1,0 +1,15 @@
+assets
+coverage
+docs
+node_modules
+scripts
+test
+
+.*
+
+# Only add .min.js dependencies
+app/components/**/*.js*
+!app/components/**/*.min.js
+
+Dockerfile
+rules.json

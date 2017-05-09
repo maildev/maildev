@@ -8,14 +8,12 @@ WORKDIR /usr/src/app
 
 ADD package.json /usr/src/app/
 
-RUN npm install && npm prune && npm cache clean
-RUN rm -rf /tmp/*
+RUN npm install && \
+    npm prune && \
+    npm cache clean \
+    rm -rf /tmp/*
 
-ADD index.js /usr/src/app
-ADD app /usr/src/app/app
-ADD assets /usr/src/app/assets
-ADD bin /usr/src/app/bin
-ADD lib /usr/src/app/lib
+ADD . /usr/src/app/
 
 EXPOSE 80 25
 

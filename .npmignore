@@ -1,15 +1,9 @@
-.git
 assets
 coverage
 docs
 scripts
 test
 
-.DS_Store
-.editorconfig
-.gitignore
-.travis.yml
-.nodemonignore
-.npmignore
+.*
 Dockerfile
 rules.json

@@ -19,7 +19,7 @@ If you want to use MailDev with [Docker](https://www.docker.com/), you can use t
 For a guide for usage with Docker,
 [checkout the docs](https://github.com/djfarrelly/MailDev/blob/master/docs/docker.md).
 
-    $ docker run -p 1080:80 djfarrelly/maildev
+    $ docker run -p 1080:80 -p 1025:25 djfarrelly/maildev
 
 For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierpriour/grunt-maildev).
 

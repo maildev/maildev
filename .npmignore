@@ -2,6 +2,7 @@ assets
 coverage
 docs
 scripts
+!app/scripts
 test
 
 .*

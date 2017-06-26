@@ -27,28 +27,30 @@ For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierprio
 
     maildev [options]
 
-      -h, --help                      output usage information
-      -V, --version                   output the version number
-      -s, --smtp <port>               SMTP port to catch emails [1025]
-      -w, --web <port>                Port to run the Web GUI [1080]
-      --ip <ip address>               IP Address to bind SMTP service to
-      --outgoing-host <host>          SMTP host for outgoing emails
-      --outgoing-port <port>          SMTP port for outgoing emails
-      --outgoing-user <user>          SMTP user for outgoing emails
-      --outgoing-pass <password>      SMTP password for outgoing emails
-      --outgoing-secure               Use SMTP SSL for outgoing emails
-      --auto-relay                    Use auto-relay mode
-      --auto-relay-rules <file>       Filter rules for auto relay mode
-      --incoming-user <user>          SMTP user for incoming emails
-      --incoming-pass <pass>          SMTP password for incoming emails
-      --web-ip <ip address>           IP Address to bind HTTP service to, defaults to --ip
-      --web-user <user>               HTTP user for GUI
-      --web-pass <password>           HTTP password for GUI
-      --base-pathname <path>          base path for URLs
-      --disable-web                   Disable the use of the web interface. Useful for unit testing
-      --hide-extensions <extensions>  Comma separated list of SMTP extensions to NOT advertise
-                                      (STARTTLS, SMTPUTF8, PIPELINING, 8BITMIME)
-      -o, --open                      Open the Web GUI after startup
+      -h, --help                           output usage information
+      -V, --version                        output the version number
+      -s, --smtp <port>                    SMTP port to catch emails [1025]
+      -w, --web <port>                     Port to run the Web GUI [1080]
+      --ip <ip address>                    IP Address to bind SMTP service to
+      --outgoing-host <host>               SMTP host for outgoing emails
+      --outgoing-port <port>               SMTP port for outgoing emails
+      --outgoing-user <user>               SMTP user for outgoing emails
+      --outgoing-pass <password>           SMTP password for outgoing emails
+      --outgoing-secure                    Use SMTP SSL for outgoing emails
+      --auto-relay                         Use auto-relay mode
+      --auto-relay-all-to-address <email>  Relay all emails to supplied email address,
+                                           imlpies --auto-relay
+      --auto-relay-rules <file>            Filter rules for auto relay mode
+      --incoming-user <user>               SMTP user for incoming emails
+      --incoming-pass <pass>               SMTP password for incoming emails
+      --web-ip <ip address>                IP Address to bind HTTP service to, defaults to --ip
+      --web-user <user>                    HTTP user for GUI
+      --web-pass <password>                HTTP password for GUI
+      --base-pathname <path>               base path for URLs
+      --disable-web                        Disable the use of the web interface. Useful for unit testing
+      --hide-extensions <extensions>       Comma separated list of SMTP extensions to NOT advertise
+                                           (STARTTLS, SMTPUTF8, PIPELINING, 8BITMIME)
+      -o, --open                           Open the Web GUI after startup
       -v, --verbose
       --silent
 

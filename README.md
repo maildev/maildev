@@ -39,7 +39,7 @@ For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierprio
       --outgoing-secure                    Use SMTP SSL for outgoing emails
       --auto-relay                         Use auto-relay mode
       --auto-relay-all-to-address <email>  Relay all emails to supplied email address,
-                                           imlpies --auto-relay
+                                           implies --auto-relay
       --auto-relay-rules <file>            Filter rules for auto relay mode
       --incoming-user <user>               SMTP user for incoming emails
       --incoming-pass <pass>               SMTP password for incoming emails

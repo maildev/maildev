@@ -34,6 +34,15 @@ variables. `MAILDEV_PORT_25_TCP_ADDR` and `MAILDEV_PORT_25_TCP_PORT` can be
 used to send your emails. Sending them here will result in them being captured
 by MailDev. Here's an example of using these with Nodemailer:
 
+To pass parameters, because the Dockerfile uses CMD, you need to specify the executable again.
+The Dockerfile specifically EXPOSES port 80 and 25, therefor you need to tell maildev to use them.
+This example adds the base-pathname parameter.
+
+```
+$ docker run -p 1080:80 -p 1025:25 djfarrelly/maildev bin/maildev --base-pathname /maildev -w 80 -s 25
+```
+
+
 ```js
 const nodemailer = require('nodemailer')
 

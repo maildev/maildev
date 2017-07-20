@@ -8,6 +8,7 @@ maildev-*
 settings.json
 *.sublime-*
 .nodemonignore
+yarn.lock
 
 # Ignore npm debug log
 npm-debug.log

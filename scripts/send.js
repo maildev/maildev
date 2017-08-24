@@ -27,6 +27,7 @@ var messages = [
     },
     text: 'The wax at the bank was surfer wax!!!',
     html: '<!DOCTYPE html><html><head></head><body>' +
+          '<script type=\'text/javascript\'>alert("Hello World")</script>' +
           '<p>The wax at the bank was surfer wax!!!</p>' +
           '</body></html>',
     attachments: [

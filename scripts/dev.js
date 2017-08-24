@@ -9,7 +9,8 @@ nodemon({
     'lib/*'
   ],
   args: [
-    '--verbose'
+    '--verbose',
+    '--disable-javascript'
   ]
 }).on('start', function () {
   setTimeout(sendEmails, 1000)

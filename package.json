@@ -45,6 +45,7 @@
     "smtp-connection": "2.3.1",
     "smtp-server": "1.16.1",
     "socket.io": "1.7.3",
+    "strip-tags": "^0.1.1",
     "wildstring": "1.0.8"
   },
   "devDependencies": {
@@ -52,11 +53,11 @@
     "got": "^6.7.1",
     "http-proxy-middleware": "0.12.0",
     "istanbul": "^0.4.5",
-    "mocha": "^3.3.0",
+    "mocha": "^3.5.0",
     "node-sass": "^4.5.2",
     "nodemailer": "2.3.0",
     "nodemon": "^1.11.0",
-    "standard": "^10.0.2"
+    "standard": "^10.0.3"
   },
   "engines": {
     "node": ">=4.0.0"

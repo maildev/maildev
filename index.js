@@ -28,7 +28,7 @@ module.exports = function (config) {
       .option('--outgoing-user <user>', 'SMTP user for outgoing emails')
       .option('--outgoing-pass <password>', 'SMTP password for outgoing emails')
       .option('--outgoing-secure', 'Use SMTP SSL for outgoing emails')
-      .option('--auto-relay', 'Use auto-relay mode')
+      .option('--auto-relay [email]', 'Use auto-relay mode. Optional relay email address')
       .option('--auto-relay-rules <file>', 'Filter rules for auto relay mode')
       .option('--incoming-user <user>', 'SMTP user for incoming emails')
       .option('--incoming-pass <pass>', 'SMTP password for incoming emails')
@@ -72,7 +72,8 @@ module.exports = function (config) {
   }
 
   if (config.autoRelay) {
-    mailserver.setAutoRelayMode(true, config.autoRelayRules)
+    const emailAddress = typeof config.autoRelay === 'string' ? config.autoRelay : null
+    mailserver.setAutoRelayMode(true, config.autoRelayRules, emailAddress)
   }
 
   if (config.disableJavascript) {

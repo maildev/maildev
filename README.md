@@ -37,7 +37,7 @@ For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierprio
       --outgoing-user <user>          SMTP user for outgoing emails
       --outgoing-pass <password>      SMTP password for outgoing emails
       --outgoing-secure               Use SMTP SSL for outgoing emails
-      --auto-relay                    Use auto-relay mode
+      --auto-relay [email]            Use auto-relay mode. Optional relay email address
       --auto-relay-rules <file>       Filter rules for auto relay mode
       --incoming-user <user>          SMTP user for incoming emails
       --incoming-pass <pass>          SMTP password for incoming emails
@@ -90,6 +90,11 @@ to a real SMTP service that will *actually* send the email to the recipient.
 Enabling the auto relay mode will automatically send each email to it's recipient
 without the need to click the "Relay" button mentioned above.
 The outgoing email options are required to enable this feature.
+
+Optionally you may pass an single email address which Maildev will forward all
+emails to instead of the original recipient. For example, using
+`--auto-relay you@example.com` will forward all emails to that address
+automatically.
 
 Additionally, you can pass a valid json file with additional configuration for
 what email addresses you would like to `allow` or `deny`. The last matching

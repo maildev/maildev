@@ -18,7 +18,7 @@
     <div class="wrapper">
       <header>
         <div class="inner">
-          
+
           <h1 class="branding">
             MailDev
           </h1>
@@ -31,7 +31,7 @@
 
       </header>
 
-      <a class="github-ribbon" href="https://github.com/djfarrelly/MailDev">Fork me on Github</a>
+      <a class="github-ribbon" href="https://github.com/djfarrelly/MailDev">MailDev on Github</a>
 
       <article>
 
@@ -107,10 +107,10 @@
   $ npm install -g maildev
   $ maildev
 </pre>
-            
+
             <h3>Docker</h3>
 
-            <p>Using <a href="https://docs.docker.com/">Docker</a> to run the <a href="https://registry.hub.docker.com/u/djfarrelly/maildev/">official MailDev image</a> in a container. You may choose to change your port mapping or link containers together:</p>
+            <p>If you want to use MailDev with <a href="https://docs.docker.com/">Docker</a>, you can use the <a href="https://registry.hub.docker.com/u/djfarrelly/maildev/">djfarrelly/maildev image on Docker Hub</a>. For a guide for usage with Docker, <a href="https://github.com/djfarrelly/MailDev/blob/master/docs/docker.md">checkout the docs</a>.</p>
 
 <pre>
   $ docker pull djfarrelly/maildev
@@ -138,43 +138,51 @@
 <pre>
 maildev [options]
 
-  -h, --help              output usage information
-  -V, --version           output the version number
-  -s, --smtp &lt;port&gt;       SMTP port to catch emails [1025]
-  -w, --web &lt;port&gt;        Port to run the Web GUI [1080]
-  --ip &lt;ip address&gt;       IP Address to bind services to [0.0.0.0]
-  --outgoing-host &lt;host&gt;  SMTP host for outgoing emails
-  --outgoing-port &lt;port&gt;  SMTP port for outgoing emails
-  --outgoing-user &lt;user&gt;  SMTP user for outgoing emails
-  --outgoing-pass &lt;pass&gt;  SMTP password for outgoing emails
-  --outgoing-secure       Use SMTP SSL for outgoing emails
-  --incoming-user &lt;user&gt;  SMTP user for incoming emails
-  --incoming-pass &lt;pass&gt;  SMTP password for incoming emails
-  --web-user &lt;user&gt;       HTTP basic auth username
-  --web-pass &lt;pass&gt;       HTTP basic auth password
-  -o, --open              Open the Web GUI after startup
+  -h, --help                      output usage information
+  -V, --version                   output the version number
+  -s, --smtp &lt;port&lt;               SMTP port to catch emails [1025]
+  -w, --web &lt;port&lt;                Port to run the Web GUI [1080]
+  --ip &lt;ip address&lt;               IP Address to bind SMTP service to
+  --outgoing-host &lt;host&lt;          SMTP host for outgoing emails
+  --outgoing-port &lt;port&lt;          SMTP port for outgoing emails
+  --outgoing-user &lt;user&lt;          SMTP user for outgoing emails
+  --outgoing-pass &lt;password&lt;      SMTP password for outgoing emails
+  --outgoing-secure               Use SMTP SSL for outgoing emails
+  --auto-relay %lt;email&lt;            Use auto-relay mode. Optional relay email address
+  --auto-relay-rules &lt;file&lt;       Filter rules for auto relay mode
+  --incoming-user &lt;user&lt;          SMTP user for incoming emails
+  --incoming-pass &lt;pass&lt;          SMTP password for incoming emails
+  --web-ip &lt;ip address&lt;           IP Address to bind HTTP service to, defaults to --ip
+  --web-user &lt;user&lt;               HTTP user for GUI
+  --web-pass &lt;password&lt;           HTTP password for GUI
+  --base-pathname &lt;path&lt;          base path for URLs
+  --disable-web                   Disable the use of the web interface. Useful for unit testing
+  --hide-extensions &lt;extensions&lt;  Comma separated list of SMTP extensions to NOT advertise
+                                  (STARTTLS, SMTPUTF8, PIPELINING, 8BITMIME)
+  -o, --open                      Open the Web GUI after startup
   -v, --verbose
+  --silent
 </pre>
 
           <p>Or within your Node.js project:</p>
 
 <pre>
-  var MailDev = require('maildev');
+  const MailDev = require('maildev')
 
-  var maildev = new MailDev();
+  const maildev = new MailDev()
 
-  maildev.listen();
+  maildev.listen()
 
   // Handle new emails as they come in
-  maildev.on('new', function(email){
-    console.log('Received new email with subject: %s', email.subject);
-  });
+  maildev.on('new', (email) => {
+    console.log(`Received new email with subject: ${email.subject}`)
+  })
 
   // Get all emails
-  maildev.getAllEmail(function(err, emails){
-    if (err) return console.log(err);
-    console.log('There are %s emails', emails.length);
-  });
+  maildev.getAllEmail((err, emails) => {
+    if (err) return console.log(err)
+    console.log(`There are ${emails.length} emails`)
+  })
 </pre>
 
         </section>
@@ -191,7 +199,7 @@ maildev [options]
             <li>
               Node &mdash; <a href="https://github.com/andris9/Nodemailer" target="_blank">Nodemailer</a>:
 <pre>
-  var transport = nodemailer.createTransport({
+  const transport = nodemailer.createTransport({
     port: 1025,
     ignoreTLS: true,
     // other settings...
@@ -212,6 +220,14 @@ maildev [options]
 </pre>
             </li>
           </ul>
+
+        </section>
+
+        <section id="more-documentaiton" class="content-section">
+
+          <h3>
+            For the complete documentation <a href="https://github.com/djfarrelly/MailDev/blob/master/README.md">check out the README on Github</a>.
+          </h3>
 
         </section>
 
@@ -245,7 +261,7 @@ maildev [options]
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
     <script src="https://static.buffer.com/js/button.js"></script>
-    
+
     <script>
       (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
       (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -256,6 +272,6 @@ maildev [options]
       ga('send', 'pageview');
 
     </script>
-    
+
   </body>
 </html>

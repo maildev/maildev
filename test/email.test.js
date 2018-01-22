@@ -30,12 +30,12 @@ describe('email', function () {
       from: 'johnny.utah@fbi.gov',
       to: 'bodhi@gmail.com',
       subject: 'Test cid replacement',
-      html: '<img src="cid:12345"/>',
+      html: '<img src="cid:image"/>',
       attachments: [
         {
           filename: 'tyler.jpg',
           path: path.join(__dirname, '/tyler.jpg'),
-          cid: '12345'
+          cid: 'image'
         }
       ]
     }

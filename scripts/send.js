@@ -61,12 +61,27 @@ var messages = [
     from: 'Johnny Utah <johnny.utah@fbi.gov>',
     to: 'Bodhi <bodhi@gmail.com>',
     subject: 'Where\'s Tyler?',
-    html: 'Here she is:<br><img src="cid:12345"/>',
+    html: 'Here she is:<br><img src="cid:image"/>',
     attachments: [
       {
         filename: 'tyler.jpg',
         path: path.join(__dirname, '/../test/tyler.jpg'),
-        cid: '12345'
+        cid: 'image'
+      }
+    ]
+  },
+
+  // Another email w/ embedded image, with same cid
+  {
+    from: 'Bodhi <bodhi@gmail.com>',
+    to: 'Johnny Utah <johnny.utah@fbi.gov>',
+    subject: 'Big wave coming',
+    html: 'You need to catch this!<br><img src="cid:image"/>',
+    attachments: [
+      {
+        filename: 'wave.jpg',
+        path: path.join(__dirname, '/../test/wave.jpg'),
+        cid: 'image'
       }
     ]
   }

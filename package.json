@@ -39,6 +39,7 @@
   "dependencies": {
     "async": "1.5.1",
     "commander": "2.9.0",
+    "cors": "^2.8.4",
     "express": "4.13.4",
     "mailparser": "0.6.2",
     "open": "0.0.5",

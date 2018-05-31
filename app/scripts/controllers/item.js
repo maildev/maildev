@@ -156,7 +156,7 @@ app.controller('ItemCtrl', [
 
           window.confirm(
             'Are you sure you want to REALLY SEND email to ' +
-            (relayTo || item.to.map(function (to) { return to.address }).join()) + ' through ' +
+            (relayTo || item.envelope.to.map(function (to) { return to.address }).join()) + ' through ' +
             $rootScope.config.outgoingHost + '?'
           )
         ) {

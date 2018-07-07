@@ -72,10 +72,10 @@ To use MailDev with Docker Compose, add the following to your
 Here's an example using Nodemailer:
 
 ```js
-const nodemailer = require("nodemailer");
+const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
-  host: "maildev",
+  host: 'maildev',
   port: 25,
   // We add this setting to tell nodemailer the host isn't secure during dev:
   ignoreTLS: true

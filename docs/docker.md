@@ -46,7 +46,7 @@ const transporter = nodemailer.createTransport({
 })
 
 // Now when your send an email, it will show up in the MailDev interface
-transporter.sendMail({ /* from, to, etc... */ }, function (error, info) { // ...
+transporter.sendMail({ /* from, to, etc... */ }, (err, info) => { /* ... */ });
 ```
 
 The above example could apply for any app in any language using the available
@@ -58,4 +58,32 @@ environment variables to configure how to send email.
 
 ## Docker Compose
 
-*Needs documentation for simple usage with Docker Compose*
+To use MailDev with Docker Compose, add the following to your
+`docker-compose.yml` file in the `services` section:
+
+```yaml
+  maildev:
+    image: djfarrelly/maildev
+    command: bin/maildev --web 80 --smtp 25 --verbose
+    ports:
+      - "1080:80"
+```
+
+Here's an example using Nodemailer:
+
+```js
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  host: "maildev",
+  port: 25,
+  // We add this setting to tell nodemailer the host isn't secure during dev:
+  ignoreTLS: true
+});
+
+// Now when your send an email, it will show up in the MailDev interface
+transporter.sendMail({ /* from, to, etc... */ }, (err, info) => { /* ... */ });
+```
+
+Note that the host name, `maildev`, is the name of the service in your
+`docker-compose.yml` file.

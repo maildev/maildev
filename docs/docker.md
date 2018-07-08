@@ -73,7 +73,6 @@ To use MailDev with Docker Compose, add the following to your
 ```yaml
   maildev:
     image: djfarrelly/maildev
-    command: bin/maildev --web 80 --smtp 25 --verbose
     ports:
       - "1080:80"
 ```

@@ -14,7 +14,8 @@ const nodemailer = require('nodemailer')
 const MailDev = require('../index.js')
 
 const defaultMailDevOpts = {
-  silent: true
+  silent: true,
+  disabledCommands: ['AUTH']
 }
 
 const defaultNodemailerOpts = {

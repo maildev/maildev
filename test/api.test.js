@@ -59,7 +59,8 @@ describe('API', function () {
     it('should receive emails', function (done) {
       const maildev = new MailDev({
         silent: true,
-        disableWeb: true
+        disableWeb: true,
+        disabledCommands: ['AUTH']
       })
 
       const emailOpts = {
@@ -102,7 +103,8 @@ describe('API', function () {
     it('should emit events when receiving emails', function (done) {
       const maildev = new MailDev({
         silent: true,
-        disableWeb: true
+        disableWeb: true,
+        disabledCommands: ['AUTH']
       })
 
       const transporter = nodemailer.createTransport({

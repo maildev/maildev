@@ -134,7 +134,7 @@
 
     <div class="panel-attachments" ng-hide=" panelVisibility != 'attachments' ">
         <span ng-repeat="attachment in item.attachments">
-            <a target="_blank" href="email/{{item.id}}/attachment/{{attachment.generatedFileName}}">
+            <a target="_blank" ng-href="email/{{item.id}}/attachment/{{attachment.generatedFileName | encodeURIComponent}}">
                 <strong>{{attachment.generatedFileName}}</strong>
             </a>
             <br>

@@ -43,6 +43,14 @@ app.filter('newLines', function () {
 });
 
 /**
+ * filter to encode URI
+ */
+
+app.filter('encodeURIComponent', function($window) {
+  return $window.encodeURIComponent;
+});
+
+/**
  * Sidebar scrollbar fixed height
  */
 

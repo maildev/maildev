@@ -36,17 +36,17 @@ app.run(['$rootScope', function ($rootScope) {
  * filter to encode special HTML characters as HTML entities
  */
 
-app.filter('escapeHTML', function() {
-  return function(text) {
+app.filter('escapeHTML', function () {
+  return function (text) {
     if (text) {
-      return text.
-          replace(/&/g, '&amp;').
-          replace(/</g, '&lt;').
-          replace(/>/g, '&gt;').
-          replace(/'/g, '&#39;').
-          replace(/"/g, '&quot;');
+      return text
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/'/g, '&#39;')
+          .replace(/"/g, '&quot;')
     }
-    return '';
+    return ''
   }
 });
 
@@ -54,8 +54,8 @@ app.filter('escapeHTML', function() {
  * filter to encode URI
  */
 
-app.filter('encodeURIComponent', function($window) {
-  return $window.encodeURIComponent;
+app.filter('encodeURIComponent', function ($window) {
+  return $window.encodeURIComponent
 });
 
 /**

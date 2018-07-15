@@ -33,12 +33,20 @@ app.run(['$rootScope', function ($rootScope) {
 }])
 
 /**
- * NewLineFilter -- Converts new line characters to br tags
+ * filter to encode special HTML characters as HTML entities
  */
 
-app.filter('newLines', function () {
-  return function (text) {
-    return text ? text.replace(/\n/g, '<br>') : ''
+app.filter('escapeHTML', function() {
+  return function(text) {
+    if (text) {
+      return text.
+          replace(/&/g, '&amp;').
+          replace(/</g, '&lt;').
+          replace(/>/g, '&gt;').
+          replace(/'/g, '&#39;').
+          replace(/"/g, '&quot;');
+    }
+    return '';
   }
 });
 

@@ -37,7 +37,10 @@ $toolbarHeight:     2.8em;
  * Generic & Helper Classes
  */
 
-.plain-text { font-family: Monaco, Menlo, Consolas, "Courier New", monospace; }
+.plain-text {
+    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+    white-space: pre-wrap;
+}
 
 .clearfix:before,
 .clearfix:after { content:""; display:table; }

@@ -48,7 +48,7 @@ app.filter('escapeHTML', function () {
     }
     return ''
   }
-});
+})
 
 /**
  * filter to encode URI

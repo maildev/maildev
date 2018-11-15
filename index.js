@@ -41,6 +41,7 @@ module.exports = function (config) {
         'Comma separated list of SMTP extensions to NOT advertise (STARTTLS, SMTPUTF8, PIPELINING, 8BITMIME)',
         function (val) { return val.split(',') }
       )
+      .option('--store-limit <limit>', 'Limit the number of stored messages')
       .option('-o, --open', 'Open the Web GUI after startup')
       .option('-v, --verbose')
       .option('--silent')
@@ -54,7 +55,14 @@ module.exports = function (config) {
   }
 
   // Start the Mailserver & Web GUI
-  mailserver.create(config.smtp, config.ip, config.incomingUser, config.incomingPass, config.hideExtensions)
+  mailserver.create(
+    config.smtp,
+    config.ip,
+    config.incomingUser,
+    config.incomingPass,
+    config.hideExtensions,
+    config.storeLimit
+  )
 
   if (config.outgoingHost ||
       config.outgoingPort ||

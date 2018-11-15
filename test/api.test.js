@@ -6,6 +6,7 @@
  */
 
 const assert = require('assert')
+const expect = require('expect')
 const nodemailer = require('nodemailer')
 
 const MailDev = require('../index.js')
@@ -130,6 +131,48 @@ describe('API', function () {
       maildev.listen(function (err) {
         if (err) return done(err)
 
+        transporter.sendMail(emailOpts)
+      })
+    })
+
+    it('should respect store size limit', function (done) {
+      const maildev = new MailDev({
+        silent: true,
+        disableWeb: true,
+        storeLimit: 2
+      })
+
+      const transporter = nodemailer.createTransport({
+        port: 1025,
+        ignoreTLS: true
+      })
+
+      const emailOpts = {
+        from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
+        to: 'Johnny Utah <johnny.utah@fbi.gov>',
+        subject: 'You were right.',
+        text: 'They are surfers.\n'
+      }
+
+      let emailCount = 3
+
+      maildev.on('new', function (email) {
+        expect(maildev.store.length).toBeLessThan(3)
+
+        if (!--emailCount) {
+          maildev.close(function () {
+            maildev.removeAllListeners()
+            transporter.close()
+            done()
+          })
+        }
+      })
+
+      maildev.listen(function (err) {
+        if (err) return done(err)
+
+        transporter.sendMail(emailOpts)
+        transporter.sendMail(emailOpts)
         transporter.sendMail(emailOpts)
       })
     })

@@ -48,6 +48,7 @@ For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierprio
       --disable-web                   Disable the use of the web interface. Useful for unit testing
       --hide-extensions <extensions>  Comma separated list of SMTP extensions to NOT advertise
                                       (STARTTLS, SMTPUTF8, PIPELINING, 8BITMIME)
+      --store-limit <limit>           Limit the number of stored messages
       -o, --open                      Open the Web GUI after startup
       -v, --verbose
       --silent

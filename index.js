@@ -60,8 +60,7 @@ module.exports = function (config) {
     config.ip,
     config.incomingUser,
     config.incomingPass,
-    config.hideExtensions,
-    config.storeLimit
+    config.hideExtensions
   )
 
   if (config.outgoingHost ||
@@ -76,6 +75,10 @@ module.exports = function (config) {
       config.outgoingPass,
       config.outgoingSecure
     )
+  }
+
+  if (config.storeLimit) {
+    mailserver.setStoreLimit(config.storeLimit)
   }
 
   if (config.autoRelay) {

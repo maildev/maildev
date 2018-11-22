@@ -133,5 +133,67 @@ describe('API', function () {
         transporter.sendMail(emailOpts)
       })
     })
+
+    it('should respect store size limit', function (done) {
+      const maildev = new MailDev({
+        silent: true,
+        disableWeb: true,
+        storeLimit: 1
+      })
+
+      const transporter = nodemailer.createTransport({
+        port: 1025,
+        ignoreTLS: true
+      })
+
+      const emailOpts = {
+        from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
+        to: 'Johnny Utah <johnny.utah@fbi.gov>',
+        text: 'They are surfers.\n'
+      }
+
+      let receivedCount = 2
+      let deletedCount = 1
+      let lastReceived = null
+
+      // As the store is currently a global variable and is persisted between
+      // test runs, we clear it here for the purpose of this test.
+      maildev.store.length = 0
+
+      // Ensure that both `new` and `delete` events are received, regardless
+      // of the order in which they arrive.
+      function onEvent () {
+        if (!receivedCount && !deletedCount) {
+          assert.equal(receivedCount, 0)
+          assert.equal(deletedCount, 0)
+          assert.equal(maildev.store.length, 1)
+          assert.equal(maildev.store[0].subject, lastReceived)
+
+          maildev.close(function () {
+            maildev.removeAllListeners()
+            transporter.close()
+            done()
+          })
+        }
+      }
+
+      maildev.on('new', function (email) {
+        receivedCount--
+        lastReceived = email.subject
+        onEvent()
+      })
+
+      maildev.on('delete', function (email) {
+        deletedCount--
+        onEvent()
+      })
+
+      maildev.listen(function (err) {
+        if (err) return done(err)
+
+        transporter.sendMail(Object.assign(emailOpts, { subject: '1' }))
+        transporter.sendMail(Object.assign(emailOpts, { subject: '2' }))
+      })
+    })
   })
 })

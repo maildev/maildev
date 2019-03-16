@@ -1,7 +1,7 @@
 {
   "name": "maildev",
   "description": "SMTP Server and Web Interface for reading and testing emails during development",
-  "version": "1.0.0-rc3",
+  "version": "1.0.0",
   "keywords": [
     "email",
     "e-mail",
@@ -42,6 +42,7 @@
     "express": "4.13.4",
     "mailparser": "0.6.2",
     "open": "0.0.5",
+    "rimraf": "^2.6.1",
     "smtp-connection": "2.3.1",
     "smtp-server": "1.16.1",
     "socket.io": "1.7.3",
@@ -53,7 +54,7 @@
     "http-proxy-middleware": "0.12.0",
     "istanbul": "^0.4.5",
     "mocha": "^3.3.0",
-    "node-sass": "^4.5.2",
+    "node-sass": "^4.9.0",
     "nodemailer": "2.3.0",
     "nodemon": "^1.11.0",
     "standard": "^10.0.2"

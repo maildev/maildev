@@ -33,13 +33,29 @@ app.run(['$rootScope', function ($rootScope) {
 }])
 
 /**
- * NewLineFilter -- Converts new line characters to br tags
+ * filter to encode special HTML characters as HTML entities
  */
 
-app.filter('newLines', function () {
+app.filter('escapeHTML', function () {
   return function (text) {
-    return text ? text.replace(/\n/g, '<br>') : ''
+    if (text) {
+      return text
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/'/g, '&#39;')
+          .replace(/"/g, '&quot;')
+    }
+    return ''
   }
+})
+
+/**
+ * filter to encode URI
+ */
+
+app.filter('encodeURIComponent', function ($window) {
+  return $window.encodeURIComponent
 });
 
 /**

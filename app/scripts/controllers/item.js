@@ -153,13 +153,12 @@ app.controller('ItemCtrl', [
       }
 
       if (
-
-          window.confirm(
-            'Are you sure you want to REALLY SEND email to ' +
-            (relayTo || item.to.map(function (to) { return to.address }).join()) + ' through ' +
-            $rootScope.config.outgoingHost + '?'
-          )
-        ) {
+        window.confirm(
+          'Are you sure you want to REALLY SEND email to ' +
+          (relayTo || item.to.map(function (to) { return to.address }).join()) + ' through ' +
+          $rootScope.config.outgoingHost + '?'
+        )
+      ) {
         $http({
           method: 'POST',
           url: 'email/' + item.id + '/relay' + (relayTo ? '/' + relayTo : '')

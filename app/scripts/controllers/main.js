@@ -65,8 +65,7 @@ app.controller('MainCtrl', [
           return c.id === email.id ? i : 0
         }, 0)
 
-        var nextIdx = $scope.items.length === 1 ? null
-                      : idx === 0 ? idx + 1 : idx - 1
+        var nextIdx = $scope.items.length === 1 ? null : idx === 0 ? idx + 1 : idx - 1
         if (nextIdx !== null) {
           $location.path('/email/' + $scope.items[nextIdx].id)
         } else {
@@ -96,7 +95,7 @@ app.controller('MainCtrl', [
     // Initialize the view
     loadData()
 
-    $http({method: 'GET', url: 'config'})
+    $http({ method: 'GET', url: 'config' })
       .success(function (data) {
         $rootScope.config = data
         $scope.config = data

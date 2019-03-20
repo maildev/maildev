@@ -37,27 +37,27 @@
   },
   "license": "MIT",
   "dependencies": {
-    "async": "1.5.1",
-    "commander": "2.9.0",
-    "express": "4.13.4",
-    "mailparser": "0.6.2",
-    "open": "0.0.5",
-    "rimraf": "^2.6.1",
-    "smtp-connection": "2.3.1",
-    "smtp-server": "1.16.1",
-    "socket.io": "1.7.3",
-    "wildstring": "1.0.8"
+    "async": "2.6.2",
+    "commander": "2.19.0",
+    "express": "4.16.4",
+    "mailparser-mit": "^1.0.0",
+    "opn": "^5.5.0",
+    "rimraf": "^2.6.3",
+    "smtp-connection": "4.0.2",
+    "smtp-server": "3.5.0",
+    "socket.io": "2.2.0",
+    "wildstring": "1.0.9"
   },
   "devDependencies": {
-    "expect": "1.20.2",
-    "got": "^6.7.1",
-    "http-proxy-middleware": "0.12.0",
+    "expect": "24.5.0",
+    "got": "^9.6.0",
+    "http-proxy-middleware": "0.19.1",
     "istanbul": "^0.4.5",
-    "mocha": "^3.3.0",
-    "node-sass": "^4.9.0",
-    "nodemailer": "2.3.0",
-    "nodemon": "^1.11.0",
-    "standard": "^10.0.2"
+    "mocha": "^6.0.2",
+    "node-sass": "^4.11.0",
+    "nodemailer": "5.1.1",
+    "nodemon": "^1.18.10",
+    "standard": "10.0.2"
   },
   "engines": {
     "node": ">=6.0.0"

@@ -44,7 +44,7 @@ module.exports = function (config) {
       .option('-o, --open', 'Open the Web GUI after startup')
       .option('-v, --verbose')
       .option('--silent')
-      .option('-o, --disable-javascript', 'If set, disables the execution of JavaScript in Mails')
+      .option('-j, --disable-javascript', 'If set, disables the execution of JavaScript in Mails')
       .parse(process.argv)
   }
 

@@ -25,7 +25,7 @@
     "url": "http://github.com/djfarrelly/maildev.git"
   },
   "scripts": {
-    "test": "standard && istanbul cover _mocha",
+    "test": "standard && nyc _mocha --exit",
     "lint": "standard",
     "dev": "node ./scripts/dev.js & npm run css-watch",
     "css": "node-sass --output-style compressed -o app/styles assets/styles/style.scss",
@@ -52,11 +52,11 @@
     "expect": "1.20.2",
     "got": "^9.6.0",
     "http-proxy-middleware": "0.19.1",
-    "istanbul": "^0.4.5",
     "mocha": "^6.0.2",
     "node-sass": "^4.11.0",
     "nodemailer": "5.1.1",
     "nodemon": "^1.18.10",
+    "nyc": "^13.3.0",
     "standard": "10.0.2"
   },
   "engines": {
@@ -65,6 +65,17 @@
   "standard": {
     "ignore": [
       "app/components/"
+    ]
+  },
+  "nyc": {
+    "exclude": [
+      "test/**/*"
+    ],
+    "ignore-class-method": "methodToIgnore",
+    "reporter": [
+      "json",
+      "lcov",
+      "text-summary"
     ]
   }
 }

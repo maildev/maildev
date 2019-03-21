@@ -2,6 +2,7 @@
 .sass-cache
 node_modules
 coverage
+.nyc_output
 dist
 .zip
 maildev-*

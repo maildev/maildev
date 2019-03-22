@@ -1,8 +1,8 @@
 language: node_js
 node_js:
   - "stable"
-  - "6"
-  - "4"
+  - "10"
+  - "8"
 after_success:
   - bash <(curl -s https://codecov.io/bash)
 notifications:

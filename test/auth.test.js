@@ -68,4 +68,19 @@ describe('auththentication middleware', () => {
 
     middleware(fakeRequest, fakeResponse, done)
   })
+
+  it('should call next function for health checks', (done) => {
+    const middleware = auth('user', 'password')
+    const fakeRequest = {
+      path: '/healthz',
+      headers: { }
+    }
+    const fakeResponse = {
+      statusCode: null,
+      setHeader: function () {},
+      send: function () {}
+    }
+
+    middleware(fakeRequest, fakeResponse, done)
+  })
 })

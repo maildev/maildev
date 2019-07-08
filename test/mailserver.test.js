@@ -58,8 +58,8 @@ describe('mailserver', function () {
 
           connection.send(envelope, 'They are surfers.', function (err) {
             // This should return an error since we're not authenticating
-            assert.notEqual(typeof err, 'undefined')
-            assert.equal(err.code, 'EENVELOPE')
+            assert.notStrictEqual(typeof err, 'undefined')
+            assert.strictEqual(err.code, 'EENVELOPE')
 
             connection.close()
             maildev.close(done)
@@ -94,7 +94,7 @@ describe('mailserver', function () {
             user: 'bodhi',
             pass: 'surfing'
           }, function (err) {
-            assert.equal(err, null, 'Login should not return error')
+            assert.strictEqual(err, null, 'Login should not return error')
 
             const envelope = {
               from: 'angelo.pappas@fbi.gov',
@@ -104,9 +104,9 @@ describe('mailserver', function () {
             connection.send(envelope, 'They are surfers.', function (err, info) {
               if (err) return done(err)
 
-              assert.notEqual(typeof info, 'undefined')
-              assert.equal(info.accepted.length, 1)
-              assert.equal(info.rejected.length, 0)
+              assert.notStrictEqual(typeof info, 'undefined')
+              assert.strictEqual(info.accepted.length, 1)
+              assert.strictEqual(info.rejected.length, 0)
 
               connection.close()
               maildev.close(done)

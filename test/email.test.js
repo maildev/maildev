@@ -61,11 +61,11 @@ describe('email', function () {
       // Simple replacement to root url
       maildev.getEmailHTML(email.id, function (_, html) {
         const attachmentFilename = (email.subject.endsWith('#1')) ? 'tyler.jpg' : 'wave.jpg'
-        assert.equal(html, '<img src="/email/' + email.id + '/attachment/' + attachmentFilename + '"/>')
+        assert.strictEqual(html, '<img src="/email/' + email.id + '/attachment/' + attachmentFilename + '"/>')
 
         // Pass baseUrl
         maildev.getEmailHTML(email.id, 'localhost:8080', function (_, html) {
-          assert.equal(html, '<img src="//localhost:8080/email/' + email.id + '/attachment/' + attachmentFilename + '"/>')
+          assert.strictEqual(html, '<img src="//localhost:8080/email/' + email.id + '/attachment/' + attachmentFilename + '"/>')
 
           // Check contents of attached/embedded files
           http.get('http://localhost:1080/email/' + email.id + '/attachment/' + attachmentFilename, function (res) {
@@ -79,7 +79,7 @@ describe('email', function () {
             })
             res.on('end', function () {
               const fileContents = fs.readFileSync(path.join(__dirname, attachmentFilename), 'binary')
-              assert.equal(data, fileContents)
+              assert.strictEqual(data, fileContents)
 
               seenEmails++
               if (seenEmails === 2) {

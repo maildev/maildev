@@ -61,10 +61,10 @@ describe('middleware', function () {
     // Request to the express app
     got('http://localhost:8080/')
       .then(function (res) {
-        assert.equal(res.body, 'root')
+        assert.strictEqual(res.body, 'root')
         return got('http://localhost:8080/maildev/email')
           .then(function (res) {
-            assert.equal(res.statusCode, 200)
+            assert.strictEqual(res.statusCode, 200)
 
             const json = JSON.parse(res.body)
             assert(Array.isArray(json))
@@ -98,7 +98,7 @@ describe('middleware', function () {
     maildev.on('new', function (email) {
       got(`http://localhost:8080/maildev/email/${email.id}/html`)
         .then(function (res) {
-          assert.equal(
+          assert.strictEqual(
             res.body,
             `<img src="//localhost:8080/maildev/email/${email.id}/attachment/tyler.jpg"/>`
           )

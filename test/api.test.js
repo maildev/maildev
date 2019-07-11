@@ -21,8 +21,8 @@ describe('API', function () {
         disableWeb: true
       })
 
-      assert.equal(maildev.port, 1026)
-      assert.equal(maildev.getOutgoingHost(), 'smtp.gmail.com')
+      assert.strictEqual(maildev.port, 1026)
+      assert.strictEqual(maildev.getOutgoingHost(), 'smtp.gmail.com')
 
       maildev.close(done)
     })
@@ -33,8 +33,8 @@ describe('API', function () {
         disableWeb: true
       })
 
-      assert.equal(typeof maildev.getEmail, 'function')
-      assert.equal(typeof maildev.relayMail, 'function')
+      assert.strictEqual(typeof maildev.getEmail, 'function')
+      assert.strictEqual(typeof maildev.relayMail, 'function')
 
       maildev.close(done)
     })
@@ -85,9 +85,9 @@ describe('API', function () {
             maildev.getAllEmail(function (err, emails) {
               if (err) return done(err)
 
-              assert.equal(Array.isArray(emails), true)
-              assert.equal(emails.length, 1)
-              assert.equal(emails[0].text, emailOpts.text)
+              assert.strictEqual(Array.isArray(emails), true)
+              assert.strictEqual(emails.length, 1)
+              assert.strictEqual(emails[0].text, emailOpts.text)
 
               maildev.close(function () {
                 done()
@@ -118,7 +118,7 @@ describe('API', function () {
       }
 
       maildev.on('new', function (email) {
-        assert.equal(email.text, emailOpts.text)
+        assert.strictEqual(email.text, emailOpts.text)
 
         maildev.close(function () {
           maildev.removeAllListeners()

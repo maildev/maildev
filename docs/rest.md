@@ -85,3 +85,5 @@ Returns:
 "to" address.
 
 **GET    /config** - Get the application configuration.
+
+**GET    /healthz** - Health check

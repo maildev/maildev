@@ -6,11 +6,11 @@ ENV NODE_ENV production
 RUN mkdir -p /usr/src/app
 WORKDIR /usr/src/app
 
-ADD package.json /usr/src/app/
+ADD package*.json /usr/src/app/
 
 RUN npm install && \
     npm prune && \
-    npm cache clean \
+    npm cache clean --force && \
     rm -rf /tmp/*
 
 ADD . /usr/src/app/

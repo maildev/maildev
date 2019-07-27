@@ -29,7 +29,9 @@
     "lint": "standard",
     "dev": "node ./scripts/dev.js & npm run css-watch",
     "css": "node-sass --output-style compressed -o app/styles assets/styles/style.scss",
-    "css-watch": "node-sass -wr --output-style compressed -o app/styles assets/styles/style.scss"
+    "css-watch": "node-sass -wr --output-style compressed -o app/styles assets/styles/style.scss",
+    "docker-build": "docker build -t djfarrelly/maildev:$npm_package_version . && docker tag djfarrelly/maildev:$npm_package_version djfarrelly/maildev:latest",
+    "docker-push": "docker push djfarrelly/maildev:$npm_package_version && docker push djfarrelly/maildev:latest"
   },
   "main": "./index.js",
   "bin": {

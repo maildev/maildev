@@ -11,5 +11,7 @@ test
 app/components/**/*.js*
 !app/components/**/*.min.js
 
+appveyor.yml
+codecov.yml
 Dockerfile
 rules.json

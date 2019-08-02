@@ -84,7 +84,7 @@ describe('outgoing', () => {
       const port = getPort()
       const email = {
         envelope: {
-          to: ['reciever@test.com'],
+          to: ['receiver@test.com'],
           from: ['sender@test.com']
         },
         subject: 'Test email'
@@ -92,7 +92,7 @@ describe('outgoing', () => {
       const message = 'A test email body'
 
       // When the email is full received we deem this successful
-      const emailRecieved = (emailBody) => {
+      const emailReceived = (emailBody) => {
         // trim b/c new lines are added
         expect(emailBody.trim()).toBe(message)
         outgoing.close()
@@ -105,7 +105,7 @@ describe('outgoing', () => {
           const chunks = []
           stream.on('data', (chunk) => chunks.push(chunk))
           stream.on('end', () => {
-            emailRecieved(Buffer.concat(chunks).toString())
+            emailReceived(Buffer.concat(chunks).toString())
             callback()
           })
         }
@@ -115,7 +115,7 @@ describe('outgoing', () => {
         outgoing.setup(null, port)
         outgoing.relayMail(email, message, false, (err) => {
           expect(err).toNotExist()
-          // emailRecieved should now be called to close this test
+          // emailReceived should now be called to close this test
         })
       })
     })
@@ -133,7 +133,7 @@ describe('outgoing', () => {
 
         const email = {
           envelope: {
-            to: ['reciever@test.com'],
+            to: ['receiver@test.com'],
             from: ['sender@test.com']
           },
           subject: 'Test email'

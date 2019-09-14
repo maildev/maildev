@@ -7,7 +7,6 @@ dist
 .zip
 maildev-*
 settings.json
-*.sublime-*
 .nodemonignore
 
 # Ignore npm debug log

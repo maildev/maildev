@@ -390,3 +390,17 @@ code {
   color: white;
   padding-top: 3px;
 }
+
+.toggle {
+    display: inline-block;
+    cursor: pointer;
+    width: 24px;
+    height: 24px;
+    filter: brightness(0) invert(1);
+    &.on {
+        background: url('./icons/iconmonstr-control-panel-21.svg');
+    }
+    &.off {
+        background: url('./icons/iconmonstr-control-panel-23.svg');
+    }
+}

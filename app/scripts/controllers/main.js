@@ -5,8 +5,8 @@
  */
 
 app.controller('MainCtrl', [
-  '$scope', '$rootScope', '$http', 'Email', '$route', '$location',
-  function ($scope, $rootScope, $http, Email, $route, $location) {
+  '$scope', '$rootScope', '$http', 'Email', '$route', '$location', 'Favicon',
+  function ($scope, $rootScope, $http, Email, $route, $location, Favicon) {
     $scope.items = []
     $scope.configOpen = false
     $scope.currentItemId = null
@@ -17,6 +17,7 @@ app.controller('MainCtrl', [
       $scope.unreadItems = $scope.items.filter(function (email) {
         return !email.read
       }).length
+      Favicon.setUnreadCount($scope.unreadItems)
     }
 
     // Load all emails

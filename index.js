@@ -37,8 +37,8 @@ module.exports = function (config) {
       .option('--web-pass <password>', 'HTTP password for GUI')
       .option('--base-pathname <path>', 'base path for URLs')
       .option('--disable-web', 'Disable the use of the web interface. Useful for unit testing')
-      .option('--hide-extensions <extensions>',
-        'Comma separated list of SMTP extensions to NOT advertise (STARTTLS, SMTPUTF8, PIPELINING, 8BITMIME)',
+      .option('--disabled-commands <commands>',
+        'Comma separated list of SMTP commands to NOT advertise',
         function (val) { return val.split(',') }
       )
       .option('-o, --open', 'Open the Web GUI after startup')
@@ -54,7 +54,7 @@ module.exports = function (config) {
   }
 
   // Start the Mailserver & Web GUI
-  mailserver.create(config.smtp, config.ip, config.incomingUser, config.incomingPass, config.hideExtensions)
+  mailserver.create(config.smtp, config.ip, config.incomingUser, config.incomingPass, config.disabledCommands)
 
   if (config.outgoingHost ||
       config.outgoingPort ||

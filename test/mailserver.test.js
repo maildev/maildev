@@ -34,7 +34,8 @@ describe('mailserver', function () {
         incomingUser: 'bodhi',
         incomingPass: 'surfing',
         silent: true,
-        disableWeb: true
+        disableWeb: true,
+        disabledCommands: ['STARTTLS']
       })
 
       maildev.listen(function (err) {
@@ -73,7 +74,8 @@ describe('mailserver', function () {
         incomingUser: 'bodhi',
         incomingPass: 'surfing',
         silent: true,
-        disableWeb: true
+        disableWeb: true,
+        disabledCommands: ['STARTTLS']
       })
 
       maildev.listen(function (err) {

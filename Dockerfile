@@ -17,10 +17,10 @@ RUN npm install && \
 
 ADD . /usr/src/app/
 
-EXPOSE 80 25
+EXPOSE 1080 1025
 
 ENTRYPOINT ["bin/maildev"]
-CMD ["--web", "80", "--smtp", "25"]
+CMD ["--web", "1080", "--smtp", "1025"]
 
 HEALTHCHECK --interval=10s --timeout=1s \
   CMD curl -k -f -v http://localhost/healthz || exit 1

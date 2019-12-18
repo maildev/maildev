@@ -23,6 +23,7 @@ module.exports = function (config) {
       .option('-s, --smtp <port>', 'SMTP port to catch emails [1025]', '1025')
       .option('-w, --web <port>', 'Port to run the Web GUI [1080]', '1080')
       .option('--ip <ip address>', 'IP Address to bind SMTP service to', '0.0.0.0')
+      .option('--mail-directory <path>', 'Directory for persisting mails')
       .option('--outgoing-host <host>', 'SMTP host for outgoing emails')
       .option('--outgoing-port <port>', 'SMTP port for outgoing emails')
       .option('--outgoing-user <user>', 'SMTP user for outgoing emails')
@@ -54,7 +55,7 @@ module.exports = function (config) {
   }
 
   // Start the Mailserver & Web GUI
-  mailserver.create(config.smtp, config.ip, config.incomingUser, config.incomingPass, config.hideExtensions)
+  mailserver.create(config.smtp, config.ip, config.mailDirectory, config.incomingUser, config.incomingPass, config.hideExtensions)
 
   if (config.outgoingHost ||
       config.outgoingPort ||

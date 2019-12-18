@@ -32,6 +32,8 @@ For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierprio
       -s, --smtp <port>               SMTP port to catch emails [1025]
       -w, --web <port>                Port to run the Web GUI [1080]
       --ip <ip address>               IP Address to bind SMTP service to
+      --mail-directory <path>         Mail directory for storing mails and attachements, defaults to
+                                      os specific temp directory
       --outgoing-host <host>          SMTP host for outgoing emails
       --outgoing-port <port>          SMTP port for outgoing emails
       --outgoing-user <user>          SMTP user for outgoing emails

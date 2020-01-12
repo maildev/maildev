@@ -13,7 +13,7 @@ If you don't have the image on your machine, Docker will pull it. Let's name
 it "maildev" and publish the interface on port `1080`:
 
 ```
-$ docker run -p 1080:80 --name maildev djfarrelly/maildev
+$ docker run -p 1080:1080 --name maildev djfarrelly/maildev
 ```
 
 Now the MailDev UI will be running at port `1080` on your virtual machine
@@ -39,7 +39,7 @@ The Dockerfile specifically EXPOSES port 80 and 25, therefor you need to tell ma
 This example adds the base-pathname parameter.
 
 ```
-$ docker run -p 1080:80 -p 1025:25 djfarrelly/maildev bin/maildev --base-pathname /maildev -w 80 -s 25
+$ docker run -p 1080:1080 -p 1025:1025 djfarrelly/maildev bin/maildev --base-pathname /maildev -w 1080 -s 1025
 ```
 
 

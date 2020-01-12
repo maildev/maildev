@@ -9,7 +9,7 @@ USER node
 
 WORKDIR /home/node
 
-ADD . /home/node
+COPY --chown=node:node . /home/node
 
 RUN npm install && \
     npm prune && \

@@ -1,26 +1,25 @@
-FROM node:8-alpine
+FROM node:12-alpine
 MAINTAINER "Dan Farrelly <daniel.j.farrelly@gmail.com>"
 
 ENV NODE_ENV production
 
 RUN apk add --no-cache curl
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+USER node
 
-ADD package*.json /usr/src/app/
+WORKDIR /home/node
+
+ADD . /home/node
 
 RUN npm install && \
     npm prune && \
     npm cache clean --force && \
     rm -rf /tmp/*
 
-ADD . /usr/src/app/
+EXPOSE 1080 1025
 
-EXPOSE 80 25
-
-ENTRYPOINT ["bin/maildev"]
-CMD ["--web", "80", "--smtp", "25"]
+ENTRYPOINT ["/home/node/bin/maildev"]
+CMD ["--web", "1080", "--smtp", "1025"]
 
 HEALTHCHECK --interval=10s --timeout=1s \
   CMD curl -k -f -v http://localhost/healthz || exit 1

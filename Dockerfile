@@ -22,4 +22,4 @@ ENTRYPOINT ["/home/node/bin/maildev"]
 CMD ["--web", "1080", "--smtp", "1025"]
 
 HEALTHCHECK --interval=10s --timeout=1s \
-  CMD curl -k -f -v http://localhost/healthz || exit 1
+  CMD curl -k -f -v http://localhost:1080/healthz || exit 1

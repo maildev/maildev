@@ -38,7 +38,7 @@ module.exports = function (config) {
       .option('--base-pathname <path>', 'base path for URLs')
       .option('--disable-web', 'Disable the use of the web interface. Useful for unit testing')
       .option('--hide-extensions <extensions>',
-        'Comma separated list of SMTP extensions to NOT advertise (STARTTLS, SMTPUTF8, PIPELINING, 8BITMIME)',
+        'Comma separated list of SMTP extensions to NOT advertise (SMTPUTF8, PIPELINING, 8BITMIME)',
         function (val) { return val.split(',') }
       )
       .option('-o, --open', 'Open the Web GUI after startup')

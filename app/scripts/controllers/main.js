@@ -96,15 +96,19 @@ app.controller('MainCtrl', [
     }
 
     $scope.enableNotifications = function () {
-      if ($scope.notificationsSupported === false || window.Notification.permission !== 'default') {
+      if (window.Notification && window.Notification.permission === 'granted') {
+        window.alert('To disable notifications, revoke the permissions in your browser.')
         return
       }
-      try {
-        window.Notification.requestPermission().then(function () {
-          $scope.webNotifications = true
-        })
-      } catch (e) {
-        window.alert('test')
+      window.Notification.requestPermission().then(function (permissions) {
+        $scope.webNotifications = permissions === 'granted'
+      })
+      if (!window.isSecureContext) {
+        console.info(
+          'Web notifications can only be enabled on websites with https.\n\n' +
+          'You can disable this restriction temporarily to allow notifications for MailDev.\n' +
+          'Firefox: in the address bar type `about:config`, and toggle `dom.webnotifications.allowinsecure` \n'
+        )
       }
     }
 

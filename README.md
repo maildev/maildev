@@ -32,9 +32,6 @@ For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierprio
       -s, --smtp <port>               SMTP port to catch emails [1025]
       -w, --web <port>                Port to run the Web GUI [1080]
       --ip <ip address>               IP Address to bind SMTP service to
-      --https                         Switch from http to https protocol
-      --https-key <file>              The file path to the ssl private key
-      --https-cert <file>             The file path to the ssl cert file
       --outgoing-host <host>          SMTP host for outgoing emails
       --outgoing-port <port>          SMTP port for outgoing emails
       --outgoing-user <user>          SMTP user for outgoing emails
@@ -47,6 +44,9 @@ For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierprio
       --web-ip <ip address>           IP Address to bind HTTP service to, defaults to --ip
       --web-user <user>               HTTP user for GUI
       --web-pass <password>           HTTP password for GUI
+      --https                         Switch from http to https protocol
+      --https-key <file>              The file path to the ssl private key
+      --https-cert <file>             The file path to the ssl cert file
       --base-pathname <path>          base path for URLs
       --disable-web                   Disable the use of the web interface. Useful for unit testing
       --hide-extensions <extensions>  Comma separated list of SMTP extensions to NOT advertise

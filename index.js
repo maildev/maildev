@@ -50,8 +50,6 @@ module.exports = function (config) {
       .parse(process.argv)
   }
 
-  console.log(config);
-
   if (config.verbose) {
     logger.setLevel(2)
   } else if (config.silent) {

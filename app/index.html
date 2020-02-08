@@ -21,8 +21,16 @@
                             <i class="fa fa-envelope a"></i>
                             MailDev
                         </a>
-                        <div class="autoshow-toggle">
-                          <i class="fa" ng-class="{'fa-bell' : autoShow, 'fa-bell-o': !autoShow}" ng-click="toggleAutoShow()" title="Automatically show new emails as they arrive"></i>
+                        <div class="options-toggle">
+                          <i class="option fa"
+                             ng-if="notificationsSupported"
+                             ng-class="{'fa-comment disabled' : webNotifications, 'fa-comment-o': !webNotifications}"
+                             ng-click="enableNotifications()"
+                             title="Show browser notification when emails arrive"></i>
+                          <i class="option fa"
+                             ng-class="{'fa-bell' : autoShow, 'fa-bell-o': !autoShow}"
+                             ng-click="toggleAutoShow()"
+                             title="Automatically show new emails as they arrive"></i>
                         </div>
                     </div>
                     <div>

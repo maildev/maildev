@@ -10,6 +10,8 @@ app.controller('MainCtrl', [
     $scope.items = []
     $scope.configOpen = false
     $scope.currentItemId = null
+    $scope.notificationsSupported = 'Notification' in window
+    $scope.webNotifications = window.Notification && window.Notification.permission === 'granted'
     $scope.autoShow = false
     $scope.unreadItems = 0
 
@@ -91,6 +93,19 @@ app.controller('MainCtrl', [
 
     $scope.toggleAutoShow = function () {
       $scope.autoShow = !$scope.autoShow
+    }
+
+    $scope.enableNotifications = function () {
+      if ($scope.notificationsSupported === false || window.Notification.permission !== 'default') {
+        return
+      }
+      try {
+        window.Notification.requestPermission().then(function () {
+          $scope.webNotifications = true
+        })
+      } catch (e) {
+        window.alert('test')
+      }
     }
 
     // Initialize the view

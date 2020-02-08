@@ -10,7 +10,7 @@ app.controller('MainCtrl', [
     $scope.items = []
     $scope.configOpen = false
     $scope.currentItemId = null
-    $scope.autoShow = false
+    $scope.autoShow = window.localStorage && window.localStorage.getItem('MailDev.autoShow') === '1'
     $scope.unreadItems = 0
 
     var countUnread = function () {
@@ -91,6 +91,9 @@ app.controller('MainCtrl', [
 
     $scope.toggleAutoShow = function () {
       $scope.autoShow = !$scope.autoShow
+      if (window.localStorage) {
+        window.localStorage.setItem('MailDev.autoShow', $scope.autoShow ? '1' : '0')
+      }
     }
 
     // Initialize the view

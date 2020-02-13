@@ -3,18 +3,22 @@ MAINTAINER "Dan Farrelly <daniel.j.farrelly@gmail.com>"
 
 ENV NODE_ENV production
 
-RUN apk add --no-cache curl
+WORKDIR /root
 
-USER node
+COPY package* .
+
+RUN apk add --no-cache curl \
+  && npm install \
+  && npm prune \
+  && npm cache clean --force \
+  && rm package*
+
+COPY . /home/node
+RUN mv /root/node_modules /home/node \
+    && chown -R node:node /home/node
 
 WORKDIR /home/node
-
-COPY --chown=node:node . /home/node
-
-RUN npm install && \
-    npm prune && \
-    npm cache clean --force && \
-    rm -rf /tmp/*
+USER node
 
 EXPOSE 1080 1025
 

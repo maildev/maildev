@@ -15,11 +15,11 @@
     $ maildev
 
 If you want to use MailDev with [Docker](https://www.docker.com/), you can use the
-[**djfarrelly/maildev** image on Docker Hub](https://registry.hub.docker.com/u/djfarrelly/maildev/).
+[**maildev/maildev** image on Docker Hub](https://hub.docker.com/repository/docker/maildev/maildev).
 For a guide for usage with Docker,
-[checkout the docs](https://github.com/djfarrelly/MailDev/blob/master/docs/docker.md).
+[checkout the docs](https://github.com/maildev/maildev/blob/master/docs/docker.md).
 
-    $ docker run -p 1080:80 -p 1025:25 djfarrelly/maildev
+    $ docker run -p 1080:80 -p 1025:25 maildev/maildev
 
 For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierpriour/grunt-maildev).
 

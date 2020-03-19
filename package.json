@@ -13,7 +13,7 @@
     "smtp"
   ],
   "author": "Dan Farrelly",
-  "homepage": "http://djfarrelly.github.io/MailDev/",
+  "homepage": "http://maildev.github.io/maildev/",
   "maintainers": [
     {
       "name": "Dan Farrelly",
@@ -22,7 +22,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "http://github.com/djfarrelly/maildev.git"
+    "url": "http://github.com/maildev/maildev.git"
   },
   "scripts": {
     "test": "standard && nyc _mocha --exit",

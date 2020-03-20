@@ -13,8 +13,6 @@ const web = require('./lib/web')
 const mailserver = require('./lib/mailserver')
 const logger = require('./lib/logger')
 
-
-
 module.exports = function (config) {
   const version = pkg.version
 

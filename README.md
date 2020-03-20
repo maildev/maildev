@@ -52,6 +52,28 @@ For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierprio
       -v, --verbose
       --silent
 
+## Environment variables
+
+MailDev can be configured using the following environment variables:
+
+    MAILDEV_SMTP_PORT
+    MAILDEV_WEB_PORT
+    MAILDEV_IP
+    MAILDEV_OUTGOING_HOST
+    MAILDEV_OUTGOING_PORT
+    MAILDEV_OUTGOING_USER
+    MAILDEV_OUTGOING_PASS
+    MAILDEV_OUTGOING_SECURE
+    MAILDEV_AUTO_RELAY
+    MAILDEV_AUTO_RELAY_RULES
+    MAILDEV_INCOMING_USER
+    MAILDEV_INCOMING_PASS
+    MAILDEV_WEB_IP
+    MAILDEV_WEB_USER
+    MAILDEV_WEB_PASS
+    MAILDEV_BASE_PATHNAME
+    MAILDEV_DISABLE_WEB
+
 ## API
 
 MailDev can be used in your Node.js application. For more info view the

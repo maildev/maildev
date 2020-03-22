@@ -55,10 +55,10 @@
     "expect": "^1.20.2",
     "got": "^9.6.0",
     "http-proxy-middleware": "0.19.1",
-    "mocha": "^6.2.2",
-    "node-sass": "^4.13.0",
+    "mocha": "^7.1.1",
+    "node-sass": "^4.13.1",
     "nodemailer": "^6.4.2",
-    "nodemon": "^1.19.4",
+    "nodemon": "^2.0.2",
     "nyc": "^14.1.1",
     "standard": "^12.0.1"
   },

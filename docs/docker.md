@@ -2,7 +2,7 @@
 
 MailDev works quite conveniently with [Docker](https://www.docker.com/) for
 your development setup. You can use the
-[`djfarrelly/maildev`](https://registry.hub.docker.com/u/djfarrelly/maildev/)
+[`maildev/maildev`](https://hub.docker.com/repository/docker/maildev/maildev)
 image on Docker Hub or pull this repo down and build an image yourself using
 the included Dockerfile. Here is a short guide on how to use MailDev with Docker.
 
@@ -13,7 +13,7 @@ If you don't have the image on your machine, Docker will pull it. Let's name
 it "maildev" and publish the interface on port `1080`:
 
 ```
-$ docker run -p 1080:1080 --name maildev djfarrelly/maildev
+$ docker run -p 1080:1080 --name maildev maildev/maildev
 ```
 
 Now the MailDev UI will be running at port `1080` on your virtual machine
@@ -39,7 +39,11 @@ The Dockerfile specifically EXPOSES port 80 and 25, therefor you need to tell ma
 This example adds the base-pathname parameter.
 
 ```
+<<<<<<< HEAD
 $ docker run -p 1080:1080 -p 1025:1025 djfarrelly/maildev bin/maildev --base-pathname /maildev -w 1080 -s 1025
+=======
+$ docker run -p 1080:80 -p 1025:25 maildev/maildev bin/maildev --base-pathname /maildev -w 80 -s 25
+>>>>>>> master
 ```
 
 
@@ -72,7 +76,7 @@ To use MailDev with Docker Compose, add the following to your
 
 ```yaml
   maildev:
-    image: djfarrelly/maildev
+    image: maildev/maildev
     ports:
       - "1080:80"
 ```

@@ -6,8 +6,8 @@ ENV NODE_ENV production
 
 # Build
 FROM base as build
-WORKDIR /root
 
+WORKDIR /root
 COPY package* ./
 
 RUN apk add --no-cache curl \

@@ -39,7 +39,7 @@ The Dockerfile specifically EXPOSES port 80 and 25, therefor you need to tell ma
 This example adds the base-pathname parameter.
 
 ```
-$ docker run -p 1080:1080 -p 1025:102525 maildev/maildev bin/maildev --base-pathname /maildev -w 1080 -s 1025
+$ docker run -p 1080:1080 -p 1025:1025 maildev/maildev bin/maildev --base-pathname /maildev -w 1080 -s 1025
 ```
 
 

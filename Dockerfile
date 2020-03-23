@@ -8,13 +8,13 @@ ENV NODE_ENV production
 FROM base as build
 
 WORKDIR /root
-COPY package* ./
+COPY package*.json ./
 
 RUN apk add --no-cache curl \
   && npm install \
   && npm prune \
   && npm cache clean --force \
-  && rm package*
+  && rm package*.json
 
 # Prod
 FROM base as prod

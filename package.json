@@ -47,7 +47,7 @@
     "express": "^4.17.1",
     "mailparser-mit": "^1.0.0",
     "opn": "^6.0.0",
-    "rimraf": "^2.7.1",
+    "rimraf": "^3.0.2",
     "smtp-connection": "4.0.2",
     "smtp-server": "3.5.0",
     "socket.io": "2.2.0",

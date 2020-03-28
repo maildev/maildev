@@ -384,9 +384,19 @@ code {
   background: $brandLighter;
 }
 
-.autoshow-toggle {
+.options-toggle {
   float: right;
-  cursor: pointer;
-  color: white;
   padding-top: 3px;
+
+  > .option {
+    color: white;
+    cursor: pointer;
+    + .option {
+      margin-left: 5px;
+    }
+
+    &.disabled {
+      cursor: default;
+    }
+  }
 }

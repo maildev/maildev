@@ -22,6 +22,9 @@ module.exports = function (config) {
       .version(version)
       .option('-s, --smtp <port>', 'SMTP port to catch emails [1025]', process.env.MAILDEV_SMTP_PORT || '1025')
       .option('-w, --web <port>', 'Port to run the Web GUI [1080]', process.env.MAILDEV_WEB_PORT || '1080')
+      .option('--https', 'Switch from http to https protocol')
+      .option('--https-key <file>', 'The file path to the ssl private key')
+      .option('--https-cert <file>', 'The file path to the ssl cert file')
       .option('--ip <ip address>', 'IP Address to bind SMTP service to', process.env.MAILDEV_IP || '0.0.0.0')
       .option('--outgoing-host <host>', 'SMTP host for outgoing emails', process.env.MAILDEV_OUTGOING_HOST)
       .option('--outgoing-port <port>', 'SMTP port for outgoing emails', process.env.MAILDEV_OUTGOING_PORT)
@@ -76,9 +79,15 @@ module.exports = function (config) {
   }
 
   if (!config.disableWeb) {
+    const secure = {
+      https: config.https,
+      cert: config.httpsCert,
+      key: config.httpsKey
+    }
+
     // Default to run on same IP as smtp
     const webIp = config.webIp ? config.webIp : config.ip
-    web.start(config.web, webIp, mailserver, config.webUser, config.webPass, config.basePathname)
+    web.start(config.web, webIp, mailserver, config.webUser, config.webPass, config.basePathname, secure)
 
     if (config.open) {
       const open = require('opn')

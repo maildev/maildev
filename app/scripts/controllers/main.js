@@ -3,6 +3,8 @@
 /**
  * Main App Controller -- Manage all emails visible in the list
  */
+var refreshTimeout = null
+var notificationTimeout = null
 
 app.controller('MainCtrl', [
   '$scope', '$rootScope', '$http', 'Email', '$route', '$location', 'Favicon',
@@ -10,6 +12,8 @@ app.controller('MainCtrl', [
     $scope.items = []
     $scope.configOpen = false
     $scope.currentItemId = null
+    $scope.notificationsSupported = 'Notification' in window
+    $scope.webNotifications = window.Notification && window.Notification.permission === 'granted'
     $scope.autoShow = false
     $scope.unreadItems = 0
 
@@ -38,7 +42,6 @@ app.controller('MainCtrl', [
       }
     })
 
-    var refreshTimeout = null
     $rootScope.$on('newMail', function (e, newEmail) {
       // update model
       $scope.items.push(newEmail)
@@ -53,6 +56,18 @@ app.controller('MainCtrl', [
           }
           $scope.$apply()
         }, 200)
+      }
+
+      // show notifications
+      if (!notificationTimeout && $scope.webNotifications) {
+        notificationTimeout = setTimeout(function () {
+          notificationTimeout = null
+        }, 2000)
+        new window.Notification('MailDev', { body: newEmail.subject, icon: 'favicon.ico' })
+          .addEventListener('click', function () {
+            $location.path('/email/' + newEmail.id)
+            $scope.$apply()
+          })
       }
     })
 
@@ -91,6 +106,27 @@ app.controller('MainCtrl', [
 
     $scope.toggleAutoShow = function () {
       $scope.autoShow = !$scope.autoShow
+    }
+
+    $scope.enableNotifications = function () {
+      if (window.Notification && window.Notification.permission === 'granted') {
+        window.alert('To disable notifications, revoke the permissions in your browser.')
+        return
+      }
+      window.Notification.requestPermission().then(function (permissions) {
+        $scope.webNotifications = permissions === 'granted'
+      }).catch(function () {
+        window.alert('Unable to enable web notifications. See console for more information')
+      })
+      if (!window.isSecureContext && window.console) {
+        console.info(
+          'Web notifications can only be enabled on websites with https.\n\n' +
+          'You can enable https for MailDev with self-signed certificate. See `docs/https.md`\n\n' +
+          'For Firefox you can circumvent this restriction temporarily:\n' +
+          'In the address bar type `about:config`, and toggle `dom.webnotifications.allowinsecure` \n' +
+          'Don\'t forget to reset it again after enabling notifications in MailDev'
+        )
+      }
     }
 
     // Initialize the view

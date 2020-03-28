@@ -47,7 +47,6 @@ module.exports = function (config) {
       .option('-o, --open', 'Open the Web GUI after startup')
       .option('-v, --verbose')
       .option('--silent')
-      .option('-j, --disable-javascript', 'If set, disables the execution of JavaScript in Mails')
       .parse(process.argv)
   }
 
@@ -77,10 +76,6 @@ module.exports = function (config) {
   if (config.autoRelay) {
     const emailAddress = typeof config.autoRelay === 'string' ? config.autoRelay : null
     mailserver.setAutoRelayMode(true, config.autoRelayRules, emailAddress)
-  }
-
-  if (config.disableJavascript) {
-    mailserver.setDisableJavascript()
   }
 
   if (!config.disableWeb) {

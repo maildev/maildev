@@ -13,7 +13,7 @@
     "smtp"
   ],
   "author": "Dan Farrelly",
-  "homepage": "http://djfarrelly.github.io/MailDev/",
+  "homepage": "http://maildev.github.io/maildev/",
   "maintainers": [
     {
       "name": "Dan Farrelly",
@@ -22,7 +22,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "http://github.com/djfarrelly/maildev.git"
+    "url": "http://github.com/maildev/maildev.git"
   },
   "scripts": {
     "test": "standard && nyc _mocha --exit",
@@ -30,8 +30,9 @@
     "dev": "node ./scripts/dev.js & npm run css-watch",
     "css": "node-sass --output-style compressed -o app/styles assets/styles/style.scss",
     "css-watch": "node-sass -wr --output-style compressed -o app/styles assets/styles/style.scss",
-    "docker-build": "docker build -t djfarrelly/maildev:$npm_package_version . && docker tag djfarrelly/maildev:$npm_package_version djfarrelly/maildev:latest",
-    "docker-push": "docker push djfarrelly/maildev:$npm_package_version && docker push djfarrelly/maildev:latest"
+    "docker-build": "docker build -t maildev/maildev:$npm_package_version . && docker tag maildev/maildev:$npm_package_version maildev/maildev:latest",
+    "docker-run": "docker run --rm -p 1080:1080 -p 1025:1025 maildev/maildev:$npm_package_version",
+    "docker-push": "docker push maildev/maildev:$npm_package_version && docker push maildev/maildev:latest"
   },
   "main": "./index.js",
   "bin": {
@@ -40,12 +41,12 @@
   "license": "MIT",
   "dependencies": {
     "async": "^3.1.0",
-    "commander": "^2.20.0",
+    "commander": "^2.20.3",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "mailparser-mit": "^1.0.0",
     "opn": "^6.0.0",
-    "rimraf": "^2.6.3",
+    "rimraf": "^2.7.1",
     "smtp-connection": "4.0.2",
     "smtp-server": "3.5.0",
     "socket.io": "2.2.0",
@@ -55,15 +56,15 @@
     "expect": "^1.20.2",
     "got": "^9.6.0",
     "http-proxy-middleware": "0.19.1",
-    "mocha": "^6.1.4",
-    "node-sass": "^4.12.0",
-    "nodemailer": "^6.2.1",
-    "nodemon": "^1.19.1",
+    "mocha": "^7.1.1",
+    "node-sass": "^4.13.1",
+    "nodemailer": "^6.4.2",
+    "nodemon": "^2.0.2",
     "nyc": "^14.1.1",
     "standard": "^12.0.1"
   },
   "engines": {
-    "node": ">=8.0.0"
+    "node": ">=10.0.0"
   },
   "standard": {
     "ignore": [

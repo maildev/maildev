@@ -1,26 +1,34 @@
-FROM node:8-alpine
+# Base
+FROM node:10-alpine as base
 MAINTAINER "Dan Farrelly <daniel.j.farrelly@gmail.com>"
 
 ENV NODE_ENV production
 
-RUN apk add --no-cache curl
+# Build
+FROM base as build
 
-RUN mkdir -p /usr/src/app
-WORKDIR /usr/src/app
+WORKDIR /root
+COPY package*.json ./
 
-ADD package*.json /usr/src/app/
+RUN apk add --no-cache curl \
+  && npm install \
+  && npm prune \
+  && npm cache clean --force \
+  && rm package*.json
 
-RUN npm install && \
-    npm prune && \
-    npm cache clean --force && \
-    rm -rf /tmp/*
+# Prod
+FROM base as prod
 
-ADD . /usr/src/app/
+USER node
+WORKDIR /home/node
 
-EXPOSE 80 25
+COPY --chown=node:node . /home/node
+COPY --chown=node:node --from=build /root/node_modules /home/node/node_modules
 
-ENTRYPOINT ["bin/maildev"]
-CMD ["--web", "80", "--smtp", "25"]
+EXPOSE 1080 1025
+
+ENTRYPOINT ["/home/node/bin/maildev"]
+CMD ["--web", "1080", "--smtp", "1025"]
 
 HEALTHCHECK --interval=10s --timeout=1s \
-  CMD curl -k -f -v http://localhost/healthz || exit 1
+  CMD curl -k -f -v http://localhost:1080/healthz || exit 1

@@ -12,6 +12,25 @@ const expect = require('expect')
 const MailDev = require('../index.js')
 
 describe('mailserver', function () {
+  describe('surpress javascript', () => {
+    it('if not set, javascript has to be enabled', () => {
+      const maildev = new MailDev({
+        silent: true,
+        disableWeb: true
+      })
+      expect(maildev.disableJavascript).toBe(false)
+    })
+
+    it('if disabled, set javascript disabled should be called', () => {
+      const maildev = new MailDev({
+        silent: true,
+        disableWeb: true,
+        disableJavascript: true
+      })
+      expect(maildev.disableJavascript).toBe(true)
+    })
+  })
+
   describe('smtp error handling', function () {
     it('Error should be thrown, because listening to server did not work', function (done) {
       const maildev = new MailDev({

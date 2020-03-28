@@ -51,6 +51,7 @@
     "smtp-connection": "4.0.2",
     "smtp-server": "3.5.0",
     "socket.io": "2.2.0",
+    "strip-tags": "^0.1.1",
     "wildstring": "1.0.9"
   },
   "devDependencies": {

@@ -1,6 +1,6 @@
 # HTTPS
 By default MailDev will run on the http protocol. For Web Notification support you'll need
-to run MailDev on https. This can be done with a self signed certificate.
+to run MailDev on https if not running on localhost. This can be done with a self signed certificate.
 
 ## Create certificate
 Generate the certificate:
@@ -27,6 +27,6 @@ Add the following arguments to your MailDev startup:
 
 ## Open maildev with https
 ```
-https:\\192.168.1.103:1080
+https://192.168.1.103:1080
 ```
 As it's a self signed certificate, you need to accept it in your browser.

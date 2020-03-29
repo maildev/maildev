@@ -18,7 +18,9 @@ app.controller('MainCtrl', [
 
     var settingsKey = 'maildevSettings'
     var saveSettings = function () {
-      window.localStorage.setItem(settingsKey, JSON.stringify($scope.settings))
+      if (window.localStorage) {
+        window.localStorage.setItem(settingsKey, JSON.stringify($scope.settings))
+      }
     }
     var loadSettings = function (defaultSettings) {
       try {

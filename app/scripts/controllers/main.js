@@ -34,7 +34,8 @@ app.controller('MainCtrl', [
 
     var defaultSettings = {
       notificationsEnabled: false,
-      autoShowEnabled: false
+      autoShowEnabled: false,
+      toolbarDisplayEnabled: false
     }
     $scope.settings = loadSettings(defaultSettings)
 
@@ -130,6 +131,11 @@ app.controller('MainCtrl', [
       saveSettings()
     }
 
+    $scope.toggleToolbarDisplay = function () {
+      $scope.settings.toolbarDisplayEnabled = !$scope.settings.toolbarDisplayEnabled
+      saveSettings()
+    }
+
     $scope.toggleNotifications = function () {
       if ($scope.notificationsSupported && $scope.settings.notificationsEnabled) {
         $scope.settings.notificationsEnabled = false
@@ -171,6 +177,16 @@ app.controller('NavCtrl', [
 
     $scope.deleteAll = function () {
       Email.delete({ id: 'all' })
+    }
+
+    $scope.changeMenuDisplayMode = function (mode) {
+      $rootScope.$emit('menuDisplayMode', mode)
+      window.localStorage.setItem('menuDisplayMode', mode)
+    }
+
+    const menuDisplayMode = window.localStorage.getItem('menuDisplayMode')
+    if (menuDisplayMode) {
+      $rootScope.$emit('menuDisplayMode', menuDisplayMode)
     }
   }
 ])

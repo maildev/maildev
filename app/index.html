@@ -74,7 +74,7 @@
                         <li class="toolbar-divider"></li>
 
                         <li>
-                          <label class="toggle-switch" for="toggle-auto-show">
+                          <label class="toggle-switch light" for="toggle-auto-show">
                             <input
                               type="checkbox"
                               name="auto-show"
@@ -87,7 +87,7 @@
 
                         <li>
                           <label
-                            class="toggle-switch"
+                            class="toggle-switch light"
                             ng-class="{ disabled: !notificationsSupported }"
                             for="toggle-notifications"
                             title="Notifications are supported on localhost or via https">
@@ -102,11 +102,32 @@
                           </label>
                         </li>
 
+                        <li>
+                          <label
+                            class="toggle-switch light"
+                            for="toggle-menu-mode"
+                            title="Show wide email display menu">
+                            <input
+                              type="checkbox"
+                              name="notifications"
+                              id="toggle-menu-mode"
+                              ng-checked="settings.toolbarDisplayEnabled"
+                              ng-click="toggleToolbarDisplay()"/>
+                            Toolbar Mode
+                          </label>
+                        </li>
+
                     </ul>
 
                     <ul class="toolbar toolbar-right" ng-controller="NavCtrl">
 
                         <li>
+                            <a ng-click="changeMenuDisplayMode('menu')" href="" ng-if="menuDisplayMode=='wide'">
+                                <i class="toggle on"></i>
+                            </a>
+                            <a ng-click="changeMenuDisplayMode('wide')" href="" ng-if="menuDisplayMode=='menu'">
+                                <i class="toggle off"></i>
+                            </a>
                             <a href="#/">
                                 <i class="fa fa-info-circle"></i>
                                 Info

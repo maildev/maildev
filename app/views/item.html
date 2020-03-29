@@ -1,6 +1,6 @@
 <ul class="toolbar email-toolbar on-light">
 
-    <li class="dropdown-container">
+    <li class="dropdown-container" ng-if="!settings.toolbarDisplayEnabled">
       <a href="" class="dropdown-trigger"
         ng-click="toggleDropdown($event, 'display')"
         ng-class="{ open: dropdownOpen == 'display' }">
@@ -42,8 +42,45 @@
         </li>
       </ul>
     </li>
+    <li ng-if="settings.toolbarDisplayEnabled">
+      <ul class="toolbar">
+        <li>
+            <a href="" class=""
+               ng-click="show('html')"
+               ng-class="{ active: panelVisibility == 'html', disabled: !item.html }"
+               title="HTML">
+              <i class="fa fa-code"></i>
+            </a>
+        </li>
+        <li>
+            <a href="" class=""
+               ng-click="show('plain')"
+               ng-class="{ active: panelVisibility == 'plain' }"
+               title="Plain Text">
+              <i class="fa fa-file-text-o"></i>
+            </a>
+        </li>
+        <li>
+            <a href="" class=""
+               ng-click="show('headers')"
+               ng-class="{ active: panelVisibility == 'headers' }"
+               title="Headers">
+              <i class="fa fa-list"></i>
+            </a>
+        </li>
+        <li>
+            <a href="" class=""
+               ng-click="show('source')"
+               ng-class="{ active: panelVisibility == 'source' }"
+               title="Source">
+              <i class="fa fa-file"></i>
+            </a>
+        </li>
+        <li class="disabled">|</li>
+      </ul>
+    </li>
 
-    <li class="dropdown-container">
+    <li class="dropdown-container" ng-if="!settings.toolbarDisplayEnabled">
       <a href="" class="dropdown-trigger"
         ng-click="toggleDropdown($event, 'viewport')"
         ng-class="{ open: dropdownOpen == 'viewport' }">
@@ -84,6 +121,44 @@
           </a>
       </li>
       </ul>
+    </li>
+
+    <li ng-if="settings.toolbarDisplayEnabled">
+        <ul class="toolbar">
+          <li>
+            <a href="" class=""
+               ng-click="resize('320px')"
+               ng-class="{ active: iframeSize == '320px' }"
+               title="320px">
+              <i class="fa fa-mobile fa-mobile-smaller"></i>
+            </a>
+          </li>
+          <li>
+            <a href="" class=""
+               ng-click="resize('480px')"
+               ng-class="{ active: iframeSize == '480px' }"
+               title="480px">
+              <i class="fa fa-mobile"></i>
+            </a>
+          </li>
+          <li>
+            <a href="" class=""
+               ng-click="resize('600px')"
+               ng-class="{ active: iframeSize == '600px' }"
+               title="600px">
+              <i class="fa fa-tablet"></i>
+            </a>
+          </li>
+          <li>
+            <a href="" class=""
+               ng-click="resize()"
+               ng-class="{ active: iframeSize == null }"
+               title="full">
+              <i class="fa fa-desktop"></i>
+            </a>
+          </li>
+          <li class="disabled">|</li>
+        </ul>
     </li>
 
 

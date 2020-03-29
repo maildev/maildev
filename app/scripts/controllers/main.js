@@ -12,10 +12,13 @@ app.controller('MainCtrl', [
     $scope.items = []
     $scope.configOpen = false
     $scope.currentItemId = null
-    $scope.notificationsSupported = 'Notification' in window
-    $scope.webNotifications = window.Notification && window.Notification.permission === 'granted'
-    $scope.autoShow = false
     $scope.unreadItems = 0
+
+    $scope.notificationsSupported = 'Notification' in window && window.isSecureContext
+    $scope.settings = {
+      notificationsEnabled: false,
+      autoShowEnabled: false
+    }
 
     var countUnread = function () {
       $scope.unreadItems = $scope.items.filter(function (email) {
@@ -51,7 +54,7 @@ app.controller('MainCtrl', [
       if (!refreshTimeout) {
         refreshTimeout = setTimeout(function () {
           refreshTimeout = null
-          if ($scope.autoShow === true) {
+          if ($scope.settings.autoShowEnabled) {
             $location.path('/email/' + newEmail.id)
           }
           $scope.$apply()
@@ -59,7 +62,7 @@ app.controller('MainCtrl', [
       }
 
       // show notifications
-      if (!notificationTimeout && $scope.webNotifications) {
+      if (!notificationTimeout && $scope.settings.notificationsEnabled) {
         notificationTimeout = setTimeout(function () {
           notificationTimeout = null
         }, 2000)
@@ -105,28 +108,22 @@ app.controller('MainCtrl', [
     }
 
     $scope.toggleAutoShow = function () {
-      $scope.autoShow = !$scope.autoShow
+      $scope.settings.autoShowEnabled = !$scope.settings.autoShowEnabled
     }
 
-    $scope.enableNotifications = function () {
-      if (window.Notification && window.Notification.permission === 'granted') {
-        window.alert('To disable notifications, revoke the permissions in your browser.')
+    $scope.toggleNotifications = function () {
+      if ($scope.notificationsSupported && $scope.settings.notificationsEnabled) {
+        $scope.settings.notificationsEnabled = false
         return
       }
-      window.Notification.requestPermission().then(function (permissions) {
-        $scope.webNotifications = permissions === 'granted'
-      }).catch(function () {
-        window.alert('Unable to enable web notifications. See console for more information')
-      })
-      if (!window.isSecureContext && window.console) {
-        console.info(
-          'Web notifications can only be enabled on websites with https.\n\n' +
-          'You can enable https for MailDev with self-signed certificate. See `docs/https.md`\n\n' +
-          'For Firefox you can circumvent this restriction temporarily:\n' +
-          'In the address bar type `about:config`, and toggle `dom.webnotifications.allowinsecure` \n' +
-          'Don\'t forget to reset it again after enabling notifications in MailDev'
-        )
-      }
+
+      window.Notification.requestPermission()
+        .then(function (permissions) {
+          $scope.settings.notificationsEnabled = permissions === 'granted'
+        })
+        .catch(function () {
+          window.alert('Unable to enable web notifications. See console for more information')
+        })
     }
 
     // Initialize the view

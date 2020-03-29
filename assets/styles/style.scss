@@ -226,6 +226,14 @@ a:focus {
         padding: 0 0.5em;
     }
 
+    .toolbar-divider {
+      background: #fdfdfd;
+      width: 1px;
+      height: 60%;
+      margin: 0 0.5em;
+      padding: 0;
+    }
+
     .fa {
         vertical-align: top;
         margin-right: 4px;
@@ -237,7 +245,8 @@ a:focus {
         }
     }
 
-    a {
+    a,
+    .toggle-switch {
         padding: 0.3em 0.2em;
         text-decoration: none;
         &, &:visited {
@@ -245,10 +254,6 @@ a:focus {
         }
         &:hover {
             color: $white;
-        }
-
-        &.disabled {
-            color: $greyMedium !important; cursor: default;
         }
     }
 
@@ -268,6 +273,60 @@ a:focus {
 
 .toolbar-right {
     position: fixed; top:0; right:0;
+}
+
+.toggle-switch {
+  $size: 14px;
+
+  cursor: pointer;
+
+  &.disabled {
+    cursor: not-allowed;
+  }
+
+  input {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    display: inline-block;
+    height: $size;
+    width: 2 * $size;
+    margin-right: 0.3em;
+    vertical-align: middle;
+    margin-bottom: 2px;
+    content: "";
+    background: $white;
+    border-radius: 1em;
+    cursor: pointer;
+    outline: none;
+
+    &::before {
+      display: block;
+      height: $size;
+      width: $size;
+      margin-bottom: 2px;
+      content: "";
+      background: $brandLight;
+      box-shadow: 0px 0px 0px 2px inset $white;
+      border-radius: 50%;
+      transition: margin 100ms;
+    }
+
+    &:checked::before {
+      margin-left: $size;
+      background-color: $brandDark;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      background-color: $greyMedium;
+      &::before {
+        background-color: $greyLight;
+        box-shadow: 0px 0px 0px 2px inset $greyMedium;
+      }
+    }
+  }
 }
 
 .dropdown-container {
@@ -382,21 +441,4 @@ code {
 
 .email-item.current {
   background: $brandLighter;
-}
-
-.options-toggle {
-  float: right;
-  padding-top: 3px;
-
-  > .option {
-    color: white;
-    cursor: pointer;
-    + .option {
-      margin-left: 5px;
-    }
-
-    &.disabled {
-      cursor: default;
-    }
-  }
 }

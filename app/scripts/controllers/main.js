@@ -15,10 +15,26 @@ app.controller('MainCtrl', [
     $scope.unreadItems = 0
 
     $scope.notificationsSupported = 'Notification' in window && window.isSecureContext
-    $scope.settings = {
+
+    var settingsKey = 'maildevSettings'
+    var saveSettings = function () {
+      window.localStorage.setItem(settingsKey, JSON.stringify($scope.settings))
+    }
+    var loadSettings = function (defaultSettings) {
+      try {
+        var settingsJSON = window.localStorage.getItem(settingsKey)
+        return Object.assign({}, defaultSettings, JSON.parse(settingsJSON))
+      } catch (err) {
+        console.error('Error loading MailDev settings', err)
+        return defaultSettings
+      }
+    }
+
+    var defaultSettings = {
       notificationsEnabled: false,
       autoShowEnabled: false
     }
+    $scope.settings = loadSettings(defaultSettings)
 
     var countUnread = function () {
       $scope.unreadItems = $scope.items.filter(function (email) {
@@ -109,17 +125,20 @@ app.controller('MainCtrl', [
 
     $scope.toggleAutoShow = function () {
       $scope.settings.autoShowEnabled = !$scope.settings.autoShowEnabled
+      saveSettings()
     }
 
     $scope.toggleNotifications = function () {
       if ($scope.notificationsSupported && $scope.settings.notificationsEnabled) {
         $scope.settings.notificationsEnabled = false
+        saveSettings()
         return
       }
 
       window.Notification.requestPermission()
         .then(function (permissions) {
           $scope.settings.notificationsEnabled = permissions === 'granted'
+          saveSettings()
         })
         .catch(function () {
           window.alert('Unable to enable web notifications. See console for more information')

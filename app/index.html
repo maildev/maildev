@@ -21,17 +21,6 @@
                             <i class="fa fa-envelope a"></i>
                             MailDev
                         </a>
-                        <div class="options-toggle">
-                          <i class="option fa"
-                             ng-if="notificationsSupported"
-                             ng-class="{'fa-comment disabled' : webNotifications, 'fa-comment-o': !webNotifications}"
-                             ng-click="enableNotifications()"
-                             title="Show browser notification when emails arrive"></i>
-                          <i class="option fa"
-                             ng-class="{'fa-bell' : autoShow, 'fa-bell-o': !autoShow}"
-                             ng-click="toggleAutoShow()"
-                             title="Automatically show new emails as they arrive"></i>
-                        </div>
                     </div>
                     <div>
                     </div>
@@ -69,7 +58,7 @@
                     <ul class="toolbar" ng-controller="NavCtrl">
 
                         <li>
-                            <a ng-click="refreshList()" href="" >
+                            <a ng-click="refreshList()" href="">
                                 <i class="fa fa-refresh"></i>
                                 Refresh
                             </a>
@@ -80,6 +69,37 @@
                                 <i class="fa fa-inbox"></i>
                                 Clear Inbox
                             </a>
+                        </li>
+
+                        <li class="toolbar-divider"></li>
+
+                        <li>
+                          <label class="toggle-switch" for="toggle-auto-show">
+                            <input
+                              type="checkbox"
+                              name="auto-show"
+                              id="toggle-auto-show"
+                              ng-checked="settings.autoShowEnabled"
+                              ng-click="toggleAutoShow()"/>
+                            Show newest email
+                          </label>
+                        </li>
+
+                        <li>
+                          <label
+                            class="toggle-switch"
+                            ng-class="{ disabled: !notificationsSupported }"
+                            for="toggle-notifications"
+                            title="Notifications are supported on localhost or via https">
+                            <input
+                              type="checkbox"
+                              name="notifications"
+                              id="toggle-notifications"
+                              ng-disabled="!notificationsSupported"
+                              ng-checked="settings.notificationsEnabled"
+                              ng-click="toggleNotifications()"/>
+                            Notifications
+                          </label>
                         </li>
 
                     </ul>

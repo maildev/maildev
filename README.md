@@ -24,58 +24,36 @@ For a guide for usage with Docker,
 For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierpriour/grunt-maildev).
 
 ## Usage
+```
+Usage: maildev [options]
+```
 
-    maildev [options]
-
-      -h, --help                      output usage information
-      -V, --version                   output the version number
-      -s, --smtp <port>               SMTP port to catch emails [1025]
-      -w, --web <port>                Port to run the Web GUI [1080]
-      --ip <ip address>               IP Address to bind SMTP service to
-      --outgoing-host <host>          SMTP host for outgoing emails
-      --outgoing-port <port>          SMTP port for outgoing emails
-      --outgoing-user <user>          SMTP user for outgoing emails
-      --outgoing-pass <password>      SMTP password for outgoing emails
-      --outgoing-secure               Use SMTP SSL for outgoing emails
-      --auto-relay [email]            Use auto-relay mode. Optional relay email address
-      --auto-relay-rules <file>       Filter rules for auto relay mode
-      --incoming-user <user>          SMTP user for incoming emails
-      --incoming-pass <pass>          SMTP password for incoming emails
-      --web-ip <ip address>           IP Address to bind HTTP service to, defaults to --ip
-      --web-user <user>               HTTP user for GUI
-      --web-pass <password>           HTTP password for GUI
-      --https                         Switch from http to https protocol
-      --https-key <file>              The file path to the ssl private key
-      --https-cert <file>             The file path to the ssl cert file
-      --base-pathname <path>          base path for URLs
-      --disable-web                   Disable the use of the web interface. Useful for unit testing
-      --hide-extensions <extensions>  Comma separated list of SMTP extensions to NOT advertise
-                                      (SMTPUTF8, PIPELINING, 8BITMIME)
-      -o, --open                      Open the Web GUI after startup
-      -v, --verbose
-      --silent
-
-## Environment variables
-
-MailDev can be configured using the following environment variables:
-
-    MAILDEV_SMTP_PORT
-    MAILDEV_WEB_PORT
-    MAILDEV_IP
-    MAILDEV_OUTGOING_HOST
-    MAILDEV_OUTGOING_PORT
-    MAILDEV_OUTGOING_USER
-    MAILDEV_OUTGOING_PASS
-    MAILDEV_OUTGOING_SECURE
-    MAILDEV_AUTO_RELAY
-    MAILDEV_AUTO_RELAY_RULES
-    MAILDEV_INCOMING_USER
-    MAILDEV_INCOMING_PASS
-    MAILDEV_WEB_IP
-    MAILDEV_WEB_USER
-    MAILDEV_WEB_PASS
-    MAILDEV_BASE_PATHNAME
-    MAILDEV_DISABLE_WEB
+|Options|Environment variable|Description|
+|---|---|---|
+|`-s, --smtp <port>`|`MAILDEV_SMTP_PORT`|SMTP port to catch emails|
+|`-w, --web <port>`|`MAILDEV_WEB_PORT`|Port to run the Web GUI|
+|`--https`|`MAILDEV_HTTPS`|Switch from http to https protocol|
+|`--https-key <file>`|`MAILDEV_HTTPS_KEY`|The file path to the ssl private key|
+|`--https-cert <file>`|`MAILDEV_HTTPS_CERT`|The file path to the ssl cert file|
+|`--ip <ip address>`|`MAILDEV_IP`|IP Address to bind SMTP service to|
+|`--outgoing-host <host>`|`MAILDEV_OUTGOING_HOST`|SMTP host for outgoing emails|
+|`--outgoing-port <port>`|`MAILDEV_OUTGOING_PORT`|SMTP port for outgoing emails|
+|`--outgoing-user <user>`|`MAILDEV_OUTGOING_USER`|SMTP user for outgoing emails|
+|`--outgoing-pass <password>`|`MAILDEV_OUTGOING_PASS`|SMTP password for outgoing emails|
+|`--outgoing-secure`|`MAILDEV_OUTGOING_SECURE`|Use SMTP SSL for outgoing emails|
+|`--auto-relay <email>`|`MAILDEV_AUTO_RELAY`|Use auto-relay mode. Optional relay email address|
+|`--auto-relay-rules <file>`|`MAILDEV_AUTO_RELAY_RULES`|Filter rules for auto relay mode|
+|`--incoming-user <user>`|`MAILDEV_INCOMING_USER`|SMTP user for incoming emails|
+|`--incoming-pass <pass>`|`MAILDEV_INCOMING_PASS`|SMTP password for incoming emails|
+|`--web-ip <ip address>`|`MAILDEV_WEB_IP`|IP Address to bind HTTP service to, defaults to --ip|
+|`--web-user <user>`|`MAILDEV_WEB_USER`|HTTP user for GUI|
+|`--web-pass <password>`|`MAILDEV_WEB_PASS`|HTTP password for GUI|
+|`--base-pathname <path>`|`MAILDEV_BASE_PATHNAME`|base path for URLs|
+|`--disable-web`|`MAILDEV_DISABLE_WEB`|Disable the use of the web interface. Useful for unit testing|
+|`--hide-extensions <extensions>`|`MAILDEV_HIDE_EXTENSIONS`|Comma separated list of SMTP extensions to NOT advertise (SMTPUTF8, PIPELINING, 8BITMIME)|
+|`-o, --open`||Open the Web GUI after startup|
+|`-v, --verbose`|||
+|`--silent`|||
 
 ## API
 

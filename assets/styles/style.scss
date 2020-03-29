@@ -258,7 +258,8 @@ a:focus {
     }
 
     &.on-light {
-        a {
+        a,
+        .toggle-switch {
             color: $greyDark;
             &:hover {
                 // color: $brandDark;

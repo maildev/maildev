@@ -74,7 +74,7 @@
                         <li class="toolbar-divider"></li>
 
                         <li>
-                          <label class="toggle-switch" for="toggle-auto-show">
+                          <label class="toggle-switch light" for="toggle-auto-show">
                             <input
                               type="checkbox"
                               name="auto-show"
@@ -87,7 +87,7 @@
 
                         <li>
                           <label
-                            class="toggle-switch"
+                            class="toggle-switch light"
                             ng-class="{ disabled: !notificationsSupported }"
                             for="toggle-notifications"
                             title="Notifications are supported on localhost or via https">
@@ -99,6 +99,21 @@
                               ng-checked="settings.notificationsEnabled"
                               ng-click="toggleNotifications()"/>
                             Notifications
+                          </label>
+                        </li>
+
+                        <li>
+                          <label
+                            class="toggle-switch light"
+                            for="toggle-menu-mode"
+                            title="Show wide email display menu">
+                            <input
+                              type="checkbox"
+                              name="notifications"
+                              id="toggle-menu-mode"
+                              ng-checked="settings.toolbarDisplayEnabled"
+                              ng-click="toggleToolbarDisplay()"/>
+                            Toolbar Mode
                           </label>
                         </li>
 

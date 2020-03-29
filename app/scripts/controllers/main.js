@@ -13,11 +13,6 @@ app.controller('MainCtrl', [
     $scope.configOpen = false
     $scope.currentItemId = null
     $scope.unreadItems = 0
-    $scope.menuDisplayMode = 'menu'
-
-    $rootScope.$on('menuDisplayMode', function (event, mode) {
-      $scope.menuDisplayMode = mode
-    })
 
     $scope.notificationsSupported = 'Notification' in window && window.isSecureContext
 
@@ -39,7 +34,8 @@ app.controller('MainCtrl', [
 
     var defaultSettings = {
       notificationsEnabled: false,
-      autoShowEnabled: false
+      autoShowEnabled: false,
+      toolbarDisplayEnabled: false
     }
     $scope.settings = loadSettings(defaultSettings)
 
@@ -132,6 +128,11 @@ app.controller('MainCtrl', [
 
     $scope.toggleAutoShow = function () {
       $scope.settings.autoShowEnabled = !$scope.settings.autoShowEnabled
+      saveSettings()
+    }
+
+    $scope.toggleToolbarDisplay = function () {
+      $scope.settings.toolbarDisplayEnabled = !$scope.settings.toolbarDisplayEnabled
       saveSettings()
     }
 

@@ -1,6 +1,6 @@
 <ul class="toolbar email-toolbar on-light">
 
-    <li class="dropdown-container" ng-if="menuDisplayMode=='menu'">
+    <li class="dropdown-container" ng-if="!settings.toolbarDisplayEnabled">
       <a href="" class="dropdown-trigger"
         ng-click="toggleDropdown($event, 'display')"
         ng-class="{ open: dropdownOpen == 'display' }">
@@ -42,7 +42,7 @@
         </li>
       </ul>
     </li>
-    <li ng-if="menuDisplayMode=='wide'">
+    <li ng-if="settings.toolbarDisplayEnabled">
       <ul class="toolbar">
         <li>
             <a href="" class=""
@@ -80,7 +80,7 @@
       </ul>
     </li>
 
-    <li class="dropdown-container" ng-if="menuDisplayMode=='menu'">
+    <li class="dropdown-container" ng-if="!settings.toolbarDisplayEnabled">
       <a href="" class="dropdown-trigger"
         ng-click="toggleDropdown($event, 'viewport')"
         ng-class="{ open: dropdownOpen == 'viewport' }">
@@ -123,7 +123,7 @@
       </ul>
     </li>
 
-    <li ng-if="menuDisplayMode=='wide'">
+    <li ng-if="settings.toolbarDisplayEnabled">
         <ul class="toolbar">
           <li>
             <a href="" class=""

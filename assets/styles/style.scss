@@ -7,7 +7,6 @@
 
 
 @import 'normalize';
-@import 'fonts';
 @import 'mixins';
 @import 'font-awesome/font-awesome';
 
@@ -38,7 +37,7 @@ $toolbarHeight:     2.8em;
  */
 
 .plain-text {
-    font-family: Monaco, Menlo, Consolas, "Courier New", monospace;
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
     white-space: pre-wrap;
 }
 
@@ -70,7 +69,7 @@ th, td {
 html, body, .application-container { height: 100%; width: 100%; overflow: hidden; }
 
 body {
-    font-family: 'Open Sans', Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji;
     font-size: 14px;
     -webkit-font-smoothing:antialiased;
 }

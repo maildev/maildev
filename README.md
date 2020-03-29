@@ -15,7 +15,7 @@
     $ maildev
 
 If you want to use MailDev with [Docker](https://www.docker.com/), you can use the
-[**maildev/maildev** image on Docker Hub](https://hub.docker.com/repository/docker/maildev/maildev).
+[**maildev/maildev** image on Docker Hub](https://hub.docker.com/r/maildev/maildev).
 For a guide for usage with Docker,
 [checkout the docs](https://github.com/maildev/maildev/blob/master/docs/docker.md).
 

@@ -2,7 +2,7 @@
 
 MailDev works quite conveniently with [Docker](https://www.docker.com/) for
 your development setup. You can use the
-[`maildev/maildev`](https://hub.docker.com/repository/docker/maildev/maildev)
+[`maildev/maildev`](https://hub.docker.com/r/maildev/maildev)
 image on Docker Hub or pull this repo down and build an image yourself using
 the included Dockerfile. Here is a short guide on how to use MailDev with Docker.
 

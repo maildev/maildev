@@ -13,6 +13,11 @@ app.controller('MainCtrl', [
     $scope.configOpen = false
     $scope.currentItemId = null
     $scope.unreadItems = 0
+    $scope.menuDisplayMode = 'menu'
+
+    $rootScope.$on('menuDisplayMode', function (event, mode) {
+      $scope.menuDisplayMode = mode
+    })
 
     $scope.notificationsSupported = 'Notification' in window && window.isSecureContext
 
@@ -171,6 +176,16 @@ app.controller('NavCtrl', [
 
     $scope.deleteAll = function () {
       Email.delete({ id: 'all' })
+    }
+
+    $scope.changeMenuDisplayMode = function (mode) {
+      $rootScope.$emit('menuDisplayMode', mode)
+      window.localStorage.setItem('menuDisplayMode', mode)
+    }
+
+    const menuDisplayMode = window.localStorage.getItem('menuDisplayMode')
+    if (menuDisplayMode) {
+      $rootScope.$emit('menuDisplayMode', menuDisplayMode)
     }
   }
 ])

@@ -161,15 +161,6 @@ const transport = nodemailer.createTransport({
 })
 ```
 
-**Nodemailer (v0.7)**
-
-```javascript
-const transport = nodemailer.createTransport('SMTP', {
-  port: 1025,
-  // other settings...
-})
-```
-
 **Django** -- Add `EMAIL_PORT = 1025` in your settings file [[source]](https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-EMAIL_PORT)
 
 **Rails** -- config settings:

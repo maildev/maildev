@@ -13,6 +13,8 @@ const web = require('./lib/web')
 const mailserver = require('./lib/mailserver')
 const logger = require('./lib/logger')
 const { options, appendOptions } = require('./lib/options')
+const utils = require('./lib/utils')
+
 
 module.exports = function (config) {
   const version = pkg.version
@@ -33,10 +35,10 @@ module.exports = function (config) {
   mailserver.create(config.smtp, config.ip, config.incomingUser, config.incomingPass, config.hideExtensions)
 
   if (config.outgoingHost ||
-      config.outgoingPort ||
-      config.outgoingUser ||
-      config.outgoingPass ||
-      config.outgoingSecure) {
+    config.outgoingPort ||
+    config.outgoingUser ||
+    config.outgoingPass ||
+    config.outgoingSecure) {
     mailserver.setupOutgoing(
       config.outgoingHost,
       parseInt(config.outgoingPort),
@@ -47,7 +49,7 @@ module.exports = function (config) {
   }
 
   if (config.autoRelay) {
-    const emailAddress = typeof config.autoRelay === 'string' ? config.autoRelay : null
+    const emailAddress = (typeof config.autoRelay === 'string' && utils.validateEmail(config.autoRelay)) ? config.autoRelay : null
     mailserver.setAutoRelayMode(true, config.autoRelayRules, emailAddress)
   }
 
@@ -71,7 +73,7 @@ module.exports = function (config) {
     mailserver.on('close', web.close)
   }
 
-  function shutdown () {
+  function shutdown() {
     logger.info(`Received shutdown signal, shutting down now...`)
     async.parallel([
       mailserver.close,

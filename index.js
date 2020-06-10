@@ -15,7 +15,6 @@ const logger = require('./lib/logger')
 const { options, appendOptions } = require('./lib/options')
 const utils = require('./lib/utils')
 
-
 module.exports = function (config) {
   const version = pkg.version
 
@@ -73,7 +72,7 @@ module.exports = function (config) {
     mailserver.on('close', web.close)
   }
 
-  function shutdown() {
+  function shutdown () {
     logger.info(`Received shutdown signal, shutting down now...`)
     async.parallel([
       mailserver.close,

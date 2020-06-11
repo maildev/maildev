@@ -1,4 +1,4 @@
-# MailDev
+# MailDev - (this is a fork changing how the auto-relay env var works and modifying the dockerfile to allow it to work better with docker compose)
 
 [![Build Status](https://api.travis-ci.org/maildev/maildev.svg)](https://travis-ci.org/maildev/maildev)
 [![codecov](https://codecov.io/gh/maildev/maildev/branch/master/graph/badge.svg)](https://codecov.io/gh/maildev/maildev)

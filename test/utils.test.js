@@ -14,4 +14,26 @@ describe('utils', () => {
       expect(utils.makeId()).toMatch(alphaNumericRegex)
     })
   })
+
+  describe('validateEmail', () => {
+    it('should accept an email address', () => {
+      expect(utils.validateEmail('foo@bar.com')).toMatch(true)
+    })
+
+    it('should accept an email address', () => {
+      expect(utils.validateEmail('foo+foo2@bar.com')).toMatch(true)
+    })
+
+    it('should accept an email address', () => {
+      expect(utils.validateEmail('2')).toMatch(false)
+    })
+
+    it('should accept an email address', () => {
+      expect(utils.validateEmail('myemail.com')).toMatch(false)
+    })
+
+    it('should accept an email address', () => {
+      expect(utils.validateEmail('test.com')).toMatch(false)
+    })
+  })
 })

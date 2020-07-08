@@ -30,7 +30,14 @@ module.exports = function (config) {
   }
 
   // Start the Mailserver & Web GUI
-  mailserver.create(config.smtp, config.ip, config.incomingUser, config.incomingPass, config.hideExtensions)
+  mailserver.create(
+    config.smtp,
+    config.ip,
+    config.incomingUser,
+    config.incomingPass,
+    config.hideExtensions,
+    config.mailLifeSpan
+  )
 
   if (config.outgoingHost ||
       config.outgoingPort ||

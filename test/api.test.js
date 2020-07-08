@@ -6,6 +6,7 @@
  */
 
 const assert = require('assert')
+const expect = require('expect')
 const nodemailer = require('nodemailer')
 
 const MailDev = require('../index.js')
@@ -124,6 +125,50 @@ describe('API', function () {
           maildev.removeAllListeners()
           transporter.close()
           done()
+        })
+      })
+
+      maildev.listen(function (err) {
+        if (err) return done(err)
+
+        transporter.sendMail(emailOpts)
+      })
+    })
+
+    it('should remove outdated emails', function (done) {
+      const maildev = new MailDev({
+        silent: true,
+        disableWeb: true,
+        mailLifeSpan: 1
+      })
+
+      const transporter = nodemailer.createTransport({
+        port: 1025,
+        ignoreTLS: true
+      })
+
+      const emailOpts = {
+        from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
+        to: 'Johnny Utah <johnny.utah@fbi.gov>',
+        subject: 'You were right.',
+        text: 'They are surfers.\n'
+      }
+
+      const at = (new Date()).getTime() + 1000
+
+      maildev.on('new', function (email) {
+        assert.strictEqual(email.text, emailOpts.text)
+        const id = email.id
+
+        maildev.on('delete', function (removed) {
+          assert.strictEqual(removed.id, id)
+          expect((new Date()).getTime()).toBeGreaterThanOrEqualTo(at)
+
+          maildev.close(function () {
+            maildev.removeAllListeners()
+            transporter.close()
+            done()
+          })
         })
       })
 

@@ -23,6 +23,12 @@ For a guide for usage with Docker,
 
 For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierpriour/grunt-maildev).
 
+### k8s helm chart
+
+```
+helm template maildev --dependency-update -f helm-chart/values.yaml . | kubectl apply -f-
+```
+
 ## Usage
 ```
 Usage: maildev [options]

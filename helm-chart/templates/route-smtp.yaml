@@ -1,0 +1,18 @@
+{{- if .Values.ports.smtp }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: "smtp"
+  labels:
+    {{- include "maildev.labels" . | nindent 4 }}
+spec:
+  port:
+    targetPort: {{ .Values.ports.smtp }}
+  to:
+    kind: Service
+    name: smtp
+    weight: 100
+  tls:
+    termination: passthrough
+  wildcardPolicy: None
+{{- end }}

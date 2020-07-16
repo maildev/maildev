@@ -1,0 +1,17 @@
+{{- if .Values.ports.web }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: "web-{{ include "maildev.fullname" . }}"
+  labels:
+    {{- include "maildev.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  ports:
+    - name: web-{{ .Values.ports.smtp }}-tcp
+      port: {{ .Values.ports.web }}
+      protocol: TCP
+      targetPort: {{ .Values.ports.web }}
+  selector:
+    {{- include "maildev.selectorLabels" . | nindent 4 }}
+{{- end }}

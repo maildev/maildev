@@ -1,0 +1,102 @@
+---
+appName: &name maildev
+
+# Default values for maildev.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: docker.io/maildev/maildev
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: v1.1.0
+
+outgoing_relay:
+  # MAILDEV_OUTGOING_HOST
+  host: smtp.gmail.com
+   # MAILDEV_OUTGOING_PORT
+  port: 465
+   # MAILDEV_OUTGOING_USER
+  user: 'XXX'
+   # MAILDEV_OUTGOING_PASS
+  pass: 'YYY'
+  # MAILDEV_OUTGOING_SECURE
+  secure: true
+
+incoming:
+  # MAILDEV_INCOMING_USER
+  #user:
+  # MAILDEV_INCOMING_PASS
+  #pass:
+
+ports:
+  # MAILDEV_SMTP_PORT
+  smtp: 1025
+  # MAILDEV_WEB_PORT
+  web: 1080
+
+# MAILDEV_HTTPS
+https:
+  enabled: False
+  # MAILDEV_HTTPS_KEY
+  #key:
+  # MAILDEV_HTTPS_KEY
+  #cert:
+
+# Web interface
+web:
+  # MAILDEV_DISABLE_WEB
+  disable: False
+  # MAILDEV_WEB_USER
+  user: admin
+  # MAILDEV_WEB_PASS
+  pass: admin
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+serviceAccount:
+  # Specifies whether a service account should be created
+  create: true
+  # Annotations to add to the service account
+  annotations: {}
+  # The name of the service account to use.
+  # If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+podAnnotations: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+service:
+  type: ClusterIP
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

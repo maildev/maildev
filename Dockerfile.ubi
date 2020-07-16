@@ -1,0 +1,34 @@
+# Base
+FROM registry.redhat.io/ubi8/nodejs-12:1-45 as base
+MAINTAINER "Jorge Tudela <jtudelag@redhat.com>"
+
+ENV NODE_ENV production
+
+# Build
+FROM base as build
+
+WORKDIR /opt/app-root/src
+COPY package*.json ./
+
+#RUN apk add --no-cache curl \
+RUN npm install \
+  && npm prune \
+  && npm cache clean --force \
+  && rm package*.json
+
+# Prod
+FROM base as prod
+
+USER 1001
+WORKDIR /opt/app-root/src
+
+COPY . /opt/app-root/src
+COPY --from=build /opt/app-root/src/node_modules /opt/app-root/src/node_modules
+
+EXPOSE 1080 1025
+
+ENTRYPOINT ["/opt/app-root/src/bin/maildev"]
+CMD ["-v"]
+
+#HEALTHCHECK --interval=10s --timeout=1s \
+#  CMD curl -k -f -v http://localhost:1080/healthz || exit 1

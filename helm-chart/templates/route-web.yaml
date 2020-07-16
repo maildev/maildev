@@ -1,0 +1,16 @@
+{{- if .Values.ports.web }}
+apiVersion: route.openshift.io/v1
+kind: Route
+metadata:
+  name: "web-{{ include "maildev.fullname" . }}"
+  labels:
+    {{- include "maildev.labels" . | nindent 4 }}
+spec:
+  port:
+    targetPort: {{ .Values.ports.web }}
+  to:
+    kind: Service
+    name: web-{{ include "maildev.fullname" . }}
+    weight: 100
+  wildcardPolicy: None
+{{- end }}

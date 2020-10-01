@@ -9,7 +9,7 @@
         <link rel="stylesheet" href="styles/style.css">
         <link rel="icon" id="favicon" />
     </head>
-    <body>
+    <body ng-class="{'dark-theme': settings.darkThemeEnabled}">
 
         <div class="application-container">
 
@@ -114,6 +114,22 @@
                               ng-checked="settings.toolbarDisplayEnabled"
                               ng-click="toggleToolbarDisplay()"/>
                             Toolbar Mode
+                          </label>
+                        </li>
+
+
+                        <li>
+                          <label
+                            class="toggle-switch light"
+                            for="toggle-dark-theme"
+                            title="Enable dark theme">
+                            <input
+                              type="checkbox"
+                              name="theme"
+                              id="toggle-dark-thme"
+                              ng-checked="settings.darkThemeEnabled"
+                              ng-click="toggleDarkTheme()"/>
+                            Dark Theme
                           </label>
                         </li>
 

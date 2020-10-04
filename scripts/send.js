@@ -76,7 +76,9 @@ const messages = [
     to: 'Johnny Utah <johnny.utah@fbi.gov>',
     subject: 'The ultimate price',
     text: 'If you want the ultimate, you\'ve got to be willing to pay the ultimate price. \nIt\'s not tragic to die doing what you love.',
-    html: '<!DOCTYPE html><html><head></head><body style="background:#eee;font-family:sans-serif;padding:2em 2em">' +
+    html: '<!DOCTYPE html><html><head>' +
+           '<link rel="Shortcut Icon" type="image/x-icon" href="https://ubuntu-fr.gitlab.io/code/ufr-main-layout/favicon.png" />' +
+           '</head><body style="background:#eee;font-family:sans-serif;padding:2em 2em">' +
           '<h1>Point Break</h1>' +
           '<img src="http://farm8.staticflickr.com/7337/11784709785_bbed9bae7d_m.jpg">' +
           '<p>If you want the ultimate, you\'ve got to be willing to pay the ultimate price. <br>It\'s not tragic to die doing what you love.</p>' +

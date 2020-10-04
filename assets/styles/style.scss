@@ -458,6 +458,29 @@ body.dark-theme {
     list-style: none;
 }
 
+.email-favicon {
+  display: block;
+  float: left;
+  padding: 0.6em 0.6em 0.6em; //0.6 to offset the line height of the email title
+  img {
+    border: none;
+    text-align: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 12px;
+  }
+  .circle {
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 50%;
+    font-size: 9px;
+    color: #fff;
+    text-align: center;
+    background: #000
+  }
+}
+
 .email-item {
 
 
@@ -466,7 +489,7 @@ body.dark-theme {
 
 .email-item-link {
     display: block;
-    padding: 0.9em 1em 1.1em;
+    padding: 0.9em 0.3em 1.1em;
     background: white;
     border-top: 1px solid darken(white,5);
     text-decoration: none;

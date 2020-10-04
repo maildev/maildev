@@ -7,8 +7,8 @@ let refreshTimeout = null
 let notificationTimeout = null
 
 app.controller('MainCtrl', [
-  '$scope', '$rootScope', '$http', 'Email', '$route', '$location', 'Favicon',
-  function ($scope, $rootScope, $http, Email, $route, $location, Favicon) {
+  '$scope', '$rootScope', '$http', 'Email', 'FavIcon', '$route', '$location', 'Favicon',
+  function ($scope, $rootScope, $http, Email, FavIcon, $route, $location, Favicon) {
     $scope.notificationsSupported = 'Notification' in window && window.isSecureContext
 
     $scope.itemsLoading = true
@@ -56,9 +56,11 @@ app.controller('MainCtrl', [
       $scope.items = Email.query(function () {
         $scope.itemsLoading = false
       })
-      $scope.items.$promise.then(function () {
-        countUnread()
-      })
+      $scope.items.$promise
+        .then(FavIcon.extract)
+        .then(function () {
+          countUnread()
+        })
     }
 
     $rootScope.$on('Refresh', function (e, d) {

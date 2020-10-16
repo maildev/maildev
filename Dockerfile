@@ -19,6 +19,8 @@ RUN apk add --no-cache curl \
 # Prod
 FROM base as prod
 
+RUN apk add --no-cache curl
+
 USER node
 WORKDIR /home/node
 

@@ -94,7 +94,9 @@ a:focus {
 
 .main-container {
     @include flex(1 70%);
-    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .sidebar-header {
@@ -179,6 +181,9 @@ a:focus {
 
 .email-container {
     padding-top: $toolbarHeight;
+    display: flex;
+    flex-direction: column;
+    height: 100%;
 }
 
 .email-toolbar {
@@ -189,6 +194,7 @@ a:focus {
 .email-content {
     position: inherit; z-index: 1;
     margin: 1em; padding-top: $toolbarHeight;
+    flex-grow: 1;
 }
 
 
@@ -435,7 +441,7 @@ code {
 }
 
 .preview-iframe {
-    border:0; width:100%; min-height:600px;
+    border:0; height: 100%; width:100%; min-height:600px;
     position: relative; // set position for resize rendering issue
 }
 

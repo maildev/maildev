@@ -35,7 +35,8 @@ app.controller('MainCtrl', [
     var defaultSettings = {
       notificationsEnabled: false,
       autoShowEnabled: false,
-      toolbarDisplayEnabled: false
+      toolbarDisplayEnabled: false,
+      darkThemeEnabled: false
     }
     $scope.settings = loadSettings(defaultSettings)
 
@@ -133,6 +134,11 @@ app.controller('MainCtrl', [
 
     $scope.toggleToolbarDisplay = function () {
       $scope.settings.toolbarDisplayEnabled = !$scope.settings.toolbarDisplayEnabled
+      saveSettings()
+    }
+
+    $scope.toggleDarkTheme = function () {
+      $scope.settings.darkThemeEnabled = !$scope.settings.darkThemeEnabled
       saveSettings()
     }
 

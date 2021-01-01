@@ -61,7 +61,7 @@ app.filter('encodeURIComponent', function ($window) {
 /**
  * Sidebar scrollbar fixed height
  */
-
+/*
 (function () {
   var sidebar = document.querySelector('.sidebar')
   var sidebarHeader = document.querySelector('.sidebar-header')
@@ -86,3 +86,4 @@ app.filter('encodeURIComponent', function ($window) {
     }, 300)
   }
 })()
+*/

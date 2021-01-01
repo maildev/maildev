@@ -19,7 +19,6 @@ $brandLight:        lighten($brand, 20);
 $brandLighter:      lighten($brand, 40);
 $brandDark:         darken($brand, 20);
 
-
 $white:             rgb(255,255,255);
 $whiteSemiTrans:    rgba(255,255,255,0.8);
 
@@ -30,6 +29,7 @@ $greyDark:          rgb(80,80,80);
 $greyXDark:         rgb(40,40,40);
 
 $toolbarHeight:     2.8em;
+$searchHeight:      2.4em;
 
 @import 'dark-theme';
 
@@ -87,46 +87,11 @@ a:focus {
     @include align-items(stretch);
 }
 
-.sidebar {
-    @include flex(1 30%);
 
-    max-width: 26em; height: 100%;
-    background-color: $greyXLight;
-}
 
 .main-container {
     @include flex(1 70%);
     overflow-y: scroll;
-}
-
-.sidebar-header {
-    position: absolute; top: 0; left: 0; width:30%; max-width: 26em;
-    min-height: 2 * $toolbarHeight; // 2 toolbar height = 2.8 * 2 = 5.6
-    background-color: $brand;
-}
-
-.sidebar-content {
-    height:100%;
-}
-
-.sidebar-scrollable-content {
-    height: calc(100% - #{2 * $toolbarHeight});
-    margin-top: 2 * $toolbarHeight;
-    overflow-y: scroll; overflow-x: hidden;
-}
-
-.brand-container {
-    padding: 0.5em 1em;
-}
-
-.brand {
-    font-size:20px;
-    color:rgb(255,255,255);
-    text-decoration: none;
-
-    .brand-icon {
-        margin-right: 6px;
-    }
 }
 
 
@@ -135,6 +100,147 @@ a:focus {
     background-color: $brand;
 }
 
+
+
+
+
+.sidebar {
+    @include flex(1 30%);
+
+    max-width: 26em;
+    height: 100%;
+
+    background-color: white;
+}
+
+
+
+
+
+.brand-container {
+    padding: 0.3em 0 0 0.8em;
+    height: $toolbarHeight;
+    box-sizing: border-box;
+}
+
+.brand {
+    font-size: 20px;
+    font-weight: 400;
+    color:rgb(255,255,255);
+    text-decoration: none;
+}
+.brand-text {
+    font-weight: 500;
+    margin-left: 0.1em;
+}
+
+
+
+
+.sidebar-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width:30%;
+    max-width: 26em;
+    background-color: $brand;
+}
+
+.sidebar-content {
+    height:100%;
+}
+
+
+
+
+
+
+
+
+.sidebar-emails-container {
+    box-sizing: border-box;
+    height: calc(100% - #{1 * $toolbarHeight});
+    margin-top: $toolbarHeight;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    border-right: 1px solid darken(white, 5);
+}
+
+
+
+.sidebar-scrollable-content {
+    box-sizing: border-box;
+    height: calc(100% - #{$searchHeight});
+    overflow-x: hidden;
+    overflow-y: auto;
+    border-top: 1px solid darken(white, 5);
+}
+
+
+
+
+
+.search-container {
+    position: relative;
+    height: $searchHeight;
+}
+
+.search-icon {
+    position: absolute;
+    top: 0.65em;
+    left: 0.8em;
+    color: darken(white,75);
+}
+
+.search-input {
+    box-sizing: border-box;
+    display: block;
+    margin: 0;
+    height: 100%;
+    padding: 0.5em 0.8em 0.5em 2.4em;
+    width: 100%;
+
+    background-color: white;
+    border: 0;
+    color: black;
+    -webkit-font-smoothing: antialiased;
+
+    &:focus {
+        outline: none;
+        background-color: darken(white, 5);
+        + .search-icon {
+            color: black;
+        }
+    }
+}
+
+
+/*
+::-webkit-input-placeholder {
+    -webkit-font-smoothing: antialiased;
+    color: $whiteSemiTrans;
+    -webkit-transition: color 250ms linear;
+            transition: color 250ms linear;
+}
+::-moz-placeholder { // Firefox 19+
+    color: $whiteSemiTrans;
+    -moz-transition: color 250ms linear;
+         transition: color 250ms linear;
+}
+::-ms-placeholder, // IE10+
+::placeholder {
+    -webkit-font-smoothing: antialiased;
+    color: $whiteSemiTrans;
+    transition:color 250ms linear;
+}
+*/
+
+
+
+
+
+
+
 .email-list {
     margin: 0; padding: 0;
     list-style: none;
@@ -142,36 +248,44 @@ a:focus {
 
 .email-item {
     display: block;
-    padding: 0.6em 1em 1em; //0.6 to offset the line height of the email title
+    padding: 0.8em 1em 1em; //0.6 to offset the line height of the email title
 
-    background-color: $greyXLight;
-    border-bottom: 1px solid $greyLight;
+    background-color: white;
+    border-bottom: 1px solid darken(white,5);
     color: $greyXDark; text-decoration: none;
-    font-size: 12px; line-height: 14px;
+    color: black;
+    font-size: 12px;
+    line-height: 14px;
 
     &:hover {
         background-color: $white;
     }
 
     .title {
-        display: block; position: relative;
-        margin-bottom: 0.5em; padding-right: 1em;
-        font-size:14px; line-height: 1.5em;
+        display: block;
+        position: relative;
+        margin-bottom: 0.3em;
+        font-size:14px;
+        line-height: 1.3em;
+        font-weight: 400;
+        color: darken(white,100);
+        > i {
+            margin-left: 0.2em;
+        }
     }
+    /*
     .unread-icon {
-        position: absolute; top:0.5em; right: 0;
+        position: absolute; top:0.1em; right: 0;
         color: $brandLight;
         font-size: 10px;
         line-height: 14px;
     }
+    */
     .subline {
+        font-size: 12px;
+        font-weight: 400;
+        opacity: .6;
         display: block;
-    }
-    .subline-from {
-        float:left;
-    }
-    .subline-time {
-        float:right;
     }
 
     @media (max-width: 800px) {
@@ -179,18 +293,44 @@ a:focus {
     }
 }
 
+.email-read-false {
+
+    .title {
+        font-weight: 600;
+    }
+}
+
+.email-item.current {
+  background: white;
+}
+
+
+
+
+
 .email-container {
     padding-top: $toolbarHeight;
 }
 
 .email-toolbar {
-    position: fixed; z-index: 10;
-    width: 100%; background-color: $white;
+    position: fixed;
+    z-index: 10;
+    width: 100%;
+    background-color: $white;
 }
 
 .email-content {
-    position: inherit; z-index: 1;
-    margin: 1em; padding-top: $toolbarHeight;
+    position: inherit;
+    z-index: 1;
+    margin: 0;
+    padding-top: $toolbarHeight;
+}
+
+.preview-iframe {
+    border:0;
+    width:100%;
+    min-height:600px;
+    position: relative; // set position for resize rendering issue
 }
 
 
@@ -225,14 +365,6 @@ a:focus {
 
     li {
         padding: 0 0.5em;
-    }
-
-    .toolbar-divider {
-      background: #fdfdfd;
-      width: 1px;
-      height: 60%;
-      margin: 0 0.5em;
-      padding: 0;
     }
 
     .fa {
@@ -379,89 +511,4 @@ code {
     background-color: $greyXLight;
     border:1px solid $greyLight;
     padding: 0.1em 0.3em;
-}
-
-/**
- * Specific Styles
- */
-.search-container {
-    position: relative;
-    padding: 0.3em 0.8em 0;
-}
-
-.search-icon {
-    position: absolute;
-    top: 0.7em; left: 1.3em;
-    color: $whiteSemiTrans;
-}
-
-.search-input {
-    display: block;
-    margin: 0;
-    padding: 0.3em 0.2em;
-    width: 98%;
-
-    text-indent: 1.9em;
-    background-color: $brand;
-    border: 0;
-    color: $white;
-    -webkit-font-smoothing: antialiased;
-
-    &:focus {
-        outline: none;
-        background-color: darken($brand, 10);
-        + .search-icon {
-            color: $white;
-        }
-    }
-}
-
-
-
-::-webkit-input-placeholder {
-    -webkit-font-smoothing: antialiased;
-    color: $whiteSemiTrans;
-    -webkit-transition: color 250ms linear;
-            transition: color 250ms linear;
-}
-::-moz-placeholder { // Firefox 19+
-    color: $whiteSemiTrans;
-    -moz-transition: color 250ms linear;
-         transition: color 250ms linear;
-}
-::-ms-placeholder, // IE10+
-::placeholder {
-    -webkit-font-smoothing: antialiased;
-    color: $whiteSemiTrans;
-    transition:color 250ms linear;
-}
-
-.preview-iframe {
-    border:0; width:100%; min-height:600px;
-    position: relative; // set position for resize rendering issue
-}
-
-.email-item.current {
-  background: $brandLighter;
-}
-
-.autoshow-toggle {
-  float: right;
-  cursor: pointer;
-  color: white;
-  padding-top: 3px;
-}
-
-.toggle {
-    display: inline-block;
-    cursor: pointer;
-    width: 24px;
-    height: 24px;
-    filter: brightness(0) invert(1);
-    &.on {
-        background: url('./icons/iconmonstr-control-panel-21.svg');
-    }
-    &.off {
-        background: url('./icons/iconmonstr-control-panel-23.svg');
-    }
 }

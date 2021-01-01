@@ -16,38 +16,44 @@
             <div class="sidebar">
 
                 <div class="sidebar-header">
+
                     <div class="brand-container">
                         <a href="#/" class="brand">
                             <i class="fa fa-envelope a"></i>
-                            MailDev
+                            <span class="brand-text">MailDev</span>
                         </a>
                     </div>
-                    <div>
-                    </div>
-                    <div class="search-container">
-                        <input type="text" ng-model="search" class="search-input" placeholder="Search">
-                        <i class="fa fa-search search-icon"></i>
-                    </div>
+
                 </div>
 
-                <div class="sidebar-scrollable-content">
-                    <ul class="email-list">
-                        <li ng-repeat="item in items | orderBy:'time':!reverse | filter: search " class="ng-cloak">
+                <div class="sidebar-emails-container">
+                    <div class="search-container">
+                        <input type="text" ng-model="search" class="search-input" placeholder="Search...">
+                        <i class="fa fa-search search-icon"></i>
+                    </div>
+                    <div class="sidebar-scrollable-content">
+                        <ul class="email-list">
+                            <li ng-repeat="item in items | orderBy:'time':!reverse | filter: search " class="ng-cloak">
 
-                            <a href="#/email/{{item.id}}" class="email-item email-{{item.id}}" ng-class="{current: item.id === currentItemId}" ng-click="markRead(item)">
-                                <span class="title">
-                                    {{item.subject}}
-                                    <i class="fa fa-paperclip" ng-hide="!item.attachments"></i>
-                                    <i class="fa fa-circle unread-icon" ng-hide="item.read"></i>
-                                </span>
-                                <span class="subline clearfix">
-                                    <span class="subline-from">{{item.to.0.address}}</span>
-                                    <span class="subline-time">{{item.time | date:'short' }}</span>
-                                </span>
-                            </a>
+                                <a href="#/email/{{item.id}}" class="email-item email-{{item.id}} email-read-{{item.read}}" ng-class="{current: item.id === currentItemId}" ng-click="markRead(item)">
 
-                        </li>
-                    </ul>
+
+                                    <span class="title">
+                                        {{item.subject}}
+                                        <i class="fa fa-paperclip" ng-hide="!item.attachments"></i>
+                                        <!-- <i class="fa fa-circle unread-icon" ng-hide="item.read"></i>  -->
+                                    </span>
+
+                                    <span class="subline" title="{{item.to}}">
+                                        {{item.time | date:'yyyy-MM-dd HH:mm:ss (Z)' }} {{item.to.0.address}}
+                                        <span ng-if="item.to.length > 1">+{{item.to.length-1}}</span>
+                                    </span>
+
+                                </a>
+
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
             </div><!-- END .item-container -->
@@ -70,8 +76,6 @@
                                 Clear Inbox
                             </a>
                         </li>
-
-                        <li class="toolbar-divider"></li>
 
                         <li>
                           <label class="toggle-switch light" for="toggle-auto-show">

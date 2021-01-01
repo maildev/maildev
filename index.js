@@ -30,7 +30,7 @@ module.exports = function (config) {
   }
 
   // Start the Mailserver & Web GUI
-  mailserver.create(config.smtp, config.ip, config.incomingUser, config.incomingPass, config.hideExtensions)
+  mailserver.create(config.smtp, config.ip, config.mailDirectory, config.incomingUser, config.incomingPass, config.hideExtensions)
 
   if (config.outgoingHost ||
       config.outgoingPort ||
@@ -49,6 +49,10 @@ module.exports = function (config) {
   if (config.autoRelay) {
     const emailAddress = typeof config.autoRelay === 'string' ? config.autoRelay : null
     mailserver.setAutoRelayMode(true, config.autoRelayRules, emailAddress)
+  }
+
+  if (config.mailDirectory) {
+    mailserver.loadMailsFromDirectory()
   }
 
   if (!config.disableWeb) {

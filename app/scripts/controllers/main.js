@@ -117,17 +117,41 @@ app.controller('MainCtrl', [
       }
     })
 
-    // Click event handlers
-    $scope.markRead = function (email) {
-      email.read = true
-      countUnread()
-    }
+
+    $scope.$watch('currentItemId', function (val, preVal) {
+      if (!$scope.currentItemId) return;
+      if (!$scope.items || !$scope.items.length) return;
+
+      var filtered = $scope.items.filter(function (e) {
+        return e.id === $scope.currentItemId;
+      });
+
+
+      if (!filtered || !filtered.length) return;
+
+      var currentItem = filtered[0];
+
+      currentItem.read = true;
+
+      countUnread();
+
+    }, false);
+
 
     $scope.markReadAll = function () {
-      for (email of $scope.items) {
-        email.read = true
-      }
-      countUnread()
+      $http({
+        method: 'PATCH',
+        url: 'email/read-all'
+      })
+        .success(function (data, status) {
+          for (email of $scope.items) {
+            email.read = true
+          }
+          countUnread()
+        })
+        .error(function (data) {
+          window.alert('Read all failed: ' + data.error)
+        })
     }
 
     $scope.headerNavStopPropagation = function ($event) {

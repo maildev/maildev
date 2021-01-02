@@ -131,7 +131,7 @@
                     <div class="sidebar-scrollable-content ng-cloak">
                         <ul class="email-list">
                             <li ng-repeat="item in items | orderBy:'time':!reverse | filter: search " class="email-item  email-{{item.id}} " ng-class="{current: item.id === currentItemId, read: item.read, unread: !item.read}">
-                                <a href="#/email/{{item.id}}" class="email-item-link"  ng-click="markRead(item)">
+                                <a href="#/email/{{item.id}}" class="email-item-link">
                                     <span class="title">
                                         {{item.subject}}<span ng-hide="!item.attachments">&nbsp;<i class="fas fa-paperclip" ></i></span>
                                         <span class="title-subline" title="{{item.to}}">

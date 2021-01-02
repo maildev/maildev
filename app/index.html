@@ -131,6 +131,15 @@
                         <i class="fas fa-search search-icon"></i>
                     </div>
                     <div class="sidebar-scrollable-content ng-cloak">
+
+                        <div ng-if="itemsLoading" class="emails-loading">
+                            Loading...
+                        </div>
+
+                        <div ng-if="!itemsLoading && items && !items.length" class="emails-empty">
+                            No emails
+                        </div>
+
                         <ul class="email-list">
                             <li ng-repeat="item in items | orderBy:'time':!reverse | filter: search " class="email-item  email-{{item.id}} " ng-class="{current: item.id === currentItemId, read: item.read, unread: !item.read}">
                                 <a href="#/email/{{item.id}}" class="email-item-link">

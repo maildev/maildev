@@ -12,11 +12,13 @@ app.controller('MainCtrl', [
 
     $scope.notificationsSupported = 'Notification' in window && window.isSecureContext
 
+    $scope.itemsLoading = true
     $scope.items = []
     $scope.currentItemId = null
     $scope.unreadItems = 0
     $scope.navMoreOpen = false
     $scope.deleteAllSafeguard = true
+
 
     var settingsKey = 'maildevSettings'
 
@@ -53,7 +55,10 @@ app.controller('MainCtrl', [
 
     // Load all emails
     var loadData = function () {
-      $scope.items = Email.query()
+      $scope.itemsLoading = true;
+      $scope.items = Email.query(function(){
+        $scope.itemsLoading = false;
+      })
       $scope.items.$promise.then(function () {
         countUnread()
       })

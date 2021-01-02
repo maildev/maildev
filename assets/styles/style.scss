@@ -428,7 +428,17 @@ body.dark-theme {
 
 
 
+.emails-loading,
+.emails-empty {
+    padding: 0.8em 1em;
+    font-weight: 400;
+    font-size: 14px;
+    color: rgba(black,.65);
+    body.dark-theme & {
+        color: rgba(white,.5);
+    }
 
+}
 
 .email-list {
     margin: 0; padding: 0;
@@ -443,7 +453,7 @@ body.dark-theme {
 
 .email-item-link {
     display: block;
-    padding: 0.9em 1em 1.1em; //0.6 to offset the line height of the email title
+    padding: 0.9em 1em 1.1em;
 
     background: white;
     border-top: 1px solid darken(white,5);
@@ -478,7 +488,7 @@ body.dark-theme {
         display: block;
         position: relative;
         margin-bottom: 0.2em;
-        font-size:14px;
+        font-size: 14px;
         line-height: 1.3em;
         font-weight: 400;
         color: darken(white,100);

@@ -56,4 +56,4 @@ app.filter('escapeHTML', function () {
 
 app.filter('encodeURIComponent', function ($window) {
   return $window.encodeURIComponent
-});
+})

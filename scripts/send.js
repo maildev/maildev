@@ -35,6 +35,120 @@ var messages = [
     ]
   },
 
+  // Email w/ simple attachment and basic header
+  {
+    from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
+    to: ['Johnny Long Name Utah <johnny.long.email.address.utah@fbi.gov>', 'Johnny2 Utah <johnny2.utah@fbi.gov>', 'Johnny3 Utah <johnny3.utah@fbi.gov>'],
+    subject: 'The ex-presidents are surfers. The ex-presidents are surfers. The ex-presidents are surfers. The ex-presidents are surfers.',
+    headers: {
+      'X-some-header': 1000
+    },
+    text: 'The wax at the bank was surfer wax!!!',
+    html: '<!DOCTYPE html><html><head></head><body>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '</body></html>'
+  },
+
   // Plain text email
   {
     from: 'Johnny Utah <johnny.utah@fbi.gov>',

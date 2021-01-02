@@ -9,7 +9,6 @@ var notificationTimeout = null
 app.controller('MainCtrl', [
   '$scope', '$rootScope', '$http', 'Email', '$route', '$location', 'Favicon',
   function ($scope, $rootScope, $http, Email, $route, $location, Favicon) {
-
     $scope.notificationsSupported = 'Notification' in window && window.isSecureContext
 
     $scope.itemsLoading = true
@@ -18,7 +17,6 @@ app.controller('MainCtrl', [
     $scope.unreadItems = 0
     $scope.navMoreOpen = false
     $scope.deleteAllSafeguard = true
-
 
     var settingsKey = 'maildevSettings'
 
@@ -54,9 +52,9 @@ app.controller('MainCtrl', [
 
     // Load all emails
     var loadData = function () {
-      $scope.itemsLoading = true;
-      $scope.items = Email.query(function(){
-        $scope.itemsLoading = false;
+      $scope.itemsLoading = true
+      $scope.items = Email.query(function () {
+        $scope.itemsLoading = false
       })
       $scope.items.$promise.then(function () {
         countUnread()
@@ -125,26 +123,22 @@ app.controller('MainCtrl', [
       }
     })
 
-
     $scope.$watch('currentItemId', function (val, preVal) {
-      if (!$scope.currentItemId) return;
-      if (!$scope.items || !$scope.items.length) return;
+      if (!$scope.currentItemId) return
+      if (!$scope.items || !$scope.items.length) return
 
       var filtered = $scope.items.filter(function (e) {
-        return e.id === $scope.currentItemId;
-      });
+        return e.id === $scope.currentItemId
+      })
 
+      if (!filtered || !filtered.length) return
 
-      if (!filtered || !filtered.length) return;
+      var currentItem = filtered[0]
 
-      var currentItem = filtered[0];
+      currentItem.read = true
 
-      currentItem.read = true;
-
-      countUnread();
-
-    }, false);
-
+      countUnread()
+    }, false)
 
     $scope.markReadAll = function () {
       $http({
@@ -168,12 +162,12 @@ app.controller('MainCtrl', [
 
     $scope.toggleNavMore = function ($event) {
       $event.stopPropagation()
-      $scope.navMoreOpen = !$scope.navMoreOpen;
+      $scope.navMoreOpen = !$scope.navMoreOpen
     }
 
     function hideNavMore (e) {
       $scope.$apply(function () {
-        $scope.navMoreOpen = false;
+        $scope.navMoreOpen = false
       })
     }
 
@@ -185,7 +179,6 @@ app.controller('MainCtrl', [
 
     addHideNavMoreHandler(window)
 
-
     $scope.toggleAutoShow = function () {
       $scope.settings.autoShowEnabled = !$scope.settings.autoShowEnabled
       saveSettings()
@@ -196,17 +189,17 @@ app.controller('MainCtrl', [
     }
 
     $scope.deleteAll = function () {
-      var t;
+      var t
       if ($scope.deleteAllSafeguard) {
-        $scope.deleteAllSafeguard = false;
-        t = setTimeout(function() {
-          $scope.deleteAllSafeguard = true;
-          $scope.$apply();
-        }, 2000);
-        return;
+        $scope.deleteAllSafeguard = false
+        t = setTimeout(function () {
+          $scope.deleteAllSafeguard = true
+          $scope.$apply()
+        }, 2000)
+        return
       }
-      clearTimeout(t);
-      $scope.deleteAllSafeguard = true;
+      clearTimeout(t)
+      $scope.deleteAllSafeguard = true
       Email.delete({ id: 'all' })
     }
 

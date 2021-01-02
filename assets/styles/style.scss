@@ -221,7 +221,7 @@ th, td {
 .header-nav-more-menu.header-nav-more-menu {
     box-sizing: border-box;
     position: absolute;
-    top: 1.4em;
+    top: 1.5em;
     right: 0;
     width: 200px;
 
@@ -571,12 +571,14 @@ th, td {
     }
 
     li a span {
+        box-sizing: border-box;
         height: 100%;
         @include display-flex();
         @include align-items(center);
         @include align-content(center);
         @include justify-content(center);
         flex-flow: row nowrap;
+        padding-bottom: 0.12em;
     }
 
     li a span i {
@@ -614,7 +616,7 @@ th, td {
 .dropdown-menu {
     display: none;
     position: absolute;
-    top: 2.4em;
+    top: 2.5em;
     left: 0;
     z-index: 10;
     padding: 0.3em 0;

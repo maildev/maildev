@@ -47,8 +47,9 @@
                                 </a>
                             </li>
                             <li class="header-nav-item">
-                                <a ng-click="deleteAll()" href="" class="header-nav-item-link" title="Delete all emails">
-                                    <i class="fas fa-trash-alt"></i>
+                                <a  ng-click="deleteAll()" href="" class="header-nav-item-link" title="Delete all emails">
+                                    <i ng-if="deleteAllSafeguard" class="fas fa-trash-alt"></i>
+                                    <i ng-if="!deleteAllSafeguard" class="fas fa-trash-alt" style="color: red;"></i>
                                 </a>
                             </li>
                             <li class="header-nav-item">

@@ -9,19 +9,23 @@ var notificationTimeout = null
 app.controller('MainCtrl', [
   '$scope', '$rootScope', '$http', 'Email', '$route', '$location', 'Favicon',
   function ($scope, $rootScope, $http, Email, $route, $location, Favicon) {
+
+    $scope.notificationsSupported = 'Notification' in window && window.isSecureContext
+
     $scope.items = []
     $scope.currentItemId = null
     $scope.unreadItems = 0
     $scope.navMoreOpen = false
-
-    $scope.notificationsSupported = 'Notification' in window && window.isSecureContext
+    $scope.deleteAllSafeguard = true
 
     var settingsKey = 'maildevSettings'
+
     var saveSettings = function () {
       if (window.localStorage) {
         window.localStorage.setItem(settingsKey, JSON.stringify($scope.settings))
       }
     }
+
     var loadSettings = function (defaultSettings) {
       try {
         var settingsJSON = window.localStorage.getItem(settingsKey)
@@ -188,6 +192,17 @@ app.controller('MainCtrl', [
     }
 
     $scope.deleteAll = function () {
+      var t;
+      if ($scope.deleteAllSafeguard) {
+        $scope.deleteAllSafeguard = false;
+        t = setTimeout(function() {
+          $scope.deleteAllSafeguard = true;
+          $scope.$apply();
+        }, 2000);
+        return;
+      }
+      clearTimeout(t);
+      $scope.deleteAllSafeguard = true;
       Email.delete({ id: 'all' })
     }
 

@@ -123,7 +123,12 @@ app.controller('MainCtrl', [
       countUnread()
     }
 
-
+    $scope.markReadAll = function () {
+      for (email of $scope.items) {
+        email.read = true
+      }
+      countUnread()
+    }
 
     $scope.headerNavStopPropagation = function ($event) {
       $event.stopPropagation()

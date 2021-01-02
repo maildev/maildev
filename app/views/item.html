@@ -207,7 +207,7 @@
     <li class="dropdown-container" ng-if="!settings.toolbarDisplayEnabled">
       <a href="" class="dropdown-trigger"
         ng-click="toggleDropdown($event, 'relay')"
-        ng-class="{ open: dropdownOpen == 'relay' }"
+        ng-class="{ open: dropdownOpen == 'relay', disabled: !config.isOutgoingEnabled }"
       >
         <i class="fas fa-paper-plane"></i>
         Relay

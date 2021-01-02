@@ -1,4 +1,4 @@
-/* global app */
+/* global app, angular */
 
 /**
  * Main App Controller -- Manage all emails visible in the list
@@ -146,7 +146,7 @@ app.controller('MainCtrl', [
         url: 'email/read-all'
       })
         .success(function (data, status) {
-          for (email of $scope.items) {
+          for (var email of $scope.items) {
             email.read = true
           }
           countUnread()

@@ -185,14 +185,5 @@ app.controller('NavCtrl', [
       Email.delete({ id: 'all' })
     }
 
-    $scope.changeMenuDisplayMode = function (mode) {
-      $rootScope.$emit('menuDisplayMode', mode)
-      window.localStorage.setItem('menuDisplayMode', mode)
-    }
-
-    const menuDisplayMode = window.localStorage.getItem('menuDisplayMode')
-    if (menuDisplayMode) {
-      $rootScope.$emit('menuDisplayMode', menuDisplayMode)
-    }
   }
 ])

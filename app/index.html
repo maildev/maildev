@@ -26,57 +26,24 @@
 
                 </div>
 
-                <div class="sidebar-emails-container">
-                    <div class="search-container">
-                        <input type="text" ng-model="search" class="search-input" placeholder="Search...">
-                        <i class="fa fa-search search-icon"></i>
-                    </div>
-                    <div class="sidebar-scrollable-content">
-                        <ul class="email-list">
-                            <li ng-repeat="item in items | orderBy:'time':!reverse | filter: search " class="ng-cloak">
-
-                                <a href="#/email/{{item.id}}" class="email-item email-{{item.id}} email-read-{{item.read}}" ng-class="{current: item.id === currentItemId}" ng-click="markRead(item)">
 
 
-                                    <span class="title">
-                                        {{item.subject}}
-                                        <i class="fa fa-paperclip" ng-hide="!item.attachments"></i>
-                                        <!-- <i class="fa fa-circle unread-icon" ng-hide="item.read"></i>  -->
-                                    </span>
 
-                                    <span class="subline" title="{{item.to}}">
-                                        {{item.time | date:'yyyy-MM-dd HH:mm:ss (Z)' }} {{item.to.0.address}}
-                                        <span ng-if="item.to.length > 1">+{{item.to.length-1}}</span>
-                                    </span>
 
-                                </a>
-
-                            </li>
-                        </ul>
-                    </div>
-                </div>
-
-            </div><!-- END .item-container -->
-
-            <div class="main-container">
-
-                <div class="application-toolbar">
+                <div class="application-toolbar ng-cloak" ng-hide="{{true}}">
                     <ul class="toolbar" ng-controller="NavCtrl">
-
                         <li>
                             <a ng-click="refreshList()" href="">
                                 <i class="fa fa-refresh"></i>
                                 Refresh
                             </a>
                         </li>
-
                         <li>
                             <a ng-click="deleteAll()" href="">
                                 <i class="fa fa-inbox"></i>
                                 Clear Inbox
                             </a>
                         </li>
-
                         <li>
                           <label class="toggle-switch light" for="toggle-auto-show">
                             <input
@@ -88,7 +55,6 @@
                             Show newest email
                           </label>
                         </li>
-
                         <li>
                           <label
                             class="toggle-switch light"
@@ -105,7 +71,6 @@
                             Notifications
                           </label>
                         </li>
-
                         <li>
                           <label
                             class="toggle-switch light"
@@ -120,8 +85,6 @@
                             Toolbar Mode
                           </label>
                         </li>
-
-
                         <li>
                           <label
                             class="toggle-switch light"
@@ -136,11 +99,8 @@
                             Dark Theme
                           </label>
                         </li>
-
                     </ul>
-
                     <ul class="toolbar toolbar-right" ng-controller="NavCtrl">
-
                         <li>
                             <a ng-click="changeMenuDisplayMode('menu')" href="" ng-if="menuDisplayMode=='wide'">
                                 <i class="toggle on"></i>
@@ -153,15 +113,50 @@
                                 Info
                             </a>
                         </li>
-
                     </ul>
                 </div><!-- END .application-toolbar -->
 
-                <div class="email-container" ng-view>
 
 
+
+
+
+                <div class="sidebar-emails-container">
+                    <div class="search-container">
+                        <input type="text" ng-model="search" class="search-input" placeholder="Search...">
+                        <i class="fa fa-search search-icon"></i>
+                    </div>
+                    <div class="sidebar-scrollable-content">
+                        <ul class="email-list  ng-cloak">
+                            <li ng-repeat="item in items | orderBy:'time':!reverse | filter: search " class="email-item  email-{{item.id}} " ng-class="{current: item.id === currentItemId, read: item.read, unread: !item.read}">
+
+                                <a href="#/email/{{item.id}}" class="email-item-link"  ng-click="markRead(item)">
+
+
+                                    <span class="title">
+                                        {{item.subject}}<span ng-hide="!item.attachments">&nbsp;<i class="fa fa-paperclip" ></i></span>
+
+                                        <span class="title-subline" title="{{item.to}}">
+                                            To:&nbsp;{{item.to.0.address}}&nbsp;<span ng-if="item.to.length > 1">+{{item.to.length-1}}</span>
+                                        </span>
+                                        <!-- <i class="fa fa-circle unread-icon" ng-hide="item.read"></i>  -->
+                                    </span>
+
+                                    <span class="subline">
+                                        {{item.time | date:'yyyy-MM-dd HH:mm:ss (Z)' }}
+                                    </span>
+
+                                </a>
+
+                            </li>
+                        </ul>
+                    </div>
                 </div>
 
+            </div><!-- END .item-container -->
+
+            <div class="main-container">
+                <div class="email-container" ng-view></div>
             </div><!-- END .main-container -->
 
         </div><!-- END .application-container -->

@@ -1,11 +1,18 @@
-<ul class="toolbar email-toolbar on-light">
+<ul class="toolbar email-toolbar">
+
+
 
     <li class="dropdown-container" ng-if="!settings.toolbarDisplayEnabled">
       <a href="" class="dropdown-trigger"
         ng-click="toggleDropdown($event, 'display')"
-        ng-class="{ open: dropdownOpen == 'display' }">
+        ng-class="{ open: dropdownOpen == 'display' }"
+      >
         <i class="fa fa-file-o"></i>
-        Display
+        <span ng-if="!panelVisibility || panelVisibility === 'html'">HTML</span>
+        <span ng-if="panelVisibility === 'plain'">Text</span>
+        <span ng-if="panelVisibility === 'attachments'">Attachments</span>
+        <span ng-if="panelVisibility === 'headers'">Headers</span>
+        <span ng-if="panelVisibility === 'source'">Source</span>
       </a>
       <ul class="dropdown-menu">
         <li>
@@ -21,7 +28,15 @@
               ng-click="show('plain')"
               ng-class="{ active: panelVisibility == 'plain' }">
                 <i class="fa fa-file-text-o"></i>
-                Plain Text
+                Text
+            </a>
+        </li>
+        <li>
+            <a href="" class=""
+              ng-click="show('attachments')"
+              ng-class="{ active: panelVisibility == 'attachments', disabled: !item.attachments }">
+                <i class="fa fa-paperclip"></i>
+                Attachments
             </a>
         </li>
         <li>
@@ -42,6 +57,8 @@
         </li>
       </ul>
     </li>
+
+
     <li ng-if="settings.toolbarDisplayEnabled">
       <ul class="toolbar">
         <li>
@@ -80,10 +97,11 @@
       </ul>
     </li>
 
+
     <li class="dropdown-container" ng-if="!settings.toolbarDisplayEnabled">
       <a href="" class="dropdown-trigger"
         ng-click="toggleDropdown($event, 'viewport')"
-        ng-class="{ open: dropdownOpen == 'viewport' }">
+        ng-class="{ open: dropdownOpen == 'viewport', disabled: panelVisibility != 'html' }">
         <i class="fa fa-tablet"></i>
         Viewport
       </a>
@@ -162,14 +180,49 @@
     </li>
 
 
+
     <li>
-        <a href="" class=""
-          ng-click="show('attachments')"
-          ng-class="{ active: panelVisibility == 'attachments', disabled: !item.attachments }">
-            <i class="fa fa-paperclip"></i>
-            Attachments
+        <a href="email/{{item.id}}/download" class="">
+            <i class="fa fa-cloud-download"></i>
+            Download
         </a>
     </li>
+
+
+
+
+    <li class="dropdown-container" ng-if="!settings.toolbarDisplayEnabled">
+      <a href="" class="dropdown-trigger"
+        ng-click="toggleDropdown($event, 'relay')"
+        ng-class="{ open: dropdownOpen == 'relay' }"
+      >
+        <i class="fa fa-forward"></i>
+        Relay
+      </a>
+      <ul class="dropdown-menu">
+        <li>
+          <a href="" class=""
+            ng-click="relay(item)"
+            ng-class="{ disabled: !config.isOutgoingEnabled }">
+              <i class="fa fa-forward"></i>
+              Relay
+          </a>
+        </li>
+        <li>
+          <a href="" class=""
+            ng-click="relayTo(item)"
+            ng-class="{ disabled: !config.isOutgoingEnabled }">
+              <i class="fa fa-forward"></i>
+              Relay to...
+          </a>
+        </li>
+      </ul>
+    </li>
+
+
+
+
+
     <li>
         <a href="" class=""
           ng-click="delete(item)">
@@ -177,63 +230,55 @@
             Delete
         </a>
     </li>
-    <li>
-        <a href="" class=""
-          ng-click="relay(item)"
-          ng-class="{ disabled: !config.isOutgoingEnabled }">
-            <i class="fa fa-cloud-upload"></i>
-            Relay
-        </a>
-    </li>
-    <li>
-        <a href="" class=""
-           ng-click="relayTo(item)"
-           ng-class="{ disabled: !config.isOutgoingEnabled }">
-            <i class="fa fa-share"></i>
-            Relay to
-        </a>
-    </li>
-    <li>
-        <a href="email/{{item.id}}/download" class="">
-            <i class="fa fa-cloud-download"></i>
-            Download EML
-        </a>
-    </li>
 </ul>
 
+
 <div class="email-content">
-    <iframe ng-src="{{ item.iframeUrl }}" class="preview-iframe panel-html" ng-hide=" panelVisibility != 'html' ">Hello World</iframe>
 
-    <div class="plain-text panel-plain" ng-bind-html=" item.text|escapeHTML " ng-hide=" panelVisibility != 'plain' "></div>
-
-    <div class="panel-attachments" ng-hide=" panelVisibility != 'attachments' ">
-        <span ng-repeat="attachment in item.attachments">
-            <a target="_blank" ng-href="email/{{item.id}}/attachment/{{attachment.generatedFileName | encodeURIComponent}}">
-                <strong>{{attachment.generatedFileName}}</strong>
-            </a>
-            <br>
-        </span>
+    <div class="email-content-view email-content-view-html" ng-hide="panelVisibility != 'html'">
+      <iframe ng-src="{{ item.iframeUrl }}" class="preview-iframe panel-html" >Hello World</iframe>
     </div>
 
-    <div class="panel-headers" ng-hide=" panelVisibility != 'headers' ">
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Key</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            <tr ng-repeat="(headerKey, headerValue) in item.headers">
-                <td class="span3">
-                    <strong>{{headerKey}}</strong>
-                </td>
-                <td>
-                    {{headerValue}}
-                </td>
-            </tr>
-        </table>
+    <div class="email-content-view email-content-view-plain" ng-hide="panelVisibility != 'plain'">
+      <div class="plain-text panel-plain" ng-bind-html=" item.text|escapeHTML " ></div>
     </div>
 
-    <iframe ng-src="{{ rawEmail }}" class="preview-iframe panel-source" ng-hide=" panelVisibility != 'source' "></iframe>
+    <div class="email-content-view email-content-view-attachments" ng-hide="panelVisibility != 'attachments'">
+      <div class="panel-attachments" >
+          <span ng-repeat="attachment in item.attachments">
+              <a target="_blank" ng-href="email/{{item.id}}/attachment/{{attachment.generatedFileName | encodeURIComponent}}">
+                  <strong>{{attachment.generatedFileName}}</strong>
+              </a>
+              <br>
+          </span>
+      </div>
+    </div>
+
+    <div class="email-content-view email-content-view-headers" ng-hide="panelVisibility != 'headers'">
+      <div class="panel-headers" >
+          <table class="table">
+              <!--
+              <thead>
+                  <tr>
+                      <th>Key</th>
+                      <th>Value</th>
+                  </tr>
+              </thead>
+              -->
+              <tr ng-repeat="(headerKey, headerValue) in item.headers">
+                  <td class="span3">
+                      <strong>{{headerKey}}</strong>
+                  </td>
+                  <td>
+                      {{headerValue}}
+                  </td>
+              </tr>
+          </table>
+      </div>
+    </div>
+
+    <div class="email-content-view email-content-view-source" ng-hide="panelVisibility != 'source'">
+      <iframe ng-src="{{ rawEmail }}" class="preview-iframe panel-source" ></iframe>
+    </div>
 
 </div>

@@ -8,7 +8,10 @@
 
 @import 'normalize';
 @import 'mixins';
-@import 'font-awesome/font-awesome';
+@import 'fa/fontawesome';
+//@import 'fa/regular';
+@import 'fa/solid';
+//@import 'fa/brand';
 
 /**
  * Variables
@@ -166,16 +169,15 @@ th, td {
 
 
 .sidebar-header {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width:30%;
+    box-sizing: border-box;
+    width: 100%;
     max-width: 26em;
     background-color: $brand;
+    border-right: 1px solid darken($brand, 16);
 }
 
 .sidebar-content {
-    height:100%;
+    height: 100%;
 }
 
 
@@ -188,7 +190,6 @@ th, td {
 .sidebar-emails-container {
     box-sizing: border-box;
     height: calc(100% - #{1 * $toolbarHeight});
-    margin-top: $toolbarHeight;
     overflow-x: hidden;
     overflow-y: hidden;
     border-right: 1px solid darken(white, 10);
@@ -201,7 +202,7 @@ th, td {
     height: calc(100% - #{$searchHeight});
     overflow-x: hidden;
     overflow-y: auto;
-    border-top: 1px solid darken(white, 5);
+    border-top: 1px solid darken(white, 10);
 }
 
 
@@ -291,31 +292,23 @@ th, td {
     font-size: 12px;
     line-height: 14px;
 
-    &:hover {
-        background-color: $white;
+    &:focus {
+        outline: none;
+        background: darken(white,5);
     }
 
     .title {
         display: block;
         position: relative;
-        margin-bottom: 0.3em;
-        margin-right: 0.2em;
+        margin-bottom: 0.2em;
         font-size:14px;
         line-height: 1.3em;
         font-weight: 400;
         color: darken(white,100);
-        > i {
-            margin-right: 0.2em;
+        i {
+            opacity: .8;
         }
     }
-    /*
-    .unread-icon {
-        position: absolute; top:0.1em; right: 0;
-        color: $brandLight;
-        font-size: 10px;
-        line-height: 14px;
-    }
-    */
 
     .title-subline {
         font-size: 12px;
@@ -343,8 +336,8 @@ th, td {
 }
 
 .email-item.unread .email-item-link {
-    background: lighten($brand,42);
-    border-top-color: lighten($brand,38);
+    background: lighten($brand,38);
+    border-top-color: lighten($brand,34);
     .title {
         //color: darken($brand,30);
         font-weight: 600;
@@ -352,7 +345,7 @@ th, td {
 }
 
 .email-item.unread + .email-item .email-item-link {
-    border-top-color: lighten($brand,38);
+    border-top-color: lighten($brand,34);
 }
 
 
@@ -442,15 +435,12 @@ th, td {
         padding: 0 0.5em;
     }
 
-    .fa {
-        vertical-align: top;
-        margin-right: 4px;
-        font-size: 20px;
-
-        &.fa-mobile-smaller {
-            transform-origin: center;
-            transform: scale(.8);
-        }
+    i {
+        text-align: center;
+        width: 1.2em;
+        vertical-align: baseline;
+        font-size: 16px;
+        margin-right: 0.2em;
     }
 
     a,
@@ -530,7 +520,8 @@ th, td {
 }
 
 .dropdown-trigger {
-    &:focus { outline: none; }
+
+
     &.open {
         + .dropdown-menu {
             display: block;
@@ -568,9 +559,10 @@ th, td {
     &:hover {
         background: darken(white,5);
     }
-    i {
-        text-align: center;
-        width: 1.2em;
+    &.disabled {
+        pointer-events: none;
+        user-select: none;
+        opacity: .5;
     }
 }
 

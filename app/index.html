@@ -19,7 +19,7 @@
 
                     <div class="brand-container">
                         <a href="#/" class="brand">
-                            <i class="fa fa-envelope a"></i>
+                            <i class="fas fa-envelope"></i>
                             <span class="brand-text">MailDev</span>
                         </a>
                     </div>
@@ -34,13 +34,13 @@
                     <ul class="toolbar" ng-controller="NavCtrl">
                         <li>
                             <a ng-click="refreshList()" href="">
-                                <i class="fa fa-refresh"></i>
+                                <i class="fas fa-refresh"></i>
                                 Refresh
                             </a>
                         </li>
                         <li>
                             <a ng-click="deleteAll()" href="">
-                                <i class="fa fa-inbox"></i>
+                                <i class="fas fa-inbox"></i>
                                 Clear Inbox
                             </a>
                         </li>
@@ -109,7 +109,7 @@
                                 <i class="toggle off"></i>
                             </a>
                             <a href="#/">
-                                <i class="fa fa-info-circle"></i>
+                                <i class="fas fa-info-circle"></i>
                                 Info
                             </a>
                         </li>
@@ -121,33 +121,25 @@
 
 
 
-                <div class="sidebar-emails-container">
+                <div class="sidebar-emails-container ng-cloak">
                     <div class="search-container">
                         <input type="text" ng-model="search" class="search-input" placeholder="Search...">
-                        <i class="fa fa-search search-icon"></i>
+                        <i class="fas fa-search search-icon"></i>
                     </div>
                     <div class="sidebar-scrollable-content">
-                        <ul class="email-list  ng-cloak">
+                        <ul class="email-list">
                             <li ng-repeat="item in items | orderBy:'time':!reverse | filter: search " class="email-item  email-{{item.id}} " ng-class="{current: item.id === currentItemId, read: item.read, unread: !item.read}">
-
                                 <a href="#/email/{{item.id}}" class="email-item-link"  ng-click="markRead(item)">
-
-
                                     <span class="title">
-                                        {{item.subject}}<span ng-hide="!item.attachments">&nbsp;<i class="fa fa-paperclip" ></i></span>
-
+                                        {{item.subject}}<span ng-hide="!item.attachments">&nbsp;<i class="fas fa-paperclip" ></i></span>
                                         <span class="title-subline" title="{{item.to}}">
                                             To:&nbsp;{{item.to.0.address}}&nbsp;<span ng-if="item.to.length > 1">+{{item.to.length-1}}</span>
                                         </span>
-                                        <!-- <i class="fa fa-circle unread-icon" ng-hide="item.read"></i>  -->
                                     </span>
-
                                     <span class="subline">
                                         {{item.time | date:'yyyy-MM-dd HH:mm:ss (Z)' }}
                                     </span>
-
                                 </a>
-
                             </li>
                         </ul>
                     </div>
@@ -155,7 +147,7 @@
 
             </div><!-- END .item-container -->
 
-            <div class="main-container">
+            <div class="main-container    ng-cloak">
                 <div class="email-container" ng-view></div>
             </div><!-- END .main-container -->
 

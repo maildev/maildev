@@ -2,7 +2,7 @@
 
 
 
-    <li class="dropdown-container" ng-if="!settings.toolbarDisplayEnabled">
+    <li class="dropdown-container">
       <a href="" class="dropdown-trigger"
         ng-click="toggleDropdown($event, 'display')"
         ng-class="{ open: dropdownOpen == 'display' }"
@@ -58,46 +58,8 @@
     </li>
 
 
-    <li ng-if="settings.toolbarDisplayEnabled">
-      <ul class="toolbar">
-        <li>
-            <a href="" class=""
-               ng-click="show('html')"
-               ng-class="{ active: panelVisibility == 'html', disabled: !item.html }"
-               title="HTML">
-              <i class="fas fa-code"></i>
-            </a>
-        </li>
-        <li>
-            <a href="" class=""
-               ng-click="show('plain')"
-               ng-class="{ active: panelVisibility == 'plain', disabled: !item.html  }"
-               title="Plain Text">
-              <i class="fas fa-file-text-o"></i>
-            </a>
-        </li>
-        <li>
-            <a href="" class=""
-               ng-click="show('headers')"
-               ng-class="{ active: panelVisibility == 'headers' }"
-               title="Headers">
-              <i class="fas fa-list"></i>
-            </a>
-        </li>
-        <li>
-            <a href="" class=""
-               ng-click="show('source')"
-               ng-class="{ active: panelVisibility == 'source' }"
-               title="Source">
-              <i class="fas fa-file"></i>
-            </a>
-        </li>
-        <li class="disabled">|</li>
-      </ul>
-    </li>
 
-
-    <li class="dropdown-container" ng-if="!settings.toolbarDisplayEnabled">
+    <li class="dropdown-container">
       <a href="" class="dropdown-trigger"
         ng-click="toggleDropdown($event, 'viewport')"
         ng-class="{ open: dropdownOpen == 'viewport', disabled: panelVisibility != 'html' }">
@@ -173,45 +135,6 @@
       </ul>
     </li>
 
-    <li ng-if="settings.toolbarDisplayEnabled">
-        <ul class="toolbar">
-          <li>
-            <a href="" class=""
-               ng-click="resize('320px')"
-               ng-class="{ active: iframeSize == '320px' }"
-               title="320px">
-              <i class="fas fa-mobile fa-mobile-smaller"></i>
-            </a>
-          </li>
-          <li>
-            <a href="" class=""
-               ng-click="resize('480px')"
-               ng-class="{ active: iframeSize == '480px' }"
-               title="480px">
-              <i class="fas fa-mobile"></i>
-            </a>
-          </li>
-          <li>
-            <a href="" class=""
-               ng-click="resize('600px')"
-               ng-class="{ active: iframeSize == '600px' }"
-               title="600px">
-              <i class="fas fa-tablet"></i>
-            </a>
-          </li>
-          <li>
-            <a href="" class=""
-               ng-click="resize()"
-               ng-class="{ active: iframeSize == null }"
-               title="full">
-              <i class="fas fa-desktop"></i>
-            </a>
-          </li>
-          <li class="disabled">|</li>
-        </ul>
-    </li>
-
-
 
     <li>
         <a href="email/{{item.id}}/download" class="">
@@ -225,7 +148,7 @@
 
 
 
-    <li class="dropdown-container" ng-if="!settings.toolbarDisplayEnabled">
+    <li class="dropdown-container">
       <a href="" class="dropdown-trigger"
         ng-click="toggleDropdown($event, 'relay')"
         ng-class="{ open: dropdownOpen == 'relay', disabled: !config.isOutgoingEnabled }"

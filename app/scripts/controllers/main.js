@@ -41,7 +41,6 @@ app.controller('MainCtrl', [
     var defaultSettings = {
       notificationsEnabled: false,
       autoShowEnabled: false,
-      toolbarDisplayEnabled: false,
       darkThemeEnabled: false
     }
     $scope.settings = loadSettings(defaultSettings)
@@ -209,11 +208,6 @@ app.controller('MainCtrl', [
       clearTimeout(t);
       $scope.deleteAllSafeguard = true;
       Email.delete({ id: 'all' })
-    }
-
-    $scope.toggleToolbarDisplay = function () {
-      $scope.settings.toolbarDisplayEnabled = !$scope.settings.toolbarDisplayEnabled
-      saveSettings()
     }
 
     $scope.toggleDarkTheme = function () {

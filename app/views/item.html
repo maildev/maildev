@@ -215,8 +215,10 @@
 
     <li>
         <a href="email/{{item.id}}/download" class="">
+          <span>
             <i class="fas fa-cloud-download-alt"></i>
             Download
+          </span>
         </a>
     </li>
 
@@ -228,8 +230,10 @@
         ng-click="toggleDropdown($event, 'relay')"
         ng-class="{ open: dropdownOpen == 'relay', disabled: !config.isOutgoingEnabled }"
       >
-        <i class="fas fa-paper-plane"></i>
-        Relay
+        <span>
+          <i class="fas fa-paper-plane"></i>
+          Relay
+        </span>
       </a>
       <ul class="dropdown-menu">
         <li>
@@ -254,11 +258,14 @@
 
 
     <li>
-        <a href="" class=""
-          ng-click="delete(item)">
-            <i class="fas fa-trash-alt"></i>
-            Delete
-        </a>
+      <a href="" class=""
+        ng-click="delete(item)"
+      >
+        <span>
+          <i class="fas fa-trash-alt"></i>
+          Delete
+        </span>
+      </a>
     </li>
 
 

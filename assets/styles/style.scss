@@ -547,49 +547,66 @@ th, td {
 
 
 .email-toolbar {
-    width: 100%;
-    background-color: $white;
-    background: $brand;
-    background: darken($brand, 12);
-    justify-content: center;
-    //border-bottom: 1px solid darken(white,5);
-
-
     box-sizing: border-box;
-    margin: 0;
-    padding: 0.2em 0;
+    width: 100%;
     height: $toolbarHeight;
+    background-color: $white;
+    background: darken($brand, 12);
+    //border-bottom: 1px solid darken(white,5);
+    list-style: none;
+    margin: 0;
+    padding: 0;
 
     @include display-flex();
-    flex-flow: row nowrap;
     @include align-items(center);
-
-
-    list-style: none;
+    @include align-content(center);
+    @include justify-content(center);
+    flex-flow: row nowrap;
 
     font-size: 14px;
 
+
     li {
-        padding: 0 0.5em;
+        display: inline-block;
+        height: 100%;
+        margin: 0;
+        padding: 0;
     }
 
-    i {
+    li a {
+        display: inline-block;
+        height: 100%;
+        text-decoration: none;
+        padding: 0 0.8em 0 0.5em;
+        &, &:visited {
+            color: white;
+        }
+        &:focus {
+        }
+        &:hover {
+            background: rgba(white,.1);
+        }
+
+    }
+
+    li a span {
+        height: 100%;
+        @include display-flex();
+        @include align-items(center);
+        @include align-content(center);
+        @include justify-content(center);
+        flex-flow: row nowrap;
+    }
+
+    li a span i {
+        display: block;
         text-align: center;
-        width: 1.2em;
+        width: 1.6em;
         vertical-align: baseline;
         font-size: 16px;
         margin-right: 0.2em;
     }
 
-    a {
-        text-decoration: none;
-        &, &:visited {
-            color: white;
-        }
-        &:hover {
-            color: white;
-        }
-    }
 
 
 }
@@ -616,7 +633,7 @@ th, td {
 .dropdown-menu {
     display: none;
     position: absolute;
-    top: 1.8em;
+    top: 2.4em;
     left: 0;
     z-index: 10;
     padding: 0.3em 0;

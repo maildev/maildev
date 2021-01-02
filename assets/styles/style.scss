@@ -108,14 +108,12 @@ th, td {
  */
 
 .application-container {
+    @include display-flex();
+    @include align-items(stretch);
+    flex-flow: row nowrap;
     height: 100%;
     width: 100%;
     overflow: hidden;
-
-    @include displayFlex();
-
-    flex-flow: row nowrap;
-    @include align-items(stretch);
 }
 
 
@@ -126,22 +124,22 @@ th, td {
 }
 
 
-.application-toolbar {
-    width: 100%; position: fixed; z-index: 10;
-    background-color: $brand;
-}
-
-
-
-
 
 .sidebar {
     @include flex(1 30%);
-
     max-width: 26em;
     height: 100%;
-
     background-color: white;
+}
+
+
+.sidebar-header {
+    position: relative;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 26em;
+    background: $brand;
+    border-right: 1px solid darken($brand, 16);
 }
 
 
@@ -164,26 +162,152 @@ th, td {
     font-weight: 500;
     margin-left: 0.1em;
 }
-
-
-
-
-.sidebar-header {
-    box-sizing: border-box;
-    width: 100%;
-    max-width: 26em;
-    background-color: $brand;
-    border-right: 1px solid darken($brand, 16);
+.brand-unread {
+    font-size: 13px;
+    font-weight: 400;
+    color:rgba(white,.75);
+    cursor: default;
 }
+
+
+
+.header-nav {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: $toolbarHeight;
+    padding-right: 0.4em;
+}
+.header-nav-list {
+    box-sizing: border-box;
+    display: block;
+    list-style: none;
+    @include display-flex();
+    margin: 0;
+    padding: 0;
+    height: 100%;
+
+}
+.header-nav-item {
+    box-sizing: border-box;
+    display: block;
+    height: 100%;
+}
+.header-nav-item-link {
+    @include display-flex();
+    @include align-items(center);
+    @include align-content(center);
+    @include justify-content(center);
+    flex-flow: row nowrap;
+    box-sizing: border-box;
+    height: 100%;
+    width: 2em;
+    text-align: center;
+
+    text-decoration: none;
+    font-size: 1em;
+    font-weight: 400;
+    color: rgba(white,.75);
+    padding: 0;
+    i {
+        display: block;
+        text-align: center;
+        font-size: 14px;
+        line-height: 1;
+        margin-bottom: 0.05em;
+    }
+    &:hover {
+        background: rgba(white,.1);
+    }
+
+
+}
+
+.header-nav-more {
+
+}
+
+.header-nav-more-menu.header-nav-more-menu {
+    box-sizing: border-box;
+    position: absolute;
+    top: 1.4em;
+    right: 0;
+    width: 200px;
+
+}
+
+.header-nav-switch {
+
+    padding: 0.5em 0.5em;
+    display: block;
+    box-sizing: border-box;
+    cursor: pointer;
+
+    &:hover {
+        background: darken(white,5);
+    }
+    &.disabled {
+        pointer-events: none;
+        user-select: none;
+        opacity: .5;
+    }
+
+}
+
+
+.header-nav-switch input {
+    $size: 14px;
+
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+
+    display: inline-block;
+    height: $size;
+    width: 2 * $size;
+    margin-right: 0.3em;
+    vertical-align: middle;
+    margin-bottom: 2px;
+    content: "";
+    background: lighten($brand,32);
+    border-radius: 1em;
+    cursor: pointer;
+    outline: none;
+
+    &::before {
+        display: block;
+        height: $size;
+        width: $size;
+        margin-bottom: 2px;
+        content: "";
+        background: $brand;
+        //box-shadow: 0px 0px 0px 2px inset $white;
+        border-radius: 50%;
+        transition: margin 100ms;
+    }
+
+    &:checked::before {
+        margin-left: $size;
+        background-color: $brandDark;
+    }
+
+    &:disabled {
+        cursor: not-allowed;
+        background-color: $greyMedium;
+        &::before {
+        background-color: $greyLight;
+        //box-shadow: 0px 0px 0px 2px inset $greyMedium;
+        }
+    }
+}
+
+
 
 .sidebar-content {
     height: 100%;
 }
-
-
-
-
-
 
 
 
@@ -291,10 +415,22 @@ th, td {
     color: black;
     font-size: 12px;
     line-height: 14px;
+    position: relative;
 
     &:focus {
         outline: none;
-        background: darken(white,5);
+        &::after {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            z-index: 0;
+            pointer-events: none;
+            background: rgba(black,.05);
+            content: '';
+        }
+        //box-shadow: 3px 0 0 0 lighten($brand,15) inset;
     }
 
     .title {
@@ -348,12 +484,14 @@ th, td {
     border-top-color: lighten($brand,34);
 }
 
-
 .email-item.current .email-item-link {
     background: lighten($brand,0);
+    //&:focus::after {
+    //    display: none;
+    //}
     .title {
         color: white;
-        font-weight: 600;
+        font-weight: 400;
     }
     .subline {
         color: white;
@@ -415,17 +553,17 @@ th, td {
     background: darken($brand, 12);
     justify-content: center;
     //border-bottom: 1px solid darken(white,5);
-}
 
-.toolbar {
+
     box-sizing: border-box;
     margin: 0;
     padding: 0.2em 0;
     height: $toolbarHeight;
 
-    @include displayFlex();
+    @include display-flex();
     flex-flow: row nowrap;
     @include align-items(center);
+
 
     list-style: none;
 
@@ -443,9 +581,7 @@ th, td {
         margin-right: 0.2em;
     }
 
-    a,
-    .toggle-switch {
-        padding: 0.3em 0.2em;
+    a {
         text-decoration: none;
         &, &:visited {
             color: white;
@@ -455,72 +591,15 @@ th, td {
         }
     }
 
+
 }
 
-.toolbar-right {
-    position: fixed; top:0; right:0;
-}
-
-.toggle-switch {
-  $size: 14px;
-
-  cursor: pointer;
-
-  &.disabled {
-    cursor: not-allowed;
-  }
-
-  input {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-
-    display: inline-block;
-    height: $size;
-    width: 2 * $size;
-    margin-right: 0.3em;
-    vertical-align: middle;
-    margin-bottom: 2px;
-    content: "";
-    background: $white;
-    border-radius: 1em;
-    cursor: pointer;
-    outline: none;
-
-    &::before {
-      display: block;
-      height: $size;
-      width: $size;
-      margin-bottom: 2px;
-      content: "";
-      background: $brandLight;
-      box-shadow: 0px 0px 0px 2px inset $white;
-      border-radius: 50%;
-      transition: margin 100ms;
-    }
-
-    &:checked::before {
-      margin-left: $size;
-      background-color: $brandDark;
-    }
-
-    &:disabled {
-      cursor: not-allowed;
-      background-color: $greyMedium;
-      &::before {
-        background-color: $greyLight;
-        box-shadow: 0px 0px 0px 2px inset $greyMedium;
-      }
-    }
-  }
-}
 
 .dropdown-container {
     position: relative;
 }
 
 .dropdown-trigger {
-
 
     &.open {
         + .dropdown-menu {
@@ -549,6 +628,10 @@ th, td {
 
     li {
         padding: 0;
+        display: block;
+    }
+
+    &.open {
         display: block;
     }
 }

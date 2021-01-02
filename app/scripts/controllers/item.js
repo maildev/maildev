@@ -54,7 +54,7 @@ app.controller('ItemCtrl', [
         replaceMediaQueries()
         fixIframeHeight()
 
-        addHideDropdownHanlder(iframe.contentDocument.getElementsByTagName('body')[0])
+        addHideDropdownHandler(iframe.contentDocument.getElementsByTagName('body')[0])
       }, 500)
     }
 
@@ -80,7 +80,6 @@ app.controller('ItemCtrl', [
     }
 
     // NOTE: This is kind of a hack to get these dropdowns working. Should be revisited in the future
-
     // Toggle a dropdown open/closed by toggling a class on the trigger itself
     $scope.toggleDropdown = function ($event, dropdownName) {
       $event.stopPropagation()
@@ -93,18 +92,19 @@ app.controller('ItemCtrl', [
       })
     }
 
-    function addHideDropdownHanlder (element) {
+    function addHideDropdownHandler (element) {
       angular.element(element)
         .off('click', hideDropdown)
         .on('click', hideDropdown)
     }
 
+    addHideDropdownHandler(window)
+
+
     function validateEmail (email) {
       var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return re.test(email)
     }
-
-    addHideDropdownHanlder(window)
 
     // Toggle what format is viewable
     $scope.show = function (type) {

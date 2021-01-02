@@ -10,9 +10,9 @@ app.controller('MainCtrl', [
   '$scope', '$rootScope', '$http', 'Email', '$route', '$location', 'Favicon',
   function ($scope, $rootScope, $http, Email, $route, $location, Favicon) {
     $scope.items = []
-    $scope.configOpen = false
     $scope.currentItemId = null
     $scope.unreadItems = 0
+    $scope.navMoreOpen = false
 
     $scope.notificationsSupported = 'Notification' in window && window.isSecureContext
 
@@ -123,13 +123,43 @@ app.controller('MainCtrl', [
       countUnread()
     }
 
-    $scope.showConfig = function () {
-      $scope.configOpen = !$scope.configOpen
+
+
+    $scope.headerNavStopPropagation = function ($event) {
+      $event.stopPropagation()
     }
+
+    $scope.toggleNavMore = function ($event) {
+      $event.stopPropagation()
+      $scope.navMoreOpen = !$scope.navMoreOpen;
+    }
+
+    function hideNavMore (e) {
+      $scope.$apply(function () {
+        $scope.navMoreOpen = false;
+      })
+    }
+
+    function addHideNavMoreHandler (element) {
+      angular.element(element)
+        .off('click', hideNavMore)
+        .on('click', hideNavMore)
+    }
+
+    addHideNavMoreHandler(window)
+
 
     $scope.toggleAutoShow = function () {
       $scope.settings.autoShowEnabled = !$scope.settings.autoShowEnabled
       saveSettings()
+    }
+
+    $scope.refreshList = function () {
+      $rootScope.$emit('Refresh')
+    }
+
+    $scope.deleteAll = function () {
+      Email.delete({ id: 'all' })
     }
 
     $scope.toggleToolbarDisplay = function () {
@@ -167,23 +197,5 @@ app.controller('MainCtrl', [
         $rootScope.config = data
         $scope.config = data
       })
-  }
-])
-
-/**
- * Navigation Controller
- */
-
-app.controller('NavCtrl', [
-  '$scope', '$rootScope', '$location', 'Email',
-  function ($scope, $rootScope, $location, Email) {
-    $scope.refreshList = function () {
-      $rootScope.$emit('Refresh')
-    }
-
-    $scope.deleteAll = function () {
-      Email.delete({ id: 'all' })
-    }
-
   }
 ])

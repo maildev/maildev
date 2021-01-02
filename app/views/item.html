@@ -1,4 +1,4 @@
-<ul class="toolbar email-toolbar">
+<ul class="email-toolbar">
 
 
 
@@ -101,11 +101,14 @@
       <a href="" class="dropdown-trigger"
         ng-click="toggleDropdown($event, 'viewport')"
         ng-class="{ open: dropdownOpen == 'viewport', disabled: panelVisibility != 'html' }">
-        <!-- <i class="fas fa-ruler-combined"></i> -->
+        <!--
+        <span ng-if="iframeSize == null"><i class="fas fa-ruler-combined"></i> 100%</span> -->
         <span ng-if="iframeSize == null"><i class="fas fa-desktop"></i> 100%</span>
+        <span ng-if="iframeSize == '1440px'"><i class="fas fa-desktop"></i> 1440px</span>
         <span ng-if="iframeSize == '1024px'"><i class="fas fa-tablet-alt"></i> 1024px</span>
         <span ng-if="iframeSize == '768px'"><i class="fas fa-tablet-alt"></i> 768px</span>
         <span ng-if="iframeSize == '425px'"><i class="fas fa-mobile-alt"></i> 425px</span>
+        <span ng-if="iframeSize == '375px'"><i class="fas fa-mobile-alt"></i> 375px</span>
         <span ng-if="iframeSize == '320px'"><i class="fas fa-mobile-alt"></i> 320px</span>
 
       </a>
@@ -117,6 +120,14 @@
               ng-class="{ active: iframeSize == null }">
                 <i class="fas fa-desktop"></i>
                 100%
+            </a>
+        </li>
+        <li>
+            <a href="" class=""
+              ng-click="resize('1440px')"
+              ng-class="{ active: iframeSize == '1440px' }">
+                <i class="fas fa-desktop"></i>
+                1440px
             </a>
         </li>
         <li>
@@ -142,6 +153,14 @@
                 <i class="fas fa-mobile-alt"></i>
                 425px
             </a>
+        </li>
+        <li>
+          <a href="" class=""
+            ng-click="resize('375px')"
+            ng-class="{ active: iframeSize == '375px' }">
+              <i class="fas fa-mobile-alt"></i>
+              375px
+          </a>
         </li>
         <li>
           <a href="" class=""

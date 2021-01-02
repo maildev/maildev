@@ -1,3 +1,44 @@
 body.dark-theme {
 
+
+    .sidebar-header {
+        background-color: darken($brand, 32);
+        border-right-color: darken($brand, 38);
+    }
+
+    .search-icon {
+        color: darken(white,15);
+    }
+
+    .search-input {
+        background-color: darken($brand, 38);
+        color: rgba(white,1);
+        & + .search-icon {
+            color: rgba(white,.5);
+        }
+
+        &:focus {
+            background-color: darken($brand, 38);
+            & + .search-icon {
+                color: rgba(white,1);
+            }
+        }
+
+
+        &::-webkit-input-placeholder{
+            color: rgba(white,.5);
+        }
+        &::-moz-placeholder{
+            color: rgba(white,.5);
+        }
+        &::-ms-placeholder{
+            color: rgba(white,.5);
+        }
+        &::placeholder  {
+            color: rgba(white,.5);
+        }
+    }
+
+
+
 }

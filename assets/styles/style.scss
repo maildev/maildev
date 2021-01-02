@@ -24,13 +24,6 @@ $toolbarHeight:     2.8em;
 $searchHeight:      2.4em;
 
 
-/**
- * Dark Theme
- */
-
-@import 'dark-theme';
-
-
 
 
 /**
@@ -96,6 +89,10 @@ th, td {
  * Specific Styles
  */
 
+body.dark-theme {
+    background-color: darken($brand, 46);
+}
+
 .application-container {
     @include display-flex();
     @include align-items(stretch);
@@ -118,7 +115,10 @@ th, td {
     @include flex(1 30%);
     max-width: 26em;
     height: 100%;
-    background-color: white;
+    background: white;
+    body.dark-theme & {
+        background-color: darken($brand, 38);
+    }
 }
 
 
@@ -129,6 +129,12 @@ th, td {
     max-width: 26em;
     background: $brand;
     border-right: 1px solid darken($brand, 16);
+
+    body.dark-theme & {
+        background-color: darken($brand, 32);
+        border-right-color: darken($brand, 28);
+    }
+
 }
 
 
@@ -139,6 +145,10 @@ th, td {
     padding: 0.3em 0 0 0.8em;
     height: $toolbarHeight;
     box-sizing: border-box;
+    border-bottom: 1px solid darken($brand, 6);
+    body.dark-theme & {
+        border-bottom-color: darken($brand, 28);
+    }
 }
 
 .brand {
@@ -305,6 +315,10 @@ th, td {
     overflow-x: hidden;
     overflow-y: hidden;
     border-right: 1px solid darken(white, 10);
+    body.dark-theme & {
+        border-right-color: darken($brand, 32);
+    }
+
 }
 
 
@@ -315,6 +329,9 @@ th, td {
     overflow-x: hidden;
     overflow-y: auto;
     border-top: 1px solid darken(white, 10);
+    body.dark-theme & {
+        border-top-color: darken($brand, 32);
+    }
 }
 
 
@@ -331,6 +348,9 @@ th, td {
     top: 0.7em;
     left: 0.8em;
     color: darken(white,55);
+    body.dark-theme & {
+        color: darken(white,15);
+    }
 }
 
 .search-input {
@@ -368,7 +388,39 @@ th, td {
         color: rgba(black,.5);
     }
 
+
+    body.dark-theme & {
+        background-color: darken($brand, 38);
+        color: rgba(white,1);
+        & + .search-icon {
+            color: rgba(white,.5);
+        }
+
+        &:focus {
+            background-color: darken($brand, 38);
+            & + .search-icon {
+                color: rgba(white,1);
+            }
+        }
+
+
+        &::-webkit-input-placeholder{
+            color: rgba(white,.5);
+        }
+        &::-moz-placeholder{
+            color: rgba(white,.5);
+        }
+        &::-ms-placeholder{
+            color: rgba(white,.5);
+        }
+        &::placeholder  {
+            color: rgba(white,.5);
+        }
+    }
+
 }
+
+
 
 
 
@@ -393,7 +445,7 @@ th, td {
     display: block;
     padding: 0.9em 1em 1.1em; //0.6 to offset the line height of the email title
 
-    background-color: white;
+    background: white;
     border-top: 1px solid darken(white,5);
     text-decoration: none;
     color: black;
@@ -417,6 +469,11 @@ th, td {
         //box-shadow: 3px 0 0 0 lighten($brand,15) inset;
     }
 
+    body.dark-theme &:focus::after {
+        background: rgba(white,.07);
+    }
+
+
     .title {
         display: block;
         position: relative;
@@ -428,6 +485,10 @@ th, td {
         i {
             opacity: .8;
         }
+
+        body.dark-theme & {
+            color: rgba(white,.75);
+        }
     }
 
     .title-subline {
@@ -435,6 +496,9 @@ th, td {
         font-weight: 400;
         opacity: .6;
         word-break: break-word;
+        body.dark-theme & {
+            color: rgba(white,.75);
+        }
     }
 
     .subline {
@@ -443,29 +507,56 @@ th, td {
         opacity: .6;
         display: block;
         word-break: break-word;
+        body.dark-theme & {
+            color: rgba(white,.75);
+        }
     }
 
 
-    @media (max-width: 800px) {
-        .subline-time { display: none; }
+    body.dark-theme & {
+        background-color: darken($brand, 38);
+        border-top-color: darken($brand, 32);
     }
+
+
+
 }
 
 .email-item:first-of-type .email-item-link {
     border-top: none;
 }
 
+.email-item:last-of-type .email-item-link {
+    border-bottom: 1px solid darken(white,5);
+    body.dark-theme & {
+        border-bottom-color: darken($brand, 32);
+    }
+}
+
 .email-item.unread .email-item-link {
     background: lighten($brand,38);
     border-top-color: lighten($brand,34);
+    border-bottom-color: lighten($brand,34);
     .title {
         //color: darken($brand,30);
         font-weight: 600;
     }
+
+    body.dark-theme & {
+        background-color: darken($brand, 28);
+        border-top-color: darken($brand, 23);
+        border-bottom-color: darken($brand, 23);
+    }
+
 }
 
 .email-item.unread + .email-item .email-item-link {
     border-top-color: lighten($brand,34);
+
+    body.dark-theme & {
+        border-top-color: darken($brand, 23);
+    }
+
 }
 
 .email-item.current .email-item-link {
@@ -488,10 +579,20 @@ th, td {
 
 .main-content {
     margin: 1.5em 2em;
+    color: black;
+    a {
+        color: black;
+    }
 
     h1 {
         margin-top: 0;
         font-size: 1.6em;
+    }
+    body.dark-theme & {
+        color: white;
+        a {
+            color: white;
+        }
     }
 }
 
@@ -514,8 +615,11 @@ th, td {
 
 .email-content-view-html {
     text-align: center;
-    background: darken(white,90);
-    background: darken($brand, 42);
+    background: lighten($brand, 42);
+
+    body.dark-theme & {
+        background: darken($brand, 52);
+    }
 }
 
 .preview-iframe {
@@ -527,6 +631,9 @@ th, td {
     position: relative; // set position for resize rendering issue
     //border: 1px solid darken(white,10);
     background: darken(white,0);
+    body.dark-theme & {
+        background: darken($brand, 46);
+    }
 }
 
 
@@ -536,7 +643,7 @@ th, td {
     height: $toolbarHeight;
     background-color: white;
     background: darken($brand, 12);
-    //border-bottom: 1px solid darken(white,5);
+    border-bottom: 1px solid darken($brand, 16);
     list-style: none;
     margin: 0;
     padding: 0;
@@ -593,6 +700,11 @@ th, td {
         margin-right: 0.2em;
     }
 
+
+    body.dark-theme & {
+        background-color: darken($brand, 38);
+        border-bottom-color: darken($brand, 32);
+    }
 
 
 }
@@ -656,10 +768,18 @@ th, td {
 .panel-plain {
     box-sizing: border-box;
     padding: 1em 1em;
+    body.dark-theme & {
+        color: white;
+    }
 }
 .panel-attachments {
     box-sizing: border-box;
     padding: 1em 1em;
+
+    body.dark-theme & a {
+        color: white;
+    }
+
 }
 .panel-headers {
     box-sizing: border-box;
@@ -674,5 +794,14 @@ th, td {
 
     td:first-of-type {
         text-align: right;
+    }
+    body.dark-theme & {
+        color: white;
+    }
+}
+
+.panel-source {
+    body.dark-theme & {
+        background: white;
     }
 }

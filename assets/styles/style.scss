@@ -282,7 +282,7 @@ th, td {
         width: $size;
         margin-bottom: 2px;
         content: "";
-        background: $brand;
+        background: lighten($brand,16);
         //box-shadow: 0px 0px 0px 2px inset $white;
         border-radius: 50%;
         transition: margin 100ms;

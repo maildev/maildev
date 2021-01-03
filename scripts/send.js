@@ -110,6 +110,16 @@ var messages = [
     ]
   },
 
+  // Email with mutliple to, cc & bcc
+  {
+    from: 'Bodhi <bodhi@gmail.com>',
+    to: ['Johnny First <johnny.first@fbi.gov>', 'Johnny Second <johnny.second@fbi.gov>'],
+    cc: ['Johnny Third <johnny.third@fbi.gov>', 'Johnny Fourth <johnny.fourth@fbi.gov>'],
+    bcc: ['Johnny Fifth <johnny.fifth@fbi.gov>', 'Johnny Sixth <johnny.sixth@fbi.gov>'],
+    subject: '100% pure adrenaline!',
+    text: 'This is stimulating, but we\'re out of here.',
+  },
+
   // Email with big list of naughty strings
   {
     from: 'Bodhi <bodhi@gmail.com>',

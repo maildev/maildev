@@ -449,17 +449,16 @@ body.dark-theme {
 .email-item-link {
     display: block;
     padding: 0.9em 1em 1.1em;
-
     background: white;
     border-top: 1px solid darken(white,5);
     text-decoration: none;
-    color: black;
     font-size: 12px;
     line-height: 14px;
     position: relative;
 
     &:focus {
         outline: none;
+        //box-shadow: 3px 0 0 0 lighten($brand,15) inset;
         &::after {
             position: absolute;
             top: 0;
@@ -471,14 +470,7 @@ body.dark-theme {
             background: rgba(black,.05);
             content: '';
         }
-        //box-shadow: 3px 0 0 0 lighten($brand,15) inset;
     }
-
-    body.dark-theme &:focus::after {
-        background: rgba(white,.07);
-    }
-
-
     .title {
         display: block;
         position: relative;
@@ -486,45 +478,40 @@ body.dark-theme {
         font-size: 14px;
         line-height: 1.3em;
         font-weight: 400;
-        color: darken(white,100);
+        color: rgba(black,.95);
         i {
             opacity: .8;
         }
-
         body.dark-theme & {
-            color: rgba(white,.75);
+            color: rgba(white,.8);
         }
     }
-
     .title-subline {
         font-size: 12px;
         font-weight: 400;
-        opacity: .6;
         word-break: break-word;
+        color: rgba(black,.6);
         body.dark-theme & {
-            color: rgba(white,.75);
+            color: rgba(white,.6);
         }
     }
-
     .subline {
         font-size: 12px;
         font-weight: 400;
-        opacity: .6;
         display: block;
         word-break: break-word;
+        color: rgba(black,.6);
         body.dark-theme & {
-            color: rgba(white,.75);
+            color: rgba(white,.6);
         }
     }
-
-
     body.dark-theme & {
         background-color: darken($brand, 38);
         border-top-color: darken($brand, 32);
     }
-
-
-
+    body.dark-theme &:focus::after {
+        background: rgba(white,.07);
+    }
 }
 
 .email-item:first-of-type .email-item-link {
@@ -546,37 +533,39 @@ body.dark-theme {
         //color: darken($brand,30);
         font-weight: 600;
     }
-
     body.dark-theme & {
         background-color: darken($brand, 28);
         border-top-color: darken($brand, 23);
         border-bottom-color: darken($brand, 23);
     }
-
 }
 
 .email-item.unread + .email-item .email-item-link {
     border-top-color: lighten($brand,34);
-
     body.dark-theme & {
         border-top-color: darken($brand, 23);
     }
-
 }
 
 .email-item.current .email-item-link {
-    background: lighten($brand,0);
-    //&:focus::after {
-    //    display: none;
-    //}
+    background: darken($brand,0);
     .title {
-        color: white;
+        color: rgba(white,.95);
         font-weight: 400;
     }
+    .title-subline {
+        color: rgba(white,.7);
+    }
     .subline {
-        color: white;
+        color: rgba(white,.7);
+    }
+    body.dark-theme & {
+        background: darken($brand,5);
     }
 }
+
+
+
 
 
 

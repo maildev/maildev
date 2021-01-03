@@ -10,14 +10,12 @@ const fs = require('fs')
 const nodemailer = require('nodemailer')
 
 // https://github.com/minimaxir/big-list-of-naughty-strings
-//const blns = require('blns');
+// const blns = require('blns');
 
 var blns = fs.readFileSync(path.join(__dirname, './resources/blns.txt'))
 var utf8sampler = fs.readFileSync(path.join(__dirname, './resources/utf-8-sampler.html'))
 var utf8demo = fs.readFileSync(path.join(__dirname, './resources/utf-8-demo.html'))
 var utf8quickbrown = fs.readFileSync(path.join(__dirname, './resources/utf-8-quickbrown.html'))
-
-
 
 // Create a transport with MailDev's default receiving port
 var transporter = nodemailer.createTransport({
@@ -118,7 +116,7 @@ var messages = [
     to: 'Johnny Utah <johnny.utah@fbi.gov>',
     subject: 'Naughty!',
     text: blns,
-    html: '<!DOCTYPE html><html><head></head><body>' + blns + '</body></html>',
+    html: '<!DOCTYPE html><html><head></head><body>' + blns + '</body></html>'
   },
 
   //
@@ -127,8 +125,8 @@ var messages = [
     to: 'Johnny Utah <johnny.utah@fbi.gov>',
     subject: 'Have a sample of this',
     text: utf8sampler,
-    html: utf8sampler,
-  },
+    html: utf8sampler
+  }
 
   //
   /*
@@ -137,7 +135,7 @@ var messages = [
     to: 'Johnny Utah <johnny.utah@fbi.gov>',
     subject: 'UTF-8 demo',
     text: utf8demo,
-    html: utf8demo,
+    html: utf8demo
   },
 
   //
@@ -146,7 +144,7 @@ var messages = [
     to: 'Johnny Utah <johnny.utah@fbi.gov>',
     subject: 'UTF-8 quickbrown',
     text: utf8quickbrown,
-    html: utf8quickbrown,
+    html: utf8quickbrown
   },
 
   //
@@ -154,7 +152,7 @@ var messages = [
     from: 'Bodhi <bodhi@gmail.com>',
     to: 'Johnny Utah <johnny.utah@fbi.gov>',
     subject: 'UTF-8 subject / Я могу есть / ᛁᚳ᛫ᛗᚨᚷ᛫ᚷᛚᚨᛋ / 𐌼𐌰𐌲 𐌲𐌻𐌴𐍃 𐌹̈𐍄𐌰𐌽 / Μπορώ να φάω / 私はガ / ฉันกินก / 我能吞下 / ฉันกินก / ཤེལ་སྒོ་ཟ་ནས་ / אני יכול / მინას ვჭამ / لا يؤلمني / Mogę jeść szkło / Tsésǫʼ yishą́ągo / ⡍⠜⠇⠑⠹ ⠺',
-    text: 'This test is only for subject.',
+    text: 'This test is only for subject.'
   }
   */
 

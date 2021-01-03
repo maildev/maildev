@@ -14,8 +14,8 @@ const nodemailer = require('nodemailer')
 
 var blns = fs.readFileSync(path.join(__dirname, './resources/blns.txt'))
 var utf8sampler = fs.readFileSync(path.join(__dirname, './resources/utf-8-sampler.html'))
-//var utf8demo = fs.readFileSync(path.join(__dirname, './resources/utf-8-demo.html'))
-//var utf8quickbrown = fs.readFileSync(path.join(__dirname, './resources/utf-8-quickbrown.html'))
+// var utf8demo = fs.readFileSync(path.join(__dirname, './resources/utf-8-demo.html'))
+// var utf8quickbrown = fs.readFileSync(path.join(__dirname, './resources/utf-8-quickbrown.html'))
 
 // Create a transport with MailDev's default receiving port
 var transporter = nodemailer.createTransport({

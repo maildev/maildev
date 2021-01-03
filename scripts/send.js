@@ -38,7 +38,7 @@ var messages = [
   // Email w/ simple attachment and basic header
   {
     from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
-    to: ['Johnny Long Name Utah <johnny.long.email.address.utah@fbi.gov>', 'Johnny Utah <johnny.utah@fbi.gov>', 'Bodhi <bodhi@gmail.com>', ],
+    to: [ 'Johnny Long Name Utah <johnny.long.email.address.utah@fbi.gov>', 'Johnny Utah <johnny.utah@fbi.gov>', 'Bodhi <bodhi@gmail.com>' ],
     subject: 'Look at it! It\'s a once in a lifetime opportunity, man! Let me go out there and let me get one wave, just one wave before you take me in.',
     headers: {
       'X-some-header': 1000

@@ -140,24 +140,24 @@ maildev [options]
 
   -h, --help                      output usage information
   -V, --version                   output the version number
-  -s, --smtp &lt;port&lt;               SMTP port to catch emails [1025]
-  -w, --web &lt;port&lt;                Port to run the Web GUI [1080]
-  --ip &lt;ip address&lt;               IP Address to bind SMTP service to
-  --outgoing-host &lt;host&lt;          SMTP host for outgoing emails
-  --outgoing-port &lt;port&lt;          SMTP port for outgoing emails
-  --outgoing-user &lt;user&lt;          SMTP user for outgoing emails
-  --outgoing-pass &lt;password&lt;      SMTP password for outgoing emails
+  -s, --smtp &lt;port&gt;               SMTP port to catch emails [1025]
+  -w, --web &lt;port&gt;                Port to run the Web GUI [1080]
+  --ip &lt;ip address&gt;               IP Address to bind SMTP service to
+  --outgoing-host &lt;host&gt;          SMTP host for outgoing emails
+  --outgoing-port &lt;port&gt;          SMTP port for outgoing emails
+  --outgoing-user &lt;user&gt;          SMTP user for outgoing emails
+  --outgoing-pass &lt;password&gt;      SMTP password for outgoing emails
   --outgoing-secure               Use SMTP SSL for outgoing emails
-  --auto-relay %lt;email&lt;            Use auto-relay mode. Optional relay email address
-  --auto-relay-rules &lt;file&lt;       Filter rules for auto relay mode
-  --incoming-user &lt;user&lt;          SMTP user for incoming emails
-  --incoming-pass &lt;pass&lt;          SMTP password for incoming emails
-  --web-ip &lt;ip address&lt;           IP Address to bind HTTP service to, defaults to --ip
-  --web-user &lt;user&lt;               HTTP user for GUI
-  --web-pass &lt;password&lt;           HTTP password for GUI
-  --base-pathname &lt;path&lt;          base path for URLs
+  --auto-relay &lt;email&gt;            Use auto-relay mode. Optional relay email address
+  --auto-relay-rules &lt;file&gt;       Filter rules for auto relay mode
+  --incoming-user &lt;user&gt;          SMTP user for incoming emails
+  --incoming-pass &lt;pass&gt;          SMTP password for incoming emails
+  --web-ip &lt;ip address&gt;           IP Address to bind HTTP service to, defaults to --ip
+  --web-user &lt;user&gt;               HTTP user for GUI
+  --web-pass &lt;password&gt;           HTTP password for GUI
+  --base-pathname &lt;path&gt;          base path for URLs
   --disable-web                   Disable the use of the web interface. Useful for unit testing
-  --hide-extensions &lt;extensions&lt;  Comma separated list of SMTP extensions to NOT advertise
+  --hide-extensions &lt;extensions&gt;  Comma separated list of SMTP extensions to NOT advertise
                                   (STARTTLS, SMTPUTF8, PIPELINING, 8BITMIME)
   -o, --open                      Open the Web GUI after startup
   -v, --verbose

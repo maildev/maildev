@@ -13,7 +13,7 @@ If you don't have the image on your machine, Docker will pull it. Let's name
 it "maildev" and publish the interface on port `1080`:
 
 ```
-$ docker run -p 1080:1080 --name maildev maildev/maildev
+$ docker run -p 1080:80 --name maildev maildev/maildev
 ```
 
 Now the MailDev UI will be running at port `1080` on your virtual machine

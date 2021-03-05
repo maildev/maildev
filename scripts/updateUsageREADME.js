@@ -8,8 +8,8 @@ const generateMarkdown = (options) => {
     return `|\`${option[0]}\`|${env}|${option[2] || ''}|`
   })
   return [
-    `|Options|Environment variable|Description|`,
-    `|---|---|---|`
+    '|Options|Environment variable|Description|',
+    '|---|---|---|'
   ].concat(tableRows).join('\n')
 }
 

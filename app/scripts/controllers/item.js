@@ -7,10 +7,10 @@
 app.controller('ItemCtrl', [
   '$scope', '$rootScope', '$routeParams', '$location', 'Email', '$http', '$cookies',
   function ($scope, $rootScope, $routeParams, $location, Email, $http, $cookies) {
-    var iframe = null
+    let iframe = null
 
     // Get the item data by route parameter
-    var getItem = function () {
+    const getItem = function () {
       Email.get({ id: $routeParams.itemId }, function (email) {
         $scope.item = new Email(email)
 
@@ -29,7 +29,7 @@ app.controller('ItemCtrl', [
     }
 
     // Get email source
-    var getSource = function () {
+    const getSource = function () {
       if (typeof $scope.rawEmail === 'undefined') {
         $scope.rawEmail = 'email/' + $scope.item.id + '/source'
       }
@@ -39,8 +39,8 @@ app.controller('ItemCtrl', [
     var prepIframe = function () {
       // Wait for iframe to load
       setTimeout(function () {
-        var baseEl
-        var head
+        let baseEl
+        let head
 
         iframe = document.getElementsByTagName('iframe')[0]
         head = iframe.contentDocument.getElementsByTagName('head')[0]
@@ -61,8 +61,8 @@ app.controller('ItemCtrl', [
     // Updates the iframe height so it matches it's content
     // This prevents the iframe from having scrollbars
     var fixIframeHeight = function () {
-      var body = iframe.contentDocument.getElementsByTagName('body')[0]
-      var newHeight = body.scrollHeight
+      const body = iframe.contentDocument.getElementsByTagName('body')[0]
+      const newHeight = body.scrollHeight
 
       iframe.height = newHeight
     }
@@ -100,7 +100,7 @@ app.controller('ItemCtrl', [
     }
 
     function validateEmail (email) {
-      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return re.test(email)
     }
 
@@ -128,9 +128,9 @@ app.controller('ItemCtrl', [
 
     // Relay email to
     $scope.relayTo = function (item) {
-      var lastRelayTo = $cookies.relayTo
+      const lastRelayTo = $cookies.relayTo
 
-      var relayTo = prompt('Please enter email address to relay', lastRelayTo)
+      const relayTo = prompt('Please enter email address to relay', lastRelayTo)
 
       if (relayTo) {
         if (validateEmail(relayTo)) {

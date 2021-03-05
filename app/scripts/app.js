@@ -4,7 +4,7 @@
  * App Config
  */
 
-var app = angular.module('mailDevApp', ['ngRoute', 'ngResource', 'ngSanitize', 'ngCookies'])
+const app = angular.module('mailDevApp', ['ngRoute', 'ngResource', 'ngSanitize', 'ngCookies'])
 
 app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
@@ -15,7 +15,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 
 app.run(['$rootScope', function ($rootScope) {
   // Connect Socket.io
-  var socket = io({
+  const socket = io({
     path: location.pathname + 'socket.io'
   })
 
@@ -63,14 +63,14 @@ app.filter('encodeURIComponent', function ($window) {
  */
 
 (function () {
-  var sidebar = document.querySelector('.sidebar')
-  var sidebarHeader = document.querySelector('.sidebar-header')
-  var emailList = document.querySelector('.email-list')
-  var sidebarHeaderHeight = sidebarHeader.getBoundingClientRect().height
-  var resizeTimeout = null
+  const sidebar = document.querySelector('.sidebar')
+  const sidebarHeader = document.querySelector('.sidebar-header')
+  const emailList = document.querySelector('.email-list')
+  const sidebarHeaderHeight = sidebarHeader.getBoundingClientRect().height
+  let resizeTimeout = null
 
   function adjustEmailListHeight () {
-    var newEmailListHeight = sidebar.getBoundingClientRect().height - sidebarHeaderHeight
+    const newEmailListHeight = sidebar.getBoundingClientRect().height - sidebarHeaderHeight
     emailList.style.height = newEmailListHeight + 'px'
   }
 

@@ -3,8 +3,8 @@
 /**
  * Main App Controller -- Manage all emails visible in the list
  */
-var refreshTimeout = null
-var notificationTimeout = null
+let refreshTimeout = null
+let notificationTimeout = null
 
 app.controller('MainCtrl', [
   '$scope', '$rootScope', '$http', 'Email', '$route', '$location', 'Favicon',
@@ -16,15 +16,15 @@ app.controller('MainCtrl', [
 
     $scope.notificationsSupported = 'Notification' in window && window.isSecureContext
 
-    var settingsKey = 'maildevSettings'
-    var saveSettings = function () {
+    const settingsKey = 'maildevSettings'
+    const saveSettings = function () {
       if (window.localStorage) {
         window.localStorage.setItem(settingsKey, JSON.stringify($scope.settings))
       }
     }
-    var loadSettings = function (defaultSettings) {
+    const loadSettings = function (defaultSettings) {
       try {
-        var settingsJSON = window.localStorage.getItem(settingsKey)
+        const settingsJSON = window.localStorage.getItem(settingsKey)
         return Object.assign({}, defaultSettings, JSON.parse(settingsJSON))
       } catch (err) {
         console.error('Error loading MailDev settings', err)
@@ -32,14 +32,14 @@ app.controller('MainCtrl', [
       }
     }
 
-    var defaultSettings = {
+    const defaultSettings = {
       notificationsEnabled: false,
       autoShowEnabled: false,
       toolbarDisplayEnabled: false
     }
     $scope.settings = loadSettings(defaultSettings)
 
-    var countUnread = function () {
+    const countUnread = function () {
       $scope.unreadItems = $scope.items.filter(function (email) {
         return !email.read
       }).length
@@ -47,7 +47,7 @@ app.controller('MainCtrl', [
     }
 
     // Load all emails
-    var loadData = function () {
+    const loadData = function () {
       $scope.items = Email.query()
       $scope.items.$promise.then(function () {
         countUnread()
@@ -98,12 +98,12 @@ app.controller('MainCtrl', [
         $rootScope.$emit('Refresh')
         $location.path('/')
       } else {
-        var idx = $scope.items.reduce(function (p, c, i) {
+        const idx = $scope.items.reduce(function (p, c, i) {
           if (p !== 0) return p
           return c.id === email.id ? i : 0
         }, 0)
 
-        var nextIdx = $scope.items.length === 1 ? null : idx === 0 ? idx + 1 : idx - 1
+        const nextIdx = $scope.items.length === 1 ? null : idx === 0 ? idx + 1 : idx - 1
         if (nextIdx !== null) {
           $location.path('/email/' + $scope.items[nextIdx].id)
         } else {

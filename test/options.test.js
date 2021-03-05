@@ -8,6 +8,7 @@ describe('options', () => {
       constructor () {
         this.options = []
       }
+
       option (...args) {
         this.options.push([...args])
         return this

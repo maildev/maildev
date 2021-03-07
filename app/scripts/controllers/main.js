@@ -123,7 +123,7 @@ app.controller('MainCtrl', [
       }
     })
 
-    $scope.$watch('currentItemId', function (val, preVal) {
+    $scope.markCurrentAsRead = function () {
       if (!$scope.currentItemId) return
       if (!$scope.items || !$scope.items.length) return
 
@@ -138,7 +138,15 @@ app.controller('MainCtrl', [
       currentItem.read = true
 
       countUnread()
+    }
+
+    $scope.$watch('currentItemId', function (val, oldVal) {
+      $scope.markCurrentAsRead()
     }, false)
+
+    $scope.$watch('items', function (val, oldVal) {
+      $scope.markCurrentAsRead()
+    }, true)
 
     $scope.markReadAll = function () {
       $http({

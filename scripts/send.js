@@ -117,7 +117,7 @@ var messages = [
     cc: ['Johnny Third <johnny.third@fbi.gov>', 'Johnny Fourth <johnny.fourth@fbi.gov>'],
     bcc: ['Johnny Fifth <johnny.fifth@fbi.gov>', 'Johnny Sixth <johnny.sixth@fbi.gov>'],
     subject: '100% pure adrenaline!',
-    text: 'This is stimulating, but we\'re out of here.',
+    text: 'This is stimulating, but we\'re out of here.'
   },
 
   // Email with big list of naughty strings

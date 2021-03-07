@@ -231,7 +231,7 @@ body.dark-theme {
     position: absolute;
     top: 1.5em;
     right: 0;
-    width: 200px;
+    min-width: 14em;
 
 }
 
@@ -736,7 +736,7 @@ body.dark-theme {
     left: 0;
     z-index: 10;
     padding: 0.3em 0;
-    min-width: 10em;
+    min-width: 14em;
     list-style: none;
     background-color: white;
     border-radius: 0px;
@@ -745,6 +745,11 @@ body.dark-theme {
     li {
         padding: 0;
         display: block;
+    }
+
+    li a span {
+        @include display-flex();
+        @include justify-content(start);
     }
 
     &.open {

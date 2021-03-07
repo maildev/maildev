@@ -18,40 +18,50 @@
             <a href="" class=""
               ng-click="show('html')"
               ng-class="{ active: panelVisibility == 'html', disabled: !item.html }">
-                <i class="fas fa-file-code"></i>
-                HTML
+                <span>
+                  <i class="fas fa-file-code"></i>
+                  HTML
+                </span>
             </a>
         </li>
         <li>
             <a href="" class=""
               ng-click="show('plain')"
               ng-class="{ active: panelVisibility == 'plain', disabled: !item.text  }">
-                <i class="fas fa-file-alt"></i>
-                Text
+                <span>
+                  <i class="fas fa-file-alt"></i>
+                  Text
+                </span>
             </a>
         </li>
         <li>
             <a href="" class=""
               ng-click="show('attachments')"
               ng-class="{ active: panelVisibility == 'attachments', disabled: !item.attachments }">
-                <i class="fas fa-paperclip"></i>
-                Attachments
+                <span>
+                  <i class="fas fa-paperclip"></i>
+                  Attachments
+                </span>
             </a>
         </li>
         <li>
             <a href="" class=""
               ng-click="show('headers')"
               ng-class="{ active: panelVisibility == 'headers' }">
-                <i class="fas fa-th-list"></i>
-                Headers
+                <span>
+                  <i class="fas fa-th-list"></i>
+                  Headers
+                </span>
             </a>
         </li>
         <li>
             <a href="" class=""
               ng-click="show('source')"
               ng-class="{ active: panelVisibility == 'source' }">
-                <i class="fas fa-code"></i>
-                Source
+                <span>
+                  <i class="fas fa-code"></i>
+                  Source ({{item.sizeHuman}})
+                </span>
             </a>
         </li>
       </ul>
@@ -80,57 +90,71 @@
             <a href="" class=""
               ng-click="resize()"
               ng-class="{ active: iframeSize == null }">
-                <i class="fas fa-desktop"></i>
-                100%
+                <span>
+                  <i class="fas fa-desktop"></i>
+                  100%
+                </span>
             </a>
         </li>
         <li>
             <a href="" class=""
               ng-click="resize('1440px')"
               ng-class="{ active: iframeSize == '1440px' }">
-                <i class="fas fa-desktop"></i>
-                1440px
+                <span>
+                  <i class="fas fa-desktop"></i>
+                  1440px
+                </span>
             </a>
         </li>
         <li>
             <a href="" class=""
               ng-click="resize('1024px')"
               ng-class="{ active: iframeSize == '1024px' }">
-                <i class="fas fa-tablet-alt"></i>
-                1024px
+                <span>
+                  <i class="fas fa-tablet-alt"></i>
+                  1024px
+                </span>
             </a>
         </li>
         <li>
             <a href="" class=""
               ng-click="resize('768px')"
               ng-class="{ active: iframeSize == '768px' }">
-                <i class="fas fa-tablet-alt"></i>
-                768px
+                <span>
+                  <i class="fas fa-tablet-alt"></i>
+                  768px
+                </span>
             </a>
         </li>
         <li>
             <a href="" class=""
               ng-click="resize('425px')"
               ng-class="{ active: iframeSize == '425px' }">
-                <i class="fas fa-mobile-alt"></i>
-                425px
+                <span>
+                  <i class="fas fa-mobile-alt"></i>
+                  425px
+                </span>
             </a>
         </li>
         <li>
-          <a href="" class=""
-            ng-click="resize('375px')"
-            ng-class="{ active: iframeSize == '375px' }">
-              <i class="fas fa-mobile-alt"></i>
-              375px
-          </a>
+            <a href="" class=""
+              ng-click="resize('375px')"
+              ng-class="{ active: iframeSize == '375px' }">
+                <span>
+                  <i class="fas fa-mobile-alt"></i>
+                  375px
+                </span>
+            </a>
         </li>
         <li>
-          <a href="" class=""
-            ng-click="resize('320px')"
-            ng-class="{ active: iframeSize == '320px' }">
-              <i class="fas fa-mobile-alt"></i>
-              320px
-          </a>
+            <a href="" class=""
+              ng-click="resize('320px')"
+              ng-class="{ active: iframeSize == '320px' }">
+                <span>
+                  <i class="fas fa-mobile-alt"></i>
+                  320px
+                </span>
+            </a>
         </li>
       </ul>
     </li>
@@ -163,16 +187,20 @@
           <a href="" class=""
             ng-click="relay(item)"
             ng-class="{ disabled: !config.isOutgoingEnabled }">
-              <i class="fas fa-paper-plane"></i>
-              Relay
+              <span>
+                <i class="fas fa-paper-plane"></i>
+                Relay
+              </span>
           </a>
         </li>
         <li>
           <a href="" class=""
             ng-click="relayTo(item)"
             ng-class="{ disabled: !config.isOutgoingEnabled }">
-              <i class="fas fa-paper-plane"></i>
-              Relay to...
+              <span>
+                <i class="fas fa-paper-plane"></i>
+                Relay to...
+              </span>
           </a>
         </li>
       </ul>

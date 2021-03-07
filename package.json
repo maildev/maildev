@@ -63,7 +63,7 @@
     "node-sass": "^4.13.1",
     "nodemailer": "^6.4.2",
     "nodemon": "^2.0.2",
-    "nyc": "^14.1.1",
+    "nyc": "^15.1.0",
     "standard": "^12.0.1"
   },
   "engines": {

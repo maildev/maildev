@@ -638,6 +638,7 @@ body.dark-theme {
     border:0;
     margin: 0;
     width: 100%;
+    max-width: 100%;
     height: 100%;
     position: relative; // set position for resize rendering issue
     //border: 1px solid darken(white,10);

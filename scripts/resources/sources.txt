@@ -1,0 +1,5 @@
+https://github.com/minimaxir/big-list-of-naughty-strings
+http://kermitproject.org/utf8.html
+https://www.w3.org/2001/06/utf-8-test/
+https://www.w3.org/2001/06/utf-8-test/UTF-8-demo.html
+https://www.w3.org/2001/06/utf-8-test/quickbrown.html

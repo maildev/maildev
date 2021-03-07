@@ -107,7 +107,7 @@ body.dark-theme {
 
 
 .sidebar {
-    @include flex(1 30%);
+    @include flex(1 33%);
     max-width: 26em;
     height: 100%;
     background: white;
@@ -147,14 +147,26 @@ body.dark-theme {
 }
 
 .brand {
+    display: inline-block;
     font-size: 20px;
     font-weight: 400;
     color:rgb(255,255,255);
     text-decoration: none;
+
+    i {
+        margin-right: 0.1em;
+    }
+
+    @media (max-width: 1100px) {
+        margin-top: 0.15em;
+        font-size: 18px;
+        i {
+            display: none;
+        }
+    }
 }
 .brand-text {
     font-weight: 500;
-    margin-left: 0.1em;
 }
 .brand-unread {
     font-size: 13px;
@@ -219,6 +231,12 @@ body.dark-theme {
         background: rgba(white,.1);
     }
 
+    @media (max-width: 1100px) {
+        width: 1.6em;
+        i {
+            font-size: 12px;
+        }
+    }
 
 }
 
@@ -532,6 +550,9 @@ body.dark-theme {
     .title {
         //color: darken($brand,30);
         font-weight: 600;
+        body.dark-theme & {
+            color: rgba(white,.88);
+        }
     }
     body.dark-theme & {
         background-color: darken($brand, 28);

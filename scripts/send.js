@@ -38,114 +38,14 @@ var messages = [
   // Email w/ simple attachment and basic header
   {
     from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
-    to: ['Johnny Long Name Utah <johnny.long.email.address.utah@fbi.gov>', 'Johnny2 Utah <johnny2.utah@fbi.gov>', 'Johnny3 Utah <johnny3.utah@fbi.gov>'],
-    subject: 'The ex-presidents are surfers. The ex-presidents are surfers. The ex-presidents are surfers. The ex-presidents are surfers.',
+    to: ['Johnny Long Name Utah <johnny.long.email.address.utah@fbi.gov>', 'Johnny Utah <johnny.utah@fbi.gov>', 'Bodhi <bodhi@gmail.com>', ],
+    subject: 'Look at it! It\'s a once in a lifetime opportunity, man! Let me go out there and let me get one wave, just one wave before you take me in.',
     headers: {
       'X-some-header': 1000
     },
-    text: 'The wax at the bank was surfer wax!!!',
+    text: 'Look at it! It\'s a once in a lifetime opportunity, man! Let me go out there and let me get one wave, just one wave before you take me in. I mean, come on man, where I am I gonna go? Cliffs on both sides! I\'m not gonna paddle my way to New Zealand! Come on, compadre. Come on!\n'.repeat(100),
     html: '<!DOCTYPE html><html><head></head><body>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
-          '<p>The wax at the bank was surfer wax!!!</p>' +
+          '<p>Look at it! It\'s a once in a lifetime opportunity, man! Let me go out there and let me get one wave, just one wave before you take me in. I mean, come on man, where I am I gonna go? Cliffs on both sides! I\'m not gonna paddle my way to New Zealand! Come on, compadre. Come on!</p>'.repeat(100) +
           '</body></html>'
   },
 
@@ -163,7 +63,7 @@ var messages = [
     to: 'Johnny Utah <johnny.utah@fbi.gov>',
     subject: 'The ultimate price',
     text: 'If you want the ultimate, you\'ve got to be willing to pay the ultimate price. \nIt\'s not tragic to die doing what you love.',
-    html: '<!DOCTYPE html><html><head></head><body style="background:#eeefont-family:sans-serifpadding:2em 2em">' +
+    html: '<!DOCTYPE html><html><head></head><body style="background:#eee;font-family:sans-serif;padding:2em 2em">' +
           '<h1>Point Break</h1>' +
           '<img src="http://farm8.staticflickr.com/7337/11784709785_bbed9bae7d_m.jpg">' +
           '<p>If you want the ultimate, you\'ve got to be willing to pay the ultimate price. <br>It\'s not tragic to die doing what you love.</p>' +

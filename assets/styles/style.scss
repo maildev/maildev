@@ -58,11 +58,6 @@ body {
  * Generic & Helper Classes
  */
 
-.plain-text {
-    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
-    white-space: pre-wrap;
-}
-
 .clearfix:before,
 .clearfix:after { content:""; display:table; }
 .clearfix:after { clear:both; }
@@ -632,6 +627,12 @@ body.dark-theme {
     }
 }
 
+.email-content-view-plain {
+    height: 100%;
+    overflox-x: hidden;
+    overflow-y: auto;
+}
+
 .preview-iframe {
     box-sizing: border-box;
     border:0;
@@ -778,10 +779,15 @@ body.dark-theme {
 .panel-plain {
     box-sizing: border-box;
     padding: 1em 1em;
+    font-family: SFMono-Regular, Consolas, Liberation Mono, Menlo, monospace;
+    white-space: pre-wrap;
     body.dark-theme & {
         color: white;
     }
 }
+
+
+
 .panel-attachments {
     box-sizing: border-box;
     padding: 1em 1em;

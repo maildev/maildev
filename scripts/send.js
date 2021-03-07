@@ -125,12 +125,13 @@ var messages = [
   {
     from: 'Bodhi <bodhi@gmail.com>',
     to: 'Johnny Utah <johnny.utah@fbi.gov>',
-    subject: 'UTF-8 sampler',
+    subject: 'Have a sample of this',
     text: utf8sampler,
     html: utf8sampler,
   },
 
   //
+  /*
   {
     from: 'Bodhi <bodhi@gmail.com>',
     to: 'Johnny Utah <johnny.utah@fbi.gov>',
@@ -155,6 +156,7 @@ var messages = [
     subject: 'UTF-8 subject / Я могу есть / ᛁᚳ᛫ᛗᚨᚷ᛫ᚷᛚᚨᛋ / 𐌼𐌰𐌲 𐌲𐌻𐌴𐍃 𐌹̈𐍄𐌰𐌽 / Μπορώ να φάω / 私はガ / ฉันกินก / 我能吞下 / ฉันกินก / ཤེལ་སྒོ་ཟ་ནས་ / אני יכול / მინას ვჭამ / لا يؤلمني / Mogę jeść szkło / Tsésǫʼ yishą́ągo / ⡍⠜⠇⠑⠹ ⠺',
     text: 'This test is only for subject.',
   }
+  */
 
 ]
 

@@ -29,14 +29,23 @@ module.exports = function (config) {
     logger.setLevel(0)
   }
 
-  // Start the Mailserver & Web GUI
-  mailserver.create(config.smtp, config.ip, config.mailDirectory, config.incomingUser, config.incomingPass, config.hideExtensions)
+  // Start the Mailserver
+  mailserver.create(
+    config.smtp,
+    config.ip,
+    config.mailDirectory,
+    config.incomingUser,
+    config.incomingPass,
+    config.hideExtensions
+  )
 
-  if (config.outgoingHost ||
-      config.outgoingPort ||
-      config.outgoingUser ||
-      config.outgoingPass ||
-      config.outgoingSecure) {
+  if (
+    config.outgoingHost ||
+    config.outgoingPort ||
+    config.outgoingUser ||
+    config.outgoingPass ||
+    config.outgoingSecure
+  ) {
     mailserver.setupOutgoing(
       config.outgoingHost,
       parseInt(config.outgoingPort),
@@ -55,6 +64,7 @@ module.exports = function (config) {
     mailserver.loadMailsFromDirectory()
   }
 
+  // Start the web server
   if (!config.disableWeb) {
     const secure = {
       https: config.https,
@@ -64,7 +74,16 @@ module.exports = function (config) {
 
     // Default to run on same IP as smtp
     const webIp = config.webIp ? config.webIp : config.ip
-    web.start(config.web, webIp, mailserver, config.webUser, config.webPass, config.basePathname, secure)
+
+    web.start(
+      config.web,
+      webIp,
+      mailserver,
+      config.webUser,
+      config.webPass,
+      config.basePathname,
+      secure
+    )
 
     if (config.open) {
       const open = require('opn')

@@ -13,4 +13,6 @@ nodemon({
   ]
 }).on('start', function () {
   setTimeout(sendEmails, 1000)
+}).on('crash', function () {
+  console.log('Nodemon process crashed')
 })

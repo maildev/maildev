@@ -34,25 +34,27 @@ var messages = [
   }
 ]
 
-let count = 1
-let interval
+let count = 0
+let timeout
 
 async function sendMessages () {
   try {
     for (const message of messages) {
-      count++
       const result = await transporter.sendMail(message)
+      count++
       console.log(`[${count}] Test email sent: `, result.response)
     }
   } catch (error) {
     console.log(`[${count}] Test email error: `, error)
-    clearInterval(interval)
+    clearTimeout(timeout)
   }
 }
 
-function loadTest (parallel = 2, delay = 10) {
-  interval = setInterval(function () {
-    async.times(parallel, sendMessages)
+function loadTest (parallel = 100, delay = 10) {
+  timeout = setTimeout(async function () {
+    await async.times(parallel, sendMessages)
+    if (count <= 1000) loadTest()
+    else clearTimeout(timeout)
   }, delay)
 }
 

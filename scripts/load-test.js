@@ -50,10 +50,10 @@ async function sendMessages () {
   }
 }
 
-function loadTest (parallel = 100, delay = 10) {
+function loadTest (parallel = 500, delay = 10, limit = null) {
   timeout = setTimeout(async function () {
     await async.times(parallel, sendMessages)
-    if (count <= 1000) loadTest()
+    if (!limit || count <= limit) loadTest()
     else clearTimeout(timeout)
   }, delay)
 }

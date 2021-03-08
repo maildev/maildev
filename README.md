@@ -32,6 +32,7 @@ Usage: maildev [options]
 |---|---|---|
 |`-s, --smtp <port>`|`MAILDEV_SMTP_PORT`|SMTP port to catch emails|
 |`-w, --web <port>`|`MAILDEV_WEB_PORT`|Port to run the Web GUI|
+|`--mail-directory <path>`|`MAILDEV_MAIL_DIRECTORY`|Directory for persisting mails|
 |`--https`|`MAILDEV_HTTPS`|Switch from http to https protocol|
 |`--https-key <file>`|`MAILDEV_HTTPS_KEY`|The file path to the ssl private key|
 |`--https-cert <file>`|`MAILDEV_HTTPS_CERT`|The file path to the ssl cert file|

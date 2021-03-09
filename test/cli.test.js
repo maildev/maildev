@@ -8,7 +8,7 @@ const bin = path.join(__dirname, '../bin/maildev')
 
 describe('cli', () => {
   it('should shutdown with SIGTERM signal', (done) => {
-    const maildev = spawn(bin, null, { shell: true })
+    const maildev = spawn(bin, [], { cwd: undefined, env: process.env, shell: true })
     maildev.on('close', (code, signal) => {
       expect(signal).toBe('SIGTERM')
       done()
@@ -17,7 +17,7 @@ describe('cli', () => {
   })
 
   it('should shutdown with SIGINT signal', (done) => {
-    const maildev = spawn(bin, null, { shell: true })
+    const maildev = spawn(bin, [], { cwd: undefined, env: process.env, shell: true })
     maildev.on('close', (code, signal) => {
       expect(signal).toBe('SIGINT')
       done()

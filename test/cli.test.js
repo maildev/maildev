@@ -13,7 +13,9 @@ describe('cli', () => {
       expect(signal).toBe('SIGTERM')
       done()
     })
-    maildev.kill('SIGTERM')
+    maildev.on('spawn', () => {
+      maildev.kill('SIGTERM')
+    })
   })
 
   it('should shutdown with SIGINT signal', (done) => {
@@ -22,6 +24,8 @@ describe('cli', () => {
       expect(signal).toBe('SIGINT')
       done()
     })
-    maildev.kill('SIGINT')
+    maildev.on('spawn', () => {
+      maildev.kill('SIGINT')
+    })
   })
 })

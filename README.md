@@ -1,6 +1,6 @@
 # MailDev
 
-[![Build Status](https://api.travis-ci.org/maildev/maildev.svg)](https://travis-ci.org/maildev/maildev)
+[![Test](https://github.com/maildev/maildev/actions/workflows/test.yml/badge.svg)](https://github.com/maildev/maildev/actions/workflows/test.yml)
 [![codecov](https://codecov.io/gh/maildev/maildev/branch/master/graph/badge.svg)](https://codecov.io/gh/maildev/maildev)
 [![NPM Version](https://img.shields.io/npm/v/maildev.svg)](https://www.npmjs.com/package/maildev)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)

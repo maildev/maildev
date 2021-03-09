@@ -16,7 +16,7 @@ describe('cli', () => {
     maildev.on('spawn', () => {
       maildev.kill('SIGTERM')
     })
-  })
+  }).timeout(10000)
 
   it('should shutdown with SIGINT signal', (done) => {
     const maildev = spawn(bin, [], { cwd: undefined, env: process.env, shell: true })
@@ -27,5 +27,5 @@ describe('cli', () => {
     maildev.on('spawn', () => {
       maildev.kill('SIGINT')
     })
-  })
+  }).timeout(10000)
 })

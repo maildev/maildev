@@ -10,8 +10,7 @@ FROM base as build
 WORKDIR /root
 COPY package*.json ./
 
-RUN apk add --no-cache curl \
-  && npm install \
+RUN npm install \
   && npm prune \
   && npm cache clean --force \
   && rm package*.json
@@ -31,4 +30,4 @@ ENTRYPOINT ["/home/node/bin/maildev"]
 CMD ["--web", "1080", "--smtp", "1025"]
 
 HEALTHCHECK --interval=10s --timeout=1s \
-  CMD curl -k -f -v http://localhost:1080/healthz || exit 1
+  CMD wget -O - http://localhost:1080/healthz || exit 1

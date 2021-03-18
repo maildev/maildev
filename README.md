@@ -5,7 +5,7 @@
 [![NPM Version](https://img.shields.io/npm/v/maildev.svg)](https://www.npmjs.com/package/maildev)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
-**MailDev** is a simple way to test your project's generated emails during development with an easy to use web interface that runs on your machine built on top of [Node.js](http://www.nodejs.org).
+**MailDev** is a simple way to test your project's generated emails during development with an easy to use web interface that runs on your machine. Built on top of [Node.js](http://www.nodejs.org).
 
 ![MailDev Screenshot](https://github.com/maildev/maildev/blob/gh-pages/images/screenshot-2021-01-03.png?raw=true)
 
@@ -24,37 +24,38 @@ For a guide for usage with Docker,
 For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierpriour/grunt-maildev).
 
 ## Usage
+
 ```
 Usage: maildev [options]
 ```
 
-|Options|Environment variable|Description|
-|---|---|---|
-|`-s, --smtp <port>`|`MAILDEV_SMTP_PORT`|SMTP port to catch emails|
-|`-w, --web <port>`|`MAILDEV_WEB_PORT`|Port to run the Web GUI|
-|`--mail-directory <path>`|`MAILDEV_MAIL_DIRECTORY`|Directory for persisting mails|
-|`--https`|`MAILDEV_HTTPS`|Switch from http to https protocol|
-|`--https-key <file>`|`MAILDEV_HTTPS_KEY`|The file path to the ssl private key|
-|`--https-cert <file>`|`MAILDEV_HTTPS_CERT`|The file path to the ssl cert file|
-|`--ip <ip address>`|`MAILDEV_IP`|IP Address to bind SMTP service to|
-|`--outgoing-host <host>`|`MAILDEV_OUTGOING_HOST`|SMTP host for outgoing emails|
-|`--outgoing-port <port>`|`MAILDEV_OUTGOING_PORT`|SMTP port for outgoing emails|
-|`--outgoing-user <user>`|`MAILDEV_OUTGOING_USER`|SMTP user for outgoing emails|
-|`--outgoing-pass <password>`|`MAILDEV_OUTGOING_PASS`|SMTP password for outgoing emails|
-|`--outgoing-secure`|`MAILDEV_OUTGOING_SECURE`|Use SMTP SSL for outgoing emails|
-|`--auto-relay [email]`|`MAILDEV_AUTO_RELAY`|Use auto-relay mode. Optional relay email address|
-|`--auto-relay-rules <file>`|`MAILDEV_AUTO_RELAY_RULES`|Filter rules for auto relay mode|
-|`--incoming-user <user>`|`MAILDEV_INCOMING_USER`|SMTP user for incoming emails|
-|`--incoming-pass <pass>`|`MAILDEV_INCOMING_PASS`|SMTP password for incoming emails|
-|`--web-ip <ip address>`|`MAILDEV_WEB_IP`|IP Address to bind HTTP service to, defaults to --ip|
-|`--web-user <user>`|`MAILDEV_WEB_USER`|HTTP user for GUI|
-|`--web-pass <password>`|`MAILDEV_WEB_PASS`|HTTP password for GUI|
-|`--base-pathname <path>`|`MAILDEV_BASE_PATHNAME`|base path for URLs|
-|`--disable-web`|`MAILDEV_DISABLE_WEB`|Disable the use of the web interface. Useful for unit testing|
-|`--hide-extensions <extensions>`|`MAILDEV_HIDE_EXTENSIONS`|Comma separated list of SMTP extensions to NOT advertise (SMTPUTF8, PIPELINING, 8BITMIME)|
-|`-o, --open`||Open the Web GUI after startup|
-|`-v, --verbose`|||
-|`--silent`|||
+| Options                          | Environment variable       | Description                                                                               |
+| -------------------------------- | -------------------------- | ----------------------------------------------------------------------------------------- |
+| `-s, --smtp <port>`              | `MAILDEV_SMTP_PORT`        | SMTP port to catch emails                                                                 |
+| `-w, --web <port>`               | `MAILDEV_WEB_PORT`         | Port to run the Web GUI                                                                   |
+| `--mail-directory <path>`        | `MAILDEV_MAIL_DIRECTORY`   | Directory for persisting mails                                                            |
+| `--https`                        | `MAILDEV_HTTPS`            | Switch from http to https protocol                                                        |
+| `--https-key <file>`             | `MAILDEV_HTTPS_KEY`        | The file path to the ssl private key                                                      |
+| `--https-cert <file>`            | `MAILDEV_HTTPS_CERT`       | The file path to the ssl cert file                                                        |
+| `--ip <ip address>`              | `MAILDEV_IP`               | IP Address to bind SMTP service to                                                        |
+| `--outgoing-host <host>`         | `MAILDEV_OUTGOING_HOST`    | SMTP host for outgoing emails                                                             |
+| `--outgoing-port <port>`         | `MAILDEV_OUTGOING_PORT`    | SMTP port for outgoing emails                                                             |
+| `--outgoing-user <user>`         | `MAILDEV_OUTGOING_USER`    | SMTP user for outgoing emails                                                             |
+| `--outgoing-pass <password>`     | `MAILDEV_OUTGOING_PASS`    | SMTP password for outgoing emails                                                         |
+| `--outgoing-secure`              | `MAILDEV_OUTGOING_SECURE`  | Use SMTP SSL for outgoing emails                                                          |
+| `--auto-relay [email]`           | `MAILDEV_AUTO_RELAY`       | Use auto-relay mode. Optional relay email address                                         |
+| `--auto-relay-rules <file>`      | `MAILDEV_AUTO_RELAY_RULES` | Filter rules for auto relay mode                                                          |
+| `--incoming-user <user>`         | `MAILDEV_INCOMING_USER`    | SMTP user for incoming emails                                                             |
+| `--incoming-pass <pass>`         | `MAILDEV_INCOMING_PASS`    | SMTP password for incoming emails                                                         |
+| `--web-ip <ip address>`          | `MAILDEV_WEB_IP`           | IP Address to bind HTTP service to, defaults to --ip                                      |
+| `--web-user <user>`              | `MAILDEV_WEB_USER`         | HTTP user for GUI                                                                         |
+| `--web-pass <password>`          | `MAILDEV_WEB_PASS`         | HTTP password for GUI                                                                     |
+| `--base-pathname <path>`         | `MAILDEV_BASE_PATHNAME`    | base path for URLs                                                                        |
+| `--disable-web`                  | `MAILDEV_DISABLE_WEB`      | Disable the use of the web interface. Useful for unit testing                             |
+| `--hide-extensions <extensions>` | `MAILDEV_HIDE_EXTENSIONS`  | Comma separated list of SMTP extensions to NOT advertise (SMTPUTF8, PIPELINING, 8BITMIME) |
+| `-o, --open`                     |                            | Open the Web GUI after startup                                                            |
+| `-v, --verbose`                  |                            |                                                                                           |
+| `--silent`                       |                            |                                                                                           |
 
 ## API
 
@@ -62,15 +63,15 @@ MailDev can be used in your Node.js application. For more info view the
 [API docs](https://github.com/maildev/maildev/blob/master/docs/api.md).
 
 ```javascript
-const MailDev = require('maildev')
+const MailDev = require("maildev");
 
-const maildev = new MailDev()
+const maildev = new MailDev();
 
-maildev.listen()
+maildev.listen();
 
-maildev.on('new', function (email) {
+maildev.on("new", function (email) {
   // We got a new email!
-})
+});
 ```
 
 MailDev also has a **REST API**. For more info
@@ -78,11 +79,11 @@ MailDev also has a **REST API**. For more info
 
 ## Outgoing email
 
-Maildev optionally supports selectively relaying email to an outgoing SMTP server.  If you configure outgoing
+Maildev optionally supports selectively relaying email to an outgoing SMTP server. If you configure outgoing
 email with the --outgoing-* options you can click "Relay" on an individual email to relay through MailDev out
-to a real SMTP service that will *actually* send the email to the recipient.
+to a real SMTP service that will *actually\* send the email to the recipient.
 
-  Example:
+Example:
 
     $ maildev --outgoing-host smtp.gmail.com \
               --outgoing-secure \
@@ -104,7 +105,7 @@ Additionally, you can pass a valid json file with additional configuration for
 what email addresses you would like to `allow` or `deny`. The last matching
 rule in the array will be the rule MailDev will follow.
 
-  Example:
+Example:
 
     $ maildev --outgoing-host smtp.gmail.com \
               --outgoing-secure \
@@ -113,18 +114,20 @@ rule in the array will be the rule MailDev will follow.
               --auto-relay \
               --auto-relay-rules file.json
 
-  Rules example file:
+Rules example file:
+
 ```javascript
 [
-	{ "allow": "*" },
-	{ "deny":  "*@test.com" },
-	{ "allow": "ok@test.com" },
-	{ "deny":  "*@utah.com" },
-	{ "allow": "johnny@utah.com" }
-]
+  { allow: "*" },
+  { deny: "*@test.com" },
+  { allow: "ok@test.com" },
+  { deny: "*@utah.com" },
+  { allow: "johnny@utah.com" },
+];
 ```
-  This would allow `angelo@fbi.gov`, `ok@test.com`, `johnny@utah.com`, but deny
-  `bodhi@test.com`.
+
+This would allow `angelo@fbi.gov`, `ok@test.com`, `johnny@utah.com`, but deny
+`bodhi@test.com`.
 
 ## Configure your project
 
@@ -137,7 +140,7 @@ const transport = nodemailer.createTransport({
   port: 1025,
   ignoreTLS: true,
   // other settings...
-})
+});
 ```
 
 **Django** -- Add `EMAIL_PORT = 1025` in your settings file [[source]](https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-EMAIL_PORT)
@@ -157,12 +160,12 @@ config.action_mailer.delivery_method = :smtp
 
 ## Features
 
-* Toggle between HTML, plain text views as well as view email headers
-* Test responsive emails with resizable preview pane available for various screen sizes
-* Ability to receive and view email attachments
-* WebSocket integration keeps the interface in sync once emails are received
-* Command line interface for configuring SMTP and web interface ports
-* Ability to relay email to an upstream SMTP server
+- Toggle between HTML, plain text views as well as view email headers
+- Test responsive emails with resizable preview pane available for various screen sizes
+- Ability to receive and view email attachments
+- WebSocket integration keeps the interface in sync once emails are received
+- Command line interface for configuring SMTP and web interface ports
+- Ability to relay email to an upstream SMTP server
 
 ## Ideas
 

@@ -160,7 +160,7 @@ config.action_mailer.delivery_method = :smtp
 * Toggle between HTML, plain text views as well as view email headers
 * Test responsive emails with resizable preview pane available for various screen sizes
 * Ability to receive and view email attachments
-* WebSockets keep the interface in sync once emails are received
+* WebSocket integration keeps the interface in sync once emails are received
 * Command line interface for configuring SMTP and web interface ports
 * Ability to relay email to an upstream SMTP server
 

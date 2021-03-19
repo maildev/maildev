@@ -15,15 +15,22 @@ describe('mailserver', function () {
   describe('smtp error handling', function () {
     it('Error should be thrown, because listening to server did not work', function (done) {
       const server = http.createServer(() => {})
-      server.listen(9025, '0.0.0.0')
       const maildev = new MailDev({
         disableWeb: true,
         silent: true,
         smtp: 9025
       })
+      server.listen(9025, '0.0.0.0')
       maildev.listen()
-      maildev.smtp.on('error', (err) => {
+
+      // https://stackoverflow.com/a/9132271/3143704
+
+      var originalHandler = process.listeners('uncaughtException').pop()
+      process.removeListener('uncaughtException', originalHandler)
+
+      process.once('uncaughtException', function (err) {
         assert.strictEqual(err.code, 'EADDRINUSE')
+        process.listeners('uncaughtException').push(originalHandler)
         maildev.close(() => server.close(done))
       })
     })

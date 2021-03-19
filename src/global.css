@@ -30,7 +30,7 @@
 
 .prose code::before,
 .prose code::after {
-    content: "";
+  content: "";
 }
 
 .prose table {

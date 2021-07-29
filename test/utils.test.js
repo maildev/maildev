@@ -22,7 +22,7 @@ describe('utils', () => {
       { subject: 'Test2' }
     ]
 
-    it('should filter by differect predicates', () => {
+    it('should filter by different predicates', () => {
       expect(utils.filterEmails(emails, { subject: 'Test' }).length).toEqual(2)
       expect(utils.filterEmails(emails, { subject: 'Test2' }).length).toEqual(1)
       expect(utils.filterEmails(emails, { 'headers.x-some-header': 1 }).length).toEqual(1)

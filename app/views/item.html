@@ -223,7 +223,33 @@
 </ul>
 
 
-
+<div class="email-meta">
+  <div class="subject">{{item.subject}}</div>
+  <div class="row from">
+    <div class="description">From:</div>
+    <div class="description-value">
+      <app-address ng-repeat="a in item.from" address="a"></app-address>
+    </div>
+  </div>
+  <div class="row to">
+    <div class="description">To:</div>
+    <div class="description-value">
+      <app-address ng-repeat="a in item.to" address="a"></app-address>
+    </div>
+  </div>
+  <div ng-if="item.cc.length" class="row cc">
+    <div class="description">Cc:</div>
+    <div class="description-value">
+      <app-address ng-repeat="a in item.cc" address="a"></app-address>
+    </div>
+  </div>
+  <div ng-if="item.calculatedBcc.length" class="row calculated-bcc">
+    <div class="description">Bcc:</div>
+    <div class="description-value">
+      <app-address ng-repeat="a in item.calculatedBcc" address="a"></app-address>
+    </div>
+  </div>
+</div>
 
 
 

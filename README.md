@@ -6,6 +6,7 @@
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 **MailDev** is a simple way to test your project's generated emails during development with an easy to use web interface that runs on your machine. Built on top of [Node.js](http://www.nodejs.org).
+It also contains a [POP3](https://en.wikipedia.org/wiki/POP3) and [IMAP](https://en.wikipedia.org/wiki/IMAP) server, thanks to [dovecot](https://www.dovecot.org/).
 
 ![MailDev Screenshot](https://github.com/maildev/maildev/blob/gh-pages/images/screenshot-2021-01-03.png?raw=true)
 
@@ -89,6 +90,46 @@ Example:
               --outgoing-secure \
               --outgoing-user 'you@gmail.com' \
               --outgoing-pass '<pass>'
+
+## IMAP and POP
+
+To use IMAP and/or POP3, just point your prefered to Mail Client to
+
+- host: `localhost`
+- user: `node`
+- password: `password`
+- port:
+  - 110 (POP3)
+  - 143 (IMAP)
+
+Make sure you disable any kind of encryption
+
+## SMTP (Submission with Password)
+
+To test authenticated submission from a command line, you can use the netcat command `nc`.
+Here is an example usage:
+```
+nc localhost 1587 <<EOS
+EHLO hostname
+AUTH PLAIN AG5vZGUAcGFzc3dvcmQ=
+MAIL FROM:<john@doe.com>
+RCPT TO:<jane@doe.com>
+DATA
+From: John Doe <john@doe.com>
+To: Jane Doe<jane@doe.com>
+Date: Tue, 15 Jan 2008 16:02:43 -0500
+Subject: Testing Authenticated SMTP submission
+
+Find this email in the web interface at http://localhost:1080
+and delete it.
+.
+QUIT
+EOS
+```
+
+Notice that the `AUTH PLAIN` command uses the base encoded username and password,
+generated with the command `echo -en "\0node\0password" | base64`.
+
 
 ### Auto relay mode
 
@@ -205,6 +246,7 @@ To run the test suite:
 and [mailparser](https://github.com/nodemailer/mailparser).
 Many thanks to Andris as his projects are the backbone of this app and to
 [MailCatcher](http://mailcatcher.me/) for the inspiration.
+[dovecot](https://www.dovecot.org/) for the [POP3](https://en.wikipedia.org/wiki/POP3) and [IMAP](https://en.wikipedia.org/wiki/IMAP) support
 
 Additionally, thanks to all the awesome [contributors](https://github.com/maildev/maildev/graphs/contributors)
 to the project.

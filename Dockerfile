@@ -1,6 +1,6 @@
 # Base
 FROM node:10-alpine as base
-MAINTAINER "Dan Farrelly <daniel.j.farrelly@gmail.com>"
+LABEL org.opencontainers.image.authors="Dan Farrelly <daniel.j.farrelly@gmail.com>"
 
 ENV NODE_ENV production
 

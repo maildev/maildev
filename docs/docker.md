@@ -13,13 +13,18 @@ If you don't have the image on your machine, Docker will pull it. Let's name
 it "maildev" and publish the interface on port `1080`:
 
 ```
-$ docker run -p 1080:1080 --name maildev maildev/maildev
+$ docker run -p 1080:80 --name maildev maildev/maildev
 ```
 
 Now the MailDev UI will be running at port `1080` on your virtual machine
 (or machine if you're running Linux). For example if your Docker host VM is
 running at `192.168.99.100`, you can head over to `http://192.168.99.100:1080`
-to visit the interface.
+to visit the interface. Additionally, if you want to expose the SMTP server to your host
+you can publish the interface e.g. on port `1025`:
+
+```
+$ docker run -p 1080:80 -p 1025:25 --name maildev maildev/maildev
+```
 
 Let's say you're using [nodemailer](https://github.com/nodemailer/nodemailer)
 in your Node.js app running in another container. Let's link your app's

@@ -1,0 +1,52 @@
+{
+  "name": "mailparser2-mit",
+  "description": "MIT-licensed asynchronous and non-blocking parser for mime encoded e-mail messages",
+  "version": "1.0.1",
+  "author": "Andris Reinman",
+  "maintainers": [
+    {
+      "name": "poipoii",
+      "email": "earth.sama@gmail.com"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/poipoii/mailparser-mit.git"
+  },
+  "scripts": {
+    "test": "mocha --recursive --reporter list",
+    "test-with-coverage": "nyc npm test && nyc report --reporter=text-lcov | coveralls"
+  },
+  "main": "./lib/mailparser",
+  "files": [
+    "/lib"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "addressparser": "1.0.1",
+    "iconv-lite": "0.5.0",
+    "mime": "2.4.4",
+    "uue": "3.1.2"
+  },
+  "devDependencies": {
+    "chai": "4.2.0",
+    "coveralls": "3.0.6",
+    "iconv": "2.3.4",
+    "mocha": "6.2.0",
+    "nyc": "14.1.1"
+  },
+  "keywords": [
+    "mailparser",
+    "emailparser",
+    "mail-parser",
+    "email-parser",
+    "e-mail-parser",
+    "mime-parser",
+    "mime-message",
+    "mime-message-parser",
+    "email",
+    "e-mail",
+    "mime",
+    "parser"
+  ]
+}

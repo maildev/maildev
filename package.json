@@ -54,7 +54,7 @@
     "nodemailer": "^6.7.2",
     "rimraf": "^3.0.2",
     "smtp-server": "3.10.0",
-    "socket.io": "2.2.0",
+    "socket.io": "4.4.1",
     "turndown": "^7.1.1",
     "uue": "3.1.2"
   },

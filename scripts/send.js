@@ -5,6 +5,9 @@
  * Run this to send emails to port 1025 for testing MailDev during development
  *   node test/scripts/send.js
  */
+// We add this setting to tell nodemailer the host isn't secure during dev
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 const path = require('path')
 const fs = require('fs')
 const nodemailer = require('nodemailer')
@@ -19,8 +22,7 @@ var utf8sampler = fs.readFileSync(path.join(__dirname, './resources/utf-8-sample
 
 // Create a transport with MailDev's default receiving port
 var transporter = nodemailer.createTransport({
-  port: 1025,
-  ignoreTLS: true
+  port: 1025
 })
 
 // Messages list
@@ -172,7 +174,9 @@ function sendEmails (logErrors) {
   messages.forEach(function (message) {
     transporter.sendMail(message, function (err, info) {
       if (logErrors && err) { return console.log('Test email error: ', err) }
-      console.log('Test email sent: ' + info.response)
+      if (info) {
+        console.log('Test email sent: ' + info.response)
+      }
     })
   })
 }

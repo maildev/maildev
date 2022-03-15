@@ -136,9 +136,11 @@ Configure your application to send emails via port `1025` and open `localhost:10
 **Nodemailer (v1.0+)**
 
 ```javascript
+// We add this setting to tell nodemailer the host isn't secure during dev
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 const transport = nodemailer.createTransport({
   port: 1025,
-  ignoreTLS: true,
   // other settings...
 });
 ```

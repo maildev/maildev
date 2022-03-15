@@ -4,6 +4,8 @@
 /**
  * MailDev - email.js -- test the email output
  */
+// We add this setting to tell nodemailer the host isn't secure during dev
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 const assert = require('assert')
 const fs = require('fs')
@@ -18,8 +20,7 @@ const defaultMailDevOpts = {
 }
 
 const defaultNodemailerOpts = {
-  port: 1025,
-  ignoreTLS: true
+  port: 1025
 }
 
 describe('email', function () {

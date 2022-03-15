@@ -4,6 +4,8 @@
 /**
  * MailDev - middleware.js -- test using MailDev as middleware
  */
+// We add this setting to tell nodemailer the host isn't secure during dev
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 
 const assert = require('assert')
 const path = require('path')
@@ -15,8 +17,7 @@ const got = require('got')
 const MailDev = require('../index.js')
 
 const defaultNodemailerOpts = {
-  port: 1025,
-  ignoreTLS: true
+  port: 1025
 }
 
 describe('middleware', function () {

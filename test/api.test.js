@@ -5,6 +5,9 @@
  * MailDev - api.js -- test the Node.js API
  */
 
+// We add this setting to tell nodemailer the host isn't secure during dev
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 const assert = require('assert')
 const nodemailer = require('nodemailer')
 
@@ -73,8 +76,7 @@ describe('API', function () {
         if (err) return done(err)
 
         const transporter = nodemailer.createTransport({
-          port: 1025,
-          ignoreTLS: true
+          port: 1025
         })
 
         transporter.sendMail(emailOpts, function (err, info) {
@@ -106,8 +108,7 @@ describe('API', function () {
       })
 
       const transporter = nodemailer.createTransport({
-        port: 1025,
-        ignoreTLS: true
+        port: 1025
       })
 
       const emailOpts = {

@@ -1,18 +1,12 @@
 # MailDev
 
-[![Test](https://github.com/soulteary/maildev/actions/workflows/test.yml/badge.svg)](https://github.com/soulteary/maildev/actions/workflows/test.yml)
-[![codecov](https://codecov.io/gh/soulteary/maildev/branch/master/graph/badge.svg)](https://codecov.io/gh/soulteary/maildev)
-[![NPM Version](https://img.shields.io/npm/v/maildev.svg)](https://www.npmjs.com/package/maildev)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 **MailDev** is a simple way to test your project's generated emails during development with an easy to use web interface that runs on your machine. Built on top of [Node.js](http://www.nodejs.org).
 
 ![MailDev Screenshot](https://github.com/soulteary/maildev/blob/gh-pages/images/screenshot-2021-01-03.png?raw=true)
 
-## Install & Run
-
-    $ npm install -g maildev
-    $ maildev
+## Docker Run
 
 If you want to use MailDev with [Docker](https://www.docker.com/), you can use the
 [**soulteary/maildev** image on Docker Hub](https://hub.docker.com/r/soulteary/maildev).
@@ -20,8 +14,6 @@ For a guide for usage with Docker,
 [checkout the docs](https://github.com/soulteary/maildev/blob/master/docs/docker.md).
 
     $ docker run -p 1080:1080 -p 1025:1025 soulteary/maildev
-
-For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierpriour/grunt-maildev).
 
 ## Usage
 

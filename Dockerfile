@@ -10,7 +10,7 @@ FROM base as build
 WORKDIR /root
 COPY package*.json ./
 
-RUN npm install --registry=https://registry.npmmirror.com  \
+RUN npm install --registry=https://registry.npmmirror.com --production \
   && npm prune \
   && npm cache clean --force \
   && rm package*.json

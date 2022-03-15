@@ -42,19 +42,19 @@
   },
   "license": "MIT",
   "dependencies": {
+    "addressparser": "1.0.1",
     "async": "^3.2.3",
     "commander": "^9.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "addressparser": "1.0.1",
     "iconv-lite": "0.5.0",
     "mime": "2.4.4",
-    "uue": "3.1.2",
     "rimraf": "^3.0.2",
     "smtp-connection": "4.0.2",
     "smtp-server": "3.10.0",
     "socket.io": "2.2.0",
-    "strip-tags": "^0.1.1",
+    "turndown": "^7.1.1",
+    "uue": "3.1.2",
     "wildstring": "1.0.9"
   },
   "devDependencies": {

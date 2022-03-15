@@ -6,7 +6,7 @@
  */
 
 const assert = require('assert')
-const SMTPConnection = require('smtp-connection')
+const SMTPConnection = require('../vendor/smtp-connection')
 const http = require('http')
 
 const MailDev = require('../index.js')

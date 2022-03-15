@@ -50,7 +50,7 @@
     "iconv-lite": "0.5.0",
     "mime": "2.4.4",
     "rimraf": "^3.0.2",
-    "smtp-connection": "4.0.2",
+    "nodemailer": "^6.7.2",
     "smtp-server": "3.10.0",
     "socket.io": "2.2.0",
     "turndown": "^7.1.1",

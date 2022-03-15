@@ -21,6 +21,7 @@ module.exports = function (config) {
     // CLI
     config = appendOptions(program.version(version), options)
       .parse(process.argv)
+      .opts()
   }
 
   if (config.verbose) {

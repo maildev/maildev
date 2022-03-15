@@ -85,11 +85,6 @@ module.exports = function (config) {
       secure
     )
 
-    if (config.open) {
-      const open = require('opn')
-      open('http://' + (config.ip === '0.0.0.0' ? 'localhost' : config.ip) + ':' + config.web)
-    }
-
     // Close the web server when the mailserver closes
     mailserver.on('close', web.close)
   }

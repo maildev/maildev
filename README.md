@@ -48,6 +48,7 @@ Usage: maildev [options]
 | `-o, --open`                     |                            | Open the Web GUI after startup                                                            |
 | `-v, --verbose`                  |                            |                                                                                           |
 | `--silent`                       |                            |                                                                                           |
+| `--log-mail-contents`            |                            | Log a JSON representation of each incoming mail |
 
 ## API
 

@@ -15,12 +15,14 @@ const proxyMiddleware = require('http-proxy-middleware').createProxyMiddleware
 const got = require('got')
 const MailDev = require('../index.js')
 
-const port = 9025
+const smtpPort = 9025
+const webPort = 9026
+const proxyPort = 9027
 const createTransporter = async () => {
   const { user, pass } = await nodemailer.createTestAccount()
   return nodemailer.createTransport({
     host: '0.0.0.0',
-    port: port,
+    port: smtpPort,
     auth: { type: 'login', user, pass }
   })
 }
@@ -38,19 +40,18 @@ describe('middleware', function () {
   before(function (done) {
     const app = express()
 
-    app.get('/', function (_, res) {
-      res.send('root')
-    })
+    app.get('/', (_, res) => res.send('root'))
 
     maildev = new MailDev({
       silent: true,
       basePathname: '/maildev',
-      smtp: port
+      smtp: smtpPort,
+      web: webPort
     })
 
     // proxy all maildev requests to the maildev app
     const proxy = proxyMiddleware('/maildev', {
-      target: 'http://localhost:1080',
+      target: `http://localhost:${webPort}`,
       ws: true,
       logLevel: 'silent'
     })
@@ -58,7 +59,7 @@ describe('middleware', function () {
     // Maildev available at the specified route '/maildev'
     app.use(proxy)
 
-    server = app.listen(8080, function (_) {
+    server = app.listen(proxyPort, function (_) {
       maildev.listen(done)
     })
   })
@@ -74,10 +75,10 @@ describe('middleware', function () {
 
   it('should run as middleware in another express app', function (done) {
     // Request to the express app
-    got('http://localhost:8080/')
+    got(`http://localhost:${proxyPort}/`)
       .then((res) => {
         assert.strictEqual(res.body, 'root')
-        return got('http://localhost:8080/maildev/email')
+        return got(`http://localhost:${proxyPort}/maildev/email`)
           .then((res) => {
             assert.strictEqual(res.statusCode, 200)
 
@@ -110,11 +111,11 @@ describe('middleware', function () {
 
     return new Promise((resolve) => {
       maildev.on('new', (email) => {
-        got(`http://localhost:8080/maildev/email/${email.id}/html`)
+        got(`http://localhost:${proxyPort}/maildev/email/${email.id}/html`)
           .then(async (res) => {
             assert.strictEqual(
               res.body,
-              `<img src="//localhost:8080/maildev/email/${email.id}/attachment/tyler.jpg">`
+              `<img src="//localhost:${proxyPort}/maildev/email/${email.id}/attachment/tyler.jpg">`
             )
             await maildev.close()
             maildev.removeAllListeners()

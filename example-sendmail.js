@@ -6,14 +6,14 @@ const nodemailer = require('nodemailer')
 
 async function main () {
   const { user, pass } = await nodemailer.createTestAccount()
-  let transporter = nodemailer.createTransport({
+  const transporter = nodemailer.createTransport({
     host: '0.0.0.0',
     port: 8025,
     auth: { type: 'login', user, pass }
   })
 
   // send mail with defined transport object
-  let info = await transporter.sendMail({
+  const info = await transporter.sendMail({
     from: '\'Fred Foo 👻\' <foo@example.com>', // sender address
     to: 'bar@example.com, baz@example.com', // list of receivers
     subject: 'Hello ✔', // Subject line

@@ -25,7 +25,7 @@ describe('mailserver', function () {
 
       // https://stackoverflow.com/a/9132271/3143704
 
-      var originalHandler = process.listeners('uncaughtException').pop()
+      const originalHandler = process.listeners('uncaughtException').pop()
       process.removeListener('uncaughtException', originalHandler)
 
       process.once('uncaughtException', function (err) {

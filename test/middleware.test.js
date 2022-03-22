@@ -21,8 +21,8 @@ const defaultNodemailerOpts = {
 }
 
 describe('middleware', function () {
-  var server
-  var maildev
+  let server
+  let maildev
 
   before(function (done) {
     const app = express()

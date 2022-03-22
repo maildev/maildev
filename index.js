@@ -98,7 +98,7 @@ module.exports = function (config) {
   }
 
   function shutdown () {
-    logger.info(`Received shutdown signal, shutting down now...`)
+    logger.info('Received shutdown signal, shutting down now...')
     async.parallel([
       mailserver.close,
       web.close

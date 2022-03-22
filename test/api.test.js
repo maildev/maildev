@@ -5,26 +5,48 @@
  * MailDev - api.js -- test the Node.js API
  */
 
-// We add this setting to tell nodemailer the host isn't secure during dev
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 const assert = require('assert')
 const nodemailer = require('nodemailer')
-
 const MailDev = require('../index.js')
+const delay = require('../lib/utils').delay
 
-describe('API', function () {
-  describe('Constructor', function () {
-    it('should accept arguments', function (done) {
+// email opts for nodemailer
+const emailOpts = {
+  from: '\'Fred Foo 👻\' <foo@example.com>', // sender address
+  to: 'bar@example.com, baz@example.com', // list of receivers
+  subject: 'Hello ✔', // Subject line
+  text: 'Hello world?', // plain text body
+  html: '<b>Hello world?</b>' // html body
+}
+
+const port = 9025
+const createTransporter = async () => {
+  const { user, pass } = await nodemailer.createTestAccount()
+  return nodemailer.createTransport({
+    host: '0.0.0.0',
+    port: port,
+    auth: { type: 'login', user, pass }
+  })
+}
+
+function waitMailDevShutdown (maildev) {
+  return new Promise((resolve) => {
+    maildev.close(() => resolve())
+  })
+}
+
+describe('API', () => {
+  describe('Constructor', () => {
+    it('should accept arguments', (done) => {
       const maildev = new MailDev({
-        smtp: 1026,
+        smtp: port,
         web: 9000,
         outgoingHost: 'smtp.gmail.com',
         silent: true,
         disableWeb: true
       })
 
-      assert.strictEqual(maildev.port, 1026)
+      assert.strictEqual(maildev.port, port)
       assert.strictEqual(maildev.getOutgoingHost(), 'smtp.gmail.com')
 
       maildev.close(done)
@@ -43,95 +65,74 @@ describe('API', function () {
     })
   })
 
-  describe('listen/close', function () {
+  describe('listen/close', () => {
     const maildev = new MailDev({
       silent: true,
       disableWeb: true
     })
 
-    it('should start the mailserver', function (done) {
+    it('should start the mailserver', (done) => {
       maildev.listen(done)
     })
 
-    it('should stop the mailserver', function (done) {
+    it('should stop the mailserver', (done) => {
       maildev.close(done)
     })
   })
 
-  describe('Email', function () {
-    it('should receive emails', function (done) {
+  describe('Email', () => {
+    it('should receive emails', async () => {
       const maildev = new MailDev({
         silent: true,
-        disableWeb: true
+        disableWeb: true,
+        smtp: port
       })
+      maildev.listen()
 
-      const emailOpts = {
-        from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
-        to: 'Johnny Utah <johnny.utah@fbi.gov>',
-        subject: 'You were right.',
-        text: 'They are surfers.\n'
+      const transporter = await createTransporter()
+
+      try {
+        await transporter.sendMail(emailOpts)
+      } catch (err) {
+        if (err) return err
       }
 
-      maildev.listen(function (err) {
-        if (err) return done(err)
+      await delay(100)
 
-        const transporter = nodemailer.createTransport({
-          port: 1025
-        })
+      return new Promise((resolve) => {
+        maildev.getAllEmail(async (err, emails) => {
+          if (err) return resolve(err)
 
-        transporter.sendMail(emailOpts, function (err, info) {
-          if (err) return done(err)
+          assert.strictEqual(Array.isArray(emails), true)
+          assert.strictEqual(emails.length, 1)
+          assert.strictEqual(emails[0].text, emailOpts.text)
 
-          // To ensure this passes consistently, we need a delay
-          setTimeout(function () {
-            maildev.getAllEmail(function (err, emails) {
-              if (err) return done(err)
-
-              assert.strictEqual(Array.isArray(emails), true)
-              assert.strictEqual(emails.length, 1)
-              assert.strictEqual(emails[0].text, emailOpts.text)
-
-              maildev.close(function () {
-                done()
-                transporter.close()
-              })
-            })
-          }, 10)
+          await waitMailDevShutdown(maildev)
+          await transporter.close()
+          return resolve()
         })
       })
     })
 
-    it('should emit events when receiving emails', function (done) {
+    it('should emit events when receiving emails', async () => {
       const maildev = new MailDev({
         silent: true,
-        disableWeb: true
+        disableWeb: true,
+        smtp: port
       })
+      const transporter = await createTransporter()
+      maildev.listen()
+      await delay(100)
 
-      const transporter = nodemailer.createTransport({
-        port: 1025
-      })
-
-      const emailOpts = {
-        from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
-        to: 'Johnny Utah <johnny.utah@fbi.gov>',
-        subject: 'You were right.',
-        text: 'They are surfers.\n'
-      }
-
-      maildev.on('new', function (email) {
-        assert.strictEqual(email.text, emailOpts.text)
-
-        maildev.close(function () {
+      return new Promise((resolve) => {
+        maildev.on('new', async (email) => {
+          assert.strictEqual(email.text, emailOpts.text)
+          await waitMailDevShutdown(maildev)
           maildev.removeAllListeners()
-          transporter.close()
-          done()
+          await transporter.close()
+          resolve()
         })
-      })
-
-      maildev.listen(function (err) {
-        if (err) return done(err)
-
-        transporter.sendMail(emailOpts)
+        transporter.sendMail(emailOpts).then(() => {})
       })
     })
   })

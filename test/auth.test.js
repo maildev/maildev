@@ -1,12 +1,13 @@
 /* global describe, it */
 'use strict'
+const jest = require('jest-mock')
 const expect = require('expect')
 const auth = require('../lib/auth')
 
 describe('auththentication middleware', () => {
   it('should return a function', () => {
     const middleware = auth('user', 'password')
-    expect(middleware).toBeA(Function)
+    expect(typeof middleware).toBe('function')
   })
 
   it('should return Unauthorized without authorization headers', () => {
@@ -16,13 +17,12 @@ describe('auththentication middleware', () => {
     }
     const fakeResponse = {
       statusCode: null,
-      setHeader: expect.createSpy(),
-      send: expect.createSpy()
+      setHeader: jest.fn(),
+      send: jest.fn()
     }
 
     middleware(fakeRequest, fakeResponse)
 
-    expect()
     expect(fakeResponse.setHeader).toHaveBeenCalledWith(
       'WWW-Authenticate',
       'Basic realm="Authentication required"'
@@ -39,8 +39,8 @@ describe('auththentication middleware', () => {
     }
     const fakeResponse = {
       statusCode: null,
-      setHeader: expect.createSpy(),
-      send: expect.createSpy()
+      setHeader: jest.fn(),
+      send: jest.fn()
     }
 
     middleware(fakeRequest, fakeResponse)

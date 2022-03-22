@@ -17,7 +17,7 @@ app.service('Email', ['$resource', function ($resource) {
   const context = canvas.getContext('2d')
   const bufferImage = new window.Image()
 
-  var lastUnreadCount = 0
+  let lastUnreadCount = 0
   const faviconSize = 16
   const pos = {
     x: faviconSize - faviconSize / 3,

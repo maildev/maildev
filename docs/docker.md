@@ -44,14 +44,15 @@ $ docker run -p 1080:1080 -p 1025:1025 maildev/maildev bin/maildev --base-pathna
 
 
 ```js
+// We add this setting to tell nodemailer the host isn't secure during dev
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 const nodemailer = require('nodemailer')
 
 const transporter = nodemailer.createTransport({
   // In Node, environment variables are available on process.env
   host: process.env.MAILDEV_PORT_25_TCP_ADDR, // ex. 172.17.0.10
   port: process.env.MAILDEV_PORT_25_TCP_PORT, // ex. 25
-  // We add this setting to tell nodemailer the host isn't secure during dev:
-  ignoreTLS: true
 })
 
 // Now when your send an email, it will show up in the MailDev interface
@@ -80,13 +81,14 @@ To use MailDev with Docker Compose, add the following to your
 Here's an example using Nodemailer:
 
 ```js
+// We add this setting to tell nodemailer the host isn't secure during dev
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 const nodemailer = require('nodemailer');
 
 const transporter = nodemailer.createTransport({
   host: 'maildev',
   port: 25,
-  // We add this setting to tell nodemailer the host isn't secure during dev:
-  ignoreTLS: true
 });
 
 // Now when your send an email, it will show up in the MailDev interface

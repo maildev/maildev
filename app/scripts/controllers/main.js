@@ -3,8 +3,8 @@
 /**
  * Main App Controller -- Manage all emails visible in the list
  */
-var refreshTimeout = null
-var notificationTimeout = null
+let refreshTimeout = null
+let notificationTimeout = null
 
 app.controller('MainCtrl', [
   '$scope', '$rootScope', '$http', 'Email', '$route', '$location', 'Favicon',
@@ -18,17 +18,17 @@ app.controller('MainCtrl', [
     $scope.navMoreOpen = false
     $scope.deleteAllSafeguard = true
 
-    var settingsKey = 'maildevSettings'
+    const settingsKey = 'maildevSettings'
 
-    var saveSettings = function () {
+    const saveSettings = function () {
       if (window.localStorage) {
         window.localStorage.setItem(settingsKey, JSON.stringify($scope.settings))
       }
     }
 
-    var loadSettings = function (defaultSettings) {
+    const loadSettings = function (defaultSettings) {
       try {
-        var settingsJSON = window.localStorage.getItem(settingsKey)
+        const settingsJSON = window.localStorage.getItem(settingsKey)
         return Object.assign({}, defaultSettings, JSON.parse(settingsJSON))
       } catch (err) {
         console.error('Error loading MailDev settings', err)
@@ -36,14 +36,14 @@ app.controller('MainCtrl', [
       }
     }
 
-    var defaultSettings = {
+    const defaultSettings = {
       notificationsEnabled: false,
       autoShowEnabled: false,
       darkThemeEnabled: false
     }
     $scope.settings = loadSettings(defaultSettings)
 
-    var countUnread = function () {
+    const countUnread = function () {
       $scope.unreadItems = $scope.items.filter(function (email) {
         return !email.read
       }).length
@@ -51,7 +51,7 @@ app.controller('MainCtrl', [
     }
 
     // Load all emails
-    var loadData = function () {
+    const loadData = function () {
       $scope.itemsLoading = true
       $scope.items = Email.query(function () {
         $scope.itemsLoading = false
@@ -105,12 +105,12 @@ app.controller('MainCtrl', [
         $rootScope.$emit('Refresh')
         $location.path('/')
       } else {
-        var idx = $scope.items.reduce(function (p, c, i) {
+        const idx = $scope.items.reduce(function (p, c, i) {
           if (p !== 0) return p
           return c.id === email.id ? i : 0
         }, 0)
 
-        var nextIdx = $scope.items.length === 1 ? null : idx === 0 ? idx + 1 : idx - 1
+        const nextIdx = $scope.items.length === 1 ? null : idx === 0 ? idx + 1 : idx - 1
         if (nextIdx !== null) {
           $location.path('/email/' + $scope.items[nextIdx].id)
         } else {
@@ -127,13 +127,13 @@ app.controller('MainCtrl', [
       if (!$scope.currentItemId) return
       if (!$scope.items || !$scope.items.length) return
 
-      var filtered = $scope.items.filter(function (e) {
+      const filtered = $scope.items.filter(function (e) {
         return e.id === $scope.currentItemId
       })
 
       if (!filtered || !filtered.length) return
 
-      var currentItem = filtered[0]
+      const currentItem = filtered[0]
 
       currentItem.read = true
 
@@ -154,7 +154,7 @@ app.controller('MainCtrl', [
         url: 'email/read-all'
       })
         .success(function (data, status) {
-          for (var email of $scope.items) {
+          for (const email of $scope.items) {
             email.read = true
           }
           countUnread()
@@ -197,7 +197,7 @@ app.controller('MainCtrl', [
     }
 
     $scope.deleteAll = function () {
-      var t
+      let t
       if ($scope.deleteAllSafeguard) {
         $scope.deleteAllSafeguard = false
         t = setTimeout(function () {

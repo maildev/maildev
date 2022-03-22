@@ -1,0 +1,41 @@
+{
+  "name": "smtp-connection",
+  "version": "4.0.2",
+  "description": "Connect to SMTP servers",
+  "main": "lib/smtp-connection.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "grunt mochaTest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/andris9/smtp-connection.git"
+  },
+  "keywords": [
+    "SMTP"
+  ],
+  "author": "Andris Reinman",
+  "license": "EUPL-1.1",
+  "bugs": {
+    "url": "https://github.com/andris9/smtp-connection/issues"
+  },
+  "homepage": "https://github.com/andris9/smtp-connection",
+  "devDependencies": {
+    "bunyan": "^1.8.5",
+    "chai": "^3.5.0",
+    "eslint-config-nodemailer": "^1.0.0",
+    "grunt": "^1.0.1",
+    "grunt-cli": "^1.2.0",
+    "grunt-eslint": "^19.0.0",
+    "grunt-mocha-test": "^0.13.2",
+    "mocha": "^3.2.0"
+  },
+  "dependencies": {
+    "nodemailer": "^3.1.1"
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  }
+}

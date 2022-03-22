@@ -6,7 +6,7 @@ const SMTPServer = require('smtp-server').SMTPServer
 const outgoing = require('../lib/outgoing')
 const smptHelpers = require('../lib/helpers/smtp')
 
-let lastPort = 1025
+let lastPort = 8025
 const getPort = () => lastPort++
 
 describe('outgoing', () => {
@@ -138,7 +138,7 @@ describe('outgoing', () => {
         const message = 'A test email body'
 
         outgoing.relayMail(email, message, false, (err) => {
-          expect(err).toNotExist()
+          expect(typeof err).toBe('undefined')
           outgoing.close()
           smtpserver.close(done)
         })

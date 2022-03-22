@@ -12,7 +12,7 @@ const path = require('path')
 const nodemailer = require('nodemailer')
 const express = require('express')
 const proxyMiddleware = require('http-proxy-middleware')
-const got = require('got').got
+const got = require('got')
 
 const MailDev = require('../index.js')
 

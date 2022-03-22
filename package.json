@@ -63,6 +63,7 @@
     "got": "^9.6.0",
     "http-proxy-middleware": "2.0.4",
     "jest": "^27.5.1",
+    "jest-mock": "^27.5.1",
     "mocha": "^9.2.2",
     "node-sass": "^7.0.0",
     "nodemailer": "^6.7.2",

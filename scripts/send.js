@@ -5,6 +5,9 @@
  * Run this to send emails to port 1025 for testing MailDev during development
  *   node test/scripts/send.js
  */
+// We add this setting to tell nodemailer the host isn't secure during dev
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 const path = require('path')
 const fs = require('fs')
 const nodemailer = require('nodemailer')
@@ -12,19 +15,18 @@ const nodemailer = require('nodemailer')
 // https://github.com/minimaxir/big-list-of-naughty-strings
 // const blns = require('blns');
 
-var blns = fs.readFileSync(path.join(__dirname, './resources/blns.txt'))
-var utf8sampler = fs.readFileSync(path.join(__dirname, './resources/utf-8-sampler.html'))
+const blns = fs.readFileSync(path.join(__dirname, './resources/blns.txt'))
+const utf8sampler = fs.readFileSync(path.join(__dirname, './resources/utf-8-sampler.html'))
 // var utf8demo = fs.readFileSync(path.join(__dirname, './resources/utf-8-demo.html'))
 // var utf8quickbrown = fs.readFileSync(path.join(__dirname, './resources/utf-8-quickbrown.html'))
 
 // Create a transport with MailDev's default receiving port
-var transporter = nodemailer.createTransport({
-  port: 1025,
-  ignoreTLS: true
+const transporter = nodemailer.createTransport({
+  port: 1025
 })
 
 // Messages list
-var messages = [
+const messages = [
 
   // Email w/ simple attachment and basic header
   {
@@ -47,7 +49,7 @@ var messages = [
   // Email w/ simple attachment and basic header
   {
     from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
-    to: [ 'Johnny Long Name Utah <johnny.long.email.address.utah@fbi.gov>', 'Johnny Utah <johnny.utah@fbi.gov>', 'Bodhi <bodhi@gmail.com>' ],
+    to: ['Johnny Long Name Utah <johnny.long.email.address.utah@fbi.gov>', 'Johnny Utah <johnny.utah@fbi.gov>', 'Bodhi <bodhi@gmail.com>'],
     subject: 'Look at it! It\'s a once in a lifetime opportunity, man! Let me go out there and let me get one wave, just one wave before you take me in.',
     headers: {
       'X-some-header': 1000
@@ -172,7 +174,9 @@ function sendEmails (logErrors) {
   messages.forEach(function (message) {
     transporter.sendMail(message, function (err, info) {
       if (logErrors && err) { return console.log('Test email error: ', err) }
-      console.log('Test email sent: ' + info.response)
+      if (info) {
+        console.log('Test email sent: ' + info.response)
+      }
     })
   })
 }

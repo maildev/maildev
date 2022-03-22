@@ -1,5 +1,6 @@
 /* global describe, it */
 'use strict'
+const jest = require('jest')
 const expect = require('expect')
 const auth = require('../lib/auth')
 
@@ -14,10 +15,11 @@ describe('auththentication middleware', () => {
     const fakeRequest = {
       headers: {}
     }
+    const spy = jest.fn()
     const fakeResponse = {
       statusCode: null,
-      setHeader: expect.createSpy(),
-      send: expect.createSpy()
+      setHeader: spy,
+      send: spy
     }
 
     middleware(fakeRequest, fakeResponse)
@@ -37,10 +39,11 @@ describe('auththentication middleware', () => {
         authorization: `Basic ${Buffer.from('not:correct').toString('base64')}`
       }
     }
+    const spy = jest.fn()
     const fakeResponse = {
       statusCode: null,
-      setHeader: expect.createSpy(),
-      send: expect.createSpy()
+      setHeader: spy(),
+      send: spy()
     }
 
     middleware(fakeRequest, fakeResponse)

@@ -1,5 +1,6 @@
 /* global describe, it */
 'use strict'
+const jest = require('jest')
 const expect = require('expect')
 const SMTPServer = require('smtp-server').SMTPServer
 const outgoing = require('../lib/outgoing')
@@ -27,7 +28,7 @@ describe('outgoing', () => {
 
   describe('relayMail', () => {
     it('should set auto relay mode without an initialised client', () => {
-      let spy = expect.createSpy()
+      let spy = jest.fn()
       spy = expect.spyOn(require('../lib/logger'), 'info')
       // Close the SMTP server before doing anything, an investigation is needed to find where the SMTP connection is not closed
       outgoing.getClient().on('end', () => {
@@ -41,7 +42,7 @@ describe('outgoing', () => {
 
     it('should set auto relay mode with a wrong rules', (done) => {
       const rules = 'testrule'
-      let spy = expect.createSpy()
+      let spy = jest.fn()
       spy = expect.spyOn(require('../lib/logger'), 'error')
       outgoing.setup()
 
@@ -60,8 +61,7 @@ describe('outgoing', () => {
     it('should set an auto relay email address', (done) => {
       const rules = ['test']
       const emailAddress = 'test@test.com'
-
-      let spy = expect.createSpy()
+      let spy = jest.fn()
       spy = expect.spyOn(require('../lib/logger'), 'info')
 
       outgoing.setup()

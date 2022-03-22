@@ -11,13 +11,24 @@ const assert = require('assert')
 const path = require('path')
 const nodemailer = require('nodemailer')
 const express = require('express')
-const proxyMiddleware = require('http-proxy-middleware')
+const proxyMiddleware = require('http-proxy-middleware').createProxyMiddleware
 const got = require('got')
-
 const MailDev = require('../index.js')
 
-const defaultNodemailerOpts = {
-  port: 1025
+const port = 9025
+const createTransporter = async () => {
+  const { user, pass } = await nodemailer.createTestAccount()
+  return nodemailer.createTransport({
+    host: '0.0.0.0',
+    port: port,
+    auth: { type: 'login', user, pass }
+  })
+}
+
+function waitMailDevShutdown (maildev) {
+  return new Promise((resolve) => {
+    maildev.close(() => resolve())
+  })
 }
 
 describe('middleware', function () {
@@ -27,13 +38,14 @@ describe('middleware', function () {
   before(function (done) {
     const app = express()
 
-    app.get('/', function (req, res) {
+    app.get('/', function (_, res) {
       res.send('root')
     })
 
     maildev = new MailDev({
       silent: true,
-      basePathname: '/maildev'
+      basePathname: '/maildev',
+      smtp: port
     })
 
     // proxy all maildev requests to the maildev app
@@ -51,20 +63,22 @@ describe('middleware', function () {
     })
   })
 
-  after(function (done) {
-    maildev.close(function () {
+  after(async () => {
+    await waitMailDevShutdown(maildev)
+    return new Promise((resolve) => {
       maildev.removeAllListeners()
-      server.close(done)
+      server.close()
+      resolve()
     })
   })
 
   it('should run as middleware in another express app', function (done) {
     // Request to the express app
     got('http://localhost:8080/')
-      .then(function (res) {
+      .then((res) => {
         assert.strictEqual(res.body, 'root')
         return got('http://localhost:8080/maildev/email')
-          .then(function (res) {
+          .then((res) => {
             assert.strictEqual(res.statusCode, 200)
 
             const json = JSON.parse(res.body)
@@ -77,8 +91,8 @@ describe('middleware', function () {
       .catch(done)
   })
 
-  it('should serve email attachments with working urls', function (done) {
-    const transporter = nodemailer.createTransport(defaultNodemailerOpts)
+  it('should serve email attachments with working urls', async () => {
+    const transporter = await createTransporter()
 
     const emailOpts = {
       from: 'johnny.utah@fbi.gov',
@@ -94,19 +108,21 @@ describe('middleware', function () {
       ]
     }
 
-    transporter.sendMail(emailOpts)
-
-    maildev.on('new', function (email) {
-      got(`http://localhost:8080/maildev/email/${email.id}/html`)
-        .then(function (res) {
-          assert.strictEqual(
-            res.body,
-            `<img src="//localhost:8080/maildev/email/${email.id}/attachment/tyler.jpg">`
-          )
-          maildev.removeAllListeners()
-          done()
-        })
-        .catch(done)
+    return new Promise((resolve) => {
+      maildev.on('new', (email) => {
+        got(`http://localhost:8080/maildev/email/${email.id}/html`)
+          .then(async (res) => {
+            assert.strictEqual(
+              res.body,
+              `<img src="//localhost:8080/maildev/email/${email.id}/attachment/tyler.jpg">`
+            )
+            await maildev.close()
+            maildev.removeAllListeners()
+            resolve()
+          })
+          .catch((err) => resolve(err))
+      })
+      transporter.sendMail(emailOpts)
     })
   })
 })

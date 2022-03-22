@@ -4,7 +4,7 @@
  * App Config
  */
 
-var app = angular.module('mailDevApp', ['ngRoute', 'ngResource', 'ngSanitize', 'ngCookies'])
+const app = angular.module('mailDevApp', ['ngRoute', 'ngResource', 'ngSanitize', 'ngCookies'])
 
 app.config(['$routeProvider', function ($routeProvider) {
   $routeProvider
@@ -15,7 +15,7 @@ app.config(['$routeProvider', function ($routeProvider) {
 
 app.run(['$rootScope', function ($rootScope) {
   // Connect Socket.io
-  var socket = io({
+  const socket = io({
     path: location.pathname + 'socket.io'
   })
 

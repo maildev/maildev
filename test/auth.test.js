@@ -1,6 +1,6 @@
 /* global describe, it */
 'use strict'
-const jest = require('jest')
+const jest = require('jest-mock')
 const expect = require('expect')
 const auth = require('../lib/auth')
 
@@ -15,16 +15,14 @@ describe('auththentication middleware', () => {
     const fakeRequest = {
       headers: {}
     }
-    const spy = jest.fn()
     const fakeResponse = {
       statusCode: null,
-      setHeader: spy,
-      send: spy
+      setHeader: jest.fn(),
+      send: jest.fn()
     }
 
     middleware(fakeRequest, fakeResponse)
 
-    expect()
     expect(fakeResponse.setHeader).toHaveBeenCalledWith(
       'WWW-Authenticate',
       'Basic realm="Authentication required"'
@@ -39,11 +37,10 @@ describe('auththentication middleware', () => {
         authorization: `Basic ${Buffer.from('not:correct').toString('base64')}`
       }
     }
-    const spy = jest.fn()
     const fakeResponse = {
       statusCode: null,
-      setHeader: spy(),
-      send: spy()
+      setHeader: jest.fn(),
+      send: jest.fn()
     }
 
     middleware(fakeRequest, fakeResponse)

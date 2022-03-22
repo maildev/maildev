@@ -15,9 +15,9 @@ const proxyMiddleware = require('http-proxy-middleware').createProxyMiddleware
 const got = require('got')
 const MailDev = require('../index.js')
 
-const smtpPort = 9025
-const webPort = 9026
-const proxyPort = 9027
+const smtpPort = 9080
+const webPort = 9081
+const proxyPort = 9082
 const createTransporter = async () => {
   const { user, pass } = await nodemailer.createTestAccount()
   return nodemailer.createTransport({

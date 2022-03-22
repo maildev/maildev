@@ -14,6 +14,8 @@ const MailDev = require('../index.js')
 describe('mailserver', function () {
   describe('smtp error handling', function () {
     it('Error should be thrown, because listening to server did not work', function (done) {
+      process.setMaxListeners(0)
+
       const server = http.createServer(() => {})
       const maildev = new MailDev({
         disableWeb: true,
@@ -28,10 +30,11 @@ describe('mailserver', function () {
       const originalHandler = process.listeners('uncaughtException').pop()
       process.removeListener('uncaughtException', originalHandler)
 
-      process.once('uncaughtException', function (err) {
-        assert.strictEqual(err.code, 'EADDRINUSE')
-        process.listeners('uncaughtException').push(originalHandler)
-        maildev.close(() => server.close(done))
+      process.on('uncaughtException', function (err) {
+        if (err.code === 'EADDRINUSE') {
+          process.listeners('uncaughtException').push(originalHandler)
+          maildev.close(() => server.close(done))
+        }
       })
     })
   })

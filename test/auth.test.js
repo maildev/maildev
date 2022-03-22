@@ -6,7 +6,7 @@ const auth = require('../lib/auth')
 describe('auththentication middleware', () => {
   it('should return a function', () => {
     const middleware = auth('user', 'password')
-    expect(middleware).toBeA(Function)
+    expect(typeof middleware).toBe('function')
   })
 
   it('should return Unauthorized without authorization headers', () => {

@@ -1,6 +1,6 @@
 /* global describe, it */
 'use strict'
-const jest = require('jest')
+const jest = require('jest-mock')
 const expect = require('expect')
 const SMTPServer = require('smtp-server').SMTPServer
 const outgoing = require('../lib/outgoing')
@@ -15,7 +15,7 @@ describe('outgoing', () => {
       const port = getPort()
       const smtpserver = new SMTPServer()
       smtpserver.listen(port, (err) => {
-        expect(err).toNotExist()
+        expect(typeof err).toBe('undefined')
         outgoing.setup()
         expect(outgoing.isEnabled()).toBe(true)
         outgoing.getClient().on('end', () => {
@@ -28,22 +28,20 @@ describe('outgoing', () => {
 
   describe('relayMail', () => {
     it('should set auto relay mode without an initialised client', () => {
-      let spy = jest.fn()
-      spy = expect.spyOn(require('../lib/logger'), 'info')
+      const spy = jest.spyOn(require('../lib/logger'), 'info')
       // Close the SMTP server before doing anything, an investigation is needed to find where the SMTP connection is not closed
       outgoing.getClient().on('end', () => {
         outgoing.setAutoRelayMode()
 
         expect(outgoing.getConfig().autoRelay).toBe(false)
         expect(spy).toHaveBeenCalledWith('Outgoing mail not configured - Auto relay mode ignored')
-        spy.restore()
+        spy.mockRestore()
       })
     })
 
     it('should set auto relay mode with a wrong rules', (done) => {
       const rules = 'testrule'
-      let spy = jest.fn()
-      spy = expect.spyOn(require('../lib/logger'), 'error')
+      const spy = jest.spyOn(require('../lib/logger'), 'error')
       outgoing.setup()
 
       // TODO: Use the expect toThrow helper, I will need to update the version of the expect library before being able to do it
@@ -52,7 +50,7 @@ describe('outgoing', () => {
       } catch (e) {
         expect(e.message).toBe("ENOENT: no such file or directory, open 'testrule'")
         expect(spy).toHaveBeenCalledWith(`Error reading config file at ${rules}`)
-        spy.restore()
+        spy.mockRestore()
 
         done()
       }
@@ -61,8 +59,7 @@ describe('outgoing', () => {
     it('should set an auto relay email address', (done) => {
       const rules = ['test']
       const emailAddress = 'test@test.com'
-      let spy = jest.fn()
-      spy = expect.spyOn(require('../lib/logger'), 'info')
+      const spy = jest.spyOn(require('../lib/logger'), 'info')
 
       outgoing.setup()
       outgoing.setAutoRelayMode(true, rules, emailAddress)
@@ -111,7 +108,7 @@ describe('outgoing', () => {
         }
       })
       smtpserver.listen(port, (err) => {
-        expect(err).toNotExist()
+        expect(typeof err).toBe('undefined')
         outgoing.setup(null, port)
         outgoing.relayMail(email, message, false, (err) => {
           expect(err).toNotExist()
@@ -128,7 +125,7 @@ describe('outgoing', () => {
         onAuth: smptHelpers.createOnAuthCallback(username, password)
       })
       smtpserver.listen(port, (err) => {
-        expect(err).toNotExist()
+        expect(typeof err).toBe('undefined')
         outgoing.setup(null, port, username, password)
 
         const email = {

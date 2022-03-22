@@ -1,18 +1,14 @@
-/* global describe, it */
+/* global describe, it, before, after */
 'use strict'
 
 /**
  * MailDev - email.js -- test the email output
  */
-// We add this setting to tell nodemailer the host isn't secure during dev
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
-
 const assert = require('assert')
 const fs = require('fs')
 const http = require('http')
 const path = require('path')
 const nodemailer = require('nodemailer')
-const delay = require('../lib/utils').delay
 
 const MailDev = require('../index.js')
 
@@ -43,10 +39,24 @@ function waitMailDevShutdown (maildev) {
 }
 
 describe('email', () => {
+  let maildev
+
+  before(function (done) {
+    maildev = new MailDev(defaultMailDevOpts)
+    maildev.listen(done)
+  })
+
+  after(async () => {
+    await waitMailDevShutdown(maildev)
+    return new Promise((resolve) => {
+      maildev.removeAllListeners()
+      resolve()
+    })
+  })
+
   it('should stripe javascript from emails', async () => {
-    const maildev = new MailDev(defaultMailDevOpts)
     const transporter = await createTransporter()
-    const email = {
+    const emailForTest = {
       from: 'johnny.utah@fbi.gov',
       to: 'bodhi@gmail.com',
       subject: 'Test cid replacement #1',
@@ -62,26 +72,17 @@ describe('email', () => {
         maildev.getEmailHTML(email.id, async (_, html) => {
           const contentWithoutNewLine = html.replace(/\n/g, '')
           assert.strictEqual(contentWithoutNewLine, '<p>alert(&quot;Hello World&quot;)</p><p>The wax at the bank was surfer wax!!!</p>')
-          await waitMailDevShutdown(maildev)
-          maildev.removeAllListeners()
           await transporter.close()
           resolve()
         })
       })
 
-      // test callback
-      maildev.listen((err) => {
-        if (err) return resolve(err)
-        transporter.sendMail(email)
-      })
+      transporter.sendMail(emailForTest)
     })
   })
 
   it('should handle embedded images with cid', async () => {
-    const maildev = new MailDev(defaultMailDevOpts)
     const transporter = await createTransporter()
-    maildev.listen()
-    await delay(100)
 
     const emailsForTest = [
       {
@@ -114,44 +115,40 @@ describe('email', () => {
 
     let seenEmails = 0
 
-    return new Promise((resolve) => {
-      maildev.on('new', async (email) => {
+    return new Promise((resolve, reject) => {
+      maildev.on('new', (email) => {
         // Simple replacement to root url
         maildev.getEmailHTML(email.id, (_, html) => {
           const attachmentFilename = (email.subject.endsWith('#1')) ? 'tyler.jpg' : 'wave.jpg'
-          assert.strictEqual(html, '<img src="/email/' + email.id + '/attachment/' + attachmentFilename + '">')
-
+          const contentWithoutNewLine = html.replace(/\n/g, '')
+          assert.strictEqual(contentWithoutNewLine, '<p><img src="/email/' + email.id + '/attachment/' + attachmentFilename + '" alt=""></p>')
           const host = `localhost:${web}`
           const attachmentLink = `${host}/email/${email.id}/attachment/${attachmentFilename}`
 
           // Pass baseUrl
           maildev.getEmailHTML(email.id, host, (_, html) => {
-            assert.strictEqual(html, `<img src="//${attachmentLink}">`)
+            const contentWithoutNewLine = html.replace(/\n/g, '')
+            assert.strictEqual(contentWithoutNewLine, `<p><img src="//${attachmentLink}" alt=""></p>`)
 
             // Check contents of attached/embedded files
             http.get(`http://${attachmentLink}`, (res) => {
               if (res.statusCode !== 200) {
-                resolve(new Error('Failed to get attachment: ' + res.statusCode))
+                reject(new Error('Failed to get attachment: ' + res.statusCode))
               }
               let data = ''
               res.setEncoding('binary')
               res.on('data', (chunk) => {
                 data += chunk
               })
-              res.on('end', async () => {
+              res.on('end', () => {
                 const fileContents = fs.readFileSync(path.join(__dirname, attachmentFilename), 'binary')
                 assert.strictEqual(data, fileContents)
 
-                seenEmails++
-                if (seenEmails === 2) {
-                  await waitMailDevShutdown(maildev)
-                  maildev.removeAllListeners()
-                  await transporter.close()
+                seenEmails += 1
+                if (seenEmails) {
                   resolve()
                 }
               })
-            }).on('error', function (err) {
-              resolve(err)
             })
           })
         })

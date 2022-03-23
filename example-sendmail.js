@@ -16,6 +16,8 @@ async function main () {
   const info = await transporter.sendMail({
     from: '\'Fred Foo 👻\' <foo@example.com>', // sender address
     to: 'bar@example.com, baz@example.com', // list of receivers
+    cc: 'cc@example.com, cc2@example.com', // optional
+    bcc: 'bcc@example.com, bcc@example.com', // optional
     subject: 'Hello ✔', // Subject line
     text: 'Hello world?', // plain text body
     html: '<b>Hello world?</b>' // html body

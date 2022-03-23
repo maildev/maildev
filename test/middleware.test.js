@@ -126,4 +126,30 @@ describe('middleware', function () {
       transporter.sendMail(emailOpts)
     })
   })
+
+  it('should allow email filtering', async () => {
+    const transporter = await createTransporter()
+
+    const emailOpts = {
+      from: 'johnny.utah@fbi.gov',
+      to: 'bodhi@gmail.com',
+      subject: 'Test',
+      html: 'Test'
+    }
+
+    return new Promise((resolve) => {
+      maildev.on('new', function () {
+        got(`http://localhost:${proxyPort}/maildev/email?subject=Test&to.address=bodhi@gmail.com`)
+          .then(function (res) {
+            assert.strictEqual(res.statusCode, 200)
+            const json = JSON.parse(res.body)
+            assert(json.length === 1)
+            assert(json[0].subject === emailOpts.subject)
+            resolve()
+          })
+          .catch((err) => resolve(err))
+      })
+      transporter.sendMail(emailOpts)
+    })
+  })
 })

@@ -6,17 +6,19 @@
  *   node test/scripts/load-test.js
  */
 
+// We add this setting to tell nodemailer the host isn't secure during dev
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
+
 const async = require('async')
 const nodemailer = require('nodemailer')
 
 // Create a transport with MailDev's default receiving port
-var transporter = nodemailer.createTransport({
-  port: 1025,
-  ignoreTLS: true
+const transporter = nodemailer.createTransport({
+  port: 1025
 })
 
 // Messages list
-var messages = [
+const messages = [
   {
     from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
     to: 'Johnny Utah <johnny.utah@fbi.gov>',

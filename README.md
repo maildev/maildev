@@ -1,27 +1,19 @@
 # MailDev
 
-[![Test](https://github.com/maildev/maildev/actions/workflows/test.yml/badge.svg)](https://github.com/maildev/maildev/actions/workflows/test.yml)
-[![codecov](https://codecov.io/gh/maildev/maildev/branch/master/graph/badge.svg)](https://codecov.io/gh/maildev/maildev)
-[![NPM Version](https://img.shields.io/npm/v/maildev.svg)](https://www.npmjs.com/package/maildev)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 **MailDev** is a simple way to test your project's generated emails during development with an easy to use web interface that runs on your machine. Built on top of [Node.js](http://www.nodejs.org).
 
 ![MailDev Screenshot](https://github.com/maildev/maildev/blob/gh-pages/images/screenshot-2021-01-03.png?raw=true)
 
-## Install & Run
-
-    $ npm install -g maildev
-    $ maildev
+## Docker Run
 
 If you want to use MailDev with [Docker](https://www.docker.com/), you can use the
-[**maildev/maildev** image on Docker Hub](https://hub.docker.com/r/maildev/maildev).
+[**soulteary/maildev** image on Docker Hub](https://hub.docker.com/r/soulteary/maildev).
 For a guide for usage with Docker,
 [checkout the docs](https://github.com/maildev/maildev/blob/master/docs/docker.md).
 
-    $ docker run -p 1080:1080 -p 1025:1025 maildev/maildev
-
-For convenient use with Grunt, try [grunt-maildev](https://github.com/xavierpriour/grunt-maildev).
+    $ docker run -p 1080:1080 -p 1025:1025 soulteary/maildev
 
 ## Usage
 
@@ -56,6 +48,7 @@ Usage: maildev [options]
 | `-o, --open`                     |                            | Open the Web GUI after startup                                                            |
 | `-v, --verbose`                  |                            |                                                                                           |
 | `--silent`                       |                            |                                                                                           |
+| `--log-mail-contents`            |                            | Log a JSON representation of each incoming mail |
 
 ## API
 
@@ -136,9 +129,11 @@ Configure your application to send emails via port `1025` and open `localhost:10
 **Nodemailer (v1.0+)**
 
 ```javascript
+// We add this setting to tell nodemailer the host isn't secure during dev
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 const transport = nodemailer.createTransport({
   port: 1025,
-  ignoreTLS: true,
   // other settings...
 });
 ```

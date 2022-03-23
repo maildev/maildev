@@ -19,8 +19,9 @@ module.exports = function (config) {
 
   if (!config) {
     // CLI
-    config = appendOptions(program.version(version), options)
+    config = appendOptions(program.version(version).allowUnknownOption(true), options)
       .parse(process.argv)
+      .opts()
   }
 
   if (config.verbose) {
@@ -85,17 +86,19 @@ module.exports = function (config) {
       secure
     )
 
-    if (config.open) {
-      const open = require('opn')
-      open('http://' + (config.ip === '0.0.0.0' ? 'localhost' : config.ip) + ':' + config.web)
-    }
-
     // Close the web server when the mailserver closes
     mailserver.on('close', web.close)
   }
 
+  if (config.logMailContents) {
+    mailserver.on('new', function (mail) {
+      const mailContents = JSON.stringify(mail, null, 2)
+      logger.info(`Received the following mail contents:\n${mailContents}`)
+    })
+  }
+
   function shutdown () {
-    logger.info(`Received shutdown signal, shutting down now...`)
+    logger.info('Received shutdown signal, shutting down now...')
     async.parallel([
       mailserver.close,
       web.close

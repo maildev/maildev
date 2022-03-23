@@ -28,11 +28,13 @@ describe('cli', () => {
 
   it('should works with unknown arguments', (done) => {
     const maildev = spawn(bin, [`--${utils.makeId()}`])
-    setTimeout(() => {
-      maildev.kill(0)
-      done()
-    }, 1000)
     maildev.on('error', (err) => done(err))
-    maildev.on('close', (code, signal) => done(new Error(`Exit with code: ${code || signal}`)))
+    maildev.on('close', (code, signal) => {
+      expect(signal).toBe(null)
+      done()
+    })
+    setTimeout(() => {
+      maildev.kill('SIGINT')
+    }, 1000)
   })
 })

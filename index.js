@@ -19,7 +19,7 @@ module.exports = function (config) {
 
   if (!config) {
     // CLI
-    config = appendOptions(program.version(version), options)
+    config = appendOptions(program.version(version).allowUnknownOption(true), options)
       .parse(process.argv)
       .opts()
   }

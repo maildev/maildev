@@ -1,7 +1,7 @@
 {
   "name": "maildev",
   "description": "SMTP Server and Web Interface for reading and testing emails during development",
-  "version": "1.1.1",
+  "version": "2.0.1",
   "private": true,
   "keywords": [
     "email",
@@ -19,6 +19,18 @@
     {
       "name": "Dan Farrelly",
       "email": "daniel.j.farrelly@gmail.com"
+    },
+    {
+      "name": "Dominik Serafin",
+      "email": "DominikSerafin@users.noreply.github.com"
+    },
+    {
+      "name": "LoneRifle",
+      "email": "LoneRifle@users.noreply.github.com"
+    },
+    {
+      "name": "soulteary",
+      "email": "soulteary@gmail.com"
     }
   ],
   "repository": {
@@ -29,7 +41,7 @@
     "test": "standard && nyc _mocha --exit --timeout 5000",
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "dev": "node ./scripts/dev.js & npm run css-watch",
+    "dev": "node ./scripts/dev.js && npm run css-watch",
     "css": "node-sass --output-style compressed -o app/styles assets/styles/style.scss",
     "css-watch": "node-sass -wr --output-style compressed -o app/styles assets/styles/style.scss",
     "docker-build": "docker build -t soulteary/maildev:$npm_package_version . && docker tag soulteary/maildev:$npm_package_version soulteary/maildev:latest",

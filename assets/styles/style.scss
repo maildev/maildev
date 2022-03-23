@@ -731,6 +731,85 @@ body.dark-theme {
 
 }
 
+.email-meta {
+    box-sizing: border-box;
+    width: 100%;
+    background-color: white;
+    background: lighten($brand, 38);
+    border-bottom: 1px solid lighten($brand, 28);
+    margin: 0;
+    padding: .5em 1em;
+    font-size: 14px;
+
+    .row {
+        @include display-flex();
+        flex-flow: row nowrap;
+
+        @media (max-width: 1100px) {
+            flex-wrap: wrap;
+            flex-direction: column;
+            & + .row {
+                margin-top: .5em;
+            }
+        }
+    }
+
+    .description {
+        flex-basis: 5em;
+        flex-shrink: 0; 
+        display: inline-block;
+        text-align: right;
+        margin-right: .25em;
+        color: desaturate(darken($brand, 12), 20);
+
+        @media (max-width: 1100px) {
+            text-align: left;
+            flex-basis: 0;
+            margin-right: 0;
+        }
+    }
+
+    .description-value {
+        flex-grow: 1;
+    }
+
+    .subject {
+        font-size: 20px;
+        margin-bottom: .5em;
+    }
+
+
+    .address .address-address {
+        color: rgba(lighten(black, 25), .40);
+    }
+    .address .address-name {
+        color: lighten(black, 30);
+    }
+
+    app-address + app-address::before {
+        content: ', ';
+    }
+
+
+    body.dark-theme & {
+        background-color: darken($brand, 28);
+        border-bottom-color: darken($brand, 18);
+        color: white;
+
+        .description {
+            color: desaturate(lighten($brand, 12), 20);
+        }
+
+        .address .address-address {
+            color: rgba(darken(white, 40), .65);
+        }
+        .address .address-name {
+            color: darken(white, 30);
+        }
+    }
+
+}
+
 
 .dropdown-container {
     position: relative;

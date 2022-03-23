@@ -4,14 +4,14 @@
 
 **MailDev** is a simple way to test your project's generated emails during development with an easy to use web interface that runs on your machine. Built on top of [Node.js](http://www.nodejs.org).
 
-![MailDev Screenshot](https://github.com/soulteary/maildev/blob/gh-pages/images/screenshot-2021-01-03.png?raw=true)
+![MailDev Screenshot](https://github.com/maildev/maildev/blob/gh-pages/images/screenshot-2021-01-03.png?raw=true)
 
 ## Docker Run
 
 If you want to use MailDev with [Docker](https://www.docker.com/), you can use the
 [**soulteary/maildev** image on Docker Hub](https://hub.docker.com/r/soulteary/maildev).
 For a guide for usage with Docker,
-[checkout the docs](https://github.com/soulteary/maildev/blob/master/docs/docker.md).
+[checkout the docs](https://github.com/maildev/maildev/blob/master/docs/docker.md).
 
     $ docker run -p 1080:1080 -p 1025:1025 soulteary/maildev
 
@@ -53,7 +53,7 @@ Usage: maildev [options]
 ## API
 
 MailDev can be used in your Node.js application. For more info view the
-[API docs](https://github.com/soulteary/maildev/blob/master/docs/api.md).
+[API docs](https://github.com/maildev/maildev/blob/master/docs/api.md).
 
 ```javascript
 const MailDev = require("maildev");
@@ -68,7 +68,7 @@ maildev.on("new", function (email) {
 ```
 
 MailDev also has a **REST API**. For more info
-[view the docs](https://github.com/soulteary/maildev/blob/master/docs/rest.md).
+[view the docs](https://github.com/maildev/maildev/blob/master/docs/rest.md).
 
 ## Outgoing email
 
@@ -164,11 +164,11 @@ config.action_mailer.delivery_method = :smtp
 
 ## Ideas
 
-If you're using MailDev and you have a great idea, I'd love to hear it. If you're not using MailDev because it lacks a feature, I'd love to hear that too. Add an issue to the repo [here](https://github.com/soulteary/maildev/issues/new).
+If you're using MailDev and you have a great idea, I'd love to hear it. If you're not using MailDev because it lacks a feature, I'd love to hear that too. Add an issue to the repo [here](https://github.com/maildev/maildev/issues/new).
 
 ## Contributing
 
-Any help on MailDev would be awesome. There is plenty of room for improvement. Feel free to [create a Pull Request](https://github.com/soulteary/maildev/issues/new) from small to big changes.
+Any help on MailDev would be awesome. There is plenty of room for improvement. Feel free to [create a Pull Request](https://github.com/maildev/maildev/issues/new) from small to big changes.
 
 To run **MailDev** during development:
 
@@ -187,7 +187,7 @@ To run the test suite:
 
     $ npm test
 
-## [Changelog](https://github.com/soulteary/maildev/releases)
+## [Changelog](https://github.com/maildev/maildev/releases)
 
 ## Thanks
 
@@ -201,7 +201,7 @@ and [mailparser](https://github.com/nodemailer/mailparser).
 Many thanks to Andris as his projects are the backbone of this app and to
 [MailCatcher](http://mailcatcher.me/) for the inspiration.
 
-Additionally, thanks to all the awesome [contributors](https://github.com/soulteary/maildev/graphs/contributors)
+Additionally, thanks to all the awesome [contributors](https://github.com/maildev/maildev/graphs/contributors)
 to the project.
 
 ## License

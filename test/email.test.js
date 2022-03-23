@@ -1,10 +1,9 @@
-/* global describe, it */
+/* global describe, it, before, after */
 'use strict'
 
 /**
  * MailDev - email.js -- test the email output
  */
-
 const assert = require('assert')
 const fs = require('fs')
 const http = require('http')
@@ -13,21 +12,51 @@ const nodemailer = require('nodemailer')
 
 const MailDev = require('../index.js')
 
+const port = 9025
+const web = 8080
+
 const defaultMailDevOpts = {
-  silent: true
+  disableWeb: false,
+  silent: true,
+  smtp: port,
+  web: web,
+  ip: '0.0.0.0'
 }
 
-const defaultNodemailerOpts = {
-  port: 1025,
-  ignoreTLS: true
+const createTransporter = async () => {
+  const { user, pass } = await nodemailer.createTestAccount()
+  return nodemailer.createTransport({
+    host: '0.0.0.0',
+    port: port,
+    auth: { type: 'login', user, pass }
+  })
 }
 
-describe('email', function () {
-  it('should stripe javascript from emails', function (done) {
-    const maildev = new MailDev(defaultMailDevOpts)
-    const transporter = nodemailer.createTransport(defaultNodemailerOpts)
+function waitMailDevShutdown (maildev) {
+  return new Promise((resolve) => {
+    maildev.close(() => resolve())
+  })
+}
 
-    const email = {
+describe('email', () => {
+  let maildev
+
+  before(function (done) {
+    maildev = new MailDev(defaultMailDevOpts)
+    maildev.listen(done)
+  })
+
+  after(async () => {
+    await waitMailDevShutdown(maildev)
+    return new Promise((resolve) => {
+      maildev.removeAllListeners()
+      resolve()
+    })
+  })
+
+  it('should stripe javascript from emails', async () => {
+    const transporter = await createTransporter()
+    const emailForTest = {
       from: 'johnny.utah@fbi.gov',
       to: 'bodhi@gmail.com',
       subject: 'Test cid replacement #1',
@@ -38,101 +67,96 @@ describe('email', function () {
             '</body></html>'
     }
 
-    maildev.on('new', function (email) {
-      maildev.getEmailHTML(email.id, function (_, html) {
-        assert.strictEqual(html, '<!DOCTYPE html><html><head></head><body><p>The wax at the bank was surfer wax!!!</p></body></html>')
-        maildev.close(function () {
-          maildev.removeAllListeners()
-          transporter.close()
-          done()
+    return new Promise((resolve) => {
+      maildev.on('new', (email) => {
+        maildev.getEmailHTML(email.id, async (_, html) => {
+          const contentWithoutNewLine = html.replace(/\n/g, '')
+          assert.strictEqual(contentWithoutNewLine, '<p>alert(&quot;Hello World&quot;)</p><p>The wax at the bank was surfer wax!!!</p>')
+          await transporter.close()
+          resolve()
         })
       })
-    })
 
-    maildev.listen(function (err) {
-      if (err) return done(err)
-      transporter.sendMail(email)
+      transporter.sendMail(emailForTest)
     })
   })
 
-  it('should handle embedded images with cid', function (done) {
-    const maildev = new MailDev(defaultMailDevOpts)
-    const transporter = nodemailer.createTransport(defaultNodemailerOpts)
+  it('should handle embedded images with cid', async () => {
+    const transporter = await createTransporter()
 
-    const email1Opts = {
-      from: 'johnny.utah@fbi.gov',
-      to: 'bodhi@gmail.com',
-      subject: 'Test cid replacement #1',
-      html: '<img src="cid:image"/>',
-      attachments: [
-        {
-          filename: 'tyler.jpg',
-          path: path.join(__dirname, 'tyler.jpg'),
-          cid: 'image'
-        }
-      ]
-    }
-
-    const email2Opts = {
-      from: 'johnny.utah@fbi.gov',
-      to: 'bodhi@gmail.com',
-      subject: 'Test cid replacement #2',
-      html: '<img src="cid:image"/>',
-      attachments: [
-        {
-          filename: 'wave.jpg',
-          path: path.join(__dirname, 'wave.jpg'),
-          cid: 'image'
-        }
-      ]
-    }
+    const emailsForTest = [
+      {
+        from: 'johnny.utah@fbi.gov',
+        to: 'bodhi@gmail.com',
+        subject: 'Test cid replacement #1',
+        html: '<img src="cid:image"/>',
+        attachments: [
+          {
+            filename: 'tyler.jpg',
+            path: path.join(__dirname, 'tyler.jpg'),
+            cid: 'image'
+          }
+        ]
+      },
+      {
+        from: 'johnny.utah@fbi.gov',
+        to: 'bodhi@gmail.com',
+        subject: 'Test cid replacement #2',
+        html: '<img src="cid:image"/>',
+        attachments: [
+          {
+            filename: 'wave.jpg',
+            path: path.join(__dirname, 'wave.jpg'),
+            cid: 'image'
+          }
+        ]
+      }
+    ]
 
     let seenEmails = 0
 
-    maildev.on('new', function (email) {
-      // Simple replacement to root url
-      maildev.getEmailHTML(email.id, function (_, html) {
-        const attachmentFilename = (email.subject.endsWith('#1')) ? 'tyler.jpg' : 'wave.jpg'
-        assert.strictEqual(html, '<img src="/email/' + email.id + '/attachment/' + attachmentFilename + '">')
+    return new Promise((resolve, reject) => {
+      maildev.on('new', (email) => {
+        // Simple replacement to root url
+        maildev.getEmailHTML(email.id, (_, html) => {
+          const attachmentFilename = (email.subject.endsWith('#1')) ? 'tyler.jpg' : 'wave.jpg'
+          const contentWithoutNewLine = html.replace(/\n/g, '')
+          assert.strictEqual(contentWithoutNewLine, '<p><img src="/email/' + email.id + '/attachment/' + attachmentFilename + '" alt=""></p>')
+          const host = `localhost:${web}`
+          const attachmentLink = `${host}/email/${email.id}/attachment/${attachmentFilename}`
 
-        // Pass baseUrl
-        maildev.getEmailHTML(email.id, 'localhost:8080', function (_, html) {
-          assert.strictEqual(html, '<img src="//localhost:8080/email/' + email.id + '/attachment/' + attachmentFilename + '">')
+          // Pass baseUrl
+          maildev.getEmailHTML(email.id, host, (_, html) => {
+            const contentWithoutNewLine = html.replace(/\n/g, '')
+            assert.strictEqual(contentWithoutNewLine, `<p><img src="//${attachmentLink}" alt=""></p>`)
 
-          // Check contents of attached/embedded files
-          http.get('http://localhost:1080/email/' + email.id + '/attachment/' + attachmentFilename, function (res) {
-            if (res.statusCode !== 200) {
-              done(new Error('Failed to get attachment: ' + res.statusCode))
-            }
-            let data = ''
-            res.setEncoding('binary')
-            res.on('data', function (chunk) {
-              data += chunk
-            })
-            res.on('end', function () {
-              const fileContents = fs.readFileSync(path.join(__dirname, attachmentFilename), 'binary')
-              assert.strictEqual(data, fileContents)
-
-              seenEmails++
-              if (seenEmails === 2) {
-                maildev.close(function () {
-                  maildev.removeAllListeners()
-                  transporter.close()
-                  done()
-                })
+            // Check contents of attached/embedded files
+            http.get(`http://${attachmentLink}`, (res) => {
+              if (res.statusCode !== 200) {
+                reject(new Error('Failed to get attachment: ' + res.statusCode))
               }
+              let data = ''
+              res.setEncoding('binary')
+              res.on('data', (chunk) => {
+                data += chunk
+              })
+              res.on('end', () => {
+                const fileContents = fs.readFileSync(path.join(__dirname, attachmentFilename), 'binary')
+                assert.strictEqual(data, fileContents)
+
+                seenEmails += 1
+                if (seenEmails) {
+                  resolve()
+                }
+              })
             })
-          }).on('error', function (err) {
-            done(err)
           })
         })
       })
-    })
 
-    maildev.listen(function (err) {
-      if (err) return done(err)
-      transporter.sendMail(email1Opts)
-      transporter.sendMail(email2Opts)
+      emailsForTest.forEach(async (email) => {
+        await transporter.sendMail(email)
+      })
     })
   })
 })

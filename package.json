@@ -1,7 +1,8 @@
 {
   "name": "maildev",
   "description": "SMTP Server and Web Interface for reading and testing emails during development",
-  "version": "1.1.0",
+  "version": "2.0.1",
+  "private": true,
   "keywords": [
     "email",
     "e-mail",
@@ -18,6 +19,18 @@
     {
       "name": "Dan Farrelly",
       "email": "daniel.j.farrelly@gmail.com"
+    },
+    {
+      "name": "Dominik Serafin",
+      "email": "DominikSerafin@users.noreply.github.com"
+    },
+    {
+      "name": "LoneRifle",
+      "email": "LoneRifle@users.noreply.github.com"
+    },
+    {
+      "name": "soulteary",
+      "email": "soulteary@gmail.com"
     }
   ],
   "repository": {
@@ -25,15 +38,16 @@
     "url": "http://github.com/maildev/maildev.git"
   },
   "scripts": {
-    "test": "standard && nyc _mocha --exit",
+    "start": "node ./bin/maildev",
+    "test": "standard && nyc _mocha --exit --timeout 5000",
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "dev": "node ./scripts/dev.js & npm run css-watch",
+    "dev": "node ./scripts/dev.js && npm run css-watch",
     "css": "node-sass --output-style compressed -o app/styles assets/styles/style.scss",
     "css-watch": "node-sass -wr --output-style compressed -o app/styles assets/styles/style.scss",
-    "docker-build": "docker build -t maildev/maildev:$npm_package_version . && docker tag maildev/maildev:$npm_package_version maildev/maildev:latest",
-    "docker-run": "docker run --rm -p 1080:1080 -p 1025:1025 maildev/maildev:$npm_package_version",
-    "docker-push": "docker push maildev/maildev:$npm_package_version && docker push maildev/maildev:latest",
+    "docker-build": "docker build -t soulteary/maildev:$npm_package_version . && docker tag soulteary/maildev:$npm_package_version soulteary/maildev:latest",
+    "docker-run": "docker run --rm -p 1080:1080 -p 1025:1025 soulteary/maildev:$npm_package_version",
+    "docker-push": "docker push soulteary/maildev:$npm_package_version && docker push soulteary/maildev:latest",
     "update-readme": "node ./scripts/updateUsageREADME.js"
   },
   "main": "./index.js",
@@ -42,33 +56,36 @@
   },
   "license": "MIT",
   "dependencies": {
-    "async": "^3.1.0",
-    "commander": "^2.20.3",
     "compression": "1.7.4",
+    "addressparser": "1.0.1",
+    "async": "^3.2.3",
+    "commander": "^9.0.0",
     "cors": "^2.8.5",
-    "express": "^4.17.1",
-    "mailparser-mit": "^1.0.0",
-    "opn": "^6.0.0",
+    "express": "^4.17.3",
+    "iconv-lite": "0.5.0",
+    "marked": "^4.0.12",
+    "mime": "2.4.4",
+    "nodemailer": "^6.7.2",
     "rimraf": "^3.0.2",
-    "smtp-connection": "4.0.2",
-    "smtp-server": "3.5.0",
-    "socket.io": "2.2.0",
-    "strip-tags": "^0.1.1",
-    "wildstring": "1.0.9"
+    "smtp-server": "3.10.0",
+    "socket.io": "4.4.1",
+    "turndown": "^7.1.1",
+    "uue": "3.1.2"
   },
   "devDependencies": {
-    "expect": "^1.20.2",
+    "expect": "^27.5.1",
     "got": "^9.6.0",
-    "http-proxy-middleware": "0.19.1",
-    "mocha": "^7.1.1",
-    "node-sass": "^4.13.1",
-    "nodemailer": "^6.4.2",
-    "nodemon": "^2.0.2",
-    "nyc": "^14.1.1",
-    "standard": "^12.0.1"
+    "http-proxy-middleware": "2.0.4",
+    "jest": "^27.5.1",
+    "jest-mock": "^27.5.1",
+    "mocha": "^9.2.2",
+    "node-sass": "^7.0.0",
+    "nodemon": "^2.0.15",
+    "nyc": "^15.1.0",
+    "standard": "^16.0.4"
   },
   "engines": {
-    "node": ">=10.0.0"
+    "node": ">=12.0.0"
   },
   "standard": {
     "ignore": [

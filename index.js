@@ -19,8 +19,9 @@ module.exports = function (config) {
 
   if (!config) {
     // CLI
-    config = appendOptions(program.version(version), options)
+    config = appendOptions(program.version(version).allowUnknownOption(true), options)
       .parse(process.argv)
+      .opts()
   }
 
   if (config.verbose) {
@@ -29,14 +30,23 @@ module.exports = function (config) {
     logger.setLevel(0)
   }
 
-  // Start the Mailserver & Web GUI
-  mailserver.create(config.smtp, config.ip, config.incomingUser, config.incomingPass, config.hideExtensions)
+  // Start the Mailserver
+  mailserver.create(
+    config.smtp,
+    config.ip,
+    config.mailDirectory,
+    config.incomingUser,
+    config.incomingPass,
+    config.hideExtensions
+  )
 
-  if (config.outgoingHost ||
-      config.outgoingPort ||
-      config.outgoingUser ||
-      config.outgoingPass ||
-      config.outgoingSecure) {
+  if (
+    config.outgoingHost ||
+    config.outgoingPort ||
+    config.outgoingUser ||
+    config.outgoingPass ||
+    config.outgoingSecure
+  ) {
     mailserver.setupOutgoing(
       config.outgoingHost,
       parseInt(config.outgoingPort),
@@ -51,6 +61,11 @@ module.exports = function (config) {
     mailserver.setAutoRelayMode(true, config.autoRelayRules, emailAddress)
   }
 
+  if (config.mailDirectory) {
+    mailserver.loadMailsFromDirectory()
+  }
+
+  // Start the web server
   if (!config.disableWeb) {
     const secure = {
       https: config.https,
@@ -60,19 +75,30 @@ module.exports = function (config) {
 
     // Default to run on same IP as smtp
     const webIp = config.webIp ? config.webIp : config.ip
-    web.start(config.web, webIp, mailserver, config.webUser, config.webPass, config.basePathname, secure)
 
-    if (config.open) {
-      const open = require('opn')
-      open('http://' + (config.ip === '0.0.0.0' ? 'localhost' : config.ip) + ':' + config.web)
-    }
+    web.start(
+      config.web,
+      webIp,
+      mailserver,
+      config.webUser,
+      config.webPass,
+      config.basePathname,
+      secure
+    )
 
     // Close the web server when the mailserver closes
     mailserver.on('close', web.close)
   }
 
+  if (config.logMailContents) {
+    mailserver.on('new', function (mail) {
+      const mailContents = JSON.stringify(mail, null, 2)
+      logger.info(`Received the following mail contents:\n${mailContents}`)
+    })
+  }
+
   function shutdown () {
-    logger.info(`Received shutdown signal, shutting down now...`)
+    logger.info('Received shutdown signal, shutting down now...')
     async.parallel([
       mailserver.close,
       web.close

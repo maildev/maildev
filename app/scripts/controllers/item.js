@@ -7,10 +7,10 @@
 app.controller('ItemCtrl', [
   '$scope', '$rootScope', '$routeParams', '$location', 'Email', '$http', '$cookies',
   function ($scope, $rootScope, $routeParams, $location, Email, $http, $cookies) {
-    var iframe = null
+    const iframe = null
 
     // Get the item data by route parameter
-    var getItem = function () {
+    const getItem = function () {
       Email.get({ id: $routeParams.itemId }, function (email) {
         $scope.item = new Email(email)
 
@@ -29,22 +29,19 @@ app.controller('ItemCtrl', [
     }
 
     // Get email source
-    var getSource = function () {
+    const getSource = function () {
       if (typeof $scope.rawEmail === 'undefined') {
         $scope.rawEmail = 'email/' + $scope.item.id + '/source'
       }
     }
 
     // Prepares the iframe for interaction
-    var prepIframe = function () {
+    const prepIframe = function () {
       // Wait for iframe to load
       setTimeout(function () {
-        var baseEl
-        var head
-
-        iframe = document.getElementsByTagName('iframe')[0]
-        head = iframe.contentDocument.getElementsByTagName('head')[0]
-        baseEl = iframe.contentDocument.createElement('base')
+        const [iframe] = document.getElementsByTagName('iframe')
+        const [head] = iframe.contentDocument.getElementsByTagName('head')
+        const baseEl = iframe.contentDocument.createElement('base')
 
         // Append <base target="_blank" /> to <head> in the iframe so all links open in new window
         baseEl.setAttribute('target', '_blank')
@@ -54,21 +51,21 @@ app.controller('ItemCtrl', [
         replaceMediaQueries()
         fixIframeHeight()
 
-        addHideDropdownHanlder(iframe.contentDocument.getElementsByTagName('body')[0])
+        addHideDropdownHandler(iframe.contentDocument.getElementsByTagName('body')[0])
       }, 500)
     }
 
     // Updates the iframe height so it matches it's content
     // This prevents the iframe from having scrollbars
-    var fixIframeHeight = function () {
-      var body = iframe.contentDocument.getElementsByTagName('body')[0]
-      var newHeight = body.scrollHeight
+    const fixIframeHeight = function () {
+      const body = iframe.contentDocument.getElementsByTagName('body')[0]
+      const newHeight = body.scrollHeight
 
       iframe.height = newHeight
     }
 
     // Updates all media query rules to use 'width' instead of device width
-    var replaceMediaQueries = function () {
+    const replaceMediaQueries = function () {
       angular.forEach(iframe.contentDocument.styleSheets, function (styleSheet) {
         angular.forEach(styleSheet.cssRules, function (rule) {
           if (rule.media && rule.media.mediaText) {
@@ -80,7 +77,6 @@ app.controller('ItemCtrl', [
     }
 
     // NOTE: This is kind of a hack to get these dropdowns working. Should be revisited in the future
-
     // Toggle a dropdown open/closed by toggling a class on the trigger itself
     $scope.toggleDropdown = function ($event, dropdownName) {
       $event.stopPropagation()
@@ -93,18 +89,18 @@ app.controller('ItemCtrl', [
       })
     }
 
-    function addHideDropdownHanlder (element) {
+    function addHideDropdownHandler (element) {
       angular.element(element)
         .off('click', hideDropdown)
         .on('click', hideDropdown)
     }
 
+    addHideDropdownHandler(window)
+
     function validateEmail (email) {
-      var re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+      const re = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
       return re.test(email)
     }
-
-    addHideDropdownHanlder(window)
 
     // Toggle what format is viewable
     $scope.show = function (type) {
@@ -128,9 +124,9 @@ app.controller('ItemCtrl', [
 
     // Relay email to
     $scope.relayTo = function (item) {
-      var lastRelayTo = $cookies.relayTo
+      const lastRelayTo = $cookies.relayTo
 
-      var relayTo = prompt('Please enter email address to relay', lastRelayTo)
+      const relayTo = prompt('Please enter email address to relay', lastRelayTo)
 
       if (relayTo) {
         if (validateEmail(relayTo)) {

@@ -127,8 +127,8 @@ describe('middleware', function () {
     })
   })
 
-  it('should allow filtering', function (done) {
-    const transporter = nodemailer.createTransport(defaultNodemailerOpts)
+  it('should allow email filtering', async () => {
+    const transporter = await createTransporter()
 
     const emailOpts = {
       from: 'johnny.utah@fbi.gov',
@@ -137,20 +137,19 @@ describe('middleware', function () {
       html: 'Test'
     }
 
-    transporter.sendMail(emailOpts)
-
-    maildev.on('new', function () {
-      got('http://localhost:8080/maildev/email?subject=Test&to.address=bodhi@gmail.com')
-        .then(function (res) {
-          assert.strictEqual(res.statusCode, 200)
-
-          const json = JSON.parse(res.body)
-          assert(json.length === 1)
-          assert(json[0].subject === 'Test')
-
-          done()
-        })
-        .catch(done)
+    return new Promise((resolve) => {
+      maildev.on('new', function () {
+        got(`http://localhost:${proxyPort}/maildev/email?subject=Test&to.address=bodhi@gmail.com`)
+          .then(function (res) {
+            assert.strictEqual(res.statusCode, 200)
+            const json = JSON.parse(res.body)
+            assert(json.length === 1)
+            assert(json[0].subject === emailOpts.subject)
+            resolve()
+          })
+          .catch((err) => resolve(err))
+      })
+      transporter.sendMail(emailOpts)
     })
   })
 })

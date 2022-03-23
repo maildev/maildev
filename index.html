@@ -182,15 +182,16 @@
   https://raw.githubusercontent.com/maildev/maildev/master/README.md
   passed through https://marked.js.org/demo/
 -->
+
 <h1 id="maildev">MailDev</h1>
 <p><a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="JavaScript Style Guide"></a></p>
 <p><strong>MailDev</strong> is a simple way to test your project&#39;s generated emails during development with an easy to use web interface that runs on your machine. Built on top of <a href="http://www.nodejs.org">Node.js</a>.</p>
-<p><img src="https://github.com/soulteary/maildev/blob/gh-pages/images/screenshot-2021-01-03.png?raw=true" alt="MailDev Screenshot"></p>
+<p><img src="https://github.com/maildev/maildev/blob/gh-pages/images/screenshot-2021-01-03.png?raw=true" alt="MailDev Screenshot"></p>
 <h2 id="docker-run">Docker Run</h2>
 <p>If you want to use MailDev with <a href="https://www.docker.com/">Docker</a>, you can use the
 <a href="https://hub.docker.com/r/soulteary/maildev"><strong>soulteary/maildev</strong> image on Docker Hub</a>.
 For a guide for usage with Docker,
-<a href="https://github.com/soulteary/maildev/blob/master/docs/docker.md">checkout the docs</a>.</p>
+<a href="https://github.com/maildev/maildev/blob/master/docs/docker.md">checkout the docs</a>.</p>
 <pre><code>$ docker run -p 1080:1080 -p 1025:1025 soulteary/maildev
 </code></pre>
 <h2 id="usage">Usage</h2>
@@ -337,7 +338,7 @@ For a guide for usage with Docker,
 </tbody></table>
 <h2 id="api">API</h2>
 <p>MailDev can be used in your Node.js application. For more info view the
-<a href="https://github.com/soulteary/maildev/blob/master/docs/api.md">API docs</a>.</p>
+<a href="https://github.com/maildev/maildev/blob/master/docs/api.md">API docs</a>.</p>
 <pre><code class="language-javascript">const MailDev = require(&quot;maildev&quot;);
 
 const maildev = new MailDev();
@@ -349,7 +350,7 @@ maildev.on(&quot;new&quot;, function (email) {
 });
 </code></pre>
 <p>MailDev also has a <strong>REST API</strong>. For more info
-<a href="https://github.com/soulteary/maildev/blob/master/docs/rest.md">view the docs</a>.</p>
+<a href="https://github.com/maildev/maildev/blob/master/docs/rest.md">view the docs</a>.</p>
 <h2 id="outgoing-email">Outgoing email</h2>
 <p>Maildev optionally supports selectively relaying email to an outgoing SMTP server. If you configure outgoing
 email with the --outgoing-* options you can click &quot;Relay&quot; on an individual email to relay through MailDev out
@@ -421,9 +422,9 @@ const transport = nodemailer.createTransport({
 <li>Ability to relay email to an upstream SMTP server</li>
 </ul>
 <h2 id="ideas">Ideas</h2>
-<p>If you&#39;re using MailDev and you have a great idea, I&#39;d love to hear it. If you&#39;re not using MailDev because it lacks a feature, I&#39;d love to hear that too. Add an issue to the repo <a href="https://github.com/soulteary/maildev/issues/new">here</a>.</p>
+<p>If you&#39;re using MailDev and you have a great idea, I&#39;d love to hear it. If you&#39;re not using MailDev because it lacks a feature, I&#39;d love to hear that too. Add an issue to the repo <a href="https://github.com/maildev/maildev/issues/new">here</a>.</p>
 <h2 id="contributing">Contributing</h2>
-<p>Any help on MailDev would be awesome. There is plenty of room for improvement. Feel free to <a href="https://github.com/soulteary/maildev/issues/new">create a Pull Request</a> from small to big changes.</p>
+<p>Any help on MailDev would be awesome. There is plenty of room for improvement. Feel free to <a href="https://github.com/maildev/maildev/issues/new">create a Pull Request</a> from small to big changes.</p>
 <p>To run <strong>MailDev</strong> during development:</p>
 <pre><code>npm install
 npm run dev
@@ -437,7 +438,7 @@ To lint your code before submitting your PR, run <code>npm run lint</code>.</p>
 <p>To run the test suite:</p>
 <pre><code>$ npm test
 </code></pre>
-<h2 id="changelog"><a href="https://github.com/soulteary/maildev/releases">Changelog</a></h2>
+<h2 id="changelog"><a href="https://github.com/maildev/maildev/releases">Changelog</a></h2>
 <h2 id="thanks">Thanks</h2>
 <p><strong>MailDev</strong> is built on using great open source projects including
 <a href="http://expressjs.com">Express</a>,
@@ -448,10 +449,11 @@ To lint your code before submitting your PR, run <code>npm run lint</code>.</p>
 and <a href="https://github.com/nodemailer/mailparser">mailparser</a>.
 Many thanks to Andris as his projects are the backbone of this app and to
 <a href="http://mailcatcher.me/">MailCatcher</a> for the inspiration.</p>
-<p>Additionally, thanks to all the awesome <a href="https://github.com/soulteary/maildev/graphs/contributors">contributors</a>
+<p>Additionally, thanks to all the awesome <a href="https://github.com/maildev/maildev/graphs/contributors">contributors</a>
 to the project.</p>
 <h2 id="license">License</h2>
 <p>MIT</p>
+
 
 <!-- README content end -->
 

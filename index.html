@@ -182,17 +182,17 @@
   https://raw.githubusercontent.com/maildev/maildev/master/README.md
   passed through https://marked.js.org/demo/
 -->
-<h2 id="install--run">Install &amp; Run</h2>
-<pre><code>$ npm install -g maildev
-$ maildev
-</code></pre>
+<h1 id="maildev">MailDev</h1>
+<p><a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="JavaScript Style Guide"></a></p>
+<p><strong>MailDev</strong> is a simple way to test your project&#39;s generated emails during development with an easy to use web interface that runs on your machine. Built on top of <a href="http://www.nodejs.org">Node.js</a>.</p>
+<p><img src="https://github.com/soulteary/maildev/blob/gh-pages/images/screenshot-2021-01-03.png?raw=true" alt="MailDev Screenshot"></p>
+<h2 id="docker-run">Docker Run</h2>
 <p>If you want to use MailDev with <a href="https://www.docker.com/">Docker</a>, you can use the
-<a href="https://hub.docker.com/r/maildev/maildev"><strong>maildev/maildev</strong> image on Docker Hub</a>.
+<a href="https://hub.docker.com/r/soulteary/maildev"><strong>soulteary/maildev</strong> image on Docker Hub</a>.
 For a guide for usage with Docker,
-<a href="https://github.com/maildev/maildev/blob/master/docs/docker.md">checkout the docs</a>.</p>
-<pre><code>$ docker run -p 1080:1080 -p 1025:1025 maildev/maildev
+<a href="https://github.com/soulteary/maildev/blob/master/docs/docker.md">checkout the docs</a>.</p>
+<pre><code>$ docker run -p 1080:1080 -p 1025:1025 soulteary/maildev
 </code></pre>
-<p>For convenient use with Grunt, try <a href="https://github.com/xavierpriour/grunt-maildev">grunt-maildev</a>.</p>
 <h2 id="usage">Usage</h2>
 <pre><code>Usage: maildev [options]
 </code></pre>
@@ -329,27 +329,32 @@ For a guide for usage with Docker,
 <td></td>
 <td></td>
 </tr>
+<tr>
+<td><code>--log-mail-contents</code></td>
+<td></td>
+<td>Log a JSON representation of each incoming mail</td>
+</tr>
 </tbody></table>
 <h2 id="api">API</h2>
 <p>MailDev can be used in your Node.js application. For more info view the
-<a href="https://github.com/maildev/maildev/blob/master/docs/api.md">API docs</a>.</p>
-<pre><code class="language-javascript">const MailDev = require(&#39;maildev&#39;)
+<a href="https://github.com/soulteary/maildev/blob/master/docs/api.md">API docs</a>.</p>
+<pre><code class="language-javascript">const MailDev = require(&quot;maildev&quot;);
 
-const maildev = new MailDev()
+const maildev = new MailDev();
 
-maildev.listen()
+maildev.listen();
 
-maildev.on(&#39;new&#39;, function (email) {
+maildev.on(&quot;new&quot;, function (email) {
   // We got a new email!
-})
+});
 </code></pre>
 <p>MailDev also has a <strong>REST API</strong>. For more info
-<a href="https://github.com/maildev/maildev/blob/master/docs/rest.md">view the docs</a>.</p>
+<a href="https://github.com/soulteary/maildev/blob/master/docs/rest.md">view the docs</a>.</p>
 <h2 id="outgoing-email">Outgoing email</h2>
-<p>Maildev optionally supports selectively relaying email to an outgoing SMTP server.  If you configure outgoing
+<p>Maildev optionally supports selectively relaying email to an outgoing SMTP server. If you configure outgoing
 email with the --outgoing-* options you can click &quot;Relay&quot; on an individual email to relay through MailDev out
-to a real SMTP service that will <em>actually</em> send the email to the recipient.</p>
-<p>  Example:</p>
+to a real SMTP service that will *actually* send the email to the recipient.</p>
+<p>Example:</p>
 <pre><code>$ maildev --outgoing-host smtp.gmail.com \
           --outgoing-secure \
           --outgoing-user &#39;you@gmail.com&#39; \
@@ -366,7 +371,7 @@ automatically.</p>
 <p>Additionally, you can pass a valid json file with additional configuration for
 what email addresses you would like to <code>allow</code> or <code>deny</code>. The last matching
 rule in the array will be the rule MailDev will follow.</p>
-<p>  Example:</p>
+<p>Example:</p>
 <pre><code>$ maildev --outgoing-host smtp.gmail.com \
           --outgoing-secure \
           --outgoing-user &#39;you@gmail.com&#39; \
@@ -374,25 +379,27 @@ rule in the array will be the rule MailDev will follow.</p>
           --auto-relay \
           --auto-relay-rules file.json
 </code></pre>
-<p>  Rules example file:</p>
+<p>Rules example file:</p>
 <pre><code class="language-javascript">[
-    { &quot;allow&quot;: &quot;*&quot; },
-    { &quot;deny&quot;:  &quot;*@test.com&quot; },
-    { &quot;allow&quot;: &quot;ok@test.com&quot; },
-    { &quot;deny&quot;:  &quot;*@utah.com&quot; },
-    { &quot;allow&quot;: &quot;johnny@utah.com&quot; }
-]
+  { allow: &quot;*&quot; },
+  { deny: &quot;*@test.com&quot; },
+  { allow: &quot;ok@test.com&quot; },
+  { deny: &quot;*@utah.com&quot; },
+  { allow: &quot;johnny@utah.com&quot; },
+];
 </code></pre>
-<p>  This would allow <code>angelo@fbi.gov</code>, <code>ok@test.com</code>, <code>johnny@utah.com</code>, but deny
-  <code>bodhi@test.com</code>.</p>
+<p>This would allow <code>angelo@fbi.gov</code>, <code>ok@test.com</code>, <code>johnny@utah.com</code>, but deny
+<code>bodhi@test.com</code>.</p>
 <h2 id="configure-your-project">Configure your project</h2>
 <p>Configure your application to send emails via port <code>1025</code> and open <code>localhost:1080</code> in your browser.</p>
 <p><strong>Nodemailer (v1.0+)</strong></p>
-<pre><code class="language-javascript">const transport = nodemailer.createTransport({
+<pre><code class="language-javascript">// We add this setting to tell nodemailer the host isn&#39;t secure during dev
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = &quot;0&quot;;
+
+const transport = nodemailer.createTransport({
   port: 1025,
-  ignoreTLS: true,
   // other settings...
-})
+});
 </code></pre>
 <p><strong>Django</strong> -- Add <code>EMAIL_PORT = 1025</code> in your settings file <a href="https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-EMAIL_PORT">[source]</a></p>
 <p><strong>Rails</strong> -- config settings:</p>
@@ -414,9 +421,9 @@ rule in the array will be the rule MailDev will follow.</p>
 <li>Ability to relay email to an upstream SMTP server</li>
 </ul>
 <h2 id="ideas">Ideas</h2>
-<p>If you&#39;re using MailDev and you have a great idea, I&#39;d love to hear it. If you&#39;re not using MailDev because it lacks a feature, I&#39;d love to hear that too. Add an issue to the repo <a href="https://github.com/maildev/maildev/issues/new">here</a>.</p>
+<p>If you&#39;re using MailDev and you have a great idea, I&#39;d love to hear it. If you&#39;re not using MailDev because it lacks a feature, I&#39;d love to hear that too. Add an issue to the repo <a href="https://github.com/soulteary/maildev/issues/new">here</a>.</p>
 <h2 id="contributing">Contributing</h2>
-<p>Any help on MailDev would be awesome. There is plenty of room for improvement. Feel free to <a href="https://github.com/maildev/maildev/issues/new">create a Pull Request</a> from small to big changes.</p>
+<p>Any help on MailDev would be awesome. There is plenty of room for improvement. Feel free to <a href="https://github.com/soulteary/maildev/issues/new">create a Pull Request</a> from small to big changes.</p>
 <p>To run <strong>MailDev</strong> during development:</p>
 <pre><code>npm install
 npm run dev
@@ -430,7 +437,7 @@ To lint your code before submitting your PR, run <code>npm run lint</code>.</p>
 <p>To run the test suite:</p>
 <pre><code>$ npm test
 </code></pre>
-<h2 id="changelog"><a href="https://github.com/maildev/maildev/releases">Changelog</a></h2>
+<h2 id="changelog"><a href="https://github.com/soulteary/maildev/releases">Changelog</a></h2>
 <h2 id="thanks">Thanks</h2>
 <p><strong>MailDev</strong> is built on using great open source projects including
 <a href="http://expressjs.com">Express</a>,
@@ -441,10 +448,11 @@ To lint your code before submitting your PR, run <code>npm run lint</code>.</p>
 and <a href="https://github.com/nodemailer/mailparser">mailparser</a>.
 Many thanks to Andris as his projects are the backbone of this app and to
 <a href="http://mailcatcher.me/">MailCatcher</a> for the inspiration.</p>
-<p>Additionally, thanks to all the awesome <a href="https://github.com/maildev/maildev/graphs/contributors">contributors</a>
+<p>Additionally, thanks to all the awesome <a href="https://github.com/soulteary/maildev/graphs/contributors">contributors</a>
 to the project.</p>
 <h2 id="license">License</h2>
 <p>MIT</p>
+
 <!-- README content end -->
 
     </article>

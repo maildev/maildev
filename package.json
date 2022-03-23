@@ -38,6 +38,7 @@
     "url": "http://github.com/maildev/maildev.git"
   },
   "scripts": {
+    "start": "node ./bin/maildev",
     "test": "standard && nyc _mocha --exit --timeout 5000",
     "lint": "standard",
     "lint:fix": "standard --fix",
@@ -78,7 +79,6 @@
     "jest-mock": "^27.5.1",
     "mocha": "^9.2.2",
     "node-sass": "^7.0.0",
-    "nodemailer": "^6.7.2",
     "nodemon": "^2.0.15",
     "nyc": "^15.1.0",
     "standard": "^16.0.4"

@@ -7,11 +7,10 @@ ENV NODE_ENV production
 # Build
 FROM base as build
 WORKDIR /root
-COPY package*.json ./
-# In order to ensure the normal operation of Node v12/v14,
-# the current project uses the old version of npm lock
-# TODO: Save node v16 dependency locks separately
-RUN rm package-lock.json
+# In order to avoid installation errors,
+# we prepare a separate lock file for Node v16
+COPY package.json ./
+COPY docker/package-lock.json ./
 RUN npm install --production \
   && npm prune \
   && npm cache clean --force \

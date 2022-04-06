@@ -9,11 +9,11 @@
 ## Docker Run
 
 If you want to use MailDev with [Docker](https://www.docker.com/), you can use the
-[**soulteary/maildev** image on Docker Hub](https://hub.docker.com/r/soulteary/maildev).
+[**maildev/maildev** image on Docker Hub](https://hub.docker.com/r/maildev/maildev).
 For a guide for usage with Docker,
 [checkout the docs](https://github.com/maildev/maildev/blob/master/docs/docker.md).
 
-    $ docker run -p 1080:1080 -p 1025:1025 soulteary/maildev
+    $ docker run -p 1080:1080 -p 1025:1025 maildev/maildev
 
 ## Usage
 
@@ -23,22 +23,22 @@ Usage: maildev [options]
 
 | Options                          | Environment variable       | Description                                                                               |
 | -------------------------------- | -------------------------- | ----------------------------------------------------------------------------------------- |
-| `-s, --smtp <port>`              | `MAILDEV_SMTP_PORT`        | SMTP port to catch mail                                                                 |
+| `-s, --smtp <port>`              | `MAILDEV_SMTP_PORT`        | SMTP port to catch mail                                                                   |
 | `-w, --web <port>`               | `MAILDEV_WEB_PORT`         | Port to run the Web GUI                                                                   |
-| `--mail-directory <path>`        | `MAILDEV_MAIL_DIRECTORY`   | Directory for persisting mail                                                            |
+| `--mail-directory <path>`        | `MAILDEV_MAIL_DIRECTORY`   | Directory for persisting mail                                                             |
 | `--https`                        | `MAILDEV_HTTPS`            | Switch from http to https protocol                                                        |
 | `--https-key <file>`             | `MAILDEV_HTTPS_KEY`        | The file path to the ssl private key                                                      |
 | `--https-cert <file>`            | `MAILDEV_HTTPS_CERT`       | The file path to the ssl cert file                                                        |
 | `--ip <ip address>`              | `MAILDEV_IP`               | IP Address to bind SMTP service to                                                        |
-| `--outgoing-host <host>`         | `MAILDEV_OUTGOING_HOST`    | SMTP host for outgoing mail                                                             |
-| `--outgoing-port <port>`         | `MAILDEV_OUTGOING_PORT`    | SMTP port for outgoing mail                                                             |
-| `--outgoing-user <user>`         | `MAILDEV_OUTGOING_USER`    | SMTP user for outgoing mail                                                             |
-| `--outgoing-pass <password>`     | `MAILDEV_OUTGOING_PASS`    | SMTP password for outgoing mail                                                         |
-| `--outgoing-secure`              | `MAILDEV_OUTGOING_SECURE`  | Use SMTP SSL for outgoing mail                                                          |
+| `--outgoing-host <host>`         | `MAILDEV_OUTGOING_HOST`    | SMTP host for outgoing mail                                                               |
+| `--outgoing-port <port>`         | `MAILDEV_OUTGOING_PORT`    | SMTP port for outgoing mail                                                               |
+| `--outgoing-user <user>`         | `MAILDEV_OUTGOING_USER`    | SMTP user for outgoing mail                                                               |
+| `--outgoing-pass <password>`     | `MAILDEV_OUTGOING_PASS`    | SMTP password for outgoing mail                                                           |
+| `--outgoing-secure`              | `MAILDEV_OUTGOING_SECURE`  | Use SMTP SSL for outgoing mail                                                            |
 | `--auto-relay [email]`           | `MAILDEV_AUTO_RELAY`       | Use auto-relay mode. Optional relay email address                                         |
 | `--auto-relay-rules <file>`      | `MAILDEV_AUTO_RELAY_RULES` | Filter rules for auto relay mode                                                          |
-| `--incoming-user <user>`         | `MAILDEV_INCOMING_USER`    | SMTP user for incoming mail                                                             |
-| `--incoming-pass <pass>`         | `MAILDEV_INCOMING_PASS`    | SMTP password for incoming mail                                                         |
+| `--incoming-user <user>`         | `MAILDEV_INCOMING_USER`    | SMTP user for incoming mail                                                               |
+| `--incoming-pass <pass>`         | `MAILDEV_INCOMING_PASS`    | SMTP password for incoming mail                                                           |
 | `--web-ip <ip address>`          | `MAILDEV_WEB_IP`           | IP Address to bind HTTP service to, defaults to --ip                                      |
 | `--web-user <user>`              | `MAILDEV_WEB_USER`         | HTTP user for GUI                                                                         |
 | `--web-pass <password>`          | `MAILDEV_WEB_PASS`         | HTTP password for GUI                                                                     |
@@ -48,7 +48,7 @@ Usage: maildev [options]
 | `-o, --open`                     |                            | Open the Web GUI after startup                                                            |
 | `-v, --verbose`                  |                            |                                                                                           |
 | `--silent`                       |                            |                                                                                           |
-| `--log-mail-contents`            |                            | Log a JSON representation of each incoming mail |
+| `--log-mail-contents`            |                            | Log a JSON representation of each incoming mail                                           |
 
 ## API
 

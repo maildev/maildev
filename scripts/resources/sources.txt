@@ -1,4 +1,5 @@
 https://github.com/minimaxir/big-list-of-naughty-strings
+https://github.com/mdn/learning-area/blob/main/css/styling-boxes/styling-tables/punk-bands-complete.html
 http://kermitproject.org/utf8.html
 https://www.w3.org/2001/06/utf-8-test/
 https://www.w3.org/2001/06/utf-8-test/UTF-8-demo.html

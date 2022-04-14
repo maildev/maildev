@@ -115,7 +115,7 @@ describe('middleware', function () {
           .then(async (res) => {
             assert.strictEqual(
               res.body,
-              `<img src="//localhost:${proxyPort}/maildev/email/${email.id}/attachment/tyler.jpg">`
+              `<img src="//localhost:${proxyPort}/maildev/email/${email.id}/attachment/tyler.jpg"/>`
             )
             await maildev.close()
             maildev.removeAllListeners()

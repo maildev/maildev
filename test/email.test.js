@@ -71,7 +71,33 @@ describe('email', () => {
       maildev.on('new', (email) => {
         maildev.getEmailHTML(email.id, async (_, html) => {
           const contentWithoutNewLine = html.replace(/\n/g, '')
-          assert.strictEqual(contentWithoutNewLine, '<p>alert(&quot;Hello World&quot;)</p><p>The wax at the bank was surfer wax!!!</p>')
+          assert.strictEqual(contentWithoutNewLine, '<html><head></head><body><p>The wax at the bank was surfer wax!!!</p></body></html>')
+          await transporter.close()
+          resolve()
+        })
+      })
+
+      transporter.sendMail(emailForTest)
+    })
+  })
+
+  it('should preserve html with table elements', async () => {
+    const transporter = await createTransporter()
+    const emailForTest = {
+      from: 'johnny.utah@fbi.gov',
+      to: 'bodhi@gmail.com',
+      subject: 'Test html table',
+      html: '<table style="border:1px solid red">' +
+            '<tr><td>A1</td><td>B1</td></tr>' +
+            '<tr><td>A2</td><td>B2</td></tr>' +
+            '</table>'
+    }
+
+    return new Promise((resolve) => {
+      maildev.on('new', (email) => {
+        maildev.getEmailHTML(email.id, async (_, html) => {
+          const contentWithoutNewLine = html.replace(/\n/g, '')
+          assert.strictEqual(contentWithoutNewLine, '<table style="border:1px solid red"><tr><td>A1</td><td>B1</td></tr><tr><td>A2</td><td>B2</td></tr></table>')
           await transporter.close()
           resolve()
         })
@@ -121,14 +147,14 @@ describe('email', () => {
         maildev.getEmailHTML(email.id, (_, html) => {
           const attachmentFilename = (email.subject.endsWith('#1')) ? 'tyler.jpg' : 'wave.jpg'
           const contentWithoutNewLine = html.replace(/\n/g, '')
-          assert.strictEqual(contentWithoutNewLine, '<p><img src="/email/' + email.id + '/attachment/' + attachmentFilename + '" alt=""></p>')
+          assert.strictEqual(contentWithoutNewLine, '<img src="/email/' + email.id + '/attachment/' + attachmentFilename + '">')
           const host = `localhost:${web}`
           const attachmentLink = `${host}/email/${email.id}/attachment/${attachmentFilename}`
 
           // Pass baseUrl
           maildev.getEmailHTML(email.id, host, (_, html) => {
             const contentWithoutNewLine = html.replace(/\n/g, '')
-            assert.strictEqual(contentWithoutNewLine, `<p><img src="//${attachmentLink}" alt=""></p>`)
+            assert.strictEqual(contentWithoutNewLine, `<img src="//${attachmentLink}">`)
 
             // Check contents of attached/embedded files
             http.get(`http://${attachmentLink}`, (res) => {

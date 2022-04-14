@@ -17,6 +17,7 @@ const nodemailer = require('nodemailer')
 
 const blns = fs.readFileSync(path.join(__dirname, './resources/blns.txt'))
 const utf8sampler = fs.readFileSync(path.join(__dirname, './resources/utf-8-sampler.html'))
+const punkBandsHtml = fs.readFileSync(path.join(__dirname, './resources/punk-bands.html'))
 // var utf8demo = fs.readFileSync(path.join(__dirname, './resources/utf-8-demo.html'))
 // var utf8quickbrown = fs.readFileSync(path.join(__dirname, './resources/utf-8-quickbrown.html'))
 
@@ -138,6 +139,14 @@ const messages = [
     subject: 'Have a sample of this',
     text: utf8sampler,
     html: utf8sampler
+  },
+
+  // Email with styled table
+  {
+    from: 'johnny.rotten@sexpistols.uk',
+    to: 'sid.vicious@sexpistols.uk',
+    subject: 'Test html with styled table',
+    html: punkBandsHtml
   }
 
   //

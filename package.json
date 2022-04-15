@@ -60,6 +60,7 @@
     "commander": "^9.0.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
+    "dompurify": "^2.3.6",
     "express": "^4.17.3",
     "iconv-lite": "0.5.0",
     "mime": "2.4.4",
@@ -67,7 +68,6 @@
     "rimraf": "^3.0.2",
     "smtp-server": "3.10.0",
     "socket.io": "4.4.1",
-    "strip-js": "^1.2.0",
     "uue": "3.1.2"
   },
   "devDependencies": {

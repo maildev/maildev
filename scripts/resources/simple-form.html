@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+
+<body>
+    <form action="mailto:example@example.com?subject=Form Submission" method="POST" enctype="text/plain">
+        <div class="form-group">
+            <label for="name" class="control-label">Name</label>
+            <input type="text" class="form-control" id="name" name="name" placeholder="Your Name">
+        </div>
+
+        <div class="form-group">
+            <label for="message" class="control-label">Message</label>
+            <textarea class="form-control" id="message" name="message" placeholder="Your Message" rows="3"></textarea>
+        </div>
+
+        <div class="form-group">
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </div>
+    </form>
+</body>
+
+</html>

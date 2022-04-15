@@ -18,6 +18,7 @@ const nodemailer = require('nodemailer')
 const blns = fs.readFileSync(path.join(__dirname, './resources/blns.txt'))
 const utf8sampler = fs.readFileSync(path.join(__dirname, './resources/utf-8-sampler.html'))
 const punkBandsHtml = fs.readFileSync(path.join(__dirname, './resources/punk-bands.html'))
+const formHtml = fs.readFileSync(path.join(__dirname, './resources/simple-form.html'))
 // var utf8demo = fs.readFileSync(path.join(__dirname, './resources/utf-8-demo.html'))
 // var utf8quickbrown = fs.readFileSync(path.join(__dirname, './resources/utf-8-quickbrown.html'))
 
@@ -147,6 +148,14 @@ const messages = [
     to: 'sid.vicious@sexpistols.uk',
     subject: 'Test html with styled table',
     html: punkBandsHtml
+  },
+
+  // Email with form
+  {
+    from: 'Bodhi <bodhi@gmail.com>',
+    to: 'Johnny Utah <johnny.utah@fbi.gov>',
+    subject: 'Test html with form',
+    html: formHtml
   }
 
   //

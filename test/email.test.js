@@ -108,6 +108,31 @@ describe('email', () => {
     })
   })
 
+  it('should preserve form action attribute', async () => {
+    const transporter = await createTransporter()
+    const emailForTest = {
+      from: 'johnny.utah@fbi.gov',
+      to: 'bodhi@gmail.com',
+      subject: 'Test html form',
+      html: '<form action="mailto:example@example.com?subject=Form Submission" method="POST" enctype="text/plain">' +
+            '<input type="text" id="name" name="name">' +
+            '</form>'
+    }
+
+    return new Promise((resolve) => {
+      maildev.on('new', (email) => {
+        maildev.getEmailHTML(email.id, async (_, html) => {
+          const contentWithoutNewLine = html.replace(/\n/g, '')
+          assert.strictEqual(contentWithoutNewLine, '<form action="mailto:example@example.com?subject=Form Submission" method="POST" enctype="text/plain"><input type="text" id="name" name="name"></form>')
+          await transporter.close()
+          resolve()
+        })
+      })
+
+      transporter.sendMail(emailForTest)
+    })
+  })
+
   it('should handle embedded images with cid', async () => {
     const transporter = await createTransporter()
 

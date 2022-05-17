@@ -63,6 +63,7 @@
     "dompurify": "^2.3.6",
     "express": "^4.17.3",
     "iconv-lite": "0.5.0",
+    "jsdom": "^19.0.0",
     "mime": "2.4.4",
     "nodemailer": "^6.7.2",
     "rimraf": "^3.0.2",

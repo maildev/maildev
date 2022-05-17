@@ -1,21 +1,14 @@
 # Base
 FROM node:16-alpine as base
-MAINTAINER "Dan Farrelly <daniel.j.farrelly@gmail.com>"
 ENV NODE_ENV production
-
 
 # Build
 FROM base as build
 WORKDIR /root
-# In order to avoid installation errors,
-# we prepare a separate lock file for Node v16
-COPY package.json ./
-COPY docker/package-lock.json ./
-RUN npm install --production \
+COPY package*.json ./
+RUN npm install \
   && npm prune \
-  && npm cache clean --force \
-  && rm package*.json
-
+  && npm cache clean --force
 
 # Prod
 FROM base as prod

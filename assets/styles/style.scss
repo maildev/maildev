@@ -615,12 +615,16 @@ body.dark-theme {
 
 
 .email-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
 }
 
 .email-content {
     box-sizing: border-box;
     z-index: 1;
-    height: calc(100vh - #{$toolbarHeight});
+    height: 0;
+    flex-grow: 1;
     //border-top: 1px solid darken(white,10);
 }
 

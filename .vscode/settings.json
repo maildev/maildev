@@ -1,0 +1,9 @@
+{
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.fixAll.eslint": false
+  },
+  "standard.autoFixOnSave": true,
+  "eslint.enable": false,
+  "prettier.enable": false
+}

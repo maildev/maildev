@@ -18,6 +18,7 @@ const MailDev = require('../index.js')
 const smtpPort = 9080
 const webPort = 9081
 const proxyPort = 9082
+const host = '0.0.0.0'
 const createTransporter = async () => {
   const { user, pass } = await nodemailer.createTestAccount()
   return nodemailer.createTransport({
@@ -51,7 +52,7 @@ describe('middleware', function () {
 
     // proxy all maildev requests to the maildev app
     const proxy = proxyMiddleware('/maildev', {
-      target: `http://localhost:${webPort}`,
+      target: `http://${host}:${webPort}`,
       ws: true,
       logLevel: 'silent'
     })
@@ -75,10 +76,10 @@ describe('middleware', function () {
 
   it('should run as middleware in another express app', function (done) {
     // Request to the express app
-    got(`http://localhost:${proxyPort}/`)
+    got(`http://${host}:${proxyPort}/`)
       .then((res) => {
         assert.strictEqual(res.body, 'root')
-        return got(`http://localhost:${proxyPort}/maildev/email`)
+        return got(`http://${host}:${proxyPort}/maildev/email`)
           .then((res) => {
             assert.strictEqual(res.statusCode, 200)
 
@@ -111,11 +112,11 @@ describe('middleware', function () {
 
     return new Promise((resolve) => {
       maildev.on('new', (email) => {
-        got(`http://localhost:${proxyPort}/maildev/email/${email.id}/html`)
+        got(`http://${host}:${proxyPort}/maildev/email/${email.id}/html`)
           .then(async (res) => {
             assert.strictEqual(
               res.body,
-              `<img src="//localhost:${proxyPort}/maildev/email/${email.id}/attachment/tyler.jpg"/>`
+              `<img src="//${host}:${proxyPort}/maildev/email/${email.id}/attachment/tyler.jpg"/>`
             )
             await maildev.close()
             maildev.removeAllListeners()
@@ -139,7 +140,7 @@ describe('middleware', function () {
 
     return new Promise((resolve) => {
       maildev.on('new', function () {
-        got(`http://localhost:${proxyPort}/maildev/email?subject=Test&to.address=bodhi@gmail.com`)
+        got(`http://${host}:${proxyPort}/maildev/email?subject=Test&to.address=bodhi@gmail.com`)
           .then(function (res) {
             assert.strictEqual(res.statusCode, 200)
             const json = JSON.parse(res.body)

@@ -54,7 +54,7 @@ describe('email', () => {
     })
   })
 
-  it('should stripe javascript from emails', async () => {
+  it('should strip javascript from emails', async () => {
     const transporter = await createTransporter()
     const emailForTest = {
       from: 'johnny.utah@fbi.gov',
@@ -67,14 +67,22 @@ describe('email', () => {
             '</body></html>'
     }
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       maildev.on('new', (email) => {
-        maildev.getEmailHTML(email.id, async (_, html) => {
-          const contentWithoutNewLine = html.replace(/\n/g, '')
-          assert.strictEqual(contentWithoutNewLine, '<html><head></head><body><p>The wax at the bank was surfer wax!!!</p></body></html>')
-          await transporter.close()
-          resolve()
-        })
+        // Only return matching emails - since we use this new event in multiple functions
+        // we need to ensure it's the email that we want.
+        if (email.subject === emailForTest.subject) {
+          maildev.getEmailHTML(email.id, async (_, html) => {
+            transporter.close()
+            const contentWithoutNewLine = html.replace(/\n/g, '')
+            try {
+              assert.strictEqual(contentWithoutNewLine, '<html><head></head><body><p>The wax at the bank was surfer wax!!!</p></body></html>')
+            } catch (err) {
+              return reject(err)
+            }
+            resolve()
+          })
+        }
       })
 
       transporter.sendMail(emailForTest)
@@ -93,15 +101,22 @@ describe('email', () => {
             '</table>'
     }
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       maildev.on('new', (email) => {
-        maildev.getEmailHTML(email.id, async (_, html) => {
-          const contentWithoutNewLine = html.replace(/\n/g, '')
-          console.log(contentWithoutNewLine)
-          assert.strictEqual(contentWithoutNewLine, '<html><head></head><body><table style="border:1px solid red"><tbody><tr><td>A1</td><td>B1</td></tr><tr><td>A2</td><td>B2</td></tr></tbody></table></body></html>')
-          await transporter.close()
-          resolve()
-        })
+        // Only return matching emails - since we use this new event in multiple functions
+        // we need to ensure it's the email that we want.
+        if (email.subject === emailForTest.subject) {
+          maildev.getEmailHTML(email.id, async (_, html) => {
+            transporter.close()
+            const contentWithoutNewLine = html.replace(/\n/g, '')
+            try {
+              assert.strictEqual(contentWithoutNewLine, '<html><head></head><body><table style="border:1px solid red"><tbody><tr><td>A1</td><td>B1</td></tr><tr><td>A2</td><td>B2</td></tr></tbody></table></body></html>')
+            } catch (err) {
+              return reject(err)
+            }
+            resolve()
+          })
+        }
       })
 
       transporter.sendMail(emailForTest)
@@ -119,14 +134,23 @@ describe('email', () => {
             '</form>'
     }
 
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       maildev.on('new', (email) => {
-        maildev.getEmailHTML(email.id, async (_, html) => {
-          const contentWithoutNewLine = html.replace(/\n/g, '')
-          assert.strictEqual(contentWithoutNewLine, '<form action="mailto:example@example.com?subject=Form Submission" method="POST" enctype="text/plain"><input type="text" id="name" name="name"></form>')
-          await transporter.close()
-          resolve()
-        })
+        // Only return matching emails - since we use this new event in multiple functions
+        // we need to ensure it's the email that we want.
+        if (email.subject === emailForTest.subject) {
+          maildev.getEmailHTML(email.id, async (_, html) => {
+            transporter.close()
+            const contentWithoutNewLine = html.replace(/\n/g, '')
+            try {
+              const action = contentWithoutNewLine.match(/action="(.*?)"/)[1]
+              assert.strictEqual(action, 'mailto:example@example.com?subject=Form Submission')
+            } catch (err) {
+              reject(err)
+            }
+            resolve()
+          })
+        }
       })
 
       transporter.sendMail(emailForTest)
@@ -174,7 +198,7 @@ describe('email', () => {
           const attachmentFilename = (email.subject.endsWith('#1')) ? 'tyler.jpg' : 'wave.jpg'
           const contentWithoutNewLine = html.replace(/\n/g, '')
           assert.strictEqual(contentWithoutNewLine, '<html><head></head><body><img src="/email/' + email.id + '/attachment/' + attachmentFilename + '"></body></html>')
-          const host = `localhost:${web}`
+          const host = `${defaultMailDevOpts.ip}:${web}`
           const attachmentLink = `${host}/email/${email.id}/attachment/${attachmentFilename}`
 
           // Pass baseUrl

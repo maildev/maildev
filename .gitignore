@@ -6,7 +6,6 @@ coverage
 dist
 .zip
 maildev-*
-settings.json
 .nodemonignore
 
 # Ignore npm debug log

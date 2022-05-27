@@ -24,6 +24,7 @@ const formHtml = fs.readFileSync(path.join(__dirname, './resources/simple-form.h
 
 // Create a transport with MailDev's default receiving port
 const transporter = nodemailer.createTransport({
+  host: '127.0.0.1',
   port: 1025
 })
 

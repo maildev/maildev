@@ -21,4 +21,4 @@ ENV MAILDEV_WEB_PORT 1080
 ENV MAILDEV_SMTP_PORT 1025
 ENTRYPOINT ["bin/maildev"]
 HEALTHCHECK --interval=10s --timeout=1s \
-  CMD wget -O - http://localhost:1080/healthz || exit 1
+  CMD wget -O - http://localhost:1080${MAILDEV_BASE_PATHNAME}/healthz || exit 1

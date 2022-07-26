@@ -128,6 +128,37 @@ describe('middleware', function () {
     })
   })
 
+  it('should serve email attachments containing / in contentId', async () => {
+    const transporter = await createTransporter()
+
+    const emailOpts = {
+      from: 'johnny.utah@fbi.gov',
+      to: 'bodhi@gmail.com',
+      subject: 'Test cid replacement for use w/ middleware',
+      html: '<img src="cid:12/345"/>',
+      attachments: [
+        {
+          filename: 'tyler.jpg',
+          path: path.join(__dirname, '/tyler.jpg'),
+          cid: '12/345'
+        }
+      ]
+    }
+
+    return new Promise((resolve) => {
+      maildev.on('new', (email) => {
+        got(`http://${host}:${proxyPort}/maildev/email/${email.id}/attachment/tyler.jpg`)
+          .then(async (res) => {
+            assert.strictEqual(res.statusCode, 200)
+            assert.strictEqual(res.headers['content-type'], 'image/jpeg')
+            resolve()
+          })
+          .catch((err) => resolve(err))
+      })
+      transporter.sendMail(emailOpts)
+    })
+  })
+
   it('should allow email filtering', async () => {
     const transporter = await createTransporter()
 

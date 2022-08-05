@@ -1,6 +1,13 @@
 # MailDev
 
-[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+![npm](https://img.shields.io/npm/v/maildev)
+![npm](https://img.shields.io/npm/dm/maildev)
+![Docker Pulls](https://img.shields.io/docker/pulls/maildev/maildev)
+![NPM](https://img.shields.io/npm/l/maildev?color=white)
+[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-black.svg)](https://standardjs.com)
+
+
+> MailDev is sponsored by ⭐️ [inngest/inngest](https://github.com/inngest/inngest). Inngest is an open-source, event-driven platform that makes it easy for developers to [build, test and deploy serverless functions](https://www.inngest.com/demo) that are triggered by events. Check it out and give it a star!
 
 **MailDev** is a simple way to test your project's generated email during development, with an easy to use web interface that runs on your machine built on top of [Node.js](http://www.nodejs.org).
 

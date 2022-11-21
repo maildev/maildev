@@ -118,12 +118,12 @@ Rules example file:
 
 ```javascript
 [
-  { allow: "*" },
-  { deny: "*@test.com" },
-  { allow: "ok@test.com" },
-  { deny: "*@utah.com" },
-  { allow: "johnny@utah.com" },
-];
+  { "allow": "*" },
+  { "deny": "*@test.com" },
+  { "allow": "ok@test.com" },
+  { "deny": "*@utah.com" },
+  { "allow": "johnny@utah.com" }
+]
 ```
 
 This would allow `angelo@fbi.gov`, `ok@test.com`, `johnny@utah.com`, but deny

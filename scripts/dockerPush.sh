@@ -3,7 +3,7 @@
 #   jq (https://stedolan.github.io/jq/)
 
 # Build cross platform by default
-DEFAULT_PLATFORM="linux/amd64,linux/arm64"
+DEFAULT_PLATFORM="linux/amd64,linux/arm64,linux/arm/v8"
 PLATFORM="${1:-$DEFAULT_PLATFORM}"
 
 VERSION=`npm version --json | jq -r .maildev`

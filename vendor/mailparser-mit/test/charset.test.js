@@ -3,10 +3,10 @@
  * 
  * Original:
  * https://github.com/nodemailer/libmime/blob/v3.1.0/test/libmime-test.js
- * Copyright (c) 2014-2017 Andris Reinman
+ * Copyright (c) 2014-2023 Andris Reinman
  * 
  * Modifications:
- * Copyright (c) 2017 Ross Johnson
+ * Copyright (c) 2023 Ross Johnson
  * 
  * MIT licensed.
  */

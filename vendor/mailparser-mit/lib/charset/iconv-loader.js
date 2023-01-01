@@ -3,10 +3,10 @@
  * 
  * Original:
  * https://github.com/andris9/encoding/blob/master/lib/iconv-loader.js
- * Copyright (c) 2012-2014 Andris Reinman
+ * Copyright (c) 2012-2023 Andris Reinman
  * 
  * Modifications:
- * Copyright (c) 2017 Ross Johnson
+ * Copyright (c) 2023 Ross Johnson
  * 
  * MIT licensed.
  */

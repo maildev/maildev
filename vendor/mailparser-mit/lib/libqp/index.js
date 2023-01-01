@@ -3,10 +3,10 @@
  * 
  * Original:
  * https://github.com/nodemailer/libqp/blob/v1.1.0/lib/libqp.js
- * Copyright (c) 2014 Andris Reinman
+ * Copyright (c) 2023 Andris Reinman
  * 
  * Modifications:
- * Copyright (c) 2017 Ross Johnson
+ * Copyright (c) 2023 Ross Johnson
  * 
  * MIT licensed.
  */

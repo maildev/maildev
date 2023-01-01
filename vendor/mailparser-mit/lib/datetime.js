@@ -4,7 +4,7 @@
  * More info at: http://phpjs.org
  *
  * This is version: 3.18
- * php.js is copyright 2010 Kevin van Zonneveld.
+ * php.js is copyright 2023 Kevin van Zonneveld.
  *
  * Portions copyright Brett Zamir (http://brett-zamir.me), Kevin van Zonneveld
  * (http://kevin.vanzonneveld.net), Onno Marsman, Theriault, Michael White

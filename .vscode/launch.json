@@ -1,0 +1,25 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "nodemon",
+            "console": "integratedTerminal",
+            "internalConsoleOptions": "neverOpen",
+            "program": "${workspaceFolder}/bin/maildev",
+            "request": "launch",
+            "restart": true,
+            "cwd": "${workspaceFolder}",
+            // "runtimeExecutable": "nodemon", /* ORIGINAL VALUE */
+            "runtimeExecutable": "${workspaceFolder}/node_modules/nodemon/bin/nodemon.js",
+            "args": ["--verbose"], // "--incoming-user", "test@example.com", "--incoming-pass", "Test123!"],
+            "type": "node",
+            "env": {
+                "MAILDEV_INCOMING_USER": "test@example.com",
+                "MAILDEV_INCOMING_PASS": "Test123!"
+            }
+          }
+    ]
+}

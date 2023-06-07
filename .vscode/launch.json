@@ -12,9 +12,9 @@
             "request": "launch",
             "restart": true,
             "cwd": "${workspaceFolder}",
-            // "runtimeExecutable": "nodemon", /* ORIGINAL VALUE */
             "runtimeExecutable": "${workspaceFolder}/node_modules/nodemon/bin/nodemon.js",
-            "args": ["--verbose"], // "--incoming-user", "test@example.com", "--incoming-pass", "Test123!"],
+            "args": ["--verbose"],
+            // "args": ["--verbose", "--incoming-user", "test@example.com", "--incoming-pass", "Test123!"],
             "type": "node",
             "env": {
                 "MAILDEV_INCOMING_USER": "test@example.com",

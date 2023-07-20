@@ -187,6 +187,8 @@ changes are detected. On `*.scss` file save, the css will also be recompiled.
 Using `test/send.js`, a few test emails will be sent every time the application
 restarts.
 
+If you want to debug you can use the `nodemon` debug profile in VSCode. To change arguments or environment variables edit the `.vscode\launch.json`.
+
 The project uses the [JavaScript Standard coding style](https://standardjs.com).
 To lint your code before submitting your PR, run `npm run lint`.
 

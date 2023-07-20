@@ -46,6 +46,9 @@ Usage: maildev [options]
 | `--auto-relay-rules <file>`      | `MAILDEV_AUTO_RELAY_RULES` | Filter rules for auto relay mode                                                          |
 | `--incoming-user <user>`         | `MAILDEV_INCOMING_USER`    | SMTP user for incoming mail                                                               |
 | `--incoming-pass <pass>`         | `MAILDEV_INCOMING_PASS`    | SMTP password for incoming mail                                                           |
+| `--incoming-secure`              | `MAILDEV_INCOMING_SECURE`  | Use SMTP SSL for incoming emails                                                          |
+| `--incoming-cert <path>`         | `MAILDEV_INCOMING_CERT`    | Cert file location for incoming SSL                                                       |
+| `--incoming-key <path>`          | `MAILDEV_INCOMING_KEY`     | Key file location for incoming SSL                                                        |
 | `--web-ip <ip address>`          | `MAILDEV_WEB_IP`           | IP Address to bind HTTP service to, defaults to --ip                                      |
 | `--web-user <user>`              | `MAILDEV_WEB_USER`         | HTTP user for GUI                                                                         |
 | `--web-pass <password>`          | `MAILDEV_WEB_PASS`         | HTTP password for GUI                                                                     |

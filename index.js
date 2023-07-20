@@ -37,7 +37,10 @@ module.exports = function (config) {
     config.mailDirectory,
     config.incomingUser,
     config.incomingPass,
-    config.hideExtensions
+    config.hideExtensions,
+    config.incomingSecure,
+    config.incomingCert,
+    config.incomingKey
   )
 
   if (

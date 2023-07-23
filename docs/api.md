@@ -105,6 +105,8 @@ maildev.on('new', function (email) {
 **on('new', callback)** - Event called when a new email is received. Callback
 receives single mail object.
 
+**removeListener('new', callback)** - Remove the previously added event listener for new emails.
+
 **getEmail(id, callback)** - Accepts email id, returns email object
 
 **getRawEmail(id, callback)** - Returns a readable stream of the raw email

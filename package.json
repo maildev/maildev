@@ -47,7 +47,8 @@
     "docker-build": "./scripts/dockerBuild.sh",
     "docker-run": "docker run --rm -p 1080:1080 -p 1025:1025 maildev/maildev:$npm_package_version",
     "docker-push": "./scripts/dockerPush.sh",
-    "update-readme": "node ./scripts/updateUsageREADME.js"
+    "update-readme": "node ./scripts/updateUsageREADME.js",
+    "update-components": "mkdir -p app/components/color-scheme;cp node_modules/color-scheme/lib/* app/components/color-scheme"
   },
   "main": "./index.js",
   "bin": {
@@ -57,6 +58,7 @@
   "dependencies": {
     "addressparser": "1.0.1",
     "async": "^3.2.3",
+    "color-scheme": "^1.0.1",
     "commander": "^9.0.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",

@@ -136,4 +136,66 @@ describe('API', () => {
       })
     })
   })
+
+  describe('Group', function () {
+    it('should manage group header', async () => {
+      const maildev = new MailDev({
+        silent: true,
+        disableWeb: true,
+        smtp: port
+      })
+      maildev.listen()
+
+      const transporter = await createTransporter()
+
+      const groupEmailOpts = {
+        from: 'Angelo Pappas <angelo.pappas@fbi.gov>',
+        to: 'Johnny Utah <johnny.utah@fbi.gov>',
+        headers: { 'x-maildev-group': 'group01' },
+        subject: 'You were right.',
+        text: 'They are surfers, but they are in a group.\n'
+      }
+
+      try {
+        await transporter.sendMail(groupEmailOpts)
+      } catch (err) {
+        if (err) return err
+      }
+
+      await delay(100)
+
+      return new Promise((resolve) => {
+        maildev.getAllGroup((err, groups) => {
+          if (err) return err
+
+          assert.strictEqual(Array.isArray(groups), true)
+          assert.strictEqual(groups.length, 2)
+          assert.strictEqual(groups[1], groupEmailOpts.headers['x-maildev-group'])
+
+          maildev.getAllEmailByGroup(groups[1], function (err, emails) {
+            if (err) return err
+
+            assert.strictEqual(Array.isArray(emails), true)
+            assert.strictEqual(emails.length, 1)
+            assert.strictEqual(emails[0].text, groupEmailOpts.text)
+
+            maildev.deleteEmailByGroup(groups[1], function (err, emails) {
+              if (err) return err
+
+              maildev.getAllGroup(function (err, groups) {
+                if (err) return err
+                assert.strictEqual(Array.isArray(groups), true)
+                assert.strictEqual(groups.length, 1)
+
+                maildev.close(function () {
+                  transporter.close()
+                  resolve()
+                })
+              })
+            })
+          })
+        })
+      })
+    })
+  })
 })

@@ -24,6 +24,7 @@ const formHtml = fs.readFileSync(path.join(__dirname, './resources/simple-form.h
 
 // Create a transport with MailDev's default receiving port
 const transporter = nodemailer.createTransport({
+  host: '127.0.0.1',
   port: 1025
 })
 
@@ -156,6 +157,28 @@ const messages = [
     to: 'Johnny Utah <johnny.utah@fbi.gov>',
     subject: 'Test html with form',
     html: formHtml
+  },
+
+  // Another email with custom group header
+  {
+    from: 'FatMancho <fat@mancho.com>',
+    to: 'Jason Patric <jason.patric@times.com>',
+    subject: 'Hells Kitchen',
+    headers: {
+      'X-maildev-group': 'group1'
+    },
+    html: 'You want a Rolls-Royce, you don\'t come here, no no. You go to England, or wherever the .... they make it.'
+  },
+
+  // Another email with custom group header
+  {
+    from: 'FatMancho <fat@mancho.com>',
+    to: 'Jason Patric <jason.patric@times.com>',
+    subject: 'Hells Kitchen',
+    headers: {
+      'X-maildev-group': 'group1'
+    },
+    html: 'You want a Rolls-Royce, you don\'t come here, no no. You go to England, or wherever the .... they make it.'
   }
 
   //

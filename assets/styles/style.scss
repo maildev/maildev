@@ -615,7 +615,7 @@ body.dark-theme {
 
 
 .email-container {
-    height: 100vh;
+    height: 100%;
     display: flex;
     flex-direction: column;
 }
@@ -623,7 +623,6 @@ body.dark-theme {
 .email-content {
     box-sizing: border-box;
     z-index: 1;
-    height: 0;
     flex-grow: 1;
     //border-top: 1px solid darken(white,10);
 }

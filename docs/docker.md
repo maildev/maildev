@@ -21,6 +21,17 @@ Now the MailDev UI will be running at port `1080` on your virtual machine
 running at `192.168.99.100`, you can head over to `http://192.168.99.100:1080`
 to visit the interface.
 
+## Timezone
+
+Is it possible to set the timezone to match your local time via the environment variable TZ.
+Default is UTC. For example, to set the timezone to Europe/Rome:
+
+```
+$ docker run -p 1080:1080 -e TZ=Europe/Rome --name maildev maildev/maildev
+```
+
+List of timezone is available here: https://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+
 ## Linking containers
 
 > This is for using [Docker's legacy container links](https://docs.docker.com/network/links/).

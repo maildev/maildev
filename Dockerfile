@@ -1,6 +1,8 @@
 # Base
 FROM node:18-alpine as base
+RUN apk add --no-cache tzdata
 ENV NODE_ENV production
+ENV TZ UTC
 
 # Build
 FROM base as build

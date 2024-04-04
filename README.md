@@ -38,7 +38,7 @@ Usage: maildev [options]
 | `--https`                        | `MAILDEV_HTTPS`            | Switch from http to https protocol                                                        |
 | `--https-key <file>`             | `MAILDEV_HTTPS_KEY`        | The file path to the ssl private key                                                      |
 | `--https-cert <file>`            | `MAILDEV_HTTPS_CERT`       | The file path to the ssl cert file                                                        |
-| `--ip <ip address>`              | `MAILDEV_IP`               | IP Address to bind SMTP service to                                                        |
+| `--ip <ip address>`              | `MAILDEV_IP`               | IP Address to bind SMTP service to, defaults to `::` (any IPv4/v6)                        |
 | `--outgoing-host <host>`         | `MAILDEV_OUTGOING_HOST`    | SMTP host for outgoing mail                                                               |
 | `--outgoing-port <port>`         | `MAILDEV_OUTGOING_PORT`    | SMTP port for outgoing mail                                                               |
 | `--outgoing-user <user>`         | `MAILDEV_OUTGOING_USER`    | SMTP user for outgoing mail                                                               |

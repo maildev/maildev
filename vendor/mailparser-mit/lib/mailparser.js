@@ -331,8 +331,12 @@ MailParser.prototype._processStateHeader = function(line) {
 
             this._currentNode.meta.generatedFileName = this._generateFileName(this._currentNode.meta.fileName, this._currentNode.meta.contentType);
 
-            this._currentNode.meta.contentId = this._currentNode.meta.contentId ||
-                crypto.createHash("md5").update(new Buffer.from(this._currentNode.meta.generatedFileName, 'utf-8')).digest("hex") + "@mailparser";
+            const originalContentId = this._currentNode.meta.contentId
+            this._currentNode.meta.contentId = originalContentId
+              ? (crypto.createHash('md5').update(originalContentId).digest('hex') +
+                '-' +
+                originalContentId.replace(/[:/\\]+/g, '-'))
+              : crypto.createHash("md5").update(new Buffer.from(this._currentNode.meta.generatedFileName, 'utf-8')).digest("hex") + "@mailparser";
 
             extension = this._currentNode.meta.generatedFileName.split(".").pop().toLowerCase();
 

@@ -102,9 +102,6 @@ maildev.on('new', function (email) {
 
 **close(callback)** - Stops the smtp server
 
-**on('new', callback)** - Event called when a new email is received. Callback
-receives single mail object.
-
 **getEmail(id, callback)** - Accepts email id, returns email object
 
 **getRawEmail(id, callback)** - Returns a readable stream of the raw email
@@ -124,3 +121,23 @@ email to it's "to" address. Also accepts an email object instead of id.
 
 **setAutoRelayMode(enabled, rules)** - If relay configured, this will auto relay/send emails received
 to it's "to" address. The rules allows to filters the emails to send.
+
+### Event methods
+
+**on('new', callback)** - Event called when a new email is received. Callback
+receives single mail object.
+
+**once('new', callback)** - Add a one time event called when a new email is received. Callback
+receives single mail object.
+
+**off('new', callback)** - Alias for removeListener()
+
+**prependListener('new', callback)** - Event called when a new email is received. Callback
+receives single mail object. Add the listener to the beginning of the listeners array.
+
+**prependOnceListener('new', callback)** - Add a one time event called when a new email is received. Callback
+receives single mail object. Add the listener to the beginning of the listeners array.
+
+**removeListener('new', callback)** - Remove the previously added event listener (at most once).
+
+**removeAllListeners('new')** - Removes all listeners, or those of the specified eventName.

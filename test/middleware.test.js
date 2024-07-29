@@ -50,7 +50,7 @@ describe('middleware', function () {
     })
 
     // proxy all maildev requests to the maildev app
-    const proxy = proxyMiddleware('/maildev', {
+    const proxy = proxyMiddleware({
       target: `http://${host}:${webPort}`,
       ws: true,
       logLevel: 'silent'

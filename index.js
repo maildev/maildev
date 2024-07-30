@@ -1,4 +1,3 @@
-
 /**
  * MailDev - index.js
  *
@@ -6,7 +5,7 @@
  * Licensed under the MIT License.
  */
 
-const program = require('commander')
+const program = require('commander').program
 const async = require('async')
 const pkg = require('./package.json')
 const web = require('./lib/web')

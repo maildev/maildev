@@ -67,7 +67,7 @@
     "mime": "2.4.4",
     "nodemailer": "^6.9.14",
     "smtp-server": "^3.13.4",
-    "socket.io": "4.6.0",
+    "socket.io": "^4.7.5",
     "uue": "3.1.2"
   },
   "devDependencies": {

@@ -71,6 +71,9 @@
     "uue": "3.1.2",
     "wildstring": "1.0.9"
   },
+  "overrides": {
+    "socket.io-adapter": "2.5.5"
+  },
   "devDependencies": {
     "expect": "^29.7.0",
     "http-proxy-middleware": "^3.0.0",

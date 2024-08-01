@@ -68,7 +68,8 @@
     "nodemailer": "^6.9.14",
     "smtp-server": "^3.13.4",
     "socket.io": "^4.7.5",
-    "uue": "3.1.2"
+    "uue": "3.1.2",
+    "wildstring": "1.0.9"
   },
   "devDependencies": {
     "expect": "^29.7.0",

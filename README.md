@@ -22,7 +22,7 @@ If you want to use MailDev with [Docker](https://www.docker.com/), you can use t
 For a guide for usage with Docker,
 [checkout the docs](https://github.com/maildev/maildev/blob/master/docs/docker.md).
 
-    $ docker run -p 1080:1080 -p 1025:1025 maildev/maildev
+    docker run -p 1080:1080 -p 1025:1025 maildev/maildev
 
 ## Usage
 

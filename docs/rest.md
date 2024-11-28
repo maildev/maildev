@@ -71,6 +71,8 @@ Returns:
 
 **GET    /email** - Get all emails
 
+**GET    /email/skip/:number** - Get all emails excepts {number} of emails according to lifetime
+
 **DELETE /email/all** - Delete all emails
 
 **GET    /email/:id** - Get a given email by id

@@ -1,6 +1,6 @@
 /* global describe, it */
 'use strict'
-const expect = require('expect')
+const expect = require('expect').expect
 const utils = require('../lib/utils')
 
 describe('utils', () => {

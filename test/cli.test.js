@@ -2,7 +2,7 @@
 'use strict'
 const spawn = require('child_process').spawn
 const path = require('path')
-const expect = require('expect')
+const expect = require('expect').expect
 const utils = require('../lib/utils')
 
 const bin = path.join(__dirname, '../bin/maildev')

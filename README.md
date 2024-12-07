@@ -84,7 +84,7 @@ MailDev also has a **REST API**. For more info
 
 ## Outgoing email
 
-Maildev optionally supports selectively relaying email to an outgoing SMTP server. If you configure outgoing
+Maildev optionally supports selectively relaying emails to an outgoing SMTP server. If you configure outgoing
 email with the --outgoing-* options you can click "Relay" on an individual email to relay through MailDev out
 to a real SMTP service that will *actually\* send the email to the recipient.
 
@@ -101,13 +101,13 @@ Enabling the auto relay mode will automatically send each email to it's recipien
 without the need to click the "Relay" button mentioned above.
 The outgoing email options are required to enable this feature.
 
-Optionally you may pass an single email address which Maildev will forward all
-emails to instead of the original recipient. For example, using
+Optionally, you can specify a single email address to which Maildev will forward
+all emails instead of the original recipient. For example, using
 `--auto-relay you@example.com` will forward all emails to that address
 automatically.
 
 Additionally, you can pass a valid json file with additional configuration for
-what email addresses you would like to `allow` or `deny`. The last matching
+which email addresses you would like to `allow` or `deny`. The last matching
 rule in the array will be the rule MailDev will follow.
 
 Example:

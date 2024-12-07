@@ -165,6 +165,38 @@ config.action_mailer.delivery_method = :smtp
 
 **Drupal** -- Install and configure [SMTP](https://www.drupal.org/project/smtp) module or use a library like [SwiftMailer](http://swiftmailer.org/).
 
+**Spring Boot** -- configuration:
+<br/>
+in application.properties file:
+```
+spring.mail.host=localhost #where the smtp server is running
+spring.mail.port=1025
+spring.mail.username=no-reply@gmail.com
+spring.mail.properties.mail.smtp.starttls.enable=true
+spring.mail.properties.mail.smtp.starttls.required=true
+spring.mail.properties.mail.smtp.auth=true
+spring.mail.properties.mail.smtp.connectiontimeout=5000
+spring.mail.properties.mail.smtp.timeout=5000
+spring.mail.properties.mail.smtp.writetimeout=5000
+```
+Or in application.yml file:<br/>
+```
+spring:
+    mail:
+        properties:
+            mail:
+                smtp:
+                    starttls:
+                        enable: true
+                        required: true
+                    auth: true
+                    connectiontimeout: 5000
+                    timeout: 5000
+                    writetimeout: 5000
+        host: localhost
+        port: 1025
+```
+
 ## Features
 
 - Toggle between HTML, plain text views as well as view email headers

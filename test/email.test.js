@@ -32,30 +32,27 @@ const createTransporter = async () => {
   })
 }
 
-function waitMailDevShutdown (maildev) {
-  return new Promise((resolve) => {
-    maildev.close(() => resolve())
-  })
-}
-
 describe('email', () => {
   let maildev
+  let transporter
 
   before(function (done) {
     maildev = new MailDev(defaultMailDevOpts)
-    maildev.listen(done)
-  })
-
-  after(async () => {
-    await waitMailDevShutdown(maildev)
-    return new Promise((resolve) => {
-      maildev.removeAllListeners()
-      resolve()
+    maildev.listen(async function () {
+      transporter = await createTransporter()
+      done()
     })
   })
 
+  after(function (done) {
+    transporter.close()
+    maildev.close(function () {
+      maildev.removeAllListeners()
+      done()
+    });
+  })
+
   it('should strip javascript from emails', async () => {
-    const transporter = await createTransporter()
     const emailForTest = {
       from: 'johnny.utah@fbi.gov',
       to: 'bodhi@gmail.com',
@@ -73,7 +70,6 @@ describe('email', () => {
         // we need to ensure it's the email that we want.
         if (email.subject === emailForTest.subject) {
           maildev.getEmailHTML(email.id, async (_, html) => {
-            transporter.close()
             const contentWithoutNewLine = html.replace(/\n/g, '')
             try {
               assert.strictEqual(contentWithoutNewLine, '<html><head></head><body><p>The wax at the bank was surfer wax!!!</p></body></html>')
@@ -90,7 +86,6 @@ describe('email', () => {
   })
 
   it('should preserve html with table elements', async () => {
-    const transporter = await createTransporter()
     const emailForTest = {
       from: 'johnny.utah@fbi.gov',
       to: 'bodhi@gmail.com',
@@ -107,7 +102,6 @@ describe('email', () => {
         // we need to ensure it's the email that we want.
         if (email.subject === emailForTest.subject) {
           maildev.getEmailHTML(email.id, async (_, html) => {
-            transporter.close()
             const contentWithoutNewLine = html.replace(/\n/g, '')
             try {
               assert.strictEqual(contentWithoutNewLine, '<html><head></head><body><table style="border:1px solid red"><tbody><tr><td>A1</td><td>B1</td></tr><tr><td>A2</td><td>B2</td></tr></tbody></table></body></html>')
@@ -124,7 +118,6 @@ describe('email', () => {
   })
 
   it('should preserve form action attribute', async () => {
-    const transporter = await createTransporter()
     const emailForTest = {
       from: 'johnny.utah@fbi.gov',
       to: 'bodhi@gmail.com',
@@ -140,13 +133,12 @@ describe('email', () => {
         // we need to ensure it's the email that we want.
         if (email.subject === emailForTest.subject) {
           maildev.getEmailHTML(email.id, async (_, html) => {
-            transporter.close()
             const contentWithoutNewLine = html.replace(/\n/g, '')
             try {
               const action = contentWithoutNewLine.match(/action="(.*?)"/)[1]
               assert.strictEqual(action, 'mailto:example@example.com?subject=Form Submission')
             } catch (err) {
-              reject(err)
+              return reject(err)
             }
             resolve()
           })
@@ -158,8 +150,6 @@ describe('email', () => {
   })
 
   it('should handle embedded images with cid', async () => {
-    const transporter = await createTransporter()
-
     const emailsForTest = [
       {
         from: 'johnny.utah@fbi.gov',
@@ -189,7 +179,7 @@ describe('email', () => {
       }
     ]
 
-    let seenEmails = 0
+    let receivedEmails = 0;
 
     return new Promise((resolve, reject) => {
       maildev.on('new', (email) => {
@@ -209,7 +199,7 @@ describe('email', () => {
             // Check contents of attached/embedded files
             http.get(`http://${attachmentLink}`, (res) => {
               if (res.statusCode !== 200) {
-                reject(new Error('Failed to get attachment: ' + res.statusCode))
+                return reject(new Error('Failed to get attachment: ' + res.statusCode))
               }
               let data = ''
               res.setEncoding('binary')
@@ -220,9 +210,9 @@ describe('email', () => {
                 const fileContents = fs.readFileSync(path.join(__dirname, attachmentFilename), 'binary')
                 assert.strictEqual(data, fileContents)
 
-                seenEmails += 1
-                if (seenEmails) {
-                  resolve()
+                receivedEmails = receivedEmails + 1;
+                if (receivedEmails >= emailsForTest.length) {
+                  resolve();
                 }
               })
             })

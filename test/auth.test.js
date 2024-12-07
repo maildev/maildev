@@ -1,7 +1,7 @@
 /* global describe, it */
 'use strict'
 const jest = require('jest-mock')
-const expect = require('expect')
+const expect = require('expect').expect
 const auth = require('../lib/auth')
 
 describe('auththentication middleware', () => {

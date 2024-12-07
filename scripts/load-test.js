@@ -1,4 +1,3 @@
-
 /**
  * MailDev - load-test.js -- start a load test
  *

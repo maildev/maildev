@@ -1,7 +1,7 @@
 /* global describe, it */
 'use strict'
 const jest = require('jest-mock')
-const expect = require('expect')
+const expect = require('expect').expect
 const SMTPServer = require('smtp-server').SMTPServer
 const outgoing = require('../lib/outgoing')
 const smptHelpers = require('../lib/helpers/smtp')

@@ -42,8 +42,8 @@
     "lint": "standard",
     "lint:fix": "standard --fix",
     "dev": "node ./scripts/dev.js && npm run css-watch",
-    "css": "node-sass --output-style compressed -o app/styles assets/styles/style.scss",
-    "css-watch": "node-sass -wr --output-style compressed -o app/styles assets/styles/style.scss",
+    "css": "sass --style=compressed --no-source-map assets/styles/style.scss:app/styles/style.css",
+    "css-watch": "sass --watch --style=compressed --no-source-map assets/styles/style.scss:app/styles/style.css",
     "docker-build": "./scripts/dockerBuild.sh",
     "docker-run": "docker run --rm -p 1080:1080 -p 1025:1025 maildev/maildev:$npm_package_version",
     "docker-push": "./scripts/dockerPush.sh",
@@ -57,31 +57,33 @@
   "dependencies": {
     "addressparser": "1.0.1",
     "async": "^3.2.3",
-    "commander": "^9.0.0",
+    "commander": "^12.1.0",
     "compression": "^1.7.4",
     "cors": "^2.8.5",
-    "dompurify": "^2.3.6",
-    "express": "^4.17.3",
+    "dompurify": "^3.1.6",
+    "express": "^4.19.2",
     "iconv-lite": "0.5.0",
-    "jsdom": "^19.0.0",
+    "jsdom": "^24.1.1",
     "mime": "2.4.4",
-    "nodemailer": "^6.7.2",
-    "rimraf": "^3.0.2",
-    "smtp-server": "3.11.0",
-    "socket.io": "4.6.0",
-    "uue": "3.1.2"
+    "nodemailer": "^6.9.14",
+    "smtp-server": "^3.13.4",
+    "socket.io": "^4.7.5",
+    "uue": "3.1.2",
+    "wildstring": "1.0.9"
+  },
+  "overrides": {
+    "socket.io-adapter": "2.5.5"
   },
   "devDependencies": {
-    "expect": "^27.5.1",
-    "got": "^11.8.5",
-    "http-proxy-middleware": "2.0.4",
-    "jest": "^27.5.1",
-    "jest-mock": "^27.5.1",
-    "mocha": "^9.2.2",
-    "node-sass": "^7.0.0",
-    "nodemon": "^2.0.15",
-    "nyc": "^15.1.0",
-    "standard": "^16.0.4"
+    "expect": "^29.7.0",
+    "http-proxy-middleware": "^3.0.0",
+    "jest": "^29.7.0",
+    "jest-mock": "^29.7.0",
+    "mocha": "^10.7.0",
+    "sass": "^1.77.8",
+    "nodemon": "^3.1.4",
+    "nyc": "^17.0.0",
+    "standard": "^17.1.0"
   },
   "engines": {
     "node": ">=12.0.0"

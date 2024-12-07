@@ -6,13 +6,9 @@
  */
 
 const assert = require('assert')
-const SMTPConnection = require('../vendor/smtp-connection')
-// const http = require('http')
-// const delay = require('../lib/utils').delay
+const SMTPConnection = require('nodemailer/lib/smtp-connection')
 
 const MailDev = require('../index.js')
-
-// const port = 9025
 
 function waitMailDevShutdown (maildev) {
   return new Promise((resolve) => {

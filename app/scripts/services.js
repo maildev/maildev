@@ -62,6 +62,6 @@ app.service('Email', ['$resource', function ($resource) {
   }
 
   return {
-    setUnreadCount: setUnreadCount
+    setUnreadCount
   }
 }])

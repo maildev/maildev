@@ -1,4 +1,3 @@
-
 /**
  * MailDev - send.js -- send a few emails for testing
  *

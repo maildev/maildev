@@ -46,11 +46,12 @@ describe('email', () => {
     maildev.listen(done)
   })
 
-  after(async () => {
+  after(async (done) => {
     await waitMailDevShutdown(maildev)
     return new Promise((resolve) => {
       maildev.removeAllListeners()
       resolve()
+      done()
     })
   })
 

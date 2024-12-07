@@ -71,8 +71,6 @@ Returns:
 
 **GET    /email** - Get all emails
 
-**GET    /email/skip/:number** - Get all emails excepts {number} of emails according to lifetime
-
 **DELETE /email/all** - Delete all emails
 
 **GET    /email/:id** - Get a given email by id
@@ -90,12 +88,20 @@ Returns:
 
 **GET    /healthz** - Health check
 
+## Pagination
+
+The **GET    /email** endpoint allows for simple skip pagination.
+
+```plaintext
+GET /email?skip=10
+```
+
 ## Filtering
 
 The **GET    /email** endpoint does allow simple filtering. Every field content of the returned payload can be used to only return desired emails. Nested objects can be defined by using a dot syntax (`headers.to=value`).
 
 For example:
 
-```GET email?subject="Big wave coming" # only emails with the exact subject```
+```GET /email?subject="Big wave coming" # only emails with the exact subject```
 
-```GET email?headers.some-header="some-value"&subject=test # only emails with the exact subject and header value```
+```GET /email?headers.some-header="some-value"&subject=test # only emails with the exact subject and header value```

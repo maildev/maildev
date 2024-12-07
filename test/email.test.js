@@ -46,18 +46,16 @@ describe('email', () => {
     maildev.listen(done)
   })
 
-  after((done) => {
-    waitMailDevShutdown(maildev).then(() => {
-      maildev.removeAllListeners()
-      done();
+  after(async () => {
+    await waitMailDevShutdown(maildev)
+    return new Promise((resolve, reject) => {
+      try {
+        maildev.removeAllListeners()
+        resolve()
+      } catch (err) {
+        reject(err)
+      }
     })
-
-    // done()
-    // new Promise((resolve) => {
-    //   maildev.removeAllListeners()
-    //   resolve()
-    //   done()
-    // })
   })
 
   it('should strip javascript from emails', async () => {
@@ -152,7 +150,7 @@ describe('email', () => {
               const action = contentWithoutNewLine.match(/action="(.*?)"/)[1]
               assert.strictEqual(action, 'mailto:example@example.com?subject=Form Submission')
             } catch (err) {
-              reject(err)
+              return reject(err)
             }
             resolve()
           })
@@ -215,7 +213,7 @@ describe('email', () => {
             // Check contents of attached/embedded files
             http.get(`http://${attachmentLink}`, (res) => {
               if (res.statusCode !== 200) {
-                reject(new Error('Failed to get attachment: ' + res.statusCode))
+                return reject(new Error('Failed to get attachment: ' + res.statusCode))
               }
               let data = ''
               res.setEncoding('binary')
@@ -228,7 +226,8 @@ describe('email', () => {
 
                 seenEmails += 1
                 if (seenEmails) {
-                  resolve()
+                  transporter.close();
+                  resolve();
                 }
               })
             })

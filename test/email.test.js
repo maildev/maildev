@@ -53,9 +53,10 @@ describe('email', () => {
   })
 
   after(async () => {
+
+    await waitMailDevShutdown(maildev)
     transporter.close();
     maildev.removeAllListeners()
-    return await waitMailDevShutdown(maildev)
     // return new Promise((resolve, reject) => {
 
     //   try {

@@ -193,7 +193,7 @@ describe('email', () => {
       }
     ]
 
-    let seenEmails = 0
+    let receivedEmails = 0;
 
     return new Promise((resolve, reject) => {
       maildev.on('new', (email) => {
@@ -224,8 +224,8 @@ describe('email', () => {
                 const fileContents = fs.readFileSync(path.join(__dirname, attachmentFilename), 'binary')
                 assert.strictEqual(data, fileContents)
 
-                seenEmails += 1
-                if (seenEmails) {
+                receivedEmails = receivedEmails + 1;
+                if (receivedEmails >= emailsForTest.length) {
                   // transporter.close();
                   resolve();
                 }

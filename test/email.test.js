@@ -46,13 +46,18 @@ describe('email', () => {
     maildev.listen(done)
   })
 
-  after(async (done) => {
-    await waitMailDevShutdown(maildev)
-    return new Promise((resolve) => {
+  after((done) => {
+    waitMailDevShutdown(maildev).then(() => {
       maildev.removeAllListeners()
-      resolve()
-      done()
+      done();
     })
+
+    // done()
+    // new Promise((resolve) => {
+    //   maildev.removeAllListeners()
+    //   resolve()
+    //   done()
+    // })
   })
 
   it('should strip javascript from emails', async () => {

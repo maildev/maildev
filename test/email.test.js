@@ -40,35 +40,27 @@ function waitMailDevShutdown (maildev) {
 
 describe('email', () => {
   let maildev
-  let transporter
 
-  before(async function () {
-    transporter = await createTransporter()
+  before(function (done) {
     maildev = new MailDev(defaultMailDevOpts)
-    // maildev.listen(done)
-    return new Promise((resolve) => {
-      maildev.listen(resolve)
-    })
-
+    maildev.listen(done)
   })
 
-  after(async () => {
-
-    await waitMailDevShutdown(maildev)
-    transporter.close();
-    maildev.removeAllListeners()
-    // return new Promise((resolve, reject) => {
-
-    //   try {
-    //     resolve()
-    //   } catch (err) {
-    //     reject(err)
-    //   }
+  after(function (done) {
+    maildev.close(function () {
+      maildev.removeAllListeners()
+      done()
+    });
+    // setT
+    // await waitMailDevShutdown(maildev)
+    // return new Promise((resolve) => {
+    //   maildev.removeAllListeners()
+    //   resolve()
     // })
   })
 
   it('should strip javascript from emails', async () => {
-    // const transporter = await createTransporter()
+    const transporter = await createTransporter()
     const emailForTest = {
       from: 'johnny.utah@fbi.gov',
       to: 'bodhi@gmail.com',
@@ -86,7 +78,7 @@ describe('email', () => {
         // we need to ensure it's the email that we want.
         if (email.subject === emailForTest.subject) {
           maildev.getEmailHTML(email.id, async (_, html) => {
-            // transporter.close()
+            transporter.close()
             const contentWithoutNewLine = html.replace(/\n/g, '')
             try {
               assert.strictEqual(contentWithoutNewLine, '<html><head></head><body><p>The wax at the bank was surfer wax!!!</p></body></html>')
@@ -103,7 +95,7 @@ describe('email', () => {
   })
 
   it('should preserve html with table elements', async () => {
-    // const transporter = await createTransporter()
+    const transporter = await createTransporter()
     const emailForTest = {
       from: 'johnny.utah@fbi.gov',
       to: 'bodhi@gmail.com',
@@ -120,7 +112,7 @@ describe('email', () => {
         // we need to ensure it's the email that we want.
         if (email.subject === emailForTest.subject) {
           maildev.getEmailHTML(email.id, async (_, html) => {
-            // transporter.close()
+            transporter.close()
             const contentWithoutNewLine = html.replace(/\n/g, '')
             try {
               assert.strictEqual(contentWithoutNewLine, '<html><head></head><body><table style="border:1px solid red"><tbody><tr><td>A1</td><td>B1</td></tr><tr><td>A2</td><td>B2</td></tr></tbody></table></body></html>')
@@ -137,7 +129,7 @@ describe('email', () => {
   })
 
   it('should preserve form action attribute', async () => {
-
+    const transporter = await createTransporter()
     const emailForTest = {
       from: 'johnny.utah@fbi.gov',
       to: 'bodhi@gmail.com',
@@ -153,7 +145,7 @@ describe('email', () => {
         // we need to ensure it's the email that we want.
         if (email.subject === emailForTest.subject) {
           maildev.getEmailHTML(email.id, async (_, html) => {
-            // transporter.close()
+            transporter.close()
             const contentWithoutNewLine = html.replace(/\n/g, '')
             try {
               const action = contentWithoutNewLine.match(/action="(.*?)"/)[1]
@@ -171,7 +163,7 @@ describe('email', () => {
   })
 
   it('should handle embedded images with cid', async () => {
-    // const transporter = await createTransporter()
+    const transporter = await createTransporter()
 
     const emailsForTest = [
       {
@@ -235,7 +227,7 @@ describe('email', () => {
 
                 seenEmails += 1
                 if (seenEmails) {
-                  // transporter.close();
+                  transporter.close();
                   resolve();
                 }
               })

@@ -189,7 +189,7 @@ const messages = [
     from: 'Johnny Utah <johnny.utah@fbi.gov>',
     to: 'Bodhi <bodhi@gmail.com>',
     subject: 'CVE-2024-27448',
-    html: 'Here she is:<br><img src="cid:../vuln"/>',
+    html: 'Content-ID should not allow file injection: <img src="cid:../vuln"/>',
     attachments: [
       {
         filename: 'tyler.jpg',

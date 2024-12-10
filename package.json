@@ -38,7 +38,7 @@
   },
   "scripts": {
     "start": "node ./bin/maildev",
-    "test": "nyc _mocha --exit --timeout 10000",
+    "test": "nyc _mocha --exit --timeout 5000",
     "--test-old": "standard && ",
     "lint": "standard",
     "lint:fix": "standard --fix",

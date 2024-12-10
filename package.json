@@ -43,6 +43,7 @@
     "lint": "standard",
     "lint:fix": "standard --fix",
     "dev": "node ./scripts/dev.js && npm run css-watch",
+    "send-test-emails": "node ./scripts/send.js",
     "css": "sass --style=compressed --no-source-map assets/styles/style.scss:app/styles/style.css",
     "css-watch": "sass --watch --style=compressed --no-source-map assets/styles/style.scss:app/styles/style.css",
     "docker-build": "./scripts/dockerBuild.sh",

@@ -99,13 +99,17 @@ describe('API', () => {
 
       await delay(100)
 
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         maildev.getAllEmail(async (err, emails) => {
           if (err) return resolve(err)
 
-          assert.strictEqual(Array.isArray(emails), true)
-          assert.strictEqual(emails.length, 1)
-          assert.strictEqual(emails[0].text, emailOpts.text)
+          try {
+            assert.strictEqual(Array.isArray(emails), true)
+            assert.strictEqual(emails.length, 1)
+            assert.strictEqual(emails[0].text, emailOpts.text)
+          } catch (err) {
+            return reject (err)
+          }
 
           await waitMailDevShutdown(maildev)
           await transporter.close()
@@ -126,9 +130,13 @@ describe('API', () => {
 
       return new Promise((resolve) => {
         maildev.on('new', async (email) => {
-          assert.strictEqual(email.text, emailOpts.text)
-          await waitMailDevShutdown(maildev)
+          try {
+            assert.strictEqual(email.text, emailOpts.text)
+          } catch (err) {
+            return reject (err)
+          }
           maildev.removeAllListeners()
+          await waitMailDevShutdown(maildev)
           await transporter.close()
           resolve()
         })

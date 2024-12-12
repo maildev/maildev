@@ -87,17 +87,22 @@ describe('API', () => {
         disableWeb: true,
         smtp: port
       })
+      console.time('start')
       maildev.listen()
+      console.log('listening')
 
       const transporter = await createTransporter()
 
+      console.log('send...')
       try {
         await transporter.sendMail(emailOpts)
       } catch (err) {
         if (err) return err
       }
 
+
       await delay(100)
+      console.log('delay finished...')
 
       return new Promise(async (resolve, reject) => {
         const pollDelay = 100;
@@ -106,23 +111,26 @@ describe('API', () => {
         // We poll here to handle potential races
         // event emitting is covered in another test
         while (iter < maxIter) {
+          console.log('Poll ' + iter)
           maildev.getAllEmail(async (err, emails) => {
             if (err) return resolve(err)
 
             if (emails.length === 0) {
               return;
             }
+            console.log('good!')
 
             try {
               assert.strictEqual(Array.isArray(emails), true)
               assert.strictEqual(emails.length, 1)
               assert.strictEqual(emails[0].text, emailOpts.text)
             } catch (err) {
-              return reject (err)
+              return reject(err)
             }
 
             await waitMailDevShutdown(maildev)
             await transporter.close()
+            console.log('shutdown...')
             return resolve()
           });
 

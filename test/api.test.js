@@ -6,6 +6,7 @@
  */
 
 const assert = require('assert')
+const { promisify } = require('util')
 const nodemailer = require('nodemailer')
 const MailDev = require('../index.js')
 const delay = require('../lib/utils').delay
@@ -34,6 +35,9 @@ function waitMailDevShutdown (maildev) {
     maildev.close(() => resolve())
   })
 }
+
+const DEBUG = true;
+function debug(){ if(DEBUG) { console.log(new Date().toJSON(), ...arguments) } }
 
 describe('MailDev', () => {
   describe('constructor', () => {
@@ -87,22 +91,33 @@ describe('MailDev', () => {
         disableWeb: true,
         smtp: port
       })
-      console.time('start')
-      maildev.listen()
-      console.log('listening')
+      debug('server start')
+      await maildev.listen()
+      debug('server listening')
+      await delay(100)
 
-      const transporter = await createTransporter()
+      let transporter
+      try {
+        debug('email transporter creating')
+        transporter = await createTransporter()
+        debug('email transporter created')
+      } catch (err) {
+        debug('email transporter failed', err)
+        return err;
+      }
 
-      console.log('send...')
+
+      debug('email transporter created')
       try {
         await transporter.sendMail(emailOpts)
       } catch (err) {
         if (err) return err
       }
+      debug('email sent')
 
 
       await delay(100)
-      console.log('delay finished...')
+      debug('delay complete')
 
       return new Promise(async (resolve, reject) => {
         const pollDelay = 100;
@@ -111,14 +126,14 @@ describe('MailDev', () => {
         // We poll here to handle potential races
         // event emitting is covered in another test
         while (iter < maxIter) {
-          console.log('Poll ' + iter)
+          debug('poll - attempt ' + iter)
           maildev.getAllEmail(async (err, emails) => {
             if (err) return resolve(err)
 
             if (emails.length === 0) {
               return;
             }
-            console.log('good!')
+            debug('poll - found email')
 
             try {
               assert.strictEqual(Array.isArray(emails), true)
@@ -130,7 +145,7 @@ describe('MailDev', () => {
 
             await waitMailDevShutdown(maildev)
             await transporter.close()
-            console.log('shutdown...')
+            debug('server shutdown')
             return resolve()
           });
 

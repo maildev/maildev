@@ -99,22 +99,37 @@ describe('API', () => {
 
       await delay(100)
 
-      return new Promise((resolve, reject) => {
-        maildev.getAllEmail(async (err, emails) => {
-          if (err) return resolve(err)
+      return new Promise(async (resolve, reject) => {
+        const pollDelay = 100;
+        const maxIter = 10;
+        let iter = 0;
+        // We poll here to handle potential races
+        // event emitting is covered in another test
+        while (iter < maxIter) {
+          maildev.getAllEmail(async (err, emails) => {
+            if (err) return resolve(err)
 
-          try {
-            assert.strictEqual(Array.isArray(emails), true)
-            assert.strictEqual(emails.length, 1)
-            assert.strictEqual(emails[0].text, emailOpts.text)
-          } catch (err) {
-            return reject (err)
-          }
+            if (emails.length === 0) {
+              return;
+            }
 
-          await waitMailDevShutdown(maildev)
-          await transporter.close()
-          return resolve()
-        })
+            try {
+              assert.strictEqual(Array.isArray(emails), true)
+              assert.strictEqual(emails.length, 1)
+              assert.strictEqual(emails[0].text, emailOpts.text)
+            } catch (err) {
+              return reject (err)
+            }
+
+            await waitMailDevShutdown(maildev)
+            await transporter.close()
+            return resolve()
+          });
+
+          iter++;
+          await delay(pollDelay);
+        }
+        reject(`Failed to fetch email after ${iter} attempts`)
       })
     })
 
@@ -126,7 +141,6 @@ describe('API', () => {
       })
       const transporter = await createTransporter()
       maildev.listen()
-      await delay(100)
 
       return new Promise((resolve) => {
         maildev.on('new', async (email) => {

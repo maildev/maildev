@@ -19,11 +19,10 @@ const webPort = 9081
 const proxyPort = 9082
 const host = '0.0.0.0'
 const createTransporter = async () => {
-  const { user, pass } = await nodemailer.createTestAccount()
   return nodemailer.createTransport({
     host: '0.0.0.0',
     port: smtpPort,
-    auth: { type: 'login', user, pass }
+    auth: { type: 'login', user: 'username', pass: 'password' }
   })
 }
 

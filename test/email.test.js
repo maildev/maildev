@@ -25,11 +25,10 @@ const defaultMailDevOpts = {
 }
 
 const createTransporter = async () => {
-  const { user, pass } = await nodemailer.createTestAccount()
   return nodemailer.createTransport({
     host: '0.0.0.0',
     port,
-    auth: { type: 'login', user, pass }
+    auth: { type: 'login', user: 'username', pass: 'password' }
   })
 }
 

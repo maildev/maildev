@@ -6,6 +6,7 @@
  */
 
 const assert = require('assert')
+const { promisify } = require('util')
 const nodemailer = require('nodemailer')
 const MailDev = require('../index.js')
 const delay = require('../lib/utils').delay
@@ -21,11 +22,10 @@ const emailOpts = {
 
 const port = 9025
 const createTransporter = async () => {
-  const { user, pass } = await nodemailer.createTestAccount()
   return nodemailer.createTransport({
     host: '0.0.0.0',
     port,
-    auth: { type: 'login', user, pass }
+    auth: { type: 'login', user: 'username', pass: 'password' }
   })
 }
 
@@ -35,8 +35,8 @@ function waitMailDevShutdown (maildev) {
   })
 }
 
-describe('API', () => {
-  describe('Constructor', () => {
+describe('MailDev', () => {
+  describe('constructor', () => {
     it('should accept arguments', (done) => {
       const maildev = new MailDev({
         smtp: port,
@@ -87,9 +87,16 @@ describe('API', () => {
         disableWeb: true,
         smtp: port
       })
-      maildev.listen()
+      await maildev.listen()
+      await delay(100)
 
-      const transporter = await createTransporter()
+      let transporter
+      try {
+        transporter = await createTransporter()
+      } catch (err) {
+        return err;
+      }
+
 
       try {
         await transporter.sendMail(emailOpts)
@@ -97,20 +104,40 @@ describe('API', () => {
         if (err) return err
       }
 
+
       await delay(100)
 
-      return new Promise((resolve) => {
-        maildev.getAllEmail(async (err, emails) => {
-          if (err) return resolve(err)
+      return new Promise(async (resolve, reject) => {
+        const pollDelay = 100;
+        const maxIter = 10;
+        let iter = 0;
+        // We poll here to handle potential races
+        // event emitting is covered in another test
+        while (iter < maxIter) {
+          maildev.getAllEmail(async (err, emails) => {
+            if (err) return resolve(err)
 
-          assert.strictEqual(Array.isArray(emails), true)
-          assert.strictEqual(emails.length, 1)
-          assert.strictEqual(emails[0].text, emailOpts.text)
+            if (emails.length === 0) {
+              return;
+            }
 
-          await waitMailDevShutdown(maildev)
-          await transporter.close()
-          return resolve()
-        })
+            try {
+              assert.strictEqual(Array.isArray(emails), true)
+              assert.strictEqual(emails.length, 1)
+              assert.strictEqual(emails[0].text, emailOpts.text)
+            } catch (err) {
+              return reject(err)
+            }
+
+            await waitMailDevShutdown(maildev)
+            await transporter.close()
+            return resolve()
+          });
+
+          iter++;
+          await delay(pollDelay);
+        }
+        reject(`Failed to fetch email after ${iter} attempts`)
       })
     })
 
@@ -122,13 +149,16 @@ describe('API', () => {
       })
       const transporter = await createTransporter()
       maildev.listen()
-      await delay(100)
 
       return new Promise((resolve) => {
         maildev.on('new', async (email) => {
-          assert.strictEqual(email.text, emailOpts.text)
-          await waitMailDevShutdown(maildev)
+          try {
+            assert.strictEqual(email.text, emailOpts.text)
+          } catch (err) {
+            return reject (err)
+          }
           maildev.removeAllListeners()
+          await waitMailDevShutdown(maildev)
           await transporter.close()
           resolve()
         })

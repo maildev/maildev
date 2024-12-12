@@ -19,4 +19,4 @@ jobs:
           node-version: ${{matrix.node-version}}
       - run: npm ci
       - run: npm test
-      - run: bash <(curl -s https://codecov.io/bash) # Upload to Codecov
+      # - run: bash <(curl -s https://codecov.io/bash) # Upload to Codecov

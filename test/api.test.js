@@ -35,8 +35,8 @@ function waitMailDevShutdown (maildev) {
   })
 }
 
-describe('API', () => {
-  describe('Constructor', () => {
+describe('MailDev', () => {
+  describe('constructor', () => {
     it('should accept arguments', (done) => {
       const maildev = new MailDev({
         smtp: port,

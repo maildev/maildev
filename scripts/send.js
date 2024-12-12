@@ -155,7 +155,7 @@ const messages = [
     to: 'Johnny Utah <johnny.utah@fbi.gov>',
     subject: 'Test html with form',
     html: formHtml
-  }
+  },
 
   //
   /*

@@ -4,6 +4,7 @@
 
 # Build cross platform by default
 DEFAULT_PLATFORM="linux/amd64,linux/arm64"
+# Build for one platform, e.g. "npm run docker-build linux/arm64"
 PLATFORM="${1:-$DEFAULT_PLATFORM}"
 
 VERSION=`npm version --json | jq -r .maildev`

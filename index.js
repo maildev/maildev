@@ -37,6 +37,7 @@ module.exports = function (config) {
     config.incomingUser,
     config.incomingPass,
     config.hideExtensions,
+    config.hideStarttls
     config.incomingSecure,
     config.incomingCert,
     config.incomingKey

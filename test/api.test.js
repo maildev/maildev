@@ -22,11 +22,10 @@ const emailOpts = {
 
 const port = 9025
 const createTransporter = async () => {
-  const { user, pass } = await nodemailer.createTestAccount()
   return nodemailer.createTransport({
     host: '0.0.0.0',
     port,
-    auth: { type: 'login', user, pass }
+    auth: { type: 'login', user: 'username', pass: 'password' }
   })
 }
 
@@ -35,9 +34,6 @@ function waitMailDevShutdown (maildev) {
     maildev.close(() => resolve())
   })
 }
-
-const DEBUG = true;
-function debug(){ if(DEBUG) { console.log(new Date().toJSON(), ...arguments) } }
 
 describe('MailDev', () => {
   describe('constructor', () => {
@@ -91,33 +87,25 @@ describe('MailDev', () => {
         disableWeb: true,
         smtp: port
       })
-      debug('server start')
       await maildev.listen()
-      debug('server listening')
       await delay(100)
 
       let transporter
       try {
-        debug('email transporter creating')
         transporter = await createTransporter()
-        debug('email transporter created')
       } catch (err) {
-        debug('email transporter failed', err)
         return err;
       }
 
 
-      debug('email transporter created')
       try {
         await transporter.sendMail(emailOpts)
       } catch (err) {
         if (err) return err
       }
-      debug('email sent')
 
 
       await delay(100)
-      debug('delay complete')
 
       return new Promise(async (resolve, reject) => {
         const pollDelay = 100;
@@ -126,14 +114,12 @@ describe('MailDev', () => {
         // We poll here to handle potential races
         // event emitting is covered in another test
         while (iter < maxIter) {
-          debug('poll - attempt ' + iter)
           maildev.getAllEmail(async (err, emails) => {
             if (err) return resolve(err)
 
             if (emails.length === 0) {
               return;
             }
-            debug('poll - found email')
 
             try {
               assert.strictEqual(Array.isArray(emails), true)
@@ -145,7 +131,6 @@ describe('MailDev', () => {
 
             await waitMailDevShutdown(maildev)
             await transporter.close()
-            debug('server shutdown')
             return resolve()
           });
 

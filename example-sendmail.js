@@ -5,11 +5,10 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
 const nodemailer = require('nodemailer')
 
 async function main () {
-  const { user, pass } = await nodemailer.createTestAccount()
   const transporter = nodemailer.createTransport({
     host: '0.0.0.0',
     port: 8025,
-    auth: { type: 'login', user, pass }
+    auth: { type: 'login', user: 'username', pass: 'password' }
   })
 
   // send mail with defined transport object

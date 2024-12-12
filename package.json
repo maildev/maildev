@@ -38,7 +38,7 @@
   },
   "scripts": {
     "start": "node ./bin/maildev",
-    "test": "mocha --exit --timeout 5000 ./test/api.test.js",
+    "test": "nyc _mocha --exit --timeout 5000",
     "lint": "standard",
     "lint:fix": "standard --fix",
     "dev": "node ./scripts/dev.js && npm run css-watch",

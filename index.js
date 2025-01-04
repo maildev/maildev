@@ -39,7 +39,8 @@ module.exports = function (config) {
     config.hideExtensions,
     config.incomingSecure,
     config.incomingCert,
-    config.incomingKey
+    config.incomingKey,
+    config.denyRcptsRegexp
   )
 
   if (

@@ -27,7 +27,8 @@ describe('mailserver', () => {
       incomingPass: 'surfing',
       silent: true,
       disableWeb: true,
-      smtp: port
+      smtp: port,
+      denyRcptsRegexp: 'fail@example.com'
     })
     maildev.listen(done)
   })
@@ -60,6 +61,36 @@ describe('mailserver', () => {
             await waitMailDevShutdown(maildevConflict)
             resolve()
           }
+        })
+      })
+    })
+  })
+
+  describe('smtp deny rcpts feature', () => {
+    it('should deny rcpts', function (done) {
+      const connection = new SMTPConnection({
+        port: maildev.port,
+        host: maildev.host,
+        tls: {
+          rejectUnauthorized: false
+        }
+      })
+
+      connection.connect(function (err) {
+        if (err) return done(err)
+
+        const envelope = {
+          from: 'willfail@example.com',
+          to: 'fail@example.com'
+        }
+
+        connection.send(envelope, 'Will be rejected', function (err) {
+          // This should return an error since the recipient is denied
+          assert.notStrictEqual(typeof err, 'undefined')
+          assert.strictEqual(err.code, 'EENVELOPE')
+
+          connection.close()
+          maildev.close(done)
         })
       })
     })

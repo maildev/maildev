@@ -1,0 +1,16 @@
+name: AI Code Review
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
+  issue_comment:
+    types: [created]
+
+jobs:
+  ai-code-review:
+    uses: useinsider/ai-code-review/.github/workflows/ai-code-review.yml@main
+    secrets: inherit

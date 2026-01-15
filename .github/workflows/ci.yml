@@ -1,0 +1,65 @@
+name: CI
+
+on:
+  push:
+    branches: [main, v3]
+  pull_request:
+    branches: [main, v3]
+
+jobs:
+  build:
+    name: Build & Test
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: 'pnpm'
+
+      - name: Install dependencies
+        run: pnpm install
+
+      - name: Build packages
+        run: pnpm build
+
+      - name: Run linter
+        run: pnpm lint
+
+      - name: Type check
+        run: pnpm typecheck
+
+      - name: Run tests
+        run: pnpm test
+
+  legacy-tests:
+    name: Legacy Tests
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [20.x, 22.x]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+
+      - name: Install dependencies (npm)
+        run: npm ci
+
+      - name: Run legacy tests
+        run: npm run test:legacy

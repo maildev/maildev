@@ -1,0 +1,47 @@
+{
+  "name": "@maildev/mcp",
+  "version": "3.0.0-alpha.0",
+  "description": "MCP (Model Context Protocol) server for Claude integration with MailDev",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "echo \"No tests yet\""
+  },
+  "keywords": [
+    "maildev",
+    "mcp",
+    "claude",
+    "ai",
+    "model-context-protocol"
+  ],
+  "author": "Dan Farrelly",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/maildev/maildev.git",
+    "directory": "packages/mcp"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@maildev/core": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

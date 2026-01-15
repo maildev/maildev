@@ -1,0 +1,58 @@
+{
+  "name": "maildev",
+  "version": "3.0.0-alpha.0",
+  "description": "SMTP Server and Web Interface for reading and testing emails during development",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "maildev": "./dist/bin/maildev.js"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "echo \"No tests yet\""
+  },
+  "keywords": [
+    "email",
+    "e-mail",
+    "mail",
+    "maildev",
+    "mailcatcher",
+    "testing",
+    "development",
+    "smtp"
+  ],
+  "author": "Dan Farrelly",
+  "license": "MIT",
+  "homepage": "http://maildev.github.io/maildev/",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/maildev/maildev.git",
+    "directory": "packages/cli"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "dependencies": {
+    "@maildev/core": "workspace:*",
+    "@maildev/smtp": "workspace:*",
+    "@maildev/api": "workspace:*",
+    "@maildev/mcp": "workspace:*",
+    "@maildev/ui": "workspace:*"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

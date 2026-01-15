@@ -1,0 +1,42 @@
+{
+  "name": "@maildev/core",
+  "version": "3.0.0-alpha.0",
+  "description": "Core types, utilities, and storage abstraction for MailDev",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "dev": "tsc --watch",
+    "lint": "eslint src/",
+    "typecheck": "tsc --noEmit",
+    "test": "echo \"No tests yet\""
+  },
+  "keywords": [
+    "maildev",
+    "email",
+    "testing"
+  ],
+  "author": "Dan Farrelly",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/maildev/maildev.git",
+    "directory": "packages/core"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.7.3"
+  }
+}

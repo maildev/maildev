@@ -10,3 +10,9 @@ maildev-*
 
 # Ignore npm debug log
 npm-debug.log
+
+# Turborepo
+.turbo
+
+# pnpm
+pnpm-debug.log

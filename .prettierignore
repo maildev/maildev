@@ -1,0 +1,18 @@
+# Dependencies
+node_modules/
+pnpm-lock.yaml
+
+# Build outputs
+dist/
+coverage/
+
+# Legacy frontend (AngularJS)
+app/components/
+
+# Generated files
+*.min.js
+*.min.css
+
+# Other
+.turbo/
+.changeset/

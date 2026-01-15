@@ -19,7 +19,9 @@
     "dev": "tsc --watch",
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit",
-    "test": "echo \"No tests yet\""
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "keywords": [
     "maildev",
@@ -37,6 +39,8 @@
     "node": ">=20.0.0"
   },
   "devDependencies": {
-    "typescript": "^5.7.3"
+    "@vitest/coverage-v8": "^3.0.0",
+    "typescript": "^5.7.3",
+    "vitest": "^3.0.0"
   }
 }

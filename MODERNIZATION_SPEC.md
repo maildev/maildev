@@ -258,19 +258,18 @@ maildev/
 **Goal:** Set up monorepo, TypeScript infrastructure, and core packages
 
 #### 1.1 Monorepo Setup
-- [ ] Initialize pnpm workspace with Turborepo
-- [ ] Configure shared TypeScript configs
-- [ ] Set up ESLint + Prettier with sensible defaults
-- [ ] Configure changesets for versioning
-- [ ] Set up GitHub Actions for CI
+- [x] Initialize pnpm workspace with Turborepo
+- [x] Configure shared TypeScript configs
+- [x] Set up ESLint + Prettier with sensible defaults
+- [x] Configure changesets for versioning
+- [x] Set up GitHub Actions for CI
 
 #### 1.2 Core Package (@maildev/core)
-- [ ] Define TypeScript interfaces for email objects
-- [ ] Implement storage abstraction layer
-- [ ] Write storage implementations: In-Memory, File-based
-- [ ] Improve .eml file indexing and loading performance
-- [ ] Write comprehensive unit tests
-- [ ] Generate type definitions
+- [x] Define TypeScript interfaces for email objects
+- [x] Implement storage abstraction layer
+- [x] Write storage implementations: In-Memory, File-based
+- [x] Write comprehensive unit tests
+- [x] Generate type definitions
 
 **Deliverables:**
 - `@maildev/core@1.0.0-alpha.1` published to npm
@@ -298,6 +297,7 @@ maildev/
 - [ ] Evaluate mailparser-mit vs modern alternatives
 - [ ] Add streaming parser for large emails
 - [ ] Improve attachment handling (security + perf)
+- [ ] Improve .eml file indexing and loading performance
 - [ ] Add plugin hooks for custom processing
 
 #### 2.3 Relay System

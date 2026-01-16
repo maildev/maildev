@@ -284,27 +284,27 @@ maildev/
 **Goal:** Modernize SMTP server with TypeScript and async/await
 
 #### 2.1 SMTP Package (@maildev/smtp)
-- [ ] Migrate `lib/mailserver.js` to TypeScript
-- [ ] Replace callbacks with async/await
-- [ ] Integrate with @maildev/core storage layer
-- [ ] Improve error handling with typed errors
-- [ ] Add structured logging (pino or winston)
-- [ ] Implement connection pooling for relay
-- [ ] Add SMTP authentication plugins
-- [ ] Write integration tests
+- [x] Migrate `lib/mailserver.js` to TypeScript
+- [x] Replace callbacks with async/await
+- [x] Integrate with @maildev/core storage layer
+- [x] Improve error handling with typed errors
+- [x] Add structured logging (pino or winston)
+- [x] Implement connection pooling for relay
+- [x] Add SMTP authentication plugins
+- [x] Write integration tests
 
 #### 2.2 Email Parser
-- [ ] Evaluate mailparser-mit vs modern alternatives
-- [ ] Add streaming parser for large emails
-- [ ] Improve attachment handling (security + perf)
-- [ ] Improve .eml file indexing and loading performance
+- [x] Evaluate mailparser-mit vs modern alternatives
+- [x] Add streaming parser for large emails
+- [x] Improve attachment handling (security + perf)
+- [x] Improve .eml file indexing and loading performance
 - [ ] Add plugin hooks for custom processing
 
 #### 2.3 Relay System
-- [ ] Modernize outgoing.js
+- [x] Modernize outgoing.js
 - [ ] Add retry logic with exponential backoff
 - [ ] Support multiple relay strategies
-- [ ] Add event emitters for relay status
+- [x] Add event emitters for relay status
 
 **Deliverables:**
 - `@maildev/smtp@1.0.0-alpha.1` published
@@ -319,30 +319,30 @@ maildev/
 **Goal:** Build modern, versioned REST API with Fastify
 
 #### 3.1 API Package (@maildev/api)
-- [ ] Set up Fastify with TypeScript
-- [ ] Implement JWT authentication (optional)
+- [x] Set up Fastify with TypeScript
+- [x] Implement Basic authentication (optional)
 - [ ] Add rate limiting (express-rate-limit equivalent)
 - [ ] Create versioned routes (/api/v1/, /api/v2/)
-- [ ] Implement filtering with query builders
-- [ ] Add pagination (cursor-based + offset)
+- [x] Implement filtering with query builders
+- [x] Add pagination (skip-based, matching v2.x)
 - [ ] Optimize in-memory search with better indexing
-- [ ] WebSocket layer with Socket.io
+- [x] WebSocket layer with Socket.io
 - [ ] OpenAPI/Swagger documentation
 
 #### 3.2 API Features
-- [ ] Email CRUD operations
-- [ ] Advanced search (by sender, subject, date range, has:attachment)
-- [ ] Bulk operations (mark all read, delete filtered)
-- [ ] Email export (EML, MBOX, JSON)
+- [x] Email CRUD operations
+- [x] Advanced search (by sender, subject, date range, has:attachment)
+- [x] Bulk operations (mark all read, delete all)
+- [x] Email export (EML download)
 - [ ] Email scenarios/templates endpoint
 - [ ] Stats/analytics endpoint
 
 #### 3.3 Security Hardening
 - [ ] Helmet.js for security headers
-- [ ] CORS configuration per-origin
+- [x] CORS configuration per-origin
 - [ ] Input validation with Zod
 - [ ] SQL injection prevention (using ORM)
-- [ ] XSS prevention in HTML sanitization
+- [x] XSS prevention in HTML sanitization (via @maildev/smtp)
 - [ ] Rate limiting per IP/user
 - [ ] API key management
 

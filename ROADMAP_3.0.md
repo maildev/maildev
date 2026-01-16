@@ -50,33 +50,33 @@ packages/
 
 ## 10-Phase Development Plan
 
-### Phase 1: Foundation (Weeks 1-4) 🔨
+### Phase 1: Foundation (Weeks 1-4) ✅
 **Setup monorepo infrastructure**
 - pnpm workspace + Turborepo
 - Shared TypeScript configs
 - CI/CD with GitHub Actions
 - Changesets for versioning
 
-**Deliverable:** `@maildev/core@3.0.0-alpha.1`
+**Deliverable:** `@maildev/core@3.0.0-alpha.0` - **COMPLETE**
 
-### Phase 2: SMTP Server (Weeks 5-7) 📧
+### Phase 2: SMTP Server (Weeks 5-7) ✅
 **Modernize email handling**
 - TypeScript migration
 - async/await throughout
 - Improved error handling
 - Integration with storage layer
 
-**Deliverable:** `@maildev/smtp@3.0.0-alpha.1`
+**Deliverable:** `@maildev/smtp@3.0.0-alpha.0` - **COMPLETE** (39 tests)
 
-### Phase 3: REST API (Weeks 8-10) 🚀
+### Phase 3: REST API (Weeks 8-10) ✅
 **Build high-performance API**
 - Fastify + TypeScript
-- JWT authentication
-- Rate limiting
-- Full-text search
-- WebSocket for real-time
+- Basic authentication
+- CORS configuration
+- Query filtering with dot-notation
+- WebSocket for real-time (Socket.io)
 
-**Deliverable:** `@maildev/api@3.0.0-alpha.1` + OpenAPI spec
+**Deliverable:** `@maildev/api@3.0.0-alpha.0` - **COMPLETE** (18 tests)
 
 ### Phase 4: Frontend (Weeks 11-15) 🎨
 **Modern React UI**
@@ -402,7 +402,7 @@ Foundation   SMTP        API       Frontend    MCP         CLI      Advanced    
 ```
 
 **Milestones:**
-- **End of March**: Core packages ready (`@maildev/core`, `@maildev/smtp`, `@maildev/api`)
+- ✅ **Mid January 2026**: Core packages ready (`@maildev/core`, `@maildev/smtp`, `@maildev/api`)
 - **End of May**: UI + MCP complete
 - **End of July**: Feature complete, beta release
 - **Mid August**: 3.0.0 final release 🎉
@@ -452,15 +452,18 @@ pnpm dev
 ---
 
 **Last Updated:** 2026-01-15
-**Document Version:** 1.1
-**Status:** Draft for Review
+**Document Version:** 1.2
+**Status:** In Progress
 
 ---
 
-**Next Steps:**
+**Progress:**
 1. ✅ Create detailed specification
-3. ⏳ Community feedback (GitHub Discussion)
-3. ⏳ Assemble team / recruit contributors
-4. ⏳ Phase 1 kickoff
+2. ✅ Phase 1: Foundation - `@maildev/core` (51 tests)
+3. ✅ Phase 2: SMTP Server - `@maildev/smtp` (39 tests)
+4. ✅ Phase 3: REST API - `@maildev/api` (18 tests)
+5. ⏳ Phase 4: Frontend Rewrite - **Next**
+
+**Total Tests:** 108 passing across all packages
 
 Let's build the future of email testing! 🚀

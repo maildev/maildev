@@ -1,4 +1,4 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient, useIsFetching } from '@tanstack/react-query'
 import { api } from '../lib/api'
 import type { Email } from '@maildev/core'
 
@@ -114,10 +114,12 @@ export function useConfig() {
  */
 export function useRefreshEmails() {
   const queryClient = useQueryClient()
+  // useIsFetching is reactive and will trigger re-renders when fetching state changes
+  const fetchingCount = useIsFetching({ queryKey: ['emails'] })
 
   return {
     refresh: () => queryClient.invalidateQueries({ queryKey: ['emails'] }),
-    isRefreshing: queryClient.isFetching({ queryKey: ['emails'] }) > 0,
+    isRefreshing: fetchingCount > 0,
   }
 }
 

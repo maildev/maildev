@@ -456,8 +456,8 @@ pnpm dev
 ---
 
 **Last Updated:** 2026-01-17
-**Document Version:** 1.3
-**Status:** In Progress
+**Document Version:** 1.4
+**Status:** Phase 4 Complete - Ready for Phase 5 (MCP Server)
 
 ---
 
@@ -488,7 +488,7 @@ pnpm dev
      - ✅ Categorized commands (Email, Navigation, Settings)
      - ✅ 15+ commands with icons and shortcuts
    - ✅ Keyboard shortcuts:
-     - ✅ j/k - Navigate emails (Gmail-style)
+     - ✅ j/k - Navigate emails (Gmail-style, respects search filter)
      - ✅ / - Focus search
      - ✅ r - Refresh emails
      - ✅ s - Toggle sidebar
@@ -497,6 +497,18 @@ pnpm dev
      - ✅ Delete/Backspace - Delete selected email
      - ✅ Escape - Deselect email / blur input
      - ✅ ? - Open command palette
+     - ✅ All shortcuts work from within HTML preview iframe
+   - ✅ Discoverability:
+     - ✅ Shortcut hints in command palette for all commands
+     - ✅ Shortcut hints in button tooltips (e.g., "Refresh emails (r)")
+     - ✅ "/" keyboard hint badge in search input
+   - ✅ Enhanced search:
+     - ✅ Auto-selects first result when typing
+     - ✅ Arrow up/down navigation while in search input
+   - ✅ Loading indicators:
+     - ✅ Global loading bar at top of screen during refresh
+     - ✅ Spinning refresh icon in header
+     - ✅ Minimum display time for visibility
 
 **Total Tests:** 108 passing across all packages
 **UI Bundle:** ~106KB gzipped (under 200KB target)

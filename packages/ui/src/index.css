@@ -47,10 +47,6 @@
 }
 
 /* Base styles */
-* {
-  border-color: hsl(var(--border));
-}
-
 body {
   background-color: hsl(var(--background));
   color: hsl(var(--foreground));

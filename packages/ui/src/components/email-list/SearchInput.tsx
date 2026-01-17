@@ -34,7 +34,7 @@ export function SearchInput() {
         )}
       />
       {searchQuery && (
-        <div className="absolute right-3 top-1/2 -translate-y-1/2">
+        <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center">
           <Tooltip content="Clear search" position="left">
             <button
               onClick={() => setSearchQuery('')}

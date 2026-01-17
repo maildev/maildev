@@ -481,9 +481,15 @@ pnpm dev
      - ✅ Auto-show new mail
      - ✅ Favicon badge (unread count + title update)
      - ✅ Relay functionality (original + custom recipients)
-   - ⏳ Remaining: Command palette, keyboard shortcuts
+   - ✅ Command palette (Cmd+K):
+     - ✅ Keyboard shortcut (Cmd+K / Ctrl+K)
+     - ✅ Search filtering across commands
+     - ✅ Keyboard navigation (Arrow keys, Enter, Escape)
+     - ✅ Categorized commands (Email, Navigation, Settings)
+     - ✅ 15+ commands with icons and shortcuts
+   - ⏳ Remaining: Additional keyboard shortcuts
 
 **Total Tests:** 108 passing across all packages
-**UI Bundle:** ~103KB gzipped (under 200KB target)
+**UI Bundle:** ~105KB gzipped (under 200KB target)
 
 Let's build the future of email testing! 🚀

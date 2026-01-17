@@ -147,6 +147,34 @@ export function EmailContent({ email }: EmailContentProps) {
 }
 
 function HtmlContent({ html, viewport }: { html: string | undefined; viewport: string }) {
+  const iframeRef = useRef<HTMLIFrameElement>(null)
+
+  // Forward Cmd+K from iframe to parent window
+  const handleIframeLoad = () => {
+    const iframe = iframeRef.current
+    if (!iframe?.contentWindow) return
+
+    try {
+      iframe.contentWindow.addEventListener('keydown', (e: KeyboardEvent) => {
+        // Forward Cmd+K / Ctrl+K to parent
+        if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+          e.preventDefault()
+          // Dispatch to parent document
+          window.dispatchEvent(
+            new KeyboardEvent('keydown', {
+              key: 'k',
+              metaKey: e.metaKey,
+              ctrlKey: e.ctrlKey,
+              bubbles: true,
+            })
+          )
+        }
+      })
+    } catch {
+      // Ignore cross-origin errors (shouldn't happen with srcdoc)
+    }
+  }
+
   if (!html) {
     return (
       <div className="flex h-full items-center justify-center text-[hsl(var(--muted-foreground))]">
@@ -167,10 +195,12 @@ function HtmlContent({ html, viewport }: { html: string | undefined; viewport: s
         style={{ width: viewport, maxWidth: '100%' }}
       >
         <iframe
+          ref={iframeRef}
           srcDoc={html}
           className="h-full w-full border-none bg-white"
           sandbox="allow-same-origin"
           title="Email HTML content"
+          onLoad={handleIframeLoad}
         />
       </div>
     </div>

@@ -1,6 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { useEffect, useMemo } from 'react'
 import { Layout } from './components/layout/Layout'
+import { CommandPalette } from './components/ui/CommandPalette'
 import { useUIStore } from './stores/ui'
 import { useEmails } from './hooks/useEmails'
 import { useFaviconBadge } from './hooks/useFaviconBadge'
@@ -17,6 +18,7 @@ const queryClient = new QueryClient({
 
 function AppContent() {
   const theme = useUIStore((state) => state.theme)
+  const openCommandPalette = useUIStore((state) => state.openCommandPalette)
   const { data: emails = [] } = useEmails()
 
   // Count unread emails
@@ -37,7 +39,27 @@ function AppContent() {
     }
   }, [theme])
 
-  return <Layout />
+  // Global keyboard shortcut for command palette (Cmd+K / Ctrl+K)
+  // Listen on window to also catch events forwarded from iframes
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      // Cmd+K (Mac) or Ctrl+K (Windows/Linux)
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault()
+        openCommandPalette()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [openCommandPalette])
+
+  return (
+    <>
+      <Layout />
+      <CommandPalette />
+    </>
+  )
 }
 
 export function App() {

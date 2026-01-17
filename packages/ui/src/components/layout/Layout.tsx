@@ -17,8 +17,8 @@ export function Layout() {
       <div className="flex flex-1 overflow-hidden">
         <aside
           className={cn(
-            'flex-shrink-0 border-r border-[hsl(var(--border))] transition-all duration-200',
-            sidebarCollapsed ? 'w-0' : 'w-80 lg:w-96'
+            'flex-shrink-0 overflow-hidden border-r border-[hsl(var(--border))] transition-all duration-200',
+            sidebarCollapsed ? 'w-0 border-r-0' : 'w-80 lg:w-96'
           )}
         >
           <Sidebar />

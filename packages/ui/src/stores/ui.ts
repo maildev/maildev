@@ -14,6 +14,8 @@ interface UIState {
   notificationsEnabled: boolean
   /** Auto-show new emails when they arrive */
   autoShowNewMail: boolean
+  /** Command palette open state */
+  commandPaletteOpen: boolean
 
   // Actions
   setSelectedEmail: (id: string | null) => void
@@ -23,6 +25,8 @@ interface UIState {
   toggleSidebar: () => void
   setNotificationsEnabled: (enabled: boolean) => void
   setAutoShowNewMail: (enabled: boolean) => void
+  openCommandPalette: () => void
+  closeCommandPalette: () => void
 }
 
 export const useUIStore = create<UIState>()(
@@ -34,6 +38,7 @@ export const useUIStore = create<UIState>()(
       sidebarCollapsed: false,
       notificationsEnabled: false,
       autoShowNewMail: false,
+      commandPaletteOpen: false,
 
       setSelectedEmail: (id) => set({ selectedEmailId: id }),
 
@@ -54,6 +59,10 @@ export const useUIStore = create<UIState>()(
       setNotificationsEnabled: (enabled) => set({ notificationsEnabled: enabled }),
 
       setAutoShowNewMail: (enabled) => set({ autoShowNewMail: enabled }),
+
+      openCommandPalette: () => set({ commandPaletteOpen: true }),
+
+      closeCommandPalette: () => set({ commandPaletteOpen: false }),
     }),
     {
       name: 'maildev-ui-storage',

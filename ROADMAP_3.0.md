@@ -78,16 +78,20 @@ packages/
 
 **Deliverable:** `@maildev/api@3.0.0-alpha.0` - **COMPLETE** (18 tests)
 
-### Phase 4: Frontend (Weeks 11-15) 🎨
+### Phase 4: Frontend (Weeks 11-15) 🎨 **IN PROGRESS**
 **Modern React UI**
-- Vite + React + TypeScript
-- Tailwind CSS + shadcn/ui
-- Command palette (Cmd+K)
-- Dark mode
-- Real-time updates
-- Keyboard shortcuts
+- ✅ Vite + React 19 + TypeScript
+- ✅ Tailwind CSS v4
+- ✅ Dark mode with persistence
+- ✅ Real-time updates via Socket.io
+- ✅ Two-pane layout (sidebar + viewer)
+- ✅ Email list with search/filtering
+- ✅ Email viewer with HTML/Text/Headers/Source tabs
+- ✅ Custom tooltips
+- ⏳ Command palette (Cmd+K)
+- ⏳ Keyboard shortcuts
 
-**Deliverable:** `@maildev/ui@3.0.0-alpha.1` (< 200KB gzipped)
+**Deliverable:** `@maildev/ui@3.0.0-alpha.1` (~103KB gzipped - under 200KB target!)
 
 ### Phase 5: MCP Server (Weeks 16-17) 🤖
 **Claude integration**
@@ -451,8 +455,8 @@ pnpm dev
 
 ---
 
-**Last Updated:** 2026-01-15
-**Document Version:** 1.2
+**Last Updated:** 2026-01-17
+**Document Version:** 1.3
 **Status:** In Progress
 
 ---
@@ -462,8 +466,16 @@ pnpm dev
 2. ✅ Phase 1: Foundation - `@maildev/core` (51 tests)
 3. ✅ Phase 2: SMTP Server - `@maildev/smtp` (39 tests)
 4. ✅ Phase 3: REST API - `@maildev/api` (18 tests)
-5. ⏳ Phase 4: Frontend Rewrite - **Next**
+5. 🎨 Phase 4: Frontend Rewrite - **IN PROGRESS**
+   - ✅ Foundation: Vite, React 19, Tailwind v4, TypeScript
+   - ✅ Core UI: Layout, Header, Sidebar, Email List, Email Viewer
+   - ✅ Data layer: API client, TanStack Query hooks, Zustand store
+   - ✅ Real-time: Socket.io integration
+   - ✅ Features: Dark mode, search, delete, mark read, download
+   - ✅ UX: Custom instant tooltips
+   - ⏳ Remaining: Command palette, keyboard shortcuts
 
 **Total Tests:** 108 passing across all packages
+**UI Bundle:** ~103KB gzipped (under 200KB target)
 
 Let's build the future of email testing! 🚀

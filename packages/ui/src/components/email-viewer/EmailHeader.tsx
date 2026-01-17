@@ -74,7 +74,7 @@ export function EmailHeader({ email }: EmailHeaderProps) {
 
         {/* Actions */}
         <div className="flex items-center gap-1">
-          <span className="mr-2 text-xs text-[hsl(var(--muted-foreground))]">
+          <span className="mr-2 text-xs text-[hsl(var(--muted-foreground))] text-nowrap">
             {formatDate(email.time)}
           </span>
 

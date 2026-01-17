@@ -1,12 +1,59 @@
-import { useState } from 'react'
+import { useState, useEffect, useMemo, useRef } from 'react'
 import { useUIStore } from '../../stores/ui'
+import { useEmails, filterEmails } from '../../hooks/useEmails'
 import { cn } from '../../lib/utils'
 import { Tooltip } from '../ui/Tooltip'
+import type { Email } from '@maildev/core'
 
 export function SearchInput() {
   const searchQuery = useUIStore((state) => state.searchQuery)
   const setSearchQuery = useUIStore((state) => state.setSearchQuery)
+  const selectedEmailId = useUIStore((state) => state.selectedEmailId)
+  const setSelectedEmail = useUIStore((state) => state.setSelectedEmail)
   const [isFocused, setIsFocused] = useState(false)
+  const { data: emails = [] } = useEmails()
+  const prevSearchQueryRef = useRef(searchQuery)
+
+  // Filter and sort emails the same way as the list
+  const visibleEmails = useMemo(() => {
+    const filtered = filterEmails(emails as Email[], searchQuery)
+    return [...filtered].sort((a, b) => {
+      const timeA = new Date(a.time).getTime()
+      const timeB = new Date(b.time).getTime()
+      return timeB - timeA
+    })
+  }, [emails, searchQuery])
+
+  // Auto-select first email when search query changes (and there are results)
+  useEffect(() => {
+    // Only trigger when searchQuery actually changes (not on mount)
+    if (searchQuery !== prevSearchQueryRef.current) {
+      prevSearchQueryRef.current = searchQuery
+      if (searchQuery && visibleEmails.length > 0) {
+        setSelectedEmail(visibleEmails[0].id)
+      }
+    }
+  }, [searchQuery, visibleEmails, setSelectedEmail])
+
+  // Handle arrow key navigation while in search input
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (visibleEmails.length === 0) return
+
+    const currentIndex = visibleEmails.findIndex((email) => email.id === selectedEmailId)
+
+    if (e.key === 'ArrowDown') {
+      e.preventDefault()
+      const nextIndex = currentIndex < visibleEmails.length - 1 ? currentIndex + 1 : 0
+      setSelectedEmail(visibleEmails[nextIndex].id)
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault()
+      const prevIndex = currentIndex > 0 ? currentIndex - 1 : visibleEmails.length - 1
+      setSelectedEmail(visibleEmails[prevIndex].id)
+    } else if (e.key === 'Escape') {
+      // Blur the input on Escape
+      e.currentTarget.blur()
+    }
+  }
 
   return (
     <div className="relative">
@@ -27,6 +74,7 @@ export function SearchInput() {
         type="text"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
+        onKeyDown={handleKeyDown}
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         placeholder="Search emails..."

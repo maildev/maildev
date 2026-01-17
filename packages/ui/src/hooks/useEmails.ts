@@ -110,6 +110,18 @@ export function useConfig() {
 }
 
 /**
+ * Hook to manually refresh emails
+ */
+export function useRefreshEmails() {
+  const queryClient = useQueryClient()
+
+  return {
+    refresh: () => queryClient.invalidateQueries({ queryKey: ['emails'] }),
+    isRefreshing: queryClient.isFetching({ queryKey: ['emails'] }) > 0,
+  }
+}
+
+/**
  * Filter emails by search query
  */
 export function filterEmails(emails: Email[], query: string): Email[] {

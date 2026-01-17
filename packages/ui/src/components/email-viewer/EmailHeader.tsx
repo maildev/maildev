@@ -1,9 +1,16 @@
+import { useState, useRef, useEffect } from 'react'
 import type { Email } from '@maildev/core'
-import { useDeleteEmail } from '../../hooks/useEmails'
+import { useDeleteEmail, useConfig, useRelayEmail } from '../../hooks/useEmails'
 import { useUIStore } from '../../stores/ui'
 import { api } from '../../lib/api'
 import { cn, formatDate, formatEmailAddress, getInitials } from '../../lib/utils'
 import { Tooltip } from '../ui/Tooltip'
+
+// Email validation regex
+const EMAIL_REGEX = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+// LocalStorage key for last relay address
+const LAST_RELAY_ADDRESS_KEY = 'maildev-last-relay-address'
 
 interface EmailHeaderProps {
   email: Email
@@ -12,6 +19,35 @@ interface EmailHeaderProps {
 export function EmailHeader({ email }: EmailHeaderProps) {
   const setSelectedEmail = useUIStore((state) => state.setSelectedEmail)
   const deleteMutation = useDeleteEmail()
+  const relayMutation = useRelayEmail()
+  const { data: config } = useConfig()
+
+  const [showRelayMenu, setShowRelayMenu] = useState(false)
+  const [showCustomRelayInput, setShowCustomRelayInput] = useState(false)
+  const [customRelayAddress, setCustomRelayAddress] = useState('')
+  const [relayError, setRelayError] = useState('')
+  const relayMenuRef = useRef<HTMLDivElement>(null)
+
+  // Load last relay address from localStorage
+  useEffect(() => {
+    const lastAddress = localStorage.getItem(LAST_RELAY_ADDRESS_KEY)
+    if (lastAddress) {
+      setCustomRelayAddress(lastAddress)
+    }
+  }, [])
+
+  // Close relay menu when clicking outside
+  useEffect(() => {
+    function handleClickOutside(event: MouseEvent) {
+      if (relayMenuRef.current && !relayMenuRef.current.contains(event.target as Node)) {
+        setShowRelayMenu(false)
+        setShowCustomRelayInput(false)
+        setRelayError('')
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   const fromAddress = email.from?.[0]?.address ?? 'unknown'
   const toAddresses = email.to?.map(formatEmailAddress).join(', ') ?? ''
@@ -27,6 +63,41 @@ export function EmailHeader({ email }: EmailHeaderProps) {
 
   const handleDownload = () => {
     window.open(api.emails.downloadUrl(email.id), '_blank')
+  }
+
+  const handleRelayToOriginal = async () => {
+    if (!window.confirm('Relay this email to the original recipients?')) {
+      return
+    }
+    try {
+      await relayMutation.mutateAsync({ id: email.id })
+      setShowRelayMenu(false)
+    } catch (err) {
+      setRelayError(err instanceof Error ? err.message : 'Failed to relay email')
+    }
+  }
+
+  const handleRelayToCustom = async () => {
+    if (!customRelayAddress.trim()) {
+      setRelayError('Please enter an email address')
+      return
+    }
+    if (!EMAIL_REGEX.test(customRelayAddress)) {
+      setRelayError('Please enter a valid email address')
+      return
+    }
+    if (!window.confirm(`Relay this email to ${customRelayAddress}?`)) {
+      return
+    }
+    try {
+      await relayMutation.mutateAsync({ id: email.id, relayTo: customRelayAddress })
+      localStorage.setItem(LAST_RELAY_ADDRESS_KEY, customRelayAddress)
+      setShowRelayMenu(false)
+      setShowCustomRelayInput(false)
+      setRelayError('')
+    } catch (err) {
+      setRelayError(err instanceof Error ? err.message : 'Failed to relay email')
+    }
   }
 
   return (
@@ -100,6 +171,123 @@ export function EmailHeader({ email }: EmailHeaderProps) {
               </svg>
             </button>
           </Tooltip>
+
+          {/* Relay - only show if outgoing is enabled */}
+          {config?.isOutgoingEnabled && (
+            <div className="relative" ref={relayMenuRef}>
+              <Tooltip content="Relay email" position="left">
+                <button
+                  onClick={() => setShowRelayMenu(!showRelayMenu)}
+                  disabled={relayMutation.isPending}
+                  className={cn(
+                    'rounded-md p-2 hover:bg-[hsl(var(--muted))]',
+                    'disabled:cursor-not-allowed disabled:opacity-50'
+                  )}
+                  aria-label="Relay email"
+                >
+                  <svg
+                    className="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                    />
+                  </svg>
+                </button>
+              </Tooltip>
+
+              {/* Relay menu */}
+              {showRelayMenu && (
+                <div className="absolute right-0 top-full z-50 mt-1 w-64 rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--card))] py-1 shadow-lg">
+                  {/* Relay to original */}
+                  <button
+                    onClick={handleRelayToOriginal}
+                    disabled={relayMutation.isPending}
+                    className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-[hsl(var(--muted))] disabled:opacity-50"
+                  >
+                    <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                      />
+                    </svg>
+                    <span>Relay to original recipients</span>
+                  </button>
+
+                  {/* Relay to custom address */}
+                  {!showCustomRelayInput ? (
+                    <button
+                      onClick={() => setShowCustomRelayInput(true)}
+                      className="flex w-full items-center gap-2 px-3 py-2 text-sm hover:bg-[hsl(var(--muted))]"
+                    >
+                      <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                        />
+                      </svg>
+                      <span>Relay to custom address</span>
+                    </button>
+                  ) : (
+                    <div className="px-3 py-2">
+                      <input
+                        type="email"
+                        value={customRelayAddress}
+                        onChange={(e) => {
+                          setCustomRelayAddress(e.target.value)
+                          setRelayError('')
+                        }}
+                        placeholder="email@example.com"
+                        className={cn(
+                          'w-full rounded-md border border-[hsl(var(--input))] bg-[hsl(var(--background))]',
+                          'px-2 py-1.5 text-sm',
+                          'focus:border-[hsl(var(--ring))] focus:outline-none focus:ring-1 focus:ring-[hsl(var(--ring))]'
+                        )}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            handleRelayToCustom()
+                          }
+                        }}
+                        autoFocus
+                      />
+                      <button
+                        onClick={handleRelayToCustom}
+                        disabled={relayMutation.isPending}
+                        className={cn(
+                          'mt-2 w-full rounded-md bg-[hsl(var(--primary))] px-3 py-1.5 text-sm font-medium text-[hsl(var(--primary-foreground))]',
+                          'hover:bg-[hsl(var(--primary)/0.9)]',
+                          'disabled:cursor-not-allowed disabled:opacity-50'
+                        )}
+                      >
+                        {relayMutation.isPending ? 'Sending...' : 'Send'}
+                      </button>
+                    </div>
+                  )}
+
+                  {/* Error message */}
+                  {relayError && (
+                    <p className="px-3 py-1 text-xs text-[hsl(var(--destructive))]">{relayError}</p>
+                  )}
+
+                  {/* Outgoing host info */}
+                  <div className="border-t border-[hsl(var(--border))] mt-1 px-3 py-2">
+                    <p className="text-xs text-[hsl(var(--muted-foreground))]">
+                      Relay via: {config.outgoingHost}
+                    </p>
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Delete */}
           <Tooltip content="Delete this email" position="left">

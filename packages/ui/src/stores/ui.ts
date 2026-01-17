@@ -10,6 +10,10 @@ interface UIState {
   searchQuery: string
   /** Sidebar collapsed state */
   sidebarCollapsed: boolean
+  /** Browser notifications enabled */
+  notificationsEnabled: boolean
+  /** Auto-show new emails when they arrive */
+  autoShowNewMail: boolean
 
   // Actions
   setSelectedEmail: (id: string | null) => void
@@ -17,6 +21,8 @@ interface UIState {
   setTheme: (theme: 'light' | 'dark') => void
   setSearchQuery: (query: string) => void
   toggleSidebar: () => void
+  setNotificationsEnabled: (enabled: boolean) => void
+  setAutoShowNewMail: (enabled: boolean) => void
 }
 
 export const useUIStore = create<UIState>()(
@@ -26,6 +32,8 @@ export const useUIStore = create<UIState>()(
       theme: 'light',
       searchQuery: '',
       sidebarCollapsed: false,
+      notificationsEnabled: false,
+      autoShowNewMail: false,
 
       setSelectedEmail: (id) => set({ selectedEmailId: id }),
 
@@ -42,12 +50,18 @@ export const useUIStore = create<UIState>()(
         set((state) => ({
           sidebarCollapsed: !state.sidebarCollapsed,
         })),
+
+      setNotificationsEnabled: (enabled) => set({ notificationsEnabled: enabled }),
+
+      setAutoShowNewMail: (enabled) => set({ autoShowNewMail: enabled }),
     }),
     {
       name: 'maildev-ui-storage',
       partialize: (state) => ({
         theme: state.theme,
         sidebarCollapsed: state.sidebarCollapsed,
+        notificationsEnabled: state.notificationsEnabled,
+        autoShowNewMail: state.autoShowNewMail,
       }),
     }
   )

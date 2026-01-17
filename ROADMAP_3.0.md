@@ -473,6 +473,14 @@ pnpm dev
    - ✅ Real-time: Socket.io integration
    - ✅ Features: Dark mode, search, delete, mark read, download
    - ✅ UX: Custom instant tooltips
+   - ✅ v2 Feature Parity:
+     - ✅ Refresh button (manual email list refresh)
+     - ✅ Viewport toggle (7 responsive sizes for HTML preview)
+     - ✅ Settings dropdown (notifications, auto-show toggles)
+     - ✅ Browser notifications (with debounce)
+     - ✅ Auto-show new mail
+     - ✅ Favicon badge (unread count + title update)
+     - ✅ Relay functionality (original + custom recipients)
    - ⏳ Remaining: Command palette, keyboard shortcuts
 
 **Total Tests:** 108 passing across all packages

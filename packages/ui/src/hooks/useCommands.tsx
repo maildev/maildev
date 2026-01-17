@@ -209,6 +209,7 @@ export function useCommands(): Command[] {
         icon: <RefreshIcon />,
         action: refresh,
         keywords: ['reload', 'sync', 'fetch'],
+        shortcut: 'r',
       },
       {
         id: 'mark-all-read',
@@ -218,6 +219,7 @@ export function useCommands(): Command[] {
         icon: <CheckIcon />,
         action: () => markAllReadMutation.mutate(),
         keywords: ['read', 'seen'],
+        shortcut: 'a',
       },
       {
         id: 'delete-all',
@@ -261,6 +263,7 @@ export function useCommands(): Command[] {
           }
         },
         keywords: ['remove'],
+        shortcut: 'Del',
         available: !!selectedEmailId,
       },
 
@@ -273,6 +276,7 @@ export function useCommands(): Command[] {
         icon: <SidebarIcon />,
         action: toggleSidebar,
         keywords: ['menu', 'panel', 'hide', 'show'],
+        shortcut: 's',
       },
       {
         id: 'focus-search',
@@ -358,6 +362,7 @@ export function useCommands(): Command[] {
         icon: <SearchIcon />,
         action: () => setSearchQuery(''),
         keywords: ['reset', 'filter'],
+        shortcut: 'c',
       },
     ]
 

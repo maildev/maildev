@@ -290,7 +290,7 @@ export function EmailHeader({ email }: EmailHeaderProps) {
           )}
 
           {/* Delete */}
-          <Tooltip content="Delete this email" position="left">
+          <Tooltip content="Delete email (Del)" position="left">
             <button
               onClick={handleDelete}
               disabled={deleteMutation.isPending}

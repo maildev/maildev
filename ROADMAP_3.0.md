@@ -78,7 +78,7 @@ packages/
 
 **Deliverable:** `@maildev/api@3.0.0-alpha.0` - **COMPLETE** (18 tests)
 
-### Phase 4: Frontend (Weeks 11-15) 🎨 **IN PROGRESS**
+### Phase 4: Frontend (Weeks 11-15) ✅
 **Modern React UI**
 - ✅ Vite + React 19 + TypeScript
 - ✅ Tailwind CSS v4
@@ -88,10 +88,10 @@ packages/
 - ✅ Email list with search/filtering
 - ✅ Email viewer with HTML/Text/Headers/Source tabs
 - ✅ Custom tooltips
-- ⏳ Command palette (Cmd+K)
-- ⏳ Keyboard shortcuts
+- ✅ Command palette (Cmd+K)
+- ✅ Keyboard shortcuts
 
-**Deliverable:** `@maildev/ui@3.0.0-alpha.1` (~103KB gzipped - under 200KB target!)
+**Deliverable:** `@maildev/ui@3.0.0-alpha.1` (~106KB gzipped - under 200KB target!) - **COMPLETE**
 
 ### Phase 5: MCP Server (Weeks 16-17) 🤖
 **Claude integration**
@@ -466,7 +466,7 @@ pnpm dev
 2. ✅ Phase 1: Foundation - `@maildev/core` (51 tests)
 3. ✅ Phase 2: SMTP Server - `@maildev/smtp` (39 tests)
 4. ✅ Phase 3: REST API - `@maildev/api` (18 tests)
-5. 🎨 Phase 4: Frontend Rewrite - **IN PROGRESS**
+5. ✅ Phase 4: Frontend Rewrite - **COMPLETE**
    - ✅ Foundation: Vite, React 19, Tailwind v4, TypeScript
    - ✅ Core UI: Layout, Header, Sidebar, Email List, Email Viewer
    - ✅ Data layer: API client, TanStack Query hooks, Zustand store
@@ -487,9 +487,18 @@ pnpm dev
      - ✅ Keyboard navigation (Arrow keys, Enter, Escape)
      - ✅ Categorized commands (Email, Navigation, Settings)
      - ✅ 15+ commands with icons and shortcuts
-   - ⏳ Remaining: Additional keyboard shortcuts
+   - ✅ Keyboard shortcuts:
+     - ✅ j/k - Navigate emails (Gmail-style)
+     - ✅ / - Focus search
+     - ✅ r - Refresh emails
+     - ✅ s - Toggle sidebar
+     - ✅ a - Mark all as read
+     - ✅ c - Clear search
+     - ✅ Delete/Backspace - Delete selected email
+     - ✅ Escape - Deselect email / blur input
+     - ✅ ? - Open command palette
 
 **Total Tests:** 108 passing across all packages
-**UI Bundle:** ~105KB gzipped (under 200KB target)
+**UI Bundle:** ~106KB gzipped (under 200KB target)
 
 Let's build the future of email testing! 🚀

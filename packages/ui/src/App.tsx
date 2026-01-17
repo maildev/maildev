@@ -5,6 +5,7 @@ import { CommandPalette } from './components/ui/CommandPalette'
 import { useUIStore } from './stores/ui'
 import { useEmails } from './hooks/useEmails'
 import { useFaviconBadge } from './hooks/useFaviconBadge'
+import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
 import type { Email } from '@maildev/core'
 
 const queryClient = new QueryClient({
@@ -28,6 +29,9 @@ function AppContent() {
 
   // Update favicon with unread count
   useFaviconBadge(unreadCount)
+
+  // Global keyboard shortcuts
+  useKeyboardShortcuts()
 
   // Apply theme class to document
   useEffect(() => {

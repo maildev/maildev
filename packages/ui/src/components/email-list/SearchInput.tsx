@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useUIStore } from '../../stores/ui'
 import { cn } from '../../lib/utils'
 import { Tooltip } from '../ui/Tooltip'
@@ -5,6 +6,7 @@ import { Tooltip } from '../ui/Tooltip'
 export function SearchInput() {
   const searchQuery = useUIStore((state) => state.searchQuery)
   const setSearchQuery = useUIStore((state) => state.setSearchQuery)
+  const [isFocused, setIsFocused] = useState(false)
 
   return (
     <div className="relative">
@@ -25,6 +27,8 @@ export function SearchInput() {
         type="text"
         value={searchQuery}
         onChange={(e) => setSearchQuery(e.target.value)}
+        onFocus={() => setIsFocused(true)}
+        onBlur={() => setIsFocused(false)}
         placeholder="Search emails..."
         className={cn(
           'w-full rounded-md border border-[hsl(var(--input))] bg-[hsl(var(--background))]',
@@ -33,9 +37,16 @@ export function SearchInput() {
           'focus:border-[hsl(var(--ring))] focus:outline-none focus:ring-1 focus:ring-[hsl(var(--ring))]'
         )}
       />
+      {/* Keyboard shortcut hint - show when not focused and no query */}
+      {!isFocused && !searchQuery && (
+        <kbd className="absolute right-3 top-1/2 -translate-y-1/2 rounded bg-[hsl(var(--muted))] px-1.5 py-0.5 text-xs text-[hsl(var(--muted-foreground))] font-mono">
+          /
+        </kbd>
+      )}
+      {/* Clear button - show when there's a query */}
       {searchQuery && (
         <div className="absolute right-3 top-1/2 -translate-y-1/2 flex items-center justify-center">
-          <Tooltip content="Clear search" position="left">
+          <Tooltip content="Clear search (c)" position="left">
             <button
               onClick={() => setSearchQuery('')}
               className="rounded-sm p-0.5 hover:bg-[hsl(var(--muted))]"

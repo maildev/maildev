@@ -65,7 +65,7 @@ export function Header() {
   return (
     <header className="flex h-14 items-center justify-between border-b border-[hsl(var(--border))] bg-[hsl(var(--card))] px-4">
       <div className="flex items-center gap-3">
-        <Tooltip content="Toggle sidebar">
+        <Tooltip content="Toggle sidebar (s)">
           <button
             onClick={toggleSidebar}
             className="rounded-md p-2 hover:bg-[hsl(var(--muted))]"
@@ -98,7 +98,7 @@ export function Header() {
 
       <div className="flex items-center gap-2">
         {/* Refresh */}
-        <Tooltip content="Refresh emails" position="left">
+        <Tooltip content="Refresh emails (r)" position="left">
           <button
             onClick={refresh}
             disabled={isRefreshing}
@@ -126,7 +126,7 @@ export function Header() {
         </Tooltip>
 
         {/* Mark all read */}
-        <Tooltip content="Mark all as read" position="left">
+        <Tooltip content="Mark all as read (a)" position="left">
           <button
             onClick={handleMarkAllRead}
             disabled={markAllReadMutation.isPending}

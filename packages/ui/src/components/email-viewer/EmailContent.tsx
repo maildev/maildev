@@ -146,25 +146,39 @@ export function EmailContent({ email }: EmailContentProps) {
   )
 }
 
+// Keys that should be forwarded from iframe to parent for keyboard shortcuts
+const FORWARDED_KEYS = new Set(['j', 'k', 'r', 's', 'a', 'c', '/', '?', 'Escape', 'Delete', 'Backspace'])
+
 function HtmlContent({ html, viewport }: { html: string | undefined; viewport: string }) {
   const iframeRef = useRef<HTMLIFrameElement>(null)
 
-  // Forward Cmd+K from iframe to parent window
+  // Forward keyboard shortcuts from iframe to parent window
   const handleIframeLoad = () => {
     const iframe = iframeRef.current
     if (!iframe?.contentWindow) return
 
     try {
       iframe.contentWindow.addEventListener('keydown', (e: KeyboardEvent) => {
-        // Forward Cmd+K / Ctrl+K to parent
+        // Forward Cmd+K / Ctrl+K to parent (command palette)
         if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
           e.preventDefault()
-          // Dispatch to parent document
           window.dispatchEvent(
             new KeyboardEvent('keydown', {
               key: 'k',
               metaKey: e.metaKey,
               ctrlKey: e.ctrlKey,
+              bubbles: true,
+            })
+          )
+          return
+        }
+
+        // Forward other shortcut keys (only if no modifier keys pressed)
+        if (!e.metaKey && !e.ctrlKey && !e.altKey && FORWARDED_KEYS.has(e.key)) {
+          e.preventDefault()
+          window.dispatchEvent(
+            new KeyboardEvent('keydown', {
+              key: e.key,
               bubbles: true,
             })
           )

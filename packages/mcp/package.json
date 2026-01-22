@@ -5,6 +5,9 @@
   "type": "module",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
+  "bin": {
+    "maildev-mcp": "./dist/cli.js"
+  },
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -19,7 +22,8 @@
     "dev": "tsc --watch",
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit",
-    "test": "echo \"No tests yet\""
+    "test": "vitest run",
+    "test:watch": "vitest"
   },
   "keywords": [
     "maildev",
@@ -39,9 +43,13 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@maildev/core": "workspace:*"
+    "@maildev/core": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
-    "typescript": "^5.7.3"
+    "@types/node": "^22.10.5",
+    "typescript": "^5.7.3",
+    "vitest": "^2.1.8"
   }
 }

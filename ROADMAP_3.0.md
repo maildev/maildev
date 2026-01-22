@@ -93,14 +93,18 @@ packages/
 
 **Deliverable:** `@maildev/ui@3.0.0-alpha.1` (~106KB gzipped - under 200KB target!) - **COMPLETE**
 
-### Phase 5: MCP Server (Weeks 16-17) 🤖
+### Phase 5: MCP Server (Weeks 16-17) 🤖 IN PROGRESS
 **Claude integration**
-- MCP server implementation
-- 8+ MCP tools (search, get, delete, relay)
-- Resources (emails, stats)
-- Prompts for common workflows
+- ✅ MCP server implementation with stdio transport
+- ✅ 5 MCP tools (search, get, get_latest, delete, get_attachment)
+- ✅ 3 Resources (emails, stats, email/{id})
+- ✅ 4 Prompts for common workflows (verify-signup, check-password-reset, analyze-email, monitor-delivery)
+- ✅ HTTP client for MailDev API communication
+- ✅ CLI entry point (`maildev-mcp`)
+- ⏳ Integration tests
+- ⏳ Documentation updates
 
-**Deliverable:** `@maildev/mcp@3.0.0-alpha.1` + CLAUDE.md
+**Deliverable:** `@maildev/mcp@3.0.0-alpha.0` + CLAUDE.md
 
 ### Phase 6: CLI & Distribution (Weeks 18-19) 📦
 **Better developer experience**
@@ -455,9 +459,9 @@ pnpm dev
 
 ---
 
-**Last Updated:** 2026-01-17
-**Document Version:** 1.4
-**Status:** Phase 4 Complete - Ready for Phase 5 (MCP Server)
+**Last Updated:** 2026-01-19
+**Document Version:** 1.5
+**Status:** Phase 5 In Progress - MCP Server Implementation
 
 ---
 
@@ -509,6 +513,23 @@ pnpm dev
      - ✅ Global loading bar at top of screen during refresh
      - ✅ Spinning refresh icon in header
      - ✅ Minimum display time for visibility
+
+6. 🚧 Phase 5: MCP Server - **IN PROGRESS**
+   - ✅ Package setup with @modelcontextprotocol/sdk
+   - ✅ HTTP client for MailDev API (client.ts)
+   - ✅ MCP server with stdio transport (server.ts)
+   - ✅ CLI entry point (cli.ts)
+   - ✅ 5 Tools implemented (minimal set to reduce context bloat):
+     - `maildev_search_emails` - Search with filters
+     - `maildev_get_email` - Get email by ID
+     - `maildev_get_latest_email` - Get most recent email(s)
+     - `maildev_delete_email` - Delete by ID
+     - `maildev_get_attachment` - Get attachment as base64
+   - ✅ 3 Resources: `maildev://emails`, `maildev://stats`, `maildev://email/{id}`
+   - ✅ 4 Prompts: verify-signup-email, check-password-reset, analyze-email-content, monitor-email-delivery
+   - ✅ Build passing
+   - ⏳ Integration tests pending
+   - ⏳ Documentation updates pending
 
 **Total Tests:** 108 passing across all packages
 **UI Bundle:** ~106KB gzipped (under 200KB target)

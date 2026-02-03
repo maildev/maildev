@@ -93,7 +93,7 @@ packages/
 
 **Deliverable:** `@maildev/ui@3.0.0-alpha.1` (~106KB gzipped - under 200KB target!) - **COMPLETE**
 
-### Phase 5: MCP Server (Weeks 16-17) 🤖 IN PROGRESS
+### Phase 5: MCP Server (Weeks 16-17) ✅
 **Claude integration**
 - ✅ MCP server implementation with stdio transport
 - ✅ 5 MCP tools (search, get, get_latest, delete, get_attachment)
@@ -103,9 +103,9 @@ packages/
 - ✅ CLI entry point (`maildev-mcp`)
 - ✅ **HTTP Transport Integration** - MCP built into API server at `/mcp`
 - ✅ Integration tests for MCP HTTP transport (7 tests)
-- ⏳ Documentation updates
+- ✅ Documentation updates (CLAUDE.md)
 
-**Deliverable:** `@maildev/mcp@3.0.0-alpha.0` + CLAUDE.md
+**Deliverable:** `@maildev/mcp@3.0.0-alpha.0` + CLAUDE.md - **COMPLETE**
 
 ### Phase 6: CLI & Distribution (Weeks 18-19) 📦
 **Better developer experience**
@@ -412,7 +412,7 @@ Foundation   SMTP        API       Frontend    MCP         CLI      Advanced    
 
 **Milestones:**
 - ✅ **Mid January 2026**: Core packages ready (`@maildev/core`, `@maildev/smtp`, `@maildev/api`)
-- **End of May**: UI + MCP complete
+- ✅ **Early February 2026**: UI + MCP complete
 - **End of July**: Feature complete, beta release
 - **Mid August**: 3.0.0 final release 🎉
 
@@ -460,9 +460,9 @@ pnpm dev
 
 ---
 
-**Last Updated:** 2026-01-25
-**Document Version:** 1.6
-**Status:** Phase 5 In Progress - MCP HTTP Transport Complete
+**Last Updated:** 2026-02-03
+**Document Version:** 1.7
+**Status:** Phase 5 Complete - Ready for Phase 6 (CLI & Distribution)
 
 ---
 
@@ -515,7 +515,7 @@ pnpm dev
      - ✅ Spinning refresh icon in header
      - ✅ Minimum display time for visibility
 
-6. 🚧 Phase 5: MCP Server - **IN PROGRESS**
+6. ✅ Phase 5: MCP Server - **COMPLETE**
    - ✅ Package setup with @modelcontextprotocol/sdk
    - ✅ HTTP client for MailDev API (client.ts)
    - ✅ MCP server with stdio transport (server.ts)
@@ -535,7 +535,7 @@ pnpm dev
      - Direct storage access (no HTTP round-trip)
      - Session management with `mcp-session-id` header
      - 7 integration tests for MCP HTTP transport
-   - ⏳ Documentation updates pending
+   - ✅ Documentation updates (CLAUDE.md)
 
 **Total Tests:** 115 passing across all packages
 **UI Bundle:** ~106KB gzipped (under 200KB target)

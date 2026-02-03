@@ -1,6 +1,6 @@
 # MailDev + Claude Integration Guide
 
-**MailDev 2.0** includes first-class support for Claude via the Model Context Protocol (MCP), enabling you to interact with your development emails using natural language.
+**MailDev 3.0** includes first-class support for Claude via the Model Context Protocol (MCP), enabling you to interact with your development emails using natural language.
 
 ---
 
@@ -18,24 +18,30 @@ The Model Context Protocol (MCP) is Anthropic's standard for connecting AI assis
 
 ## Quick Start
 
-### 1. Install MailDev 2.0 with MCP Support
+### 1. Install MailDev 3.0 with MCP Support
 
 ```bash
 # Via npm
-npm install -g maildev@2.0.0
+npm install -g maildev@3.0.0
 
 # Via Homebrew (recommended for macOS)
 brew install maildev
 
 # Via Docker
-docker pull maildev/maildev:2.0.0
+docker pull maildev/maildev:3.0.0
 ```
 
-### 2. Start MailDev with MCP Server
+### 2. Start MailDev
+
+MailDev 3.0 offers two MCP transport modes:
+
+#### Option A: Integrated HTTP Transport (Recommended)
+
+The MCP server is built directly into MailDev's API server at the `/mcp` endpoint:
 
 ```bash
-# Start all services (SMTP, Web, MCP)
-maildev --enable-mcp
+# Start MailDev with MCP enabled
+maildev --mcp
 
 # Or with configuration file
 maildev --config maildev.config.ts
@@ -44,7 +50,16 @@ maildev --config maildev.config.ts
 By default:
 - **SMTP Server**: `localhost:1025`
 - **Web UI**: `http://localhost:1080`
-- **MCP Server**: `stdio` (for Claude Desktop) or `http://localhost:3100` (HTTP mode)
+- **MCP Endpoint**: `http://localhost:1080/mcp`
+
+#### Option B: Standalone stdio Transport
+
+For Claude Desktop's stdio mode, use the dedicated MCP CLI:
+
+```bash
+# Run the MCP server in stdio mode (used by Claude Desktop)
+maildev-mcp
+```
 
 ### 3. Configure Claude Desktop
 
@@ -56,14 +71,13 @@ Edit your Claude Desktop configuration file:
 
 **Linux**: `~/.config/Claude/claude_desktop_config.json`
 
-Add MailDev MCP server:
+#### For stdio mode (standalone):
 
 ```json
 {
   "mcpServers": {
     "maildev": {
-      "command": "maildev",
-      "args": ["mcp"],
+      "command": "maildev-mcp",
       "env": {
         "MAILDEV_API_URL": "http://localhost:1080"
       }
@@ -72,14 +86,13 @@ Add MailDev MCP server:
 }
 ```
 
-Alternatively, if you're using HTTP mode:
+#### For HTTP mode (integrated):
 
 ```json
 {
   "mcpServers": {
     "maildev": {
-      "url": "http://localhost:3100/mcp",
-      "apiKey": "your-optional-api-key"
+      "url": "http://localhost:1080/mcp"
     }
   }
 }
@@ -174,34 +187,30 @@ Claude: "✓ Welcome email received at 3:02 PM
 ### Clean Up Development Emails
 
 ```
-You: "Claude, delete all test emails from today"
+You: "Claude, delete the old test emails"
 
-Claude: [uses maildev_search_emails to find today's emails]
-        [confirms count]
-        "I found 47 emails from today. Should I delete all of them?"
-
-You: "Yes, delete them"
-
-Claude: [uses maildev_delete_all_emails or batch delete]
-        "✓ Deleted 47 emails from your MailDev inbox."
+Claude: [uses maildev_search_emails to find old emails]
+        "I found 5 test emails older than yesterday. I'll delete them one by one."
+        [uses maildev_delete_email for each]
+        "✓ Deleted 5 emails from your MailDev inbox."
 ```
 
-### Relay Email for Testing
+### Get Email Attachments
 
 ```
-You: "Claude, relay the order confirmation email to my real email address"
+You: "Claude, download the PDF attachment from the invoice email"
 
-Claude: [finds the email]
-        [uses maildev_relay_email]
-        "I've relayed the order confirmation email to your address (john@example.com).
-        Check your inbox in a moment."
+Claude: [searches for invoice email]
+        [uses maildev_get_attachment]
+        "Here's the attachment 'invoice.pdf' (45KB).
+        I've extracted the base64 content for you."
 ```
 
 ---
 
 ## Available MCP Tools
 
-MailDev's MCP server exposes the following tools to Claude:
+MailDev's MCP server exposes the following 5 tools to Claude:
 
 ### `maildev_search_emails`
 Search emails with flexible filters.
@@ -213,11 +222,11 @@ Search emails with flexible filters.
 - `subject` (optional): Filter by subject line
 - `hasAttachment` (optional): Filter emails with attachments
 - `isUnread` (optional): Filter by read/unread status
-- `since` (optional): Filter emails after timestamp
-- `until` (optional): Filter emails before timestamp
+- `since` (optional): Filter emails after timestamp (ISO 8601)
+- `until` (optional): Filter emails before timestamp (ISO 8601)
 - `limit` (optional): Maximum results (default: 20)
 
-**Returns:** Array of email objects with metadata
+**Returns:** Formatted list of matching emails with metadata
 
 ### `maildev_get_email`
 Retrieve full email content by ID.
@@ -225,15 +234,15 @@ Retrieve full email content by ID.
 **Parameters:**
 - `id` (required): Email ID
 
-**Returns:** Complete email object with HTML, text, headers, attachments
+**Returns:** Complete email with subject, from, to, date, content, and attachments
 
 ### `maildev_get_latest_email`
-Get the most recently received email.
+Get the most recently received email(s).
 
 **Parameters:**
 - `count` (optional): Number of recent emails (default: 1)
 
-**Returns:** Latest email(s)
+**Returns:** Full content of the latest email(s)
 
 ### `maildev_delete_email`
 Delete a specific email.
@@ -243,23 +252,6 @@ Delete a specific email.
 
 **Returns:** Success confirmation
 
-### `maildev_delete_all_emails`
-Delete all emails (with optional filters).
-
-**Parameters:**
-- `filters` (optional): Same filters as search_emails
-
-**Returns:** Count of deleted emails
-
-### `maildev_relay_email`
-Relay an email to its original recipient or a specified address.
-
-**Parameters:**
-- `id` (required): Email ID to relay
-- `to` (optional): Override recipient address
-
-**Returns:** Relay status
-
 ### `maildev_get_attachment`
 Download an email attachment.
 
@@ -268,22 +260,6 @@ Download an email attachment.
 - `filename` (required): Attachment filename
 
 **Returns:** Attachment content (base64 encoded)
-
-### `maildev_mark_read`
-Mark email(s) as read or unread.
-
-**Parameters:**
-- `id` (optional): Email ID (omit for "mark all")
-- `read` (optional): true/false (default: true)
-
-**Returns:** Success confirmation
-
-### `maildev_get_stats`
-Get inbox statistics.
-
-**Parameters:** None
-
-**Returns:** Email count, unread count, storage size, recent activity
 
 ---
 
@@ -356,66 +332,43 @@ You: "Use the monitor-email-delivery prompt and watch for a welcome email to use
 
 ### Environment Variables
 
-Configure MailDev MCP server with environment variables:
+Configure the standalone MCP server (`maildev-mcp`) with environment variables:
 
 ```bash
-# MailDev API URL (if not default)
+# MailDev API URL (required for stdio mode)
 MAILDEV_API_URL=http://localhost:1080
-
-# Enable authentication
-MAILDEV_API_KEY=your-secret-key
-
-# MCP server mode (stdio or http)
-MAILDEV_MCP_MODE=stdio
-
-# HTTP mode configuration
-MAILDEV_MCP_PORT=3100
-MAILDEV_MCP_HOST=localhost
-
-# Logging level
-MAILDEV_LOG_LEVEL=info
 ```
 
-### Configuration File
+### Programmatic Configuration
 
-Use `maildev.config.ts` for TypeScript configuration:
+When using the integrated HTTP transport, configure MCP via the API server options:
 
 ```typescript
-import { defineConfig } from 'maildev'
+import { createAPIServer } from '@maildev/api'
 
-export default defineConfig({
-  smtp: {
-    port: 1025,
-    host: '0.0.0.0'
-  },
-
-  web: {
-    port: 1080,
-    host: '0.0.0.0'
-  },
-
+const server = createAPIServer({
+  port: 1080,
+  storage,
   mcp: {
-    enabled: true,
-    mode: 'stdio', // or 'http'
-    port: 3100, // for HTTP mode
-
-    // Optional API key for authentication
-    apiKey: process.env.MAILDEV_API_KEY,
-
-    // Enable specific tools
-    tools: {
-      search: true,
-      delete: true,
-      relay: true
-    }
-  },
-
-  storage: {
-    type: 'sqlite',
-    path: './maildev.db'
+    enabled: true  // Enables /mcp endpoint
   }
 })
 ```
+
+### Architecture
+
+MailDev 3.0 offers two MCP deployment modes:
+
+#### Integrated HTTP Transport
+- MCP server runs inside `@maildev/api` at `/mcp`
+- Direct storage access (no HTTP round-trips)
+- Session management via `mcp-session-id` header
+- Best for: HTTP-capable MCP clients
+
+#### Standalone stdio Transport
+- Runs via `maildev-mcp` CLI command
+- Communicates with MailDev API over HTTP
+- Best for: Claude Desktop and other stdio-based clients
 
 ---
 
@@ -490,8 +443,8 @@ Claude: "Let me investigate. I'll check:
         2. If password reset emails are being sent
         3. The email content and configuration
 
-        [checks maildev_get_stats]
-        [searches for recent password reset attempts]
+        [uses maildev_search_emails to check recent emails]
+        [searches for password reset attempts]
 
         I found the issue:
         - MailDev is running and receiving emails
@@ -514,26 +467,16 @@ Claude: "Let me investigate. I'll check:
 
 When running MCP server:
 
-1. **Use API keys** in HTTP mode:
-   ```json
-   {
-     "mcpServers": {
-       "maildev": {
-         "url": "http://localhost:3100/mcp",
-         "apiKey": "your-secret-key"
-       }
-     }
-   }
-   ```
-
-2. **Restrict network access**: Bind to localhost only
+1. **Restrict network access**: Bind to localhost only
    ```bash
-   maildev --mcp-host 127.0.0.1
+   maildev --host 127.0.0.1
    ```
 
-3. **Use stdio mode** when possible (more secure than HTTP)
+2. **Use stdio mode** when possible (more secure than HTTP)
 
-4. **Don't expose MCP server** to the internet
+3. **Don't expose MCP server** to the internet
+
+4. **Use in trusted environments only**: The MCP server has full access to email content
 
 ### Email Content Privacy
 
@@ -729,11 +672,16 @@ Claude: [checks email timestamps]
 
 ## Changelog
 
-### MailDev 2.0.0 (2026-01-XX)
+### MailDev 3.0.0 (2026)
 - Initial MCP server implementation
-- All core MCP tools available
-- stdio and HTTP transport modes
-- Configuration via environment variables and config files
+- 5 MCP tools: search, get, get_latest, delete, get_attachment
+- 3 MCP resources: emails, stats, email/{id}
+- 4 MCP prompts for common workflows
+- Dual transport support:
+  - Integrated HTTP transport at `/mcp` endpoint
+  - Standalone stdio transport via `maildev-mcp`
+- Direct storage access for HTTP transport (no round-trips)
+- Session management with `mcp-session-id` header
 
 ---
 

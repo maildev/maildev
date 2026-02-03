@@ -6,8 +6,13 @@
 
 import Fastify, { type FastifyInstance, type FastifyRequest, type FastifyReply } from 'fastify'
 import cors from '@fastify/cors'
+import { randomUUID } from 'node:crypto'
 import { EventEmitter } from 'node:events'
 import { Server as SocketServer } from 'socket.io'
+import { Server as MCPServer } from '@modelcontextprotocol/sdk/server/index.js'
+import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js'
+import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js'
+import { registerMCPHandlers, type EmailDataSource } from '@maildev/mcp'
 import type { Storage, Email } from '@maildev/core'
 import type { SMTPServer } from '@maildev/smtp'
 import type { APIServerOptions, AuthConfig, ConfigResponse } from './types.js'
@@ -27,6 +32,8 @@ export class APIServer extends EventEmitter {
   private smtp: SMTPServer | undefined
   private io: SocketServer | null = null
   private options: APIServerOptions
+  private mcpServer: MCPServer | null = null
+  private mcpTransports: Map<string, StreamableHTTPServerTransport> = new Map()
 
   constructor(options: APIServerOptions) {
     super()
@@ -58,6 +65,9 @@ export class APIServer extends EventEmitter {
 
     // Register routes
     this.registerRoutes()
+
+    // Setup MCP server (if enabled)
+    this.setupMCP()
 
     // Setup WebSocket (Socket.io)
     this.setupWebSocket()
@@ -434,6 +444,130 @@ export class APIServer extends EventEmitter {
         this.smtp!.off('delete', deleteHandler)
       })
     })
+  }
+
+  /**
+   * Setup MCP (Model Context Protocol) server for Claude integration
+   */
+  private setupMCP(): void {
+    if (!this.options.mcp?.enabled) {
+      return
+    }
+
+    const basePath = this.options.basePath ?? ''
+
+    // Create a data source adapter that uses direct storage access
+    const dataSource: EmailDataSource = {
+      getEmails: () => this.storage.getAll(),
+      getEmail: async (id: string) => {
+        const email = await this.storage.getById(id)
+        if (!email) {
+          throw new Error(`Email not found: ${id}`)
+        }
+        return email
+      },
+      deleteEmail: async (id: string) => {
+        if (this.smtp) {
+          await this.smtp.deleteEmail(id)
+        } else {
+          const deleted = await this.storage.delete(id)
+          if (!deleted) {
+            throw new Error(`Email not found: ${id}`)
+          }
+        }
+      },
+      getAttachment: async (emailId: string, filename: string) => {
+        if (this.smtp) {
+          const { stream } = await this.smtp.getEmailAttachment(emailId, filename)
+          // Convert stream to buffer
+          const chunks: Buffer[] = []
+          for await (const chunk of stream) {
+            chunks.push(Buffer.from(chunk))
+          }
+          return Buffer.concat(chunks)
+        }
+        throw new Error('Attachments require SMTP server')
+      },
+    }
+
+    // Initialize MCP server
+    this.mcpServer = new MCPServer(
+      { name: 'maildev', version: VERSION },
+      { capabilities: { tools: {}, resources: {}, prompts: {} } }
+    )
+
+    // Register handlers with direct storage access
+    registerMCPHandlers(this.mcpServer, dataSource)
+
+    // Helper to get or create transport for a session
+    const getOrCreateTransport = async (sessionId: string | undefined) => {
+      if (sessionId && this.mcpTransports.has(sessionId)) {
+        return this.mcpTransports.get(sessionId)!
+      }
+
+      // Create new transport
+      const transport = new StreamableHTTPServerTransport({
+        sessionIdGenerator: () => randomUUID(),
+        onsessioninitialized: (id) => {
+          this.mcpTransports.set(id, transport)
+        },
+        onsessionclosed: (id) => {
+          this.mcpTransports.delete(id)
+        },
+      })
+
+      await this.mcpServer!.connect(transport as unknown as Transport)
+      return transport
+    }
+
+    // POST /mcp - Handle JSON-RPC requests
+    this.app.post(`${basePath}/mcp`, async (request, reply) => {
+      const sessionId = request.headers['mcp-session-id'] as string | undefined
+
+      try {
+        const transport = await getOrCreateTransport(sessionId)
+        await transport.handleRequest(request.raw, reply.raw, request.body)
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return reply.status(500).send({ error: message })
+      }
+    })
+
+    // GET /mcp - SSE stream for server notifications
+    this.app.get(`${basePath}/mcp`, async (request, reply) => {
+      const sessionId = request.headers['mcp-session-id'] as string
+
+      if (!sessionId || !this.mcpTransports.has(sessionId)) {
+        return reply.status(400).send({ error: 'Invalid or missing session ID' })
+      }
+
+      try {
+        const transport = this.mcpTransports.get(sessionId)!
+        await transport.handleRequest(request.raw, reply.raw)
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return reply.status(500).send({ error: message })
+      }
+    })
+
+    // DELETE /mcp - Terminate session
+    this.app.delete(`${basePath}/mcp`, async (request, reply) => {
+      const sessionId = request.headers['mcp-session-id'] as string
+
+      if (!sessionId || !this.mcpTransports.has(sessionId)) {
+        return reply.status(400).send({ error: 'Invalid or missing session ID' })
+      }
+
+      try {
+        const transport = this.mcpTransports.get(sessionId)!
+        await transport.handleRequest(request.raw, reply.raw)
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        return reply.status(500).send({ error: message })
+      }
+    })
+
+    console.info(`MCP server enabled at ${basePath}/mcp`)
   }
 
   /**

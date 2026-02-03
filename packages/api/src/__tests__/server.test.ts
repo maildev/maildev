@@ -445,4 +445,349 @@ describe('APIServer', () => {
       expect(response.statusCode).toBe(404)
     })
   })
+
+  describe('MCP server', () => {
+    it('should not have MCP routes when disabled', async () => {
+      server = createAPIServer({ storage, port: 0 })
+      await server.start()
+
+      const response = await server.server.inject({
+        method: 'POST',
+        url: '/mcp',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json, text/event-stream',
+        },
+        payload: {
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'initialize',
+          params: {
+            protocolVersion: '2024-11-05',
+            capabilities: {},
+            clientInfo: { name: 'test', version: '1.0' },
+          },
+        },
+      })
+
+      expect(response.statusCode).toBe(404)
+    })
+
+    it('should initialize MCP session when enabled', async () => {
+      server = createAPIServer({ storage, port: 0, mcp: { enabled: true } })
+      await server.start()
+
+      const response = await server.server.inject({
+        method: 'POST',
+        url: '/mcp',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json, text/event-stream',
+        },
+        payload: {
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'initialize',
+          params: {
+            protocolVersion: '2024-11-05',
+            capabilities: {},
+            clientInfo: { name: 'test', version: '1.0' },
+          },
+        },
+      })
+
+      expect(response.statusCode).toBe(200)
+      expect(response.headers['mcp-session-id']).toBeDefined()
+
+      // Parse SSE response
+      const body = response.body
+      expect(body).toContain('event: message')
+      expect(body).toContain('"result"')
+      expect(body).toContain('"serverInfo"')
+      expect(body).toContain('"name":"maildev"')
+    })
+
+    it('should list MCP tools', async () => {
+      server = createAPIServer({ storage, port: 0, mcp: { enabled: true } })
+      await server.start()
+
+      // First, initialize to get session ID
+      const initResponse = await server.server.inject({
+        method: 'POST',
+        url: '/mcp',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json, text/event-stream',
+        },
+        payload: {
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'initialize',
+          params: {
+            protocolVersion: '2024-11-05',
+            capabilities: {},
+            clientInfo: { name: 'test', version: '1.0' },
+          },
+        },
+      })
+
+      const sessionId = initResponse.headers['mcp-session-id'] as string
+      expect(sessionId).toBeDefined()
+
+      // Now list tools
+      const toolsResponse = await server.server.inject({
+        method: 'POST',
+        url: '/mcp',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json, text/event-stream',
+          'mcp-session-id': sessionId,
+        },
+        payload: {
+          jsonrpc: '2.0',
+          id: 2,
+          method: 'tools/list',
+          params: {},
+        },
+      })
+
+      expect(toolsResponse.statusCode).toBe(200)
+      const body = toolsResponse.body
+
+      // Should contain all 5 tools
+      expect(body).toContain('maildev_search_emails')
+      expect(body).toContain('maildev_get_email')
+      expect(body).toContain('maildev_get_latest_email')
+      expect(body).toContain('maildev_delete_email')
+      expect(body).toContain('maildev_get_attachment')
+    })
+
+    it('should execute maildev_get_latest_email tool', async () => {
+      // Add a test email
+      const testEmail: Email = {
+        id: 'mcp-test-email',
+        time: new Date(),
+        read: false,
+        subject: 'MCP Test Email',
+        text: 'This is a test email for MCP',
+        source: '/path/to/email.eml',
+        size: 512,
+        sizeHuman: '512 B',
+        from: [{ address: 'sender@mcp.test' }],
+        to: [{ address: 'recipient@mcp.test' }],
+        headers: {},
+        attachments: [],
+        envelope: {
+          from: { address: 'sender@mcp.test' },
+          to: [{ address: 'recipient@mcp.test' }],
+        },
+        calculatedBcc: [],
+      }
+      await storage.save(testEmail)
+
+      server = createAPIServer({ storage, port: 0, mcp: { enabled: true } })
+      await server.start()
+
+      // Initialize session
+      const initResponse = await server.server.inject({
+        method: 'POST',
+        url: '/mcp',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json, text/event-stream',
+        },
+        payload: {
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'initialize',
+          params: {
+            protocolVersion: '2024-11-05',
+            capabilities: {},
+            clientInfo: { name: 'test', version: '1.0' },
+          },
+        },
+      })
+
+      const sessionId = initResponse.headers['mcp-session-id'] as string
+
+      // Call the tool
+      const toolResponse = await server.server.inject({
+        method: 'POST',
+        url: '/mcp',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json, text/event-stream',
+          'mcp-session-id': sessionId,
+        },
+        payload: {
+          jsonrpc: '2.0',
+          id: 2,
+          method: 'tools/call',
+          params: {
+            name: 'maildev_get_latest_email',
+            arguments: {},
+          },
+        },
+      })
+
+      expect(toolResponse.statusCode).toBe(200)
+      const body = toolResponse.body
+
+      // Should contain the email data
+      expect(body).toContain('MCP Test Email')
+      expect(body).toContain('sender@mcp.test')
+      expect(body).toContain('recipient@mcp.test')
+      expect(body).toContain('This is a test email for MCP')
+    })
+
+    it('should execute maildev_search_emails tool with filters', async () => {
+      // Add test emails
+      const emails: Email[] = [
+        {
+          id: 'search-1',
+          time: new Date(),
+          read: false,
+          subject: 'Welcome Email',
+          text: 'Welcome to our service',
+          source: '/path/1.eml',
+          size: 100,
+          sizeHuman: '100 B',
+          from: [{ address: 'noreply@service.com' }],
+          to: [{ address: 'user@example.com' }],
+          headers: {},
+          attachments: [],
+          envelope: { from: { address: 'noreply@service.com' }, to: [{ address: 'user@example.com' }] },
+          calculatedBcc: [],
+        },
+        {
+          id: 'search-2',
+          time: new Date(),
+          read: false,
+          subject: 'Password Reset',
+          text: 'Click here to reset your password',
+          source: '/path/2.eml',
+          size: 200,
+          sizeHuman: '200 B',
+          from: [{ address: 'security@service.com' }],
+          to: [{ address: 'user@example.com' }],
+          headers: {},
+          attachments: [],
+          envelope: { from: { address: 'security@service.com' }, to: [{ address: 'user@example.com' }] },
+          calculatedBcc: [],
+        },
+      ]
+
+      for (const email of emails) {
+        await storage.save(email)
+      }
+
+      server = createAPIServer({ storage, port: 0, mcp: { enabled: true } })
+      await server.start()
+
+      // Initialize session
+      const initResponse = await server.server.inject({
+        method: 'POST',
+        url: '/mcp',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json, text/event-stream',
+        },
+        payload: {
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'initialize',
+          params: {
+            protocolVersion: '2024-11-05',
+            capabilities: {},
+            clientInfo: { name: 'test', version: '1.0' },
+          },
+        },
+      })
+
+      const sessionId = initResponse.headers['mcp-session-id'] as string
+
+      // Search for password reset email
+      const searchResponse = await server.server.inject({
+        method: 'POST',
+        url: '/mcp',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json, text/event-stream',
+          'mcp-session-id': sessionId,
+        },
+        payload: {
+          jsonrpc: '2.0',
+          id: 2,
+          method: 'tools/call',
+          params: {
+            name: 'maildev_search_emails',
+            arguments: {
+              subject: 'Password',
+            },
+          },
+        },
+      })
+
+      expect(searchResponse.statusCode).toBe(200)
+      const body = searchResponse.body
+
+      // Should find only the password reset email
+      expect(body).toContain('Password Reset')
+      expect(body).toContain('security@service.com')
+      expect(body).not.toContain('Welcome Email')
+    })
+
+    it('should reject requests without Accept header', async () => {
+      server = createAPIServer({ storage, port: 0, mcp: { enabled: true } })
+      await server.start()
+
+      const response = await server.server.inject({
+        method: 'POST',
+        url: '/mcp',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        payload: {
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'initialize',
+          params: {
+            protocolVersion: '2024-11-05',
+            capabilities: {},
+            clientInfo: { name: 'test', version: '1.0' },
+          },
+        },
+      })
+
+      // MCP transport returns 406 Not Acceptable when Accept header is missing
+      expect(response.statusCode).toBe(406)
+    })
+
+    it('should support MCP with custom base path', async () => {
+      server = createAPIServer({ storage, port: 0, basePath: '/api', mcp: { enabled: true } })
+      await server.start()
+
+      const response = await server.server.inject({
+        method: 'POST',
+        url: '/api/mcp',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json, text/event-stream',
+        },
+        payload: {
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'initialize',
+          params: {
+            protocolVersion: '2024-11-05',
+            capabilities: {},
+            clientInfo: { name: 'test', version: '1.0' },
+          },
+        },
+      })
+
+      expect(response.statusCode).toBe(200)
+      expect(response.headers['mcp-session-id']).toBeDefined()
+    })
+  })
 })

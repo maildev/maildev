@@ -39,11 +39,13 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@maildev/core": "workspace:*",
-    "@maildev/smtp": "workspace:*",
-    "fastify": "^5.2.1",
     "@fastify/cors": "^10.0.2",
     "@fastify/static": "^8.1.0",
+    "@maildev/core": "workspace:*",
+    "@maildev/mcp": "workspace:*",
+    "@maildev/smtp": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.0.0",
+    "fastify": "^5.2.1",
     "fastify-plugin": "^5.0.1",
     "socket.io": "^4.8.1"
   },

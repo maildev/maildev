@@ -14,6 +14,9 @@ export const VERSION = '3.0.0-alpha.0'
 // Server
 export { createServer, startServer, type MailDevMCPServerOptions } from './server.js'
 
+// Handlers (for integration into other servers)
+export { registerMCPHandlers, type EmailDataSource } from './handlers.js'
+
 // Client (for programmatic access)
 export {
   MailDevClient,

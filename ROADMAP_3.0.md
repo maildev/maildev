@@ -76,7 +76,7 @@ packages/
 - Query filtering with dot-notation
 - WebSocket for real-time (Socket.io)
 
-**Deliverable:** `@maildev/api@3.0.0-alpha.0` - **COMPLETE** (18 tests)
+**Deliverable:** `@maildev/api@3.0.0-alpha.0` - **COMPLETE** (25 tests)
 
 ### Phase 4: Frontend (Weeks 11-15) ✅
 **Modern React UI**
@@ -101,7 +101,8 @@ packages/
 - ✅ 4 Prompts for common workflows (verify-signup, check-password-reset, analyze-email, monitor-delivery)
 - ✅ HTTP client for MailDev API communication
 - ✅ CLI entry point (`maildev-mcp`)
-- ⏳ Integration tests
+- ✅ **HTTP Transport Integration** - MCP built into API server at `/mcp`
+- ✅ Integration tests for MCP HTTP transport (7 tests)
 - ⏳ Documentation updates
 
 **Deliverable:** `@maildev/mcp@3.0.0-alpha.0` + CLAUDE.md
@@ -459,9 +460,9 @@ pnpm dev
 
 ---
 
-**Last Updated:** 2026-01-19
-**Document Version:** 1.5
-**Status:** Phase 5 In Progress - MCP Server Implementation
+**Last Updated:** 2026-01-25
+**Document Version:** 1.6
+**Status:** Phase 5 In Progress - MCP HTTP Transport Complete
 
 ---
 
@@ -528,10 +529,15 @@ pnpm dev
    - ✅ 3 Resources: `maildev://emails`, `maildev://stats`, `maildev://email/{id}`
    - ✅ 4 Prompts: verify-signup-email, check-password-reset, analyze-email-content, monitor-email-delivery
    - ✅ Build passing
-   - ⏳ Integration tests pending
+   - ✅ **HTTP Transport Integration**:
+     - MCP server built into `@maildev/api` at `/mcp` endpoint
+     - Reusable `EmailDataSource` interface for handlers
+     - Direct storage access (no HTTP round-trip)
+     - Session management with `mcp-session-id` header
+     - 7 integration tests for MCP HTTP transport
    - ⏳ Documentation updates pending
 
-**Total Tests:** 108 passing across all packages
+**Total Tests:** 115 passing across all packages
 **UI Bundle:** ~106KB gzipped (under 200KB target)
 
 Let's build the future of email testing! 🚀

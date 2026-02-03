@@ -38,17 +38,19 @@ async function main() {
   await smtp.start()
   console.log(`  SMTP server listening on port ${SMTP_PORT}`)
 
-  // Create and start API server
+  // Create and start API server with MCP enabled
   const api = createAPIServer({
     port: API_PORT,
     host: API_HOST,
     storage,
     smtp,
+    mcp: { enabled: true },
   })
 
   await api.start()
   console.log(`  API server listening on http://localhost:${API_PORT}`)
-  console.log(`  WebSocket available at ws://localhost:${API_PORT}/socket.io\n`)
+  console.log(`  WebSocket available at ws://localhost:${API_PORT}/socket.io`)
+  console.log(`  MCP server available at http://localhost:${API_PORT}/mcp\n`)
 
   console.log('Ready to receive emails!')
   console.log(`  Send test emails to: localhost:${SMTP_PORT}`)

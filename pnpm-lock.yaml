@@ -123,9 +123,15 @@ importers:
       '@maildev/core':
         specifier: workspace:*
         version: link:../core
+      '@maildev/mcp':
+        specifier: workspace:*
+        version: link:../mcp
       '@maildev/smtp':
         specifier: workspace:*
         version: link:../smtp
+      '@modelcontextprotocol/sdk':
+        specifier: ^1.0.0
+        version: 1.25.2(hono@4.11.4)(zod@3.25.76)
       fastify:
         specifier: ^5.2.1
         version: 5.7.0

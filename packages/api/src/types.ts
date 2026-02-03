@@ -25,6 +25,16 @@ export interface APIServerOptions {
   cors?: CorsConfig
   /** Enable logging */
   logger?: boolean
+  /** MCP server configuration */
+  mcp?: MCPConfig
+}
+
+/**
+ * MCP (Model Context Protocol) server configuration
+ */
+export interface MCPConfig {
+  /** Enable MCP server at /mcp endpoint */
+  enabled: boolean
 }
 
 /**

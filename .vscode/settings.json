@@ -1,7 +1,7 @@
 {
   "editor.codeActionsOnSave": {
-    "source.fixAll": true,
-    "source.fixAll.eslint": false
+    "source.fixAll": "explicit",
+    "source.fixAll.eslint": "never"
   },
   "standard.autoFixOnSave": true,
   "eslint.enable": false,

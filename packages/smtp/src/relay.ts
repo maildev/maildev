@@ -5,8 +5,7 @@
  * to external SMTP servers.
  */
 
-// @ts-expect-error - nodemailer types don't export SMTPConnection directly
-import SMTPConnection from 'nodemailer/lib/smtp-connection'
+import SMTPConnection from 'nodemailer/lib/smtp-connection/index.js'
 // @ts-expect-error - wildstring has no type definitions
 import wildstring from 'wildstring'
 import type { Readable } from 'node:stream'
@@ -160,7 +159,7 @@ export class RelayClient {
         this.logger.error('SMTP Connection error:', err)
       })
 
-      this.client.connect((err: Error | null) => {
+      this.client.connect((err?: Error) => {
         if (err) {
           reject(err)
         } else {
@@ -179,7 +178,7 @@ export class RelayClient {
     }
 
     return new Promise((resolve, reject) => {
-      this.client!.login(this.config.auth!, (err: Error | null) => {
+      this.client!.login(this.config.auth!, (err?: Error) => {
         if (err) {
           this.logger.error('Outgoing client login error:', err)
           reject(err)

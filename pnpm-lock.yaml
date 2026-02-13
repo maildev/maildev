@@ -172,6 +172,9 @@ importers:
       '@maildev/ui':
         specifier: workspace:*
         version: link:../ui
+      commander:
+        specifier: ^12.1.0
+        version: 12.1.0
     devDependencies:
       typescript:
         specifier: ^5.7.3

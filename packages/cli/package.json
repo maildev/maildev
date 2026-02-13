@@ -50,7 +50,8 @@
     "@maildev/smtp": "workspace:*",
     "@maildev/api": "workspace:*",
     "@maildev/mcp": "workspace:*",
-    "@maildev/ui": "workspace:*"
+    "@maildev/ui": "workspace:*",
+    "commander": "^12.1.0"
   },
   "devDependencies": {
     "typescript": "^5.7.3"

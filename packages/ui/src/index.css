@@ -1,49 +1,67 @@
 @import "tailwindcss";
 
+/* MailDev Brand Colors:
+   Light cream: #FFFCF7 → hsl(37, 100%, 98%)
+   Dark black-blue: #182436 → hsl(216, 38%, 15%)
+*/
+
 /* MailDev Theme Variables */
 :root {
-  --background: 0 0% 100%;
-  --foreground: 222.2 84% 4.9%;
+  --light-cream: 37 100% 98%;
+  --deep-black-blue: 216 38% 15%;
+
+  /* Brand: Light cream background */
+  --background: 37 100% 98%;
+  --foreground: 216 38% 15%;
+  /* Cards are white for contrast against cream */
   --card: 0 0% 100%;
-  --card-foreground: 222.2 84% 4.9%;
+  --card-foreground: 216 38% 15%;
   --popover: 0 0% 100%;
-  --popover-foreground: 222.2 84% 4.9%;
-  --primary: 210 100% 50%;
-  --primary-foreground: 210 40% 98%;
-  --secondary: 210 40% 96.1%;
-  --secondary-foreground: 222.2 47.4% 11.2%;
-  --muted: 210 40% 96.1%;
-  --muted-foreground: 215.4 16.3% 46.9%;
-  --accent: 210 40% 96.1%;
-  --accent-foreground: 222.2 47.4% 11.2%;
+  --popover-foreground: 216 38% 15%;
+  /* Primary is the dark black-blue brand color */
+  --primary: 216 38% 15%;
+  --primary-foreground: 39 100% 97%;
+  /* Secondary uses warm tones to complement cream */
+  --secondary: 39 50% 92%;
+  --secondary-foreground: 216 38% 15%;
+  --muted: 39 50% 92%;
+  --muted-foreground: 216 20% 40%;
+  --accent: 39 50% 92%;
+  --accent-foreground: 216 38% 15%;
   --destructive: 0 84.2% 60.2%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 214.3 31.8% 91.4%;
-  --input: 214.3 31.8% 91.4%;
-  --ring: 210 100% 50%;
+  --destructive-foreground: 0 0% 100%;
+  /* Borders with warm undertone */
+  --border: 39 30% 88%;
+  --input: 39 30% 88%;
+  --ring: 216 38% 15%;
   --radius: 0.5rem;
 }
 
 .dark {
-  --background: 222.2 84% 4.9%;
-  --foreground: 210 40% 98%;
-  --card: 222.2 84% 4.9%;
-  --card-foreground: 210 40% 98%;
-  --popover: 222.2 84% 4.9%;
-  --popover-foreground: 210 40% 98%;
-  --primary: 210 100% 50%;
-  --primary-foreground: 222.2 47.4% 11.2%;
-  --secondary: 217.2 32.6% 17.5%;
-  --secondary-foreground: 210 40% 98%;
-  --muted: 217.2 32.6% 17.5%;
-  --muted-foreground: 215 20.2% 65.1%;
-  --accent: 217.2 32.6% 17.5%;
-  --accent-foreground: 210 40% 98%;
-  --destructive: 0 62.8% 30.6%;
-  --destructive-foreground: 210 40% 98%;
-  --border: 217.2 32.6% 17.5%;
-  --input: 217.2 32.6% 17.5%;
-  --ring: 210 100% 50%;
+  /* Brand: Dark black-blue background */
+  --background: 216 38% 15%;
+  --foreground: 40 30% 92%;
+  /* Cards slightly lighter than background */
+  --card: 216 35% 18%;
+  --card-foreground: 40 30% 92%;
+  --popover: 216 35% 18%;
+  --popover-foreground: 40 30% 92%;
+  /* Primary blue stays vibrant in dark mode */
+  --primary: var(--light-cream);
+  --primary-foreground: 216 38% 15%;
+  /* Secondary with subtle warmth */
+  --secondary: 216 30% 22%;
+  --secondary-foreground: 40 30% 92%;
+  --muted: 216 30% 22%;
+  --muted-foreground: 216 15% 60%;
+  --accent: 216 30% 22%;
+  --accent-foreground: 40 30% 92%;
+  --destructive: 0 62.8% 45%;
+  --destructive-foreground: 0 0% 100%;
+  /* Borders slightly visible */
+  --border: 216 30% 25%;
+  --input: 216 30% 25%;
+  --ring: 210 100% 55%;
 }
 
 /* Base styles */
@@ -86,6 +104,7 @@ body {
   0% {
     transform: translateX(-100%);
   }
+
   100% {
     transform: translateX(400%);
   }

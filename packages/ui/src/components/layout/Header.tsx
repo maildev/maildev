@@ -63,7 +63,7 @@ export function Header() {
   }
 
   return (
-    <header className="flex h-14 items-center justify-between border-b border-[hsl(var(--border))] bg-[hsl(var(--card))] px-4">
+    <header className="flex h-14 items-center justify-between border-b border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4">
       <div className="flex items-center gap-3">
         <Tooltip content="Toggle sidebar (s)">
           <button

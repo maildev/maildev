@@ -183,14 +183,13 @@ describe('resolveConfig', () => {
     expect(configFilePath).toBeNull()
   })
 
-  it('should not override defined values with undefined CLI options', async () => {
+  it('should not override defined values when CLI options not provided', async () => {
     process.env.MAILDEV_SMTP_PORT = '4025'
 
-    const { config } = await resolveConfig({
-      smtp: undefined,
-    })
+    // Not providing smtp option at all (vs providing undefined)
+    const { config } = await resolveConfig({})
 
-    // Environment variable should still apply
+    // Environment variable should apply
     expect(config.smtp).toBe(4025)
   })
 })

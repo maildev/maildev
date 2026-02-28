@@ -2,7 +2,7 @@
  * MailDev - load-test.js -- start a load test
  *
  * Run this to send a lot of emails in very short intervals to port 1025 for load testing MailDev during development
- *   node test/scripts/load-test.js
+ *   node scripts/load-test.js
  */
 
 // We add this setting to tell nodemailer the host isn't secure during dev

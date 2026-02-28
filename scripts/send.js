@@ -2,7 +2,7 @@
  * MailDev - send.js -- send a few emails for testing
  *
  * Run this to send emails to port 1025 for testing MailDev during development
- *   node test/scripts/send.js
+ *   node scripts/send.js
  */
 // We add this setting to tell nodemailer the host isn't secure during dev
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0'
@@ -83,36 +83,6 @@ const messages = [
           '</body></html>'
   },
 
-  // Email w/ embedded image
-  {
-    from: 'Johnny Utah <johnny.utah@fbi.gov>',
-    to: 'Bodhi <bodhi@gmail.com>',
-    subject: 'Where\'s Tyler?',
-    html: 'Here she is:<br><img src="cid:image"/>',
-    attachments: [
-      {
-        filename: 'tyler.jpg',
-        path: path.join(__dirname, '/../test/tyler.jpg'),
-        cid: 'image'
-      }
-    ]
-  },
-
-  // Another email w/ embedded image, with same cid
-  {
-    from: 'Bodhi <bodhi@gmail.com>',
-    to: 'Johnny Utah <johnny.utah@fbi.gov>',
-    subject: 'Big wave coming',
-    html: 'You need to catch this!<br><img src="cid:image"/>',
-    attachments: [
-      {
-        filename: 'wave.jpg',
-        path: path.join(__dirname, '/../test/wave.jpg'),
-        cid: 'image'
-      }
-    ]
-  },
-
   // Email with mutliple to, cc & bcc
   {
     from: 'Bodhi <bodhi@gmail.com>',
@@ -184,20 +154,6 @@ const messages = [
     text: 'This test is only for subject.'
   }
   */
-
-  {
-    from: 'Johnny Utah <johnny.utah@fbi.gov>',
-    to: 'Bodhi <bodhi@gmail.com>',
-    subject: 'CVE-2024-27448',
-    html: 'Content-ID should not allow file injection: <img src="cid:../vuln"/>',
-    attachments: [
-      {
-        filename: 'tyler.jpg',
-        path: path.join(__dirname, '/../test/tyler.jpg'),
-        cid: '../vuln'
-      }
-    ]
-  },
 
 ]
 

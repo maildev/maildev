@@ -107,14 +107,18 @@ packages/
 
 **Deliverable:** `@maildev/mcp@3.0.0-alpha.0` + CLAUDE.md - **COMPLETE**
 
-### Phase 6: CLI & Distribution (Weeks 18-19) 📦
+### Phase 6: CLI & Distribution (Weeks 18-19) ✅
 **Better developer experience**
-- Modern CLI with `maildev init`
-- Configuration file support
-- Homebrew formula
-- Backward compatible Node.js API
+- ✅ Modern CLI with `maildev init`
+- ✅ Configuration file support (.maildevrc.json, maildev.config.js/ts)
+- ✅ Environment variable support (MAILDEV_*)
+- ✅ Full backward compatibility with v2 CLI options (30+ flags)
+- ✅ Graceful shutdown handling (SIGTERM/SIGINT)
+- ✅ Programmatic API (`new MailDev()`)
+- ✅ 89 CLI tests
+- Homebrew formula (pending)
 
-**Deliverable:** `maildev@3.0.0-alpha.1` + Homebrew tap
+**Deliverable:** `maildev@3.0.0-alpha.1` - **COMPLETE**
 
 ### Phase 7: Advanced Features (Weeks 20-23) ⚡
 **Power user features**
@@ -460,9 +464,9 @@ pnpm dev
 
 ---
 
-**Last Updated:** 2026-02-03
-**Document Version:** 1.7
-**Status:** Phase 5 Complete - Ready for Phase 6 (CLI & Distribution)
+**Last Updated:** 2026-02-26
+**Document Version:** 1.8
+**Status:** Phase 6 Complete - Ready for Phase 7 (Advanced Features)
 
 ---
 
@@ -470,7 +474,7 @@ pnpm dev
 1. ✅ Create detailed specification
 2. ✅ Phase 1: Foundation - `@maildev/core` (51 tests)
 3. ✅ Phase 2: SMTP Server - `@maildev/smtp` (39 tests)
-4. ✅ Phase 3: REST API - `@maildev/api` (18 tests)
+4. ✅ Phase 3: REST API - `@maildev/api` (25 tests)
 5. ✅ Phase 4: Frontend Rewrite - **COMPLETE**
    - ✅ Foundation: Vite, React 19, Tailwind v4, TypeScript
    - ✅ Core UI: Layout, Header, Sidebar, Email List, Email Viewer
@@ -537,7 +541,26 @@ pnpm dev
      - 7 integration tests for MCP HTTP transport
    - ✅ Documentation updates (CLAUDE.md)
 
-**Total Tests:** 115 passing across all packages
+7. ✅ Phase 6: CLI & Distribution - **COMPLETE**
+   - ✅ Full CLI implementation with Commander.js
+   - ✅ Configuration system:
+     - Config file discovery (.maildevrc.json, maildev.config.ts/js)
+     - Environment variable mapping (MAILDEV_*)
+     - Priority-based merging (CLI > env > file > defaults)
+     - Validation with helpful error messages
+   - ✅ Server orchestration:
+     - Storage, SMTP, API server lifecycle management
+     - Graceful shutdown (SIGTERM/SIGINT)
+   - ✅ All 30+ v2 CLI options supported
+   - ✅ New v3 options: --mcp, --config
+   - ✅ `maildev init` interactive setup wizard
+   - ✅ Programmatic API: `new MailDev({ smtp: 1025 })`
+   - ✅ 89 CLI tests (config, env, validation, logger)
+   - ✅ Brand colors implemented:
+     - Light cream: #FFFCF7
+     - Dark black-blue: #182436
+
+**Total Tests:** 204 passing across all packages
 **UI Bundle:** ~106KB gzipped (under 200KB target)
 
 Let's build the future of email testing! 🚀

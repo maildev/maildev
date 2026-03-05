@@ -4,16 +4,17 @@
 [![npm downloads](https://img.shields.io/npm/dm/maildev)](https://www.npmjs.com/package/maildev)
 [![Docker Pulls](https://img.shields.io/docker/pulls/maildev/maildev)](https://hub.docker.com/r/maildev/maildev)
 [![License](https://img.shields.io/npm/l/maildev?color=white)](/LICENSE)
-[![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-black.svg)](https://standardjs.com)
-
-
-> MailDev is sponsored by ⭐️ **[inngest/inngest](https://github.com/inngest/inngest)**.
->
-> [**Inngest** is the developer platform](https://www.inngest.com/?ref=maildev) for easily building reliable workflows with zero infrastructure. Check it out and give it a star! ⭐️
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
 
 **MailDev** is a simple way to test your project's generated email during development, with an easy to use web interface that runs on your machine built on top of [Node.js](http://www.nodejs.org).
 
 ![MailDev Screenshot](https://github.com/maildev/maildev/blob/gh-pages/images/screenshot-2021-01-03.png?raw=true)
+
+## Install
+
+```bash
+npm install -g maildev
+```
 
 ## Docker Run
 
@@ -22,7 +23,9 @@ If you want to use MailDev with [Docker](https://www.docker.com/), you can use t
 For a guide for usage with Docker,
 [checkout the docs](https://github.com/maildev/maildev/blob/master/docs/docker.md).
 
-    $ docker run -p 1080:1080 -p 1025:1025 maildev/maildev
+```bash
+docker run -p 1080:1080 -p 1025:1025 maildev/maildev
+```
 
 ## Usage
 
@@ -32,13 +35,19 @@ Usage: maildev [options]
 
 | Options                          | Environment variable       | Description                                                                               |
 | -------------------------------- | -------------------------- | ----------------------------------------------------------------------------------------- |
-| `-s, --smtp <port>`              | `MAILDEV_SMTP_PORT`        | SMTP port to catch mail                                                                   |
-| `-w, --web <port>`               | `MAILDEV_WEB_PORT`         | Port to run the Web GUI                                                                   |
+| `-s, --smtp <port>`              | `MAILDEV_SMTP_PORT`        | SMTP port to catch mail (default: 1025)                                                   |
+| `-w, --web <port>`               | `MAILDEV_WEB_PORT`         | Port to run the Web GUI (default: 1080)                                                   |
+| `--ip <ip address>`              | `MAILDEV_IP`               | IP Address to bind SMTP service to (default: `::`)                                        |
+| `--web-ip <ip address>`          | `MAILDEV_WEB_IP`           | IP Address to bind HTTP service to (default: `0.0.0.0`)                                   |
 | `--mail-directory <path>`        | `MAILDEV_MAIL_DIRECTORY`   | Directory for persisting mail                                                             |
 | `--https`                        | `MAILDEV_HTTPS`            | Switch from http to https protocol                                                        |
 | `--https-key <file>`             | `MAILDEV_HTTPS_KEY`        | The file path to the ssl private key                                                      |
 | `--https-cert <file>`            | `MAILDEV_HTTPS_CERT`       | The file path to the ssl cert file                                                        |
-| `--ip <ip address>`              | `MAILDEV_IP`               | IP Address to bind SMTP service to, defaults to `::` (any IPv4/v6)                        |
+| `--incoming-user <user>`         | `MAILDEV_INCOMING_USER`    | SMTP user for incoming mail                                                               |
+| `--incoming-pass <pass>`         | `MAILDEV_INCOMING_PASS`    | SMTP password for incoming mail                                                           |
+| `--incoming-secure`              | `MAILDEV_INCOMING_SECURE`  | Use SMTP SSL for incoming emails                                                          |
+| `--incoming-cert <path>`         | `MAILDEV_INCOMING_CERT`    | Cert file location for incoming SSL                                                       |
+| `--incoming-key <path>`          | `MAILDEV_INCOMING_KEY`     | Key file location for incoming SSL                                                        |
 | `--outgoing-host <host>`         | `MAILDEV_OUTGOING_HOST`    | SMTP host for outgoing mail                                                               |
 | `--outgoing-port <port>`         | `MAILDEV_OUTGOING_PORT`    | SMTP port for outgoing mail                                                               |
 | `--outgoing-user <user>`         | `MAILDEV_OUTGOING_USER`    | SMTP user for outgoing mail                                                               |
@@ -46,62 +55,106 @@ Usage: maildev [options]
 | `--outgoing-secure`              | `MAILDEV_OUTGOING_SECURE`  | Use SMTP SSL for outgoing mail                                                            |
 | `--auto-relay [email]`           | `MAILDEV_AUTO_RELAY`       | Use auto-relay mode. Optional relay email address                                         |
 | `--auto-relay-rules <file>`      | `MAILDEV_AUTO_RELAY_RULES` | Filter rules for auto relay mode                                                          |
-| `--incoming-user <user>`         | `MAILDEV_INCOMING_USER`    | SMTP user for incoming mail                                                               |
-| `--incoming-pass <pass>`         | `MAILDEV_INCOMING_PASS`    | SMTP password for incoming mail                                                           |
-| `--incoming-secure`              | `MAILDEV_INCOMING_SECURE`  | Use SMTP SSL for incoming emails                                                          |
-| `--incoming-cert <path>`         | `MAILDEV_INCOMING_CERT`    | Cert file location for incoming SSL                                                       |
-| `--incoming-key <path>`          | `MAILDEV_INCOMING_KEY`     | Key file location for incoming SSL                                                        |
-| `--web-ip <ip address>`          | `MAILDEV_WEB_IP`           | IP Address to bind HTTP service to, defaults to --ip                                      |
 | `--web-user <user>`              | `MAILDEV_WEB_USER`         | HTTP user for GUI                                                                         |
 | `--web-pass <password>`          | `MAILDEV_WEB_PASS`         | HTTP password for GUI                                                                     |
 | `--base-pathname <path>`         | `MAILDEV_BASE_PATHNAME`    | Base path for URLs                                                                        |
-| `--disable-web`                  | `MAILDEV_DISABLE_WEB`      | Disable the use of the web interface. Useful for unit testing                             |
-| `--hide-extensions <extensions>` | `MAILDEV_HIDE_EXTENSIONS`  | Comma separated list of SMTP extensions to NOT advertise (SMTPUTF8, PIPELINING, 8BITMIME) |
-| `-o, --open`                     |                            | Open the Web GUI after startup                                                            |
-| `-v, --verbose`                  |                            |                                                                                           |
-| `--silent`                       |                            |                                                                                           |
+| `--disable-web`                  | `MAILDEV_DISABLE_WEB`      | Disable the use of the web interface                                                      |
+| `--hide-extensions <extensions>` | `MAILDEV_HIDE_EXTENSIONS`  | Comma separated list of SMTP extensions to NOT advertise                                  |
+| `--mcp`                          | `MAILDEV_MCP`              | Enable MCP server for Claude integration                                                  |
+| `--config <file>`                |                            | Path to configuration file                                                                |
+| `-v, --verbose`                  |                            | Enable verbose logging                                                                    |
+| `--silent`                       |                            | Disable all output                                                                        |
 | `--log-mail-contents`            |                            | Log a JSON representation of each incoming mail                                           |
+
+## Configuration File
+
+MailDev supports configuration files. Create a `maildev.config.js`, `maildev.config.ts`, or `.maildevrc.json` file:
+
+```javascript
+// maildev.config.js
+export default {
+  smtp: 1025,
+  web: 1080,
+  verbose: true,
+  mcp: true,
+}
+```
+
+```json
+// .maildevrc.json
+{
+  "smtp": 1025,
+  "web": 1080,
+  "verbose": true
+}
+```
+
+Configuration priority: CLI args > Environment variables > Config file > Defaults
 
 ## API
 
 MailDev can be used in your Node.js application. For more info view the
 [API docs](https://github.com/maildev/maildev/blob/master/docs/api.md).
 
-```javascript
-const MailDev = require("maildev");
+```typescript
+import { MailDev } from 'maildev'
 
-const maildev = new MailDev();
+const maildev = new MailDev({
+  smtp: 1025,
+  web: 1080,
+})
 
-maildev.listen();
+const { smtp } = await maildev.start()
 
-maildev.on("new", function (email) {
-  // We got a new email!
-});
+smtp.on('new', (email) => {
+  console.log('New email:', email.subject)
+})
+
+// When done
+await maildev.stop()
 ```
 
 MailDev also has a **REST API**. For more info
 [view the docs](https://github.com/maildev/maildev/blob/master/docs/rest.md).
 
-## Outgoing email
+## Claude Integration (MCP)
 
-Maildev optionally supports selectively relaying emails to an outgoing SMTP server. If you configure outgoing
-email with the --outgoing-* options you can click "Relay" on an individual email to relay through MailDev out
-to a real SMTP service that will *actually\* send the email to the recipient.
+MailDev includes a Model Context Protocol (MCP) server for integration with Claude. Enable it with `--mcp`:
+
+```bash
+maildev --mcp
+```
+
+This exposes an MCP endpoint at `/mcp` that allows Claude to:
+- Search and retrieve emails
+- Extract verification links and tokens
+- Analyze email content
+- Monitor email delivery
+
+For detailed setup instructions, see [CLAUDE.md](./CLAUDE.md).
+
+## Outgoing Email
+
+MailDev optionally supports selectively relaying emails to an outgoing SMTP server. If you configure outgoing
+email with the `--outgoing-*` options you can click "Relay" on an individual email to relay through MailDev out
+to a real SMTP service that will actually send the email to the recipient.
 
 Example:
 
-    $ maildev --outgoing-host smtp.gmail.com \
-              --outgoing-secure \
-              --outgoing-user 'you@gmail.com' \
-              --outgoing-pass '<pass>'
+```bash
+maildev --outgoing-host smtp.gmail.com \
+        --outgoing-secure \
+        --outgoing-user 'you@gmail.com' \
+        --outgoing-pass '<pass>'
+```
 
-### Auto relay mode
+### Auto Relay Mode
 
-Enabling the auto relay mode will automatically send each email to it's recipient
+Enabling the auto relay mode will automatically send each email to its recipient
 without the need to click the "Relay" button mentioned above.
 The outgoing email options are required to enable this feature.
 
-Optionally, you can specify a single email address to which Maildev will forward
+Optionally, you can specify a single email address to which MailDev will forward
 all emails instead of the original recipient. For example, using
 `--auto-relay you@example.com` will forward all emails to that address
 automatically.
@@ -112,16 +165,18 @@ rule in the array will be the rule MailDev will follow.
 
 Example:
 
-    $ maildev --outgoing-host smtp.gmail.com \
-              --outgoing-secure \
-              --outgoing-user 'you@gmail.com' \
-              --outgoing-pass '<pass>' \
-              --auto-relay \
-              --auto-relay-rules file.json
+```bash
+maildev --outgoing-host smtp.gmail.com \
+        --outgoing-secure \
+        --outgoing-user 'you@gmail.com' \
+        --outgoing-pass '<pass>' \
+        --auto-relay \
+        --auto-relay-rules file.json
+```
 
 Rules example file:
 
-```javascript
+```json
 [
   { "allow": "*" },
   { "deny": "*@test.com" },
@@ -134,20 +189,26 @@ Rules example file:
 This would allow `angelo@fbi.gov`, `ok@test.com`, `johnny@utah.com`, but deny
 `bodhi@test.com`.
 
-## Configure your project
+## Configure Your Project
 
 Configure your application to send emails via port `1025` and open `localhost:1080` in your browser.
 
-**Nodemailer (v1.0+)**
+**Nodemailer (Node.js)**
 
 ```javascript
-// We add this setting to tell nodemailer the host isn't secure during dev
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+const nodemailer = require('nodemailer')
 
 const transport = nodemailer.createTransport({
+  host: 'localhost',
   port: 1025,
-  // other settings...
-});
+})
+
+transport.sendMail({
+  from: 'sender@example.com',
+  to: 'recipient@example.com',
+  subject: 'Test Email',
+  text: 'Hello from MailDev!',
+})
 ```
 
 **Django** -- Add `EMAIL_PORT = 1025` in your settings file [[source]](https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-EMAIL_PORT)
@@ -156,55 +217,31 @@ const transport = nodemailer.createTransport({
 
 ```ruby
 config.action_mailer.delivery_method = :smtp
-    config.action_mailer.smtp_settings = {
-        address: "localhost",
-        port: 1025,
-        enable_starttls_auto: false
-    }
+config.action_mailer.smtp_settings = {
+  address: "localhost",
+  port: 1025,
+  enable_starttls_auto: false
+}
 ```
 
-**Drupal** -- Install and configure [SMTP](https://www.drupal.org/project/smtp) module or use a library like [SwiftMailer](http://swiftmailer.org/).
+**Spring Boot** -- in application.properties:
 
-**Spring Boot** -- configuration:
-<br/>
-in application.properties file:
-```
-spring.mail.host=localhost #where the smtp server is running
+```properties
+spring.mail.host=localhost
 spring.mail.port=1025
-spring.mail.username=no-reply@gmail.com
-spring.mail.properties.mail.smtp.starttls.enable=true
-spring.mail.properties.mail.smtp.starttls.required=true
-spring.mail.properties.mail.smtp.auth=true
-spring.mail.properties.mail.smtp.connectiontimeout=5000
-spring.mail.properties.mail.smtp.timeout=5000
-spring.mail.properties.mail.smtp.writetimeout=5000
-```
-Or in application.yml file:<br/>
-```
-spring:
-    mail:
-        properties:
-            mail:
-                smtp:
-                    starttls:
-                        enable: true
-                        required: true
-                    auth: true
-                    connectiontimeout: 5000
-                    timeout: 5000
-                    writetimeout: 5000
-        host: localhost
-        port: 1025
 ```
 
 ## Features
 
-- Toggle between HTML, plain text views as well as view email headers
-- Test responsive emails with resizable preview pane available for various screen sizes
-- Ability to receive and view email attachments
-- WebSocket integration keeps the interface in sync once emails are received
-- Command line interface for configuring SMTP and web interface ports
-- Ability to relay email to an upstream SMTP server
+- Modern React-based web interface
+- Toggle between HTML, plain text views and email headers
+- Test responsive emails with resizable preview pane
+- Receive and view email attachments
+- Real-time updates via WebSocket
+- Relay email to an upstream SMTP server
+- MCP integration for Claude AI assistant
+- Configuration file support
+- Full TypeScript support
 
 ## Ideas
 
@@ -212,36 +249,48 @@ If you're using MailDev and you have a great idea, I'd love to hear it. If you'r
 
 ## Contributing
 
-Any help on MailDev would be awesome. There is plenty of room for improvement. Feel free to [create a Pull Request](https://github.com/maildev/maildev/issues/new) from small to big changes.
+Any help on MailDev would be awesome. There is plenty of room for improvement. Feel free to [create a Pull Request](https://github.com/maildev/maildev/pulls).
+
+MailDev v3 is a TypeScript monorepo using pnpm workspaces:
+
+```
+packages/
+  core/     # Storage and shared types
+  smtp/     # SMTP server
+  api/      # REST API and WebSocket server
+  ui/       # React web interface
+  mcp/      # MCP server for Claude
+  cli/      # CLI and orchestration
+```
 
 To run **MailDev** during development:
 
-    npm install
-    npm run dev
+```bash
+pnpm install
+pnpm dev
+```
 
-The "dev" task will run MailDev using nodemon and restart automatically when
-changes are detected. On `*.scss` file save, the css will also be recompiled.
-Using `test/send.js`, a few test emails will be sent every time the application
-restarts.
+To send test emails:
 
-If you want to debug you can use the `nodemon` debug profile in VSCode. To change arguments or environment variables edit the `.vscode\launch.json`.
-
-The project uses the [JavaScript Standard coding style](https://standardjs.com).
-To lint your code before submitting your PR, run `npm run lint`.
+```bash
+node scripts/send.js
+```
 
 To run the test suite:
 
-    $ npm test
+```bash
+pnpm test
+```
 
 ## [Changelog](https://github.com/maildev/maildev/releases)
 
 ## Thanks
 
-**MailDev** is built on using great open source projects including
-[Express](http://expressjs.com),
-[AngularJS](http://angularjs.org/),
-[Font Awesome](http://fontawesome.io/) and two great projects from
-[Andris Reinman](https://github.com/andris9):
+**MailDev** is built using great open source projects including
+[React](https://react.dev/),
+[Fastify](https://fastify.dev/),
+[Tailwind CSS](https://tailwindcss.com/),
+and two great projects from [Andris Reinman](https://github.com/andris9):
 [smtp-server](https://github.com/nodemailer/smtp-server)
 and [mailparser](https://github.com/nodemailer/mailparser).
 Many thanks to Andris as his projects are the backbone of this app and to

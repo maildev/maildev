@@ -10,6 +10,7 @@ import { readFile } from 'node:fs/promises'
 import { MemoryStorage, FileStorage, type Storage } from '@maildev/core'
 import { createSMTPServer, type SMTPServer, type RelayConfig, type AutoRelayConfig, type RelayRule } from '@maildev/smtp'
 import { createAPIServer, type APIServer } from '@maildev/api'
+import { registerUI } from '@maildev/ui/server'
 import type { MailDevConfig } from '../config/types.js'
 import { Logger } from '../utils/logger.js'
 
@@ -113,10 +114,13 @@ export class Orchestrator {
 
     // 8. Create and start API server (unless disabled)
     if (!this.config.disableWeb) {
+      // Normalize basePath: '/' should become empty string, remove trailing slashes
+      const basePath = this.config.basePathname === '/' ? '' : this.config.basePathname.replace(/\/$/, '')
+
       const apiOptions: Parameters<typeof createAPIServer>[0] = {
         port: this.config.web,
         host: this.config.webIp,
-        basePath: this.config.basePathname,
+        basePath,
         storage: this.storage,
         smtp: this.smtp,
       }
@@ -132,7 +136,9 @@ export class Orchestrator {
       }
       this.api = createAPIServer(apiOptions)
 
-      await this.api.start()
+      await this.api.registerPlugins()
+      await registerUI(this.api.server, { basePath })
+      await this.api.listen()
       this.logger.debug(`API server started on ${this.config.webIp}:${this.config.web}`)
     }
 

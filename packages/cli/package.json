@@ -21,6 +21,7 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "lint": "eslint src/",
+    "cli": "chmod +x ./dist/bin/maildev.js && ./dist/bin/maildev.js",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",

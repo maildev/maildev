@@ -4,6 +4,7 @@ node_modules
 coverage
 .nyc_output
 dist
+dist-server
 .zip
 maildev-*
 .nodemonignore

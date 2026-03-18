@@ -34,6 +34,7 @@ export class APIServer extends EventEmitter {
   private options: APIServerOptions
   private mcpServer: MCPServer | null = null
   private mcpTransports: Map<string, StreamableHTTPServerTransport> = new Map()
+  private pluginsRegistered = false
 
   constructor(options: APIServerOptions) {
     super()
@@ -49,9 +50,11 @@ export class APIServer extends EventEmitter {
   }
 
   /**
-   * Start the API server
+   * Register all plugins and routes (without starting the server)
    */
-  async start(): Promise<void> {
+  async registerPlugins(): Promise<void> {
+    if (this.pluginsRegistered) return
+
     // Register CORS
     await this.app.register(cors, {
       origin: this.options.cors?.origin ?? true,
@@ -72,7 +75,13 @@ export class APIServer extends EventEmitter {
     // Setup WebSocket (Socket.io)
     this.setupWebSocket()
 
-    // Start listening
+    this.pluginsRegistered = true
+  }
+
+  /**
+   * Start listening on the configured port
+   */
+  async listen(): Promise<void> {
     const port = this.options.port ?? DEFAULT_PORT
     const host = this.options.host ?? DEFAULT_HOST
 
@@ -82,6 +91,14 @@ export class APIServer extends EventEmitter {
     console.info(`MailDev API running at http://${printHost}:${port}${this.options.basePath ?? ''}`)
 
     this.emit('listening', { port, host })
+  }
+
+  /**
+   * Start the API server
+   */
+  async start(): Promise<void> {
+    await this.registerPlugins()
+    await this.listen()
   }
 
   /**
@@ -145,12 +162,13 @@ export class APIServer extends EventEmitter {
    */
   private registerRoutes(): void {
     const basePath = this.options.basePath ?? ''
+    const apiPath = `${basePath}/api`
 
     // Health check (always available, even without auth)
-    this.app.get(`${basePath}/healthz`, async () => true)
+    this.app.get(`${apiPath}/healthz`, async () => true)
 
     // Config endpoint
-    this.app.get(`${basePath}/config`, async (): Promise<ConfigResponse> => {
+    this.app.get(`${apiPath}/config`, async (): Promise<ConfigResponse> => {
       return {
         version: VERSION,
         smtpPort: this.smtp ? 1025 : undefined, // TODO: Get actual port from SMTP server
@@ -160,7 +178,7 @@ export class APIServer extends EventEmitter {
     })
 
     // Get all emails
-    this.app.get(`${basePath}/email`, async (request: FastifyRequest) => {
+    this.app.get(`${apiPath}/email`, async (request: FastifyRequest) => {
       const query = request.query as Record<string, string>
       const { skip, ...filterQuery } = query
       const skipCount = skip ? parseInt(skip, 10) : 0
@@ -179,7 +197,7 @@ export class APIServer extends EventEmitter {
 
     // Get single email
     this.app.get<{ Params: { id: string } }>(
-      `${basePath}/email/:id`,
+      `${apiPath}/email/:id`,
       async (request, reply) => {
         const { id } = request.params
 
@@ -200,7 +218,7 @@ export class APIServer extends EventEmitter {
 
     // Delete single email
     this.app.delete<{ Params: { id: string } }>(
-      `${basePath}/email/:id`,
+      `${apiPath}/email/:id`,
       async (request, reply) => {
         const { id } = request.params
 
@@ -222,7 +240,7 @@ export class APIServer extends EventEmitter {
     )
 
     // Delete all emails
-    this.app.delete(`${basePath}/email/all`, async (_request, reply) => {
+    this.app.delete(`${apiPath}/email/all`, async (_request, reply) => {
       try {
         if (this.smtp) {
           await this.smtp.deleteAllEmails()
@@ -237,7 +255,7 @@ export class APIServer extends EventEmitter {
     })
 
     // Mark all emails as read
-    this.app.patch(`${basePath}/email/read-all`, async (_request, reply) => {
+    this.app.patch(`${apiPath}/email/read-all`, async (_request, reply) => {
       try {
         if (this.smtp) {
           const count = await this.smtp.markAllRead()
@@ -262,7 +280,7 @@ export class APIServer extends EventEmitter {
 
     // Get email HTML with embedded attachments
     this.app.get<{ Params: { id: string } }>(
-      `${basePath}/email/:id/html`,
+      `${apiPath}/email/:id/html`,
       async (request, reply) => {
         const { id } = request.params
         const baseUrl = request.headers.host ?? ''
@@ -296,7 +314,7 @@ export class APIServer extends EventEmitter {
 
     // Get raw email source
     this.app.get<{ Params: { id: string } }>(
-      `${basePath}/email/:id/source`,
+      `${apiPath}/email/:id/source`,
       async (request, reply) => {
         const { id } = request.params
 
@@ -316,7 +334,7 @@ export class APIServer extends EventEmitter {
 
     // Download email as .eml
     this.app.get<{ Params: { id: string } }>(
-      `${basePath}/email/:id/download`,
+      `${apiPath}/email/:id/download`,
       async (request, reply) => {
         const { id } = request.params
 
@@ -338,7 +356,7 @@ export class APIServer extends EventEmitter {
 
     // Get attachment
     this.app.get<{ Params: { id: string; filename: string } }>(
-      `${basePath}/email/:id/attachment/:filename`,
+      `${apiPath}/email/:id/attachment/:filename`,
       async (request, reply) => {
         const { id, filename } = request.params
 
@@ -359,7 +377,7 @@ export class APIServer extends EventEmitter {
 
     // Relay email
     this.app.post<{ Params: { id: string; relayTo?: string } }>(
-      `${basePath}/email/:id/relay/:relayTo?`,
+      `${apiPath}/email/:id/relay/:relayTo?`,
       async (request, reply) => {
         const { id, relayTo } = request.params
 
@@ -395,7 +413,7 @@ export class APIServer extends EventEmitter {
     )
 
     // Reload emails from directory
-    this.app.get(`${basePath}/reloadMailsFromDirectory`, async (_request, reply) => {
+    this.app.get(`${apiPath}/reloadMailsFromDirectory`, async (_request, reply) => {
       try {
         if (this.smtp) {
           await this.smtp.loadMailsFromDirectory()

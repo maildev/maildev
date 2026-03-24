@@ -30,7 +30,7 @@ phases:
       - aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 539389951722.dkr.ecr.us-east-1.amazonaws.com
       - REPOSITORY_URI=539389951722.dkr.ecr.us-east-1.amazonaws.com/web/maildev
       - aws ecr describe-repositories --repository-names $(echo $REPOSITORY_URI | cut -c46-) 2>&1 > /dev/null || aws ecr create-repository --repository-name $(echo $REPOSITORY_URI | cut -c46-)
-      - IMAGE_TAG=$(echo $NAMESPACE-v$CODEBUILD_BUILD_NUMBER)
+      - IMAGE_TAG=$(echo $NAMESPACE-v$CODEBUILD_BUILD_NUMBER)  
       - find . \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed -i 's/inone.useinsider.com/inone.insidethekube.com/g;s/api.useinsider.com/api.insidethekube.com/g;s/inone.devops.useinsider.com/inone.insidethekube.com/g'
   build:
     commands:

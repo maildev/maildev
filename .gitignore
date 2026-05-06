@@ -10,3 +10,9 @@ maildev-*
 
 # Ignore npm debug log
 npm-debug.log
+
+# Web UI (Svelte + Vite)
+web/.vite
+web/.svelte-kit
+*.local
+

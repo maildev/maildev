@@ -12,6 +12,8 @@ maildev-*
 npm-debug.log
 
 # Web UI (Svelte + Vite)
+web/node_modules
+web/dist
 web/.vite
 web/.svelte-kit
 *.local

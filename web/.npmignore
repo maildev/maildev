@@ -1,0 +1,34 @@
+# When publishing the parent maildev package, web/dist/ MUST be shipped
+# (it is the production UI bundle). web/.gitignore excludes dist/ from git
+# but npm walks per-directory .gitignore files unless a .npmignore overrides.
+#
+# This .npmignore intentionally only excludes sources and tooling, never
+# the build output.
+
+node_modules
+src
+.vite
+.svelte-kit
+*.local
+
+# Editor / OS
+.vscode
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Logs
+*.log
+npm-debug.log*
+
+# Source / config (only dist/ ships) — anchored to the web/ root so they
+# don't accidentally match files inside web/dist/.
+/index.html
+/vite.config.ts
+/tsconfig*.json
+/svelte.config.js
+/package*.json

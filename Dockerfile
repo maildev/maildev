@@ -4,12 +4,20 @@ RUN apk add --no-cache tzdata
 ENV NODE_ENV=production
 ENV TZ=UTC
 
-# Build
+# UI build (Svelte + Vite)
+FROM base AS ui-build
+ENV NODE_ENV=development
+WORKDIR /ui
+COPY web/package*.json ./
+RUN npm ci --no-audit --no-fund
+COPY web/ ./
+RUN npm run build
+
+# Backend deps
 FROM base AS build
 WORKDIR /root
 COPY package*.json ./
-RUN npm install \
-  && npm prune \
+RUN npm install --omit=dev --ignore-scripts \
   && npm cache clean --force
 
 # Prod
@@ -17,6 +25,7 @@ FROM base AS prod
 USER node
 WORKDIR /home/node
 COPY --chown=node:node . /home/node
+COPY --chown=node:node --from=ui-build /ui/dist /home/node/web/dist
 COPY --chown=node:node --from=build /root/node_modules /home/node/node_modules
 EXPOSE 1080 1025
 ENV MAILDEV_WEB_PORT=1080

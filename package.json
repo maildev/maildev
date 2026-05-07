@@ -26,13 +26,14 @@
   },
   "scripts": {
     "start": "node ./bin/maildev",
+    "dev": "concurrently -n be,ui -c blue,magenta \"node ./bin/maildev\" \"npm --prefix web run dev\"",
+    "dev:ui": "npm --prefix web run dev",
+    "build": "npm --prefix web run build",
+    "postinstall": "npm --prefix web ci --no-audit --no-fund || true",
     "test": "nyc _mocha --exit --timeout 5000",
     "lint": "standard",
     "lint:fix": "standard --fix",
-    "dev": "node ./scripts/dev.js && npm run css-watch",
     "send-test-emails": "node ./scripts/send.js",
-    "css": "sass --style=compressed --no-source-map assets/styles/style.scss:app/styles/style.css",
-    "css-watch": "sass --watch --style=compressed --no-source-map assets/styles/style.scss:app/styles/style.css",
     "docker-build": "./scripts/dockerBuild.sh",
     "docker-run": "docker run --rm -p 1080:1080 -p 1025:1025 maildev/maildev:$npm_package_version",
     "docker-push": "./scripts/dockerPush.sh",
@@ -42,6 +43,14 @@
   "bin": {
     "maildev": "./bin/maildev"
   },
+  "files": [
+    "bin/",
+    "lib/",
+    "web/dist/",
+    "index.js",
+    "README.md",
+    "LICENSE"
+  ],
   "license": "MIT",
   "dependencies": {
     "addressparser": "1.0.1",
@@ -64,6 +73,7 @@
     "socket.io-adapter": "2.5.5"
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "expect": "^29.7.0",
     "http-proxy-middleware": "^3.0.3",
     "jest": "^29.7.0",
@@ -71,7 +81,6 @@
     "mocha": "^9.2.2",
     "nodemon": "^3.1.4",
     "nyc": "^17.0.0",
-    "sass": "^1.77.8",
     "standard": "^17.1.0"
   },
   "engines": {
@@ -79,7 +88,7 @@
   },
   "standard": {
     "ignore": [
-      "app/components/"
+      "web/"
     ]
   },
   "nyc": {

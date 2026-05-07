@@ -1,10 +1,24 @@
-assets
 coverage
 docs
 scripts
-!app/scripts
 test
 
 .*
+
+# Web UI: only web/dist/ ships (declared in package.json#files).
+# Sources, configs and build cache stay out of the tarball.
+web/node_modules
+web/src
+web/.vite
+web/.svelte-kit
+web/index.html
+web/vite.config.ts
+web/tsconfig*.json
+web/svelte.config.js
+web/package*.json
+
+appveyor.yml
+codecov.yml
 Dockerfile
 rules.json
+*.local

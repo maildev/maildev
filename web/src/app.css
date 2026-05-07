@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+/* Class-based dark mode (toggled on <html> by the settings store) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+html, body, #app {
+  height: 100%;
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}

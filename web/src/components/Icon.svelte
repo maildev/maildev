@@ -11,6 +11,17 @@
     | 'paperclip'
     | 'check'
     | 'x'
+    | 'arrow-left'
+    | 'file-code'
+    | 'file-text'
+    | 'list'
+    | 'code'
+    | 'download'
+    | 'send'
+    | 'desktop'
+    | 'tablet'
+    | 'smartphone'
+    | 'chevron-down'
 
   type Props = {
     name: IconName
@@ -73,5 +84,48 @@
   {:else if name === 'x'}
     <path d="M18 6 6 18" />
     <path d="m6 6 12 12" />
+  {:else if name === 'arrow-left'}
+    <path d="m12 19-7-7 7-7" />
+    <path d="M19 12H5" />
+  {:else if name === 'file-code'}
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <path d="M14 2v6h6" />
+    <path d="m9 17 3-3-3-3" />
+    <path d="m13 11 3 3-3 3" />
+  {:else if name === 'file-text'}
+    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+    <path d="M14 2v6h6" />
+    <path d="M16 13H8" />
+    <path d="M16 17H8" />
+    <path d="M10 9H8" />
+  {:else if name === 'list'}
+    <path d="M3 6h.01" />
+    <path d="M3 12h.01" />
+    <path d="M3 18h.01" />
+    <path d="M8 6h13" />
+    <path d="M8 12h13" />
+    <path d="M8 18h13" />
+  {:else if name === 'code'}
+    <path d="m16 18 6-6-6-6" />
+    <path d="m8 6-6 6 6 6" />
+  {:else if name === 'download'}
+    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+    <path d="M7 10l5 5 5-5" />
+    <path d="M12 15V3" />
+  {:else if name === 'send'}
+    <path d="m22 2-7 20-4-9-9-4z" />
+    <path d="M22 2 11 13" />
+  {:else if name === 'desktop'}
+    <rect width="20" height="14" x="2" y="3" rx="2" />
+    <path d="M8 21h8" />
+    <path d="M12 17v4" />
+  {:else if name === 'tablet'}
+    <rect width="16" height="20" x="4" y="2" rx="2" />
+    <path d="M12 18h.01" />
+  {:else if name === 'smartphone'}
+    <rect width="14" height="20" x="5" y="2" rx="2" />
+    <path d="M12 18h.01" />
+  {:else if name === 'chevron-down'}
+    <path d="m6 9 6 6 6-6" />
   {/if}
 </svg>

@@ -3,12 +3,12 @@
   import { onMount } from 'svelte'
   import Sidebar from './components/Sidebar.svelte'
   import Welcome from './components/Welcome.svelte'
-  import EmailDetailPlaceholder from './components/EmailDetailPlaceholder.svelte'
+  import EmailDetail from './components/EmailDetail.svelte'
   import { store } from './lib/stores.svelte'
 
   const routes = {
     '/': Welcome,
-    '/email/:id': EmailDetailPlaceholder,
+    '/email/:id': EmailDetail,
   }
 
   onMount(() => {

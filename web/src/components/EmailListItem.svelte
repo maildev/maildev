@@ -36,14 +36,23 @@
 <li class="border-b border-slate-100 last:border-0 dark:border-slate-800/60">
   <a
     href={`#/email/${encodeURIComponent(email.id)}`}
-    class="flex flex-col gap-0.5 px-3 py-2.5 text-sm transition-colors {isCurrent
+    aria-current={isCurrent ? 'page' : undefined}
+    class="flex flex-col gap-0.5 border-l-2 px-3 py-2.5 text-sm transition-colors {!email.read
+      ? 'border-violet-500'
+      : 'border-transparent'} {isCurrent
       ? 'bg-violet-100 text-slate-900 dark:bg-violet-900/40 dark:text-slate-100'
-      : 'hover:bg-slate-100 dark:hover:bg-slate-800/60'} {email.read
-      ? 'text-slate-500 dark:text-slate-400'
-      : 'text-slate-900 dark:text-slate-100'}"
+      : 'text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800/60'}"
   >
-    <span class="flex items-center gap-1.5 font-medium leading-tight">
-      <span class="truncate {!email.read ? 'font-semibold' : ''}">
+    <span class="flex items-center gap-1.5 leading-tight">
+      {#if !email.read}
+        <span class="h-2 w-2 shrink-0 rounded-full bg-violet-500" aria-hidden="true"></span>
+        <span class="sr-only">Unread</span>
+      {/if}
+      <span
+        class="truncate {!email.read
+          ? 'font-semibold text-slate-900 dark:text-slate-100'
+          : 'font-medium'}"
+      >
         {email.subject || '(no subject)'}
       </span>
       {#if email.attachments && email.attachments.length > 0}

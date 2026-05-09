@@ -1,9 +1,10 @@
-version: '3'
-
 services:
 
   maildev:
-    image: maildev/maildev
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: maildev/maildev:local
     restart: always
     environment:
       - TZ=Asia/Shanghai

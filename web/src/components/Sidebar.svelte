@@ -24,12 +24,23 @@
         <span>MailDev</span>
       </a>
       {#if store.emails.size > 0}
-        <span
-          class="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300"
-          title="Total emails (+ unread)"
-        >
-          {store.emails.size}{store.unreadCount > 0 ? ` (+${store.unreadCount})` : ''}
-        </span>
+        <div class="flex items-center gap-1">
+          <span
+            class="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600 dark:bg-slate-800 dark:text-slate-300"
+            title="Total emails"
+          >
+            {store.emails.size}
+          </span>
+          {#if store.unreadCount > 0}
+            <span
+              class="rounded-full bg-violet-500 px-2 py-0.5 text-xs font-medium text-white"
+              title="Unread emails"
+              aria-label={`${store.unreadCount} unread`}
+            >
+              {store.unreadCount}
+            </span>
+          {/if}
+        </div>
       {/if}
     </div>
 

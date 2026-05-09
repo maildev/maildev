@@ -24,7 +24,12 @@ RUN npm install --omit=dev --ignore-scripts \
 FROM base AS prod
 USER node
 WORKDIR /home/node
-COPY --chown=node:node . /home/node
+COPY --chown=node:node package*.json ./
+COPY --chown=node:node index.js ./
+COPY --chown=node:node bin/ ./bin/
+COPY --chown=node:node lib/ ./lib/
+COPY --chown=node:node vendor/ ./vendor/
+COPY --chown=node:node README.md LICENSE ./
 COPY --chown=node:node --from=ui-build /ui/dist /home/node/web/dist
 COPY --chown=node:node --from=build /root/node_modules /home/node/node_modules
 EXPOSE 1080 1025

@@ -2,8 +2,10 @@
 # Requires:
 #   jq (https://stedolan.github.io/jq/)
 
-# Build cross platform by default
-DEFAULT_PLATFORM="linux/amd64,linux/arm64"
+# Build and load a single platform image for local use. Multi-platform builds
+# cannot be loaded into the local Docker image store; use dockerPush.sh for
+# multi-platform publishing.
+DEFAULT_PLATFORM="${DOCKER_DEFAULT_PLATFORM:-linux/amd64}"
 # Build for one platform, e.g. "npm run docker-build linux/arm64"
 PLATFORM="${1:-$DEFAULT_PLATFORM}"
 

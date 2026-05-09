@@ -6,17 +6,11 @@ test
 
 .*
 
-# Web UI: source is built in the ui-build stage and copied in;
-# nothing from web/ should ship in the prod stage as-is.
+# Web UI: keep source files in the build context for the ui-build stage.
+# The production stage copies only web/dist from that stage.
 web/node_modules
-web/src
 web/dist
 web/.vite
-web/index.html
-web/vite.config.ts
-web/tsconfig*.json
-web/svelte.config.js
-web/package*.json
 
 appveyor.yml
 codecov.yml

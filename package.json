@@ -26,7 +26,7 @@
   },
   "scripts": {
     "start": "node ./bin/maildev",
-    "dev": "concurrently -n be,ui -c blue,magenta \"node ./bin/maildev\" \"npm --prefix web run dev\"",
+    "dev": "concurrently -n be,ui,seed -c blue,magenta,green \"node ./bin/maildev\" \"npm --prefix web run dev\" \"node ./scripts/dev-seed.js\"",
     "dev:ui": "npm --prefix web run dev",
     "build": "npm --prefix web run build",
     "postinstall": "npm --prefix web ci --no-audit --no-fund || true",

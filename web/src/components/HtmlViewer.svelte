@@ -5,7 +5,6 @@
   let { id, width }: Props = $props()
 
   let iframe: HTMLIFrameElement
-  let height = $state(0)
 
   function applyMediaQueryFix(doc: Document) {
     for (const sheet of Array.from(doc.styleSheets)) {
@@ -35,38 +34,21 @@
     head.appendChild(base)
   }
 
-  function fitHeight(doc: Document) {
-    const body = doc.body
-    if (!body) return
-    height = body.scrollHeight
-  }
-
   function onLoad() {
     const doc = iframe.contentDocument
     if (!doc) return
     injectBaseTarget(doc)
     applyMediaQueryFix(doc)
-    fitHeight(doc)
   }
-
-  // Re-fit on width change (some media queries rearrange content height).
-  $effect(() => {
-    void width
-    if (!iframe) return
-    const doc = iframe.contentDocument
-    if (!doc) return
-    requestAnimationFrame(() => fitHeight(doc))
-  })
 </script>
 
-<div class="flex h-full w-full justify-center overflow-auto bg-slate-100 dark:bg-slate-950">
+<div class="flex h-full w-full justify-center bg-slate-100 dark:bg-slate-950">
   <iframe
     bind:this={iframe}
     src={api.htmlUrl(id)}
     onload={onLoad}
     title="Email HTML preview"
     style:width={width ?? '100%'}
-    style:height={height ? `${height}px` : '100%'}
-    class="border-0 bg-white shadow-sm dark:shadow-none"
+    class="h-full border-0 bg-white shadow-sm dark:shadow-none"
   ></iframe>
 </div>

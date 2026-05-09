@@ -11,6 +11,14 @@
   import SourceViewer from './SourceViewer.svelte'
   import AttachmentsList from './AttachmentsList.svelte'
   import RelayDialog from './RelayDialog.svelte'
+  import Icon from './Icon.svelte'
+
+  function humanSize(bytes: number | undefined): string {
+    if (!bytes && bytes !== 0) return ''
+    if (bytes < 1024) return `${bytes} B`
+    if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`
+    return `${(bytes / 1024 / 1024).toFixed(1)} MB`
+  }
 
   type Props = { params?: { id?: string } }
   let { params }: Props = $props()
@@ -107,6 +115,28 @@
           <dd class="break-all text-slate-700 dark:text-slate-300">{joinAddresses(email.bcc)}</dd>
         {/if}
       </dl>
+
+      {#if email.attachments?.length}
+        <ul class="mt-2.5 flex flex-wrap items-center gap-1.5">
+          {#each email.attachments as att}
+            <li>
+              <a
+                href={api.attachmentUrl(email.id, att.generatedFileName)}
+                target="_blank"
+                rel="noopener"
+                title={`${att.fileName || att.generatedFileName} (${att.contentType})`}
+                class="inline-flex max-w-xs items-center gap-1.5 rounded-md border border-slate-200 bg-slate-50 px-2 py-1 text-xs text-slate-700 transition-colors hover:border-violet-400 hover:bg-violet-50 hover:text-violet-700 dark:border-slate-700 dark:bg-slate-800/60 dark:text-slate-200 dark:hover:border-violet-500 dark:hover:bg-violet-900/30 dark:hover:text-violet-200"
+              >
+                <Icon name="paperclip" size={12} class="shrink-0" />
+                <span class="truncate font-medium">{att.fileName || att.generatedFileName}</span>
+                {#if att.length}
+                  <span class="shrink-0 text-slate-500 dark:text-slate-400">{humanSize(att.length)}</span>
+                {/if}
+              </a>
+            </li>
+          {/each}
+        </ul>
+      {/if}
     </header>
 
     <div class="flex-1 overflow-hidden">

@@ -56,7 +56,13 @@
         {email.subject || '(no subject)'}
       </span>
       {#if email.attachments && email.attachments.length > 0}
-        <Icon name="paperclip" size={12} class="shrink-0 text-slate-400 dark:text-slate-500" />
+        <span
+          class="inline-flex shrink-0 items-center gap-0.5 text-slate-400 dark:text-slate-500"
+          title={`${email.attachments.length} attachment${email.attachments.length === 1 ? '' : 's'}`}
+        >
+          <Icon name="paperclip" size={12} />
+          <span class="text-[11px] leading-none">{email.attachments.length}</span>
+        </span>
       {/if}
     </span>
     <span class="truncate text-xs text-slate-500 dark:text-slate-400" title={allRecipients}>

@@ -1,6 +1,6 @@
 {
   "name": "@maildev/core",
-  "version": "3.0.0-alpha.0",
+  "version": "3.0.0-rc.1",
   "description": "Core types, utilities, and storage abstraction for MailDev",
   "type": "module",
   "main": "./dist/index.js",

@@ -1,0 +1,15 @@
+{
+  "mode": "pre",
+  "tag": "rc",
+  "initialVersions": {
+    "@maildev/api": "3.0.0-alpha.0",
+    "maildev": "3.0.0-alpha.0",
+    "@maildev/core": "3.0.0-alpha.0",
+    "@maildev/mcp": "3.0.0-alpha.0",
+    "@maildev/smtp": "3.0.0-alpha.0",
+    "@maildev/ui": "3.0.0-alpha.0"
+  },
+  "changesets": [
+    "proud-chefs-travel"
+  ]
+}

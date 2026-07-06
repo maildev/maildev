@@ -6,6 +6,9 @@
 [![License](https://img.shields.io/npm/l/maildev?color=white)](/LICENSE)
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-black.svg)](https://standardjs.com)
 
+> [!WARNING]
+> This is is the 2.x release branch. This branch exists for any backcompat fixes, but it's recommended to use [the 3.x version of MailDev](https://github.com/maildev/maildev/tree/main) which is a complete re-write with many improvements including updated APIs and UIs and a new MCP server.
+
 
 > MailDev is sponsored by ⭐️ **[inngest/inngest](https://github.com/inngest/inngest)**.
 >

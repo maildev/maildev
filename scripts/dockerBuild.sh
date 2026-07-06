@@ -1,13 +1,16 @@
 #!/bin/bash
 # Requires:
 #   jq (https://stedolan.github.io/jq/)
+set -euo pipefail
 
 # Build cross platform by default
 DEFAULT_PLATFORM="linux/amd64,linux/arm64"
-# Build for one platform, e.g. "npm run docker-build linux/arm64"
+# Build for one platform, e.g. "pnpm docker-build linux/arm64"
 PLATFORM="${1:-$DEFAULT_PLATFORM}"
 
-VERSION=`npm version --json | jq -r .maildev`
+# The published version lives in the CLI package (the root is a private,
+# unversioned monorepo).
+VERSION=$(jq -r .version packages/cli/package.json)
 
 CMD="docker buildx build --load --platform $PLATFORM -t maildev/maildev:$VERSION -t maildev/maildev:latest ."
 

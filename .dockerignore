@@ -1,17 +1,34 @@
-assets
-coverage
-docs
+# Dependencies & build output are (re)installed/built inside the image.
+# NOTE: pnpm-lock.yaml and pnpm-workspace.yaml are intentionally NOT ignored —
+# the build needs them for `pnpm fetch` / `--frozen-lockfile`.
 node_modules
+**/node_modules
+**/dist
+**/dist-server
+**/coverage
+.turbo
+**/.turbo
+
+# Tests & test fixtures
+**/__tests__
+**/*.test.ts
+**/*.spec.ts
+
+# Docs, scripts, and repo meta
+docs
 scripts
-test
+.github
+.devcontainer
+.vscode
 
-.*
-
-# Only add .min.js dependencies
-app/components/**/*.js*
-!app/components/**/*.min.js
-
-appveyor.yml
-codecov.yml
+# Docker & CI
 Dockerfile
-rules.json
+.dockerignore
+docker-compose.yml
+
+# Git / editor / lint / logs
+.git
+.gitignore
+.editorconfig
+.eslintcache
+*.log

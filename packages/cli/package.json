@@ -49,14 +49,15 @@
     "node": ">=20.0.0"
   },
   "dependencies": {
-    "@maildev/core": "workspace:*",
-    "@maildev/smtp": "workspace:*",
     "@maildev/api": "workspace:*",
+    "@maildev/core": "workspace:*",
     "@maildev/mcp": "workspace:*",
+    "@maildev/smtp": "workspace:*",
     "@maildev/ui": "workspace:*",
     "commander": "^12.1.0"
   },
   "devDependencies": {
+    "@types/node": "^22.10.7",
     "typescript": "^5.7.3",
     "vitest": "^2.1.8"
   }

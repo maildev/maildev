@@ -1,7 +1,6 @@
 {
-  "name": "maildev",
-  "description": "SMTP Server and Web Interface for reading and testing emails during development",
-  "version": "2.2.1",
+  "name": "@maildev/monorepo",
+  "description": "MailDev monorepo — SMTP server and web interface for reading and testing emails during development",
   "private": true,
   "packageManager": "pnpm@9.15.4",
   "keywords": [
@@ -43,7 +42,7 @@
     "css": "sass --style=compressed --no-source-map assets/styles/style.scss:app/styles/style.css",
     "css-watch": "sass --watch --style=compressed --no-source-map assets/styles/style.scss:app/styles/style.css",
     "docker-build": "./scripts/dockerBuild.sh",
-    "docker-run": "docker run --rm -p 1080:1080 -p 1025:1025 maildev/maildev:$npm_package_version",
+    "docker-run": "docker run --rm -p 1080:1080 -p 1025:1025 maildev/maildev:$(jq -r .version packages/cli/package.json)",
     "docker-push": "./scripts/dockerPush.sh",
     "update-readme": "node ./scripts/updateUsageREADME.js"
   },

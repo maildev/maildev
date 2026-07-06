@@ -30,7 +30,6 @@
     "build": "turbo run build",
     "dev": "turbo run dev",
     "test": "turbo run test",
-    "test:legacy": "nyc _mocha --exit --timeout 5000",
     "lint": "turbo run lint",
     "lint:fix": "turbo run lint -- --fix",
     "typecheck": "turbo run typecheck",
@@ -100,17 +99,6 @@
   "standard": {
     "ignore": [
       "app/components/"
-    ]
-  },
-  "nyc": {
-    "exclude": [
-      "test/**/*"
-    ],
-    "ignore-class-method": "methodToIgnore",
-    "reporter": [
-      "json",
-      "lcov",
-      "text-summary"
     ]
   }
 }

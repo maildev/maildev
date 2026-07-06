@@ -188,25 +188,38 @@ interface Email {
   time: Date
   read: boolean
   subject: string
+  source: string
+  size: number
+  sizeHuman: string
   from: Address[]
   to: Address[]
   cc?: Address[]
-  text?: string
+  bcc?: Address[]
+  calculatedBcc?: Address[]
+  date?: Date
   html?: string
+  text?: string
   headers: Record<string, string | string[]>
-  attachments: Attachment[]
-  envelope: {
-    from: { address: string }
-    to: { address: string }[]
-  }
+  inReplyTo?: string
   priority?: 'high' | 'normal' | 'low'
-  size: number
-  sizeHuman: string
+  attachments: Attachment[]
+  envelope: Envelope
 }
 
 interface Address {
   address: string
   name?: string
+}
+
+interface Envelope {
+  from: EnvelopeAddress
+  to: EnvelopeAddress[]
+  host?: string
+  remoteAddress?: string
+}
+
+interface EnvelopeAddress extends Address {
+  args?: boolean | Record<string, unknown>
 }
 
 interface Attachment {
@@ -216,6 +229,7 @@ interface Attachment {
   contentDisposition: 'inline' | 'attachment'
   contentId?: string
   size?: number
+  transferred?: boolean
 }
 ```
 

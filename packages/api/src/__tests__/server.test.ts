@@ -26,13 +26,13 @@ describe('APIServer', () => {
   })
 
   describe('health check', () => {
-    it('should return true on GET /healthz', async () => {
+    it('should return true on GET /api/healthz', async () => {
       server = createAPIServer({ storage, port: 0 })
       await server.start()
 
       const response = await server.server.inject({
         method: 'GET',
-        url: '/healthz',
+        url: '/api/healthz',
       })
 
       expect(response.statusCode).toBe(200)
@@ -41,13 +41,13 @@ describe('APIServer', () => {
   })
 
   describe('config endpoint', () => {
-    it('should return config on GET /config', async () => {
+    it('should return config on GET /api/config', async () => {
       server = createAPIServer({ storage, port: 0 })
       await server.start()
 
       const response = await server.server.inject({
         method: 'GET',
-        url: '/config',
+        url: '/api/config',
       })
 
       expect(response.statusCode).toBe(200)
@@ -64,7 +64,7 @@ describe('APIServer', () => {
 
       const response = await server.server.inject({
         method: 'GET',
-        url: '/email',
+        url: '/api/email',
       })
 
       expect(response.statusCode).toBe(200)
@@ -97,7 +97,7 @@ describe('APIServer', () => {
 
       const response = await server.server.inject({
         method: 'GET',
-        url: '/email',
+        url: '/api/email',
       })
 
       expect(response.statusCode).toBe(200)
@@ -132,7 +132,7 @@ describe('APIServer', () => {
 
       const response = await server.server.inject({
         method: 'GET',
-        url: '/email/test-456',
+        url: '/api/email/test-456',
       })
 
       expect(response.statusCode).toBe(200)
@@ -167,7 +167,7 @@ describe('APIServer', () => {
 
       const response = await server.server.inject({
         method: 'GET',
-        url: '/email/test-789',
+        url: '/api/email/test-789',
       })
 
       expect(response.statusCode).toBe(200)
@@ -184,7 +184,7 @@ describe('APIServer', () => {
 
       const response = await server.server.inject({
         method: 'GET',
-        url: '/email/non-existent',
+        url: '/api/email/non-existent',
       })
 
       expect(response.statusCode).toBe(404)
@@ -217,7 +217,7 @@ describe('APIServer', () => {
 
       const response = await server.server.inject({
         method: 'DELETE',
-        url: '/email/delete-me',
+        url: '/api/email/delete-me',
       })
 
       expect(response.statusCode).toBe(200)
@@ -271,7 +271,7 @@ describe('APIServer', () => {
 
       const response = await server.server.inject({
         method: 'DELETE',
-        url: '/email/all',
+        url: '/api/email/all',
       })
 
       expect(response.statusCode).toBe(200)
@@ -324,7 +324,7 @@ describe('APIServer', () => {
 
       const response = await server.server.inject({
         method: 'GET',
-        url: '/email?from.address=alice@test.com',
+        url: '/api/email?from.address=alice@test.com',
       })
 
       expect(response.statusCode).toBe(200)
@@ -341,7 +341,7 @@ describe('APIServer', () => {
 
       const response = await server.server.inject({
         method: 'GET',
-        url: '/email',
+        url: '/api/email',
       })
 
       expect(response.statusCode).toBe(200)
@@ -357,7 +357,7 @@ describe('APIServer', () => {
 
       const response = await server.server.inject({
         method: 'GET',
-        url: '/email',
+        url: '/api/email',
       })
 
       expect(response.statusCode).toBe(401)
@@ -374,7 +374,7 @@ describe('APIServer', () => {
       const credentials = Buffer.from('admin:secret').toString('base64')
       const response = await server.server.inject({
         method: 'GET',
-        url: '/email',
+        url: '/api/email',
         headers: {
           authorization: `Basic ${credentials}`,
         },
@@ -394,7 +394,7 @@ describe('APIServer', () => {
       const credentials = Buffer.from('admin:wrong').toString('base64')
       const response = await server.server.inject({
         method: 'GET',
-        url: '/email',
+        url: '/api/email',
         headers: {
           authorization: `Basic ${credentials}`,
         },
@@ -413,7 +413,7 @@ describe('APIServer', () => {
 
       const response = await server.server.inject({
         method: 'GET',
-        url: '/healthz',
+        url: '/api/healthz',
       })
 
       expect(response.statusCode).toBe(200)
@@ -422,24 +422,24 @@ describe('APIServer', () => {
 
   describe('base path', () => {
     it('should support custom base path', async () => {
-      server = createAPIServer({ storage, port: 0, basePath: '/api' })
+      server = createAPIServer({ storage, port: 0, basePath: '/base' })
       await server.start()
 
       const response = await server.server.inject({
         method: 'GET',
-        url: '/api/healthz',
+        url: '/base/api/healthz',
       })
 
       expect(response.statusCode).toBe(200)
     })
 
-    it('should 404 on root when base path is set', async () => {
-      server = createAPIServer({ storage, port: 0, basePath: '/api' })
+    it('should 404 on unprefixed route when base path is set', async () => {
+      server = createAPIServer({ storage, port: 0, basePath: '/base' })
       await server.start()
 
       const response = await server.server.inject({
         method: 'GET',
-        url: '/healthz',
+        url: '/api/healthz',
       })
 
       expect(response.statusCode).toBe(404)

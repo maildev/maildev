@@ -127,9 +127,12 @@ export class APIServer extends EventEmitter {
    * Register HTTP Basic Auth hook
    */
   private registerAuthHook(auth: AuthConfig): void {
+    const basePath = this.options.basePath ?? ''
+    const healthPath = `${basePath}/api/healthz`
+
     this.app.addHook('onRequest', async (request: FastifyRequest, reply: FastifyReply) => {
-      // Skip auth for health check
-      if (request.url === '/healthz') {
+      // Skip auth for health check (always available, even without auth)
+      if (request.url.split('?')[0] === healthPath) {
         return
       }
 

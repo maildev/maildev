@@ -34,6 +34,11 @@ export default [
     },
     rules: {
       ...tseslint.configs.recommended.rules,
+      // TypeScript's compiler already checks for undefined identifiers and
+      // understands type-only references (e.g. DOM types like RequestInit),
+      // which core no-undef does not. Disabling it is the typescript-eslint
+      // recommended practice.
+      'no-undef': 'off',
       '@typescript-eslint/no-unused-vars': [
         'error',
         { argsIgnorePattern: '^_', varsIgnorePattern: '^_' },

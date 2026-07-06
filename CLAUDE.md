@@ -86,9 +86,6 @@ The Model Context Protocol (MCP) is Anthropic's standard for connecting AI assis
 # Via npm
 npm install -g maildev@3.0.0
 
-# Via Homebrew (recommended for macOS)
-brew install maildev
-
 # Via Docker
 docker pull maildev/maildev:3.0.0
 ```

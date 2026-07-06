@@ -97,6 +97,7 @@ maildev:
   image: maildev/maildev
   ports:
     - "1080:1080"
+    - "1025:1025"
 ```
 
 Here's an example using Nodemailer:

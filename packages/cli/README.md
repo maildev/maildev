@@ -7,7 +7,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
 
 > [!IMPORTANT]
-> MailDev 3.0 release candidate has now been released which includes a complete re-write and re-structuring of the entire project. If you run into any issues, please install the latest v2 release.
+> MailDev 3.0 release candidate has now been released which includes a complete re-write and re-structuring of the entire project. If you run into any issues, please install the latest [v2](https://github.com/maildev/maildev/tree/v2) release.
 
 **MailDev** is a simple way to test your project's generated email during development, with an easy to use web interface that runs on your machine built on top of [Node.js](http://www.nodejs.org).
 

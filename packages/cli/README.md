@@ -28,7 +28,7 @@ npm install -g maildev
 If you want to use MailDev with [Docker](https://www.docker.com/), you can use the
 [**maildev/maildev** image on Docker Hub](https://hub.docker.com/r/maildev/maildev).
 For a guide for usage with Docker,
-[checkout the docs](https://github.com/maildev/maildev/blob/master/docs/docker.md).
+[checkout the docs](https://github.com/maildev/maildev/blob/main/docs/docker.md).
 
 ```bash
 docker run -p 1080:1080 -p 1025:1025 maildev/maildev
@@ -101,7 +101,7 @@ Configuration priority: CLI args > Environment variables > Config file > Default
 ## API
 
 MailDev can be used in your Node.js application. For more info view the
-[API docs](https://github.com/maildev/maildev/blob/master/docs/api.md).
+[API docs](https://github.com/maildev/maildev/blob/main/docs/api.md).
 
 ```typescript
 import { MailDev } from 'maildev'
@@ -122,7 +122,7 @@ await maildev.stop()
 ```
 
 MailDev also has a **REST API**. For more info
-[view the docs](https://github.com/maildev/maildev/blob/master/docs/rest.md).
+[view the docs](https://github.com/maildev/maildev/blob/main/docs/rest.md).
 
 ## Claude Integration (MCP)
 
@@ -138,7 +138,8 @@ This exposes an MCP endpoint at `/mcp` that allows Claude to:
 - Analyze email content
 - Monitor email delivery
 
-For detailed setup instructions, see [CLAUDE.md](./CLAUDE.md).
+For detailed setup instructions — both transports, Claude Desktop config, and the
+available tools, resources, and prompts — [see the MCP docs](https://github.com/maildev/maildev/blob/main/docs/mcp.md).
 
 ## Outgoing Email
 

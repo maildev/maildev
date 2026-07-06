@@ -14,9 +14,10 @@ export default defineConfig({
     port: 5173,
     proxy: {
       '/api': {
+        // API routes are served under the /api prefix (see @maildev/api
+        // registerRoutes), so forward the path unchanged — do NOT strip /api.
         target: 'http://localhost:1080',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api/, ''),
       },
       '/socket.io': {
         target: 'http://localhost:1080',

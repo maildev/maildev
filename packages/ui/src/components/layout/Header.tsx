@@ -277,7 +277,9 @@ export function Header() {
                 <div
                   className={cn(
                     'h-5 w-9 rounded-full transition-colors',
-                    notificationsEnabled ? 'bg-[hsl(var(--primary))]' : 'bg-[hsl(var(--muted))]'
+                    notificationsEnabled
+                      ? 'bg-blue-600 dark:bg-blue-500'
+                      : 'bg-gray-300 dark:bg-gray-600'
                   )}
                 >
                   <div
@@ -319,7 +321,9 @@ export function Header() {
                 <div
                   className={cn(
                     'h-5 w-9 rounded-full transition-colors',
-                    autoShowNewMail ? 'bg-[hsl(var(--primary))]' : 'bg-[hsl(var(--muted))]'
+                    autoShowNewMail
+                      ? 'bg-blue-600 dark:bg-blue-500'
+                      : 'bg-gray-300 dark:bg-gray-600'
                   )}
                 >
                   <div

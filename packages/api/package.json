@@ -43,15 +43,15 @@
     "@maildev/core": "workspace:*",
     "@maildev/mcp": "workspace:*",
     "@maildev/smtp": "workspace:*",
-    "@modelcontextprotocol/sdk": "^1.0.0",
-    "fastify": "^5.2.1",
+    "@modelcontextprotocol/sdk": "^1.29.0",
+    "fastify": "^5.10.0",
     "fastify-plugin": "^5.0.1",
-    "socket.io": "^4.8.1"
+    "socket.io": "^4.8.3"
   },
   "devDependencies": {
     "@types/node": "^22.10.7",
     "tsx": "^4.19.0",
     "typescript": "^5.7.3",
-    "vitest": "^3.0.4"
+    "vitest": "^3.2.7"
   }
 }

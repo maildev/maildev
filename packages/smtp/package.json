@@ -40,20 +40,20 @@
   },
   "dependencies": {
     "@maildev/core": "workspace:*",
-    "smtp-server": "^3.13.6",
-    "nodemailer": "^6.9.16",
-    "mailparser": "^3.7.2",
-    "dompurify": "^3.2.3",
-    "jsdom": "^25.0.1",
+    "smtp-server": "^3.19.2",
+    "nodemailer": "^9.0.3",
+    "mailparser": "^3.9.14",
+    "dompurify": "^3.4.11",
+    "jsdom": "^26.0.0",
     "wildstring": "^1.0.8"
   },
   "devDependencies": {
     "@types/dompurify": "^3.0.5",
     "@types/jsdom": "^21.1.7",
     "@types/mailparser": "^3.4.5",
-    "@types/nodemailer": "^6.4.17",
+    "@types/nodemailer": "6.4.17",
     "@types/smtp-server": "^3.5.10",
-    "vitest": "^3.0.0",
+    "vitest": "^3.2.7",
     "typescript": "^5.7.3"
   }
 }

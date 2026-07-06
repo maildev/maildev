@@ -15,7 +15,7 @@
 >
 > **Inngest** is the durable execution platform for AI agents and workflows enabling you to ship reliable products with no infrastructure.
 
-![MailDev Screenshot](https://github.com/maildev/maildev/blob/gh-pages/images/screenshot-2021-01-03.png?raw=true)
+![MailDev Screenshot](https://github.com/maildev/maildev/blob/main/.github/assets/screenshot-3.0-rc.png?raw=true)
 
 ## Install
 

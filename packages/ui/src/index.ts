@@ -4,7 +4,9 @@
  * React-based web UI for MailDev.
  */
 
-export const VERSION = '3.0.0-alpha.0'
+// Note: this constant is not currently exported from the package's build
+// output, so it is maintained by hand rather than by a build step.
+export const VERSION = '3.0.0-rc.1'
 
 // Re-export components for library usage
 export { App } from './App'

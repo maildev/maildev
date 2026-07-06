@@ -15,7 +15,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node scripts/set-version.mjs",
     "dev": "tsc --watch",
     "lint": "eslint src/",
     "typecheck": "tsc --noEmit",

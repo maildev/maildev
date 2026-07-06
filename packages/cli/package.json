@@ -18,7 +18,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && node scripts/set-version.mjs",
     "dev": "tsc --watch",
     "lint": "eslint src/",
     "cli": "chmod +x ./dist/bin/maildev.js && ./dist/bin/maildev.js",

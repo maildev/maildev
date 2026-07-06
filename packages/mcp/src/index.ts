@@ -9,7 +9,9 @@
  * - MCP prompts for common email testing workflows
  */
 
-export const VERSION = '3.0.0-alpha.0'
+// The value below is a dev-time fallback. On build, scripts/set-version.mjs
+// rewrites this constant in dist/index.js to match package.json's version.
+export const VERSION = '3.0.0-rc.1'
 
 // Server
 export { createServer, startServer, type MailDevMCPServerOptions } from './server.js'

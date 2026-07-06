@@ -43,24 +43,6 @@ overrides:
   postcss: ^8.5.10
   immutable: ^5.1.5
   '@babel/core': ^7.29.1
-allowBuilds:
-  '@parcel/watcher': false
-  esbuild: true
-minimumReleaseAgeExclude:
-  - '@turbo/darwin-64@2.10.4'
-  - '@turbo/darwin-arm64@2.10.4'
-  - '@turbo/linux-64@2.10.4'
-  - '@turbo/linux-arm64@2.10.4'
-  - '@turbo/windows-64@2.10.4'
-  - '@turbo/windows-arm64@2.10.4'
-  - '@vitest/coverage-v8@3.2.7'
-  - '@vitest/expect@3.2.7'
-  - '@vitest/mocker@3.2.7'
-  - '@vitest/pretty-format@3.2.7'
-  - '@vitest/runner@3.2.7'
-  - '@vitest/snapshot@3.2.7'
-  - '@vitest/spy@3.2.7'
-  - '@vitest/utils@3.2.7'
-  - turbo@2.10.4
-  - vitest@3.2.7
-  - hono@4.12.28
+# esbuild ships prebuilt platform binaries via a postinstall; allow it to run.
+onlyBuiltDependencies:
+  - esbuild

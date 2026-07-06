@@ -2,7 +2,7 @@
   "name": "@maildev/monorepo",
   "description": "MailDev monorepo — SMTP server and web interface for reading and testing emails during development",
   "private": true,
-  "packageManager": "pnpm@11.10.0",
+  "packageManager": "pnpm@10.34.4",
   "keywords": [
     "email",
     "e-mail",

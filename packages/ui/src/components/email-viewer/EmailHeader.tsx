@@ -324,7 +324,7 @@ export function EmailHeader({ email }: EmailHeaderProps) {
           {email.attachments.map((attachment, index) => (
             <Tooltip key={index} content={`Download ${attachment.filename ?? 'attachment'}`}>
               <a
-                href={api.emails.attachmentUrl(email.id, attachment.filename ?? `attachment-${index}`)}
+                href={api.emails.attachmentUrl(email.id, attachment.generatedFileName)}
                 target="_blank"
                 rel="noopener noreferrer"
                 className={cn(

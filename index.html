@@ -1,527 +1,636 @@
 <!doctype html>
-<html>
-<head>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="chrome=1">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MailDev — Local SMTP server & email inbox for developers</title>
+    <meta
+      name="description"
+      content="MailDev is a local SMTP server and modern web inbox that catches every email your app sends during development. Now with first-class MCP integration, so AI agents like Claude, Cursor, and Codex can read your dev inbox. Free and open source."
+    />
+    <link rel="canonical" href="https://maildev.github.io/maildev/" />
 
-  <title>MailDev - Create better emails during development</title>
-  <meta name="description" content="SMTP Server + Web Interface for viewing and testing emails during development. An open source project originally created by Dan Farrelly.">
+    <!-- Open Graph / Twitter -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="MailDev" />
+    <meta
+      property="og:title"
+      content="MailDev — Local SMTP server & email inbox for developers"
+    />
+    <meta
+      property="og:description"
+      content="Catch, inspect, and test emails locally with a modern web UI — and let AI agents like Claude, Cursor, and Codex read your dev inbox via MCP."
+    />
+    <meta property="og:url" content="https://maildev.github.io/maildev/" />
+    <meta
+      property="og:image"
+      content="https://maildev.github.io/maildev/assets/img/og.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:title"
+      content="MailDev — Local SMTP server & email inbox for developers"
+    />
+    <meta
+      name="twitter:description"
+      content="Catch, inspect, and test emails locally with a modern web UI — and let AI agents like Claude, Cursor, and Codex read your dev inbox via MCP."
+    />
+    <meta
+      name="twitter:image"
+      content="https://maildev.github.io/maildev/assets/img/og.png"
+    />
 
-  <link rel="shortcut icon" href="favicon.ico">
+    <link rel="icon" type="image/svg+xml" href="icon.svg" />
+    <link rel="icon" href="favicon.ico" sizes="any" />
+    <link rel="apple-touch-icon" href="icon.svg" />
+    <link rel="alternate" type="text/markdown" href="index.md" />
 
-  <link href="assets/style/global.css" rel="stylesheet">
-  <link rel="stylesheet" href="assets/font/inter-3-15/inter-block.css">
+    <link rel="stylesheet" href="assets/font/inter-3-15/inter-block.css" />
+    <link rel="stylesheet" href="assets/css/site.css" />
 
-</head>
-<body class="antialiased font-sans min-h-screen">
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "SoftwareApplication",
+        "name": "MailDev",
+        "applicationCategory": "DeveloperApplication",
+        "operatingSystem": "macOS, Linux, Windows, Docker",
+        "description": "A local SMTP server and modern web inbox that catches every email your app sends during development, with first-class Model Context Protocol (MCP) integration so AI agents like Claude, Cursor, and Codex can read the dev inbox.",
+        "url": "https://maildev.github.io/maildev/",
+        "downloadUrl": "https://www.npmjs.com/package/maildev",
+        "license": "https://github.com/maildev/maildev/blob/main/LICENSE",
+        "softwareVersion": "3.0",
+        "offers": { "@type": "Offer", "price": "0", "priceCurrency": "USD" },
+        "sameAs": [
+          "https://github.com/maildev/maildev",
+          "https://www.npmjs.com/package/maildev",
+          "https://hub.docker.com/r/maildev/maildev"
+        ]
+      }
+    </script>
 
-  <header class="bg-brand py-16  text-center">
-    <div class="container max-w-screen-md mx-auto px-4">
-      <h1 class="text-5xl text-white font-semibold">MailDev</h1>
-      <p class="text-white mt-6 text-lg font-medium">SMTP server & web interface for viewing and testing emails during development.</p>
-      <div class="mt-8 mx-auto relative rounded border border-white border-opacity-30 overflow-hidden shadow">
-        <img class="" src="assets/img/compressed/maildev-dark.png" alt="MailDev dark theme interface screenshot">
-        <img tabindex="0" class="absolute inset-0 opacity-100 focus:opacity-0 hover:opacity-0 transition-opacity" src="assets/img/compressed/maildev-light.png" alt="MailDev light theme interface screenshot">
-      </div>
-      <div class="mx-auto w-max mt-10 px-3 py-3 rounded flex flex-col md:flex-row justify-center items-center bg-white bg-opacity-10">
-        <div class="">
-          <a href="https://github.com/maildev/maildev" class="inline-flex items-center bg-github-btn hover:bg-github-btn-hover text-black rounded py-1 px-2 shadow">
-            <svg class="h-4 w-4" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-            <span class="text-sm text-sm font-semibold pl-1">View on GitHub</span>
-          </a>
-        </div>
-        <div class="mx-3 w-px h-4 bg-white opacity-20 hidden md:inline-block"></div>
-        <div class="my-3 h-px w-4 bg-white opacity-20 md:hidden block"></div>
-        <div class="border border-white border-opacity-20 overflow-hidden rounded">
-          <a class="twitter-share-button" href="https://twitter.com/intent/tweet" data-related="djfarrelly" data-text="MailDev - a simple way to test your project's emails during development">Tweet</a>
-        </div>
-      </div>
-      <div class="mx-auto mt-10 px-3 py-3 rounded flex flex-col md:flex-row justify-center items-center bg-white bg-opacity-10">
-        <a href="https://www.inngest.com/?ref=maildev-site" style="min-width: 200px; max-width: 260px;">
-          <img src="assets/img/original/inngest-logo.svg" alt="Inngest Logo" style="width:100%"/>
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-5G748V38MT"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-5G748V38MT");
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav">
+        <a class="brand" href="./">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <rect width="64" height="64" rx="14" fill="currentColor" />
+            <g
+              fill="none"
+              stroke="#FAFAFA"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="14" y="20" width="36" height="26" rx="4" />
+              <path d="M14.5 23.5 L32 36 L49.5 23.5" />
+            </g>
+          </svg>
+          MailDev
         </a>
-        <p class="ml-4 text-left">MailDev is sponsored by ⭐️&nbsp; <strong><u><a href="https://github.com/inngest/inngest" class="underline">inngest/inngest</a></u></strong>. Inngest is an open-source, event-driven platform that makes it easy for developers to <u><a href="https://www.inngest.com/?ref=maildev-site" class="underline">build, test and deploy serverless functions</a></u> that are triggered by events. Check it out and give it a star!
-        </p>
+        <nav class="nav-links">
+          <a href="mcp/">MCP</a>
+          <a href="setup/" class="hide-sm">Setup</a>
+          <a
+            href="https://github.com/maildev/maildev/tree/main/docs"
+            class="hide-sm"
+            >Docs ↗</a
+          >
+          <a
+            class="star-pill"
+            href="https://github.com/maildev/maildev"
+            aria-label="Star MailDev on GitHub"
+          >
+            <svg class="gh" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            <svg class="star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.26 6.9.6-5.2 4.52 1.55 6.74L12 17.77l-6.15 3.35L7.4 14.38 2.2 9.86l6.9-.6L12 2z"/></svg>
+            <span data-gh-stars>5,900+</span>
+          </a>
+        </nav>
       </div>
-    </div>
-  </header>
+    </header>
 
-  <div class="container max-w-screen-md mx-auto px-4 mt-16 text-center">
-    <p class="text-lg opacity-95"><strong>MailDev</strong> is a simple way to test your project&#39;s generated emails during development with an easy-to-use web interface that runs on your machine.</p>
-  </div>
+    <main>
+      <!-- Hero -->
+      <section class="hero">
+        <div class="container">
+          <span class="eyebrow">MailDev 3.0</span>
+          <h1>The local email inbox<br />for developers</h1>
+          <p class="lead">
+            A local SMTP server and modern web UI that catches every email your
+            app sends during development. Now readable by your AI agent via the
+            Model Context Protocol.
+          </p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#install">Get started</a>
+            <a
+              class="btn btn-secondary"
+              href="https://github.com/maildev/maildev"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+                />
+              </svg>
+              View on GitHub
+            </a>
+          </div>
+          <p class="hero-note">
+            Free &amp; open source (MIT) · <code>npm i -g maildev</code>
+          </p>
 
-  <div class="container max-w-screen-md mx-auto px-4 mt-16 text-white text-center">
-    <dl class="space-y-14 md:space-y-0 md:grid md:grid-cols-3 md:gap-x-12 md:gap-y-12">
-      <div>
-        <div class="h-auto md:h-40 w-56 md:w-auto mx-auto rounded shadow overflow-hidden">
-          <img class="w-full" src="assets/img/compressed/responsive.png" alt="MailDev interface screenshot">
+          <div
+            class="shot-frame"
+            tabindex="0"
+            aria-label="MailDev 3.0 web interface, light and dark themes"
+          >
+            <img
+              class="shot-light"
+              src="assets/img/screenshots/inbox-light.png"
+              width="1920"
+              height="1200"
+              alt="MailDev 3.0 web interface showing a caught email rendered as HTML, with a list of received emails"
+            />
+            <img
+              class="shot-dark"
+              src="assets/img/screenshots/inbox-dark.png"
+              width="1920"
+              height="1200"
+              alt="MailDev 3.0 web interface in dark mode"
+            />
+          </div>
+          <p class="shot-hint">
+            Hover the screenshot to preview dark mode · ships with light &amp;
+            dark themes
+          </p>
         </div>
-        <dt class="mt-4 text-lg leading-6 font-medium text-gray-900">Test responsive emails</dt>
-        <dd class="mt-1 text-sm text-gray-600">
-          Resizable viewport to test your emails at different sizes.
-        </dd>
-      </div>
-      <div>
-        <div class="h-auto md:h-40 w-56 md:w-auto mx-auto rounded shadow overflow-hidden">
-          <img class="w-full" src="assets/img/compressed/formats.png" alt="MailDev interface screenshot">
+      </section>
+
+      <!-- Sponsor -->
+      <section class="sponsor-band">
+        <div class="container">
+          <div class="sponsor">
+            <a href="https://www.inngest.com/?ref=maildev" aria-label="Inngest">
+              <img src="assets/img/original/inngest-logo.svg" alt="Inngest" />
+            </a>
+            <p>
+              MailDev is sponsored by ⭐️
+              <strong
+                ><a href="https://www.inngest.com/?ref=maildev"
+                  >Inngest</a
+                ></strong
+              >
+              — the durable execution platform for AI agents and workflows,
+              letting you ship reliable products with no infrastructure. Check
+              it out today!
+            </p>
+          </div>
         </div>
-        <dt class="mt-4 text-lg leading-6 font-medium text-gray-900">Switch between formats</dt>
-        <dd class="mt-1 text-sm text-gray-600">
-          View email HTML, plain text, headers or raw source.
-        </dd>
-      </div>
-      <div>
-        <div class="h-auto md:h-40 w-56 md:w-auto mx-auto rounded shadow overflow-hidden">
-          <img class="w-full" src="assets/img/compressed/search.png" alt="MailDev interface screenshot">
+      </section>
+
+      <!-- Flagship: MCP -->
+      <section class="section-alt" id="mcp">
+        <div class="container">
+          <div class="mcp">
+            <div>
+              <span class="eyebrow">New in 3.0</span>
+              <h2>Your dev inbox, readable by your AI agent</h2>
+              <p class="muted">
+                MailDev ships a built-in
+                <strong>Model Context Protocol (MCP)</strong> server, so AI
+                agents can search your inbox, pull verification links, and check
+                that email actually went out — in plain language. Works with any
+                MCP client, including Claude, Cursor, and Codex.
+              </p>
+              <p>Turn it on with a single flag:</p>
+              <pre><code><span class="cmd">maildev --mcp</span>
+<span class="comment"># MCP endpoint now live at http://localhost:1080/mcp</span></code></pre>
+              <p class="muted">
+                Or run the standalone <code>maildev-mcp</code> stdio server for
+                desktop AI tools.
+              </p>
+              <ul class="pill-list">
+                <li class="pill">5 tools</li>
+                <li class="pill">3 resources</li>
+                <li class="pill">4 prompts</li>
+              </ul>
+              <p style="margin-top: 1.25rem">
+                <a href="mcp/">Read the MCP integration guide →</a>
+              </p>
+            </div>
+            <div class="chat">
+              <div class="chat-head">
+                <span class="dot" style="background: #ff5f57"></span>
+                <span class="dot" style="background: #febc2e"></span>
+                <span class="dot" style="background: #28c840"></span>
+                <span style="margin-left: 0.5rem">AI agent + MailDev</span>
+              </div>
+              <div class="chat-body">
+                <div class="bubble bubble-user">
+                  Get me the verification link from the signup email to
+                  user@test.com
+                </div>
+                <div class="bubble bubble-ai">
+                  Found the signup email sent 12s ago. The verification link
+                  is:<br /><code>https://app.test/verify?token=a1b2c3</code>
+                </div>
+                <div class="bubble bubble-user">
+                  Did the password reset email actually go out?
+                </div>
+                <div class="bubble bubble-ai">
+                  Yes — a “Reset your password” email was delivered to
+                  user@test.com 4s ago with a valid reset link. ✅
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <dt class="mt-4 text-lg leading-6 font-medium text-gray-900">Search emails inbox</dt>
-        <dd class="mt-1 text-sm text-gray-600">
-          Convenient search feature to quickly find any email.
-        </dd>
-      </div>
-    </dl>
-  </div>
+      </section>
 
-  <div class="h-2"></div>
-
-  <div class="container max-w-screen-md mx-auto px-4 mt-16 mb-12 text-white">
-    <dl class="space-y-8 md:space-y-0 md:grid md:grid-cols-2 md:gap-x-8 md:gap-y-8">
-      <div class="text-center md:relative md:text-left">
-        <dt>
-          <div class="md:absolute inline-flex items-center justify-center h-12 w-12 rounded-md bg-brand text-white">
-            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-terminal"><polyline points="4 17 10 11 4 5"></polyline><line x1="12" y1="19" x2="20" y2="19"></line></svg>
+      <!-- Screenshot feature trio -->
+      <section>
+        <div class="container">
+          <div class="section-head">
+            <h2>Everything you need to test email locally</h2>
+            <p>
+              Catch mail on a local SMTP port and inspect it in a fast, modern
+              interface.
+            </p>
           </div>
-          <p class="md:ml-16 mt-2 md:mt-0 text-lg leading-6 font-medium text-gray-900">Programmatic & CLI</p>
-        </dt>
-        <dd class="md:ml-16 mt-1 text-sm text-gray-600">
-          Use MailDev programmatically or via command line interface.
-        </dd>
-      </div>
-      <div class="text-center md:relative md:text-left">
-        <dt>
-          <div class="md:absolute inline-flex items-center justify-center h-12 w-12 rounded-md bg-brand text-white">
-            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-layers"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+          <div class="grid grid-3">
+            <div class="card card-shot">
+              <img
+                src="assets/img/screenshots/formats.png"
+                width="1920"
+                height="1200"
+                loading="lazy"
+                alt="MailDev showing the raw source of an email with HTML, Plain Text, Headers and Source tabs"
+              />
+              <div class="card-body">
+                <h3>Every format</h3>
+                <p>
+                  Switch between rendered HTML, plain text, headers, and raw
+                  source for any message.
+                </p>
+              </div>
+            </div>
+            <div class="card card-shot">
+              <img
+                src="assets/img/screenshots/responsive.png"
+                width="1920"
+                height="1200"
+                loading="lazy"
+                alt="MailDev previewing an HTML email at a 425px mobile viewport width"
+              />
+              <div class="card-body">
+                <h3>Responsive preview</h3>
+                <p>
+                  Resize the preview to any viewport to check how your emails
+                  render on mobile.
+                </p>
+              </div>
+            </div>
+            <div class="card card-shot">
+              <img
+                src="assets/img/screenshots/command-palette-light.png"
+                width="1920"
+                height="1200"
+                loading="lazy"
+                alt="MailDev command palette open, showing email actions and keyboard shortcuts, launched with Command-K"
+              />
+              <div class="card-body">
+                <h3>Command palette <kbd class="kbd">⌘K</kbd></h3>
+                <p>
+                  Hit <kbd class="kbd">⌘K</kbd> to jump anywhere, run actions,
+                  and search your inbox — without leaving the keyboard.
+                </p>
+              </div>
+            </div>
           </div>
-          <p class="md:ml-16 mt-2 md:mt-0 text-lg leading-6 font-medium text-gray-900">REST API</p>
-        </dt>
-        <dd class="md:ml-16 mt-1 text-sm text-gray-600">
-          Manage your inbox and emails via easily consumable REST API.
-        </dd>
-      </div>
-      <div class="text-center md:relative md:text-left">
-        <dt>
-          <div class="md:absolute inline-flex items-center justify-center h-12 w-12 rounded-md bg-brand text-white">
-            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-cw"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+        </div>
+      </section>
+
+      <!-- Feature grid -->
+      <section class="section-alt">
+        <div class="container">
+          <div class="section-head">
+            <h2>Built for modern development</h2>
+            <p>
+              A complete TypeScript rewrite — same zero-config workflow,
+              brand-new foundation.
+            </p>
           </div>
-          <p class="md:ml-16 mt-2 md:mt-0 text-lg leading-6 font-medium text-gray-900">Real-time</p>
-        </dt>
-        <dd class="md:ml-16 mt-1 text-sm text-gray-600">
-          Live interface updates via WebSocket integration.
-        </dd>
-      </div>
-      <div class="text-center md:relative md:text-left">
-        <dt>
-          <div class="md:absolute inline-flex items-center justify-center h-12 w-12 rounded-md bg-brand text-white">
-            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-bell"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          <div class="grid grid-3">
+            <div class="card feature">
+              <span class="icon"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="2" y="4" width="20" height="16" rx="2" />
+                  <path d="m22 7-10 5L2 7" /></svg
+              ></span>
+              <h3>SMTP catch-all</h3>
+              <p>
+                Point your app at <code>localhost:1025</code> and every outgoing
+                email lands in MailDev instead of a real inbox.
+              </p>
+            </div>
+            <div class="card feature">
+              <span class="icon"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M4 17V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"
+                  />
+                  <path d="m8 9 3 3-3 3" />
+                  <path d="M13 15h3" /></svg
+              ></span>
+              <h3>REST API</h3>
+              <p>
+                A full JSON API under <code>/api</code> to list, read, search,
+                download, and delete mail from your tests.
+              </p>
+            </div>
+            <div class="card feature">
+              <span class="icon"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M12 2v4" />
+                  <path d="m6.34 6.34-.7-.7" />
+                  <path d="M2 12h4" />
+                  <circle cx="12" cy="12" r="4" />
+                  <path d="M18 12h4" />
+                  <path d="m18.36 6.34.7-.7" /></svg
+              ></span>
+              <h3>Real-time</h3>
+              <p>
+                New mail appears instantly over WebSockets — no refresh, no
+                polling.
+              </p>
+            </div>
+            <div class="card feature">
+              <span class="icon"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"
+                  /></svg
+              ></span>
+              <h3>Attachments</h3>
+              <p>
+                Receive, preview, and download attachments exactly as they were
+                sent.
+              </p>
+            </div>
+            <div class="card feature">
+              <span class="icon"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m17 2 4 4-4 4" />
+                  <path d="M3 11v-1a4 4 0 0 1 4-4h14" />
+                  <path d="m7 22-4-4 4-4" />
+                  <path d="M21 13v1a4 4 0 0 1-4 4H3" /></svg
+              ></span>
+              <h3>Relay &amp; auto-relay</h3>
+              <p>
+                Selectively forward a message to a real SMTP server, or
+                auto-relay with allow/deny rules.
+              </p>
+            </div>
+            <div class="card feature">
+              <span class="icon"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                  <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg
+              ></span>
+              <h3>Notifications</h3>
+              <p>
+                Optional browser notifications the moment a new email is
+                received.
+              </p>
+            </div>
+            <div class="card feature">
+              <span class="icon"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M22 12A10 10 0 1 1 12 2a7 7 0 0 0 10 10Z" /></svg
+              ></span>
+              <h3>Light &amp; dark</h3>
+              <p>
+                A polished interface that follows your theme, easy on the eyes
+                at 2am.
+              </p>
+            </div>
+            <div class="card feature">
+              <span class="icon"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m18 16 4-4-4-4" />
+                  <path d="m6 8-4 4 4 4" />
+                  <path d="m14.5 4-5 16" /></svg
+              ></span>
+              <h3>TypeScript &amp; embeddable</h3>
+              <p>
+                Fully typed. Use the CLI, Docker, or embed the programmatic API
+                in your own Node app.
+              </p>
+            </div>
+            <div class="card feature">
+              <span class="icon"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <path d="M9 9h6v6H9z" />
+                  <path
+                    d="M9 3v2M15 3v2M9 19v2M15 19v2M3 9h2M3 15h2M19 9h2M19 15h2"
+                  /></svg
+              ></span>
+              <h3>Runs anywhere</h3>
+              <p>
+                One npm install or a single Docker command. Also serves over
+                HTTPS when you need it.
+              </p>
+            </div>
           </div>
-          <p class="md:ml-16 mt-2 md:mt-0 text-lg leading-6 font-medium text-gray-900">Browser notifications</p>
-        </dt>
-        <dd class="md:ml-16 mt-1 text-sm text-gray-600">
-          Receive browser notifications whenever new email is received.
-        </dd>
-      </div>
-      <div class="text-center md:relative md:text-left">
-        <dt>
-          <div class="md:absolute inline-flex items-center justify-center h-12 w-12 rounded-md bg-brand text-white">
-            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-fast-forward"><polygon points="13 19 22 12 13 5 13 19"></polygon><polygon points="2 19 11 12 2 5 2 19"></polygon></svg>
+        </div>
+      </section>
+
+      <!-- Quickstart -->
+      <section id="install">
+        <div class="container narrow">
+          <div class="section-head">
+            <h2>Get started in seconds</h2>
+            <p>
+              Install, point your mail transport at port 1025, and open the
+              inbox.
+            </p>
           </div>
-          <p class="md:ml-16 mt-2 md:mt-0 text-lg leading-6 font-medium text-gray-900">Relay</p>
-        </dt>
-        <dd class="md:ml-16 mt-1 text-sm text-gray-600">
-          Retransmit incoming emails to an upstream SMTP server.
-        </dd>
-      </div>
-      <div class="text-center md:relative md:text-left">
-        <dt>
-          <div class="md:absolute inline-flex items-center justify-center h-12 w-12 rounded-md bg-brand text-white">
-            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-paperclip"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"></path></svg>
-          </div>
-          <p class="md:ml-16 mt-2 md:mt-0 text-lg leading-6 font-medium text-gray-900">Attachments</p>
-        </dt>
-        <dd class="md:ml-16 mt-1 text-sm text-gray-600">
-          Receive and view email attachments.
-        </dd>
-      </div>
-      <div class="text-center md:relative md:text-left">
-        <dt>
-          <div class="md:absolute inline-flex items-center justify-center h-12 w-12 rounded-md bg-brand text-white">
-            <svg class="h-6 w-6" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-moon"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
-          </div>
-          <p class="md:ml-16 mt-2 md:mt-0 text-lg leading-6 font-medium text-gray-900">Dark theme</p>
-        </dt>
-        <dd class="md:ml-16 mt-1 text-sm text-gray-600">
-          View your emails in an eye-friendly dark interface.
-        </dd>
-      </div>
-      <div class="text-center md:relative md:text-left">
-        <dt>
-          <div class="md:absolute inline-flex items-center justify-center h-12 w-12 rounded-md bg-brand text-white">
-            <svg class="h-6 w-6"  xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-hexagon"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path></svg>
-          </div>
-          <p class="md:ml-16 mt-2 md:mt-0 text-lg leading-6 font-medium text-gray-900">Built with Node.js</p>
-        </dt>
-        <dd class="md:ml-16 mt-1 text-sm text-gray-600">
-          MailDev source code is written with JavaScript on top of Node.js.
-        </dd>
-      </div>
-    </dl>
-  </div>
 
-  <hr class="mt-20 mb-20" />
+          <h3>Install with npm</h3>
+          <pre><code><span class="cmd">npm install -g maildev</span>
+<span class="cmd">maildev</span></code></pre>
 
-  <div class="container max-w-screen-md mx-auto pb-16 px-4 bg-white">
-    <article class="prose max-w-full">
+          <h3>…or with Docker</h3>
+          <pre><code><span class="cmd">docker run -p 1080:1080 -p 1025:1025 maildev/maildev</span></code></pre>
 
-<!-- README content start -->
-<!--
-  https://raw.githubusercontent.com/maildev/maildev/master/README.md
-  passed through https://marked.js.org/demo/
--->
-
-<h1 id="maildev">MailDev</h1>
-<p><a href="https://standardjs.com"><img src="https://img.shields.io/badge/code_style-standard-brightgreen.svg" alt="JavaScript Style Guide"></a></p>
-<p><strong>MailDev</strong> is a simple way to test your project&#39;s generated emails during development with an easy to use web interface that runs on your machine. Built on top of <a href="http://www.nodejs.org">Node.js</a>.</p>
-<p><img src="https://github.com/maildev/maildev/blob/gh-pages/images/screenshot-2021-01-03.png?raw=true" alt="MailDev Screenshot"></p>
-<h2 id="docker-run">Docker Run</h2>
-<p>If you want to use MailDev with <a href="https://www.docker.com/">Docker</a>, you can use the
-<a href="https://hub.docker.com/r/soulteary/maildev"><strong>soulteary/maildev</strong> image on Docker Hub</a>.
-For a guide for usage with Docker,
-<a href="https://github.com/maildev/maildev/blob/master/docs/docker.md">checkout the docs</a>.</p>
-<pre><code>$ docker run -p 1080:1080 -p 1025:1025 soulteary/maildev
-</code></pre>
-<h2 id="usage">Usage</h2>
-<pre><code>Usage: maildev [options]
-</code></pre>
-<table>
-<thead>
-<tr>
-<th>Options</th>
-<th>Environment variable</th>
-<th>Description</th>
-</tr>
-</thead>
-<tbody><tr>
-<td><code>-s, --smtp &lt;port&gt;</code></td>
-<td><code>MAILDEV_SMTP_PORT</code></td>
-<td>SMTP port to catch emails</td>
-</tr>
-<tr>
-<td><code>-w, --web &lt;port&gt;</code></td>
-<td><code>MAILDEV_WEB_PORT</code></td>
-<td>Port to run the Web GUI</td>
-</tr>
-<tr>
-<td><code>--mail-directory &lt;path&gt;</code></td>
-<td><code>MAILDEV_MAIL_DIRECTORY</code></td>
-<td>Directory for persisting mails</td>
-</tr>
-<tr>
-<td><code>--https</code></td>
-<td><code>MAILDEV_HTTPS</code></td>
-<td>Switch from http to https protocol</td>
-</tr>
-<tr>
-<td><code>--https-key &lt;file&gt;</code></td>
-<td><code>MAILDEV_HTTPS_KEY</code></td>
-<td>The file path to the ssl private key</td>
-</tr>
-<tr>
-<td><code>--https-cert &lt;file&gt;</code></td>
-<td><code>MAILDEV_HTTPS_CERT</code></td>
-<td>The file path to the ssl cert file</td>
-</tr>
-<tr>
-<td><code>--ip &lt;ip address&gt;</code></td>
-<td><code>MAILDEV_IP</code></td>
-<td>IP Address to bind SMTP service to</td>
-</tr>
-<tr>
-<td><code>--outgoing-host &lt;host&gt;</code></td>
-<td><code>MAILDEV_OUTGOING_HOST</code></td>
-<td>SMTP host for outgoing emails</td>
-</tr>
-<tr>
-<td><code>--outgoing-port &lt;port&gt;</code></td>
-<td><code>MAILDEV_OUTGOING_PORT</code></td>
-<td>SMTP port for outgoing emails</td>
-</tr>
-<tr>
-<td><code>--outgoing-user &lt;user&gt;</code></td>
-<td><code>MAILDEV_OUTGOING_USER</code></td>
-<td>SMTP user for outgoing emails</td>
-</tr>
-<tr>
-<td><code>--outgoing-pass &lt;password&gt;</code></td>
-<td><code>MAILDEV_OUTGOING_PASS</code></td>
-<td>SMTP password for outgoing emails</td>
-</tr>
-<tr>
-<td><code>--outgoing-secure</code></td>
-<td><code>MAILDEV_OUTGOING_SECURE</code></td>
-<td>Use SMTP SSL for outgoing emails</td>
-</tr>
-<tr>
-<td><code>--auto-relay [email]</code></td>
-<td><code>MAILDEV_AUTO_RELAY</code></td>
-<td>Use auto-relay mode. Optional relay email address</td>
-</tr>
-<tr>
-<td><code>--auto-relay-rules &lt;file&gt;</code></td>
-<td><code>MAILDEV_AUTO_RELAY_RULES</code></td>
-<td>Filter rules for auto relay mode</td>
-</tr>
-<tr>
-<td><code>--incoming-user &lt;user&gt;</code></td>
-<td><code>MAILDEV_INCOMING_USER</code></td>
-<td>SMTP user for incoming emails</td>
-</tr>
-<tr>
-<td><code>--incoming-pass &lt;pass&gt;</code></td>
-<td><code>MAILDEV_INCOMING_PASS</code></td>
-<td>SMTP password for incoming emails</td>
-</tr>
-<tr>
-<td><code>--web-ip &lt;ip address&gt;</code></td>
-<td><code>MAILDEV_WEB_IP</code></td>
-<td>IP Address to bind HTTP service to, defaults to --ip</td>
-</tr>
-<tr>
-<td><code>--web-user &lt;user&gt;</code></td>
-<td><code>MAILDEV_WEB_USER</code></td>
-<td>HTTP user for GUI</td>
-</tr>
-<tr>
-<td><code>--web-pass &lt;password&gt;</code></td>
-<td><code>MAILDEV_WEB_PASS</code></td>
-<td>HTTP password for GUI</td>
-</tr>
-<tr>
-<td><code>--base-pathname &lt;path&gt;</code></td>
-<td><code>MAILDEV_BASE_PATHNAME</code></td>
-<td>Base path for URLs</td>
-</tr>
-<tr>
-<td><code>--disable-web</code></td>
-<td><code>MAILDEV_DISABLE_WEB</code></td>
-<td>Disable the use of the web interface. Useful for unit testing</td>
-</tr>
-<tr>
-<td><code>--hide-extensions &lt;extensions&gt;</code></td>
-<td><code>MAILDEV_HIDE_EXTENSIONS</code></td>
-<td>Comma separated list of SMTP extensions to NOT advertise (SMTPUTF8, PIPELINING, 8BITMIME)</td>
-</tr>
-<tr>
-<td><code>-o, --open</code></td>
-<td></td>
-<td>Open the Web GUI after startup</td>
-</tr>
-<tr>
-<td><code>-v, --verbose</code></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><code>--silent</code></td>
-<td></td>
-<td></td>
-</tr>
-<tr>
-<td><code>--log-mail-contents</code></td>
-<td></td>
-<td>Log a JSON representation of each incoming mail</td>
-</tr>
-</tbody></table>
-<h2 id="api">API</h2>
-<p>MailDev can be used in your Node.js application. For more info view the
-<a href="https://github.com/maildev/maildev/blob/master/docs/api.md">API docs</a>.</p>
-<pre><code class="language-javascript">const MailDev = require(&quot;maildev&quot;);
-
-const maildev = new MailDev();
-
-maildev.listen();
-
-maildev.on(&quot;new&quot;, function (email) {
-  // We got a new email!
-});
-</code></pre>
-<p>MailDev also has a <strong>REST API</strong>. For more info
-<a href="https://github.com/maildev/maildev/blob/master/docs/rest.md">view the docs</a>.</p>
-<h2 id="outgoing-email">Outgoing email</h2>
-<p>Maildev optionally supports selectively relaying email to an outgoing SMTP server. If you configure outgoing
-email with the --outgoing-* options you can click &quot;Relay&quot; on an individual email to relay through MailDev out
-to a real SMTP service that will *actually* send the email to the recipient.</p>
-<p>Example:</p>
-<pre><code>$ maildev --outgoing-host smtp.gmail.com \
-          --outgoing-secure \
-          --outgoing-user &#39;you@gmail.com&#39; \
-          --outgoing-pass &#39;&lt;pass&gt;&#39;
-</code></pre>
-<h3 id="auto-relay-mode">Auto relay mode</h3>
-<p>Enabling the auto relay mode will automatically send each email to it&#39;s recipient
-without the need to click the &quot;Relay&quot; button mentioned above.
-The outgoing email options are required to enable this feature.</p>
-<p>Optionally you may pass an single email address which Maildev will forward all
-emails to instead of the original recipient. For example, using
-<code>--auto-relay you@example.com</code> will forward all emails to that address
-automatically.</p>
-<p>Additionally, you can pass a valid json file with additional configuration for
-what email addresses you would like to <code>allow</code> or <code>deny</code>. The last matching
-rule in the array will be the rule MailDev will follow.</p>
-<p>Example:</p>
-<pre><code>$ maildev --outgoing-host smtp.gmail.com \
-          --outgoing-secure \
-          --outgoing-user &#39;you@gmail.com&#39; \
-          --outgoing-pass &#39;&lt;pass&gt;&#39; \
-          --auto-relay \
-          --auto-relay-rules file.json
-</code></pre>
-<p>Rules example file:</p>
-<pre><code class="language-javascript">[
-  { allow: &quot;*&quot; },
-  { deny: &quot;*@test.com&quot; },
-  { allow: &quot;ok@test.com&quot; },
-  { deny: &quot;*@utah.com&quot; },
-  { allow: &quot;johnny@utah.com&quot; },
-];
-</code></pre>
-<p>This would allow <code>angelo@fbi.gov</code>, <code>ok@test.com</code>, <code>johnny@utah.com</code>, but deny
-<code>bodhi@test.com</code>.</p>
-<h2 id="configure-your-project">Configure your project</h2>
-<p>Configure your application to send emails via port <code>1025</code> and open <code>localhost:1080</code> in your browser.</p>
-<p><strong>Nodemailer (v1.0+)</strong></p>
-<pre><code class="language-javascript">// We add this setting to tell nodemailer the host isn&#39;t secure during dev
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = &quot;0&quot;;
-
+          <h3>Send mail to it</h3>
+          <p class="muted">
+            Configure your app to send over SMTP on <code>localhost:1025</code>,
+            then open <code>http://localhost:1080</code>. For example, with
+            Nodemailer:
+          </p>
+          <pre><code><span class="comment">// Nodemailer — no auth needed in development</span>
 const transport = nodemailer.createTransport({
+  host: 'localhost',
   port: 1025,
-  // other settings...
-});
-</code></pre>
-<p><strong>Django</strong> -- Add <code>EMAIL_PORT = 1025</code> in your settings file <a href="https://docs.djangoproject.com/en/dev/ref/settings/#std:setting-EMAIL_PORT">[source]</a></p>
-<p><strong>Rails</strong> -- config settings:</p>
-<pre><code class="language-ruby">config.action_mailer.delivery_method = :smtp
-    config.action_mailer.smtp_settings = {
-        address: &quot;localhost&quot;,
-        port: 1025,
-        enable_starttls_auto: false
-    }
-</code></pre>
-<p><strong>Drupal</strong> -- Install and configure <a href="https://www.drupal.org/project/smtp">SMTP</a> module or use a library like <a href="http://swiftmailer.org/">SwiftMailer</a>.</p>
-<h2 id="features">Features</h2>
-<ul>
-<li>Toggle between HTML, plain text views as well as view email headers</li>
-<li>Test responsive emails with resizable preview pane available for various screen sizes</li>
-<li>Ability to receive and view email attachments</li>
-<li>WebSocket integration keeps the interface in sync once emails are received</li>
-<li>Command line interface for configuring SMTP and web interface ports</li>
-<li>Ability to relay email to an upstream SMTP server</li>
-</ul>
-<h2 id="ideas">Ideas</h2>
-<p>If you&#39;re using MailDev and you have a great idea, I&#39;d love to hear it. If you&#39;re not using MailDev because it lacks a feature, I&#39;d love to hear that too. Add an issue to the repo <a href="https://github.com/maildev/maildev/issues/new">here</a>.</p>
-<h2 id="contributing">Contributing</h2>
-<p>Any help on MailDev would be awesome. There is plenty of room for improvement. Feel free to <a href="https://github.com/maildev/maildev/issues/new">create a Pull Request</a> from small to big changes.</p>
-<p>To run <strong>MailDev</strong> during development:</p>
-<pre><code>npm install
-npm run dev
-</code></pre>
-<p>The &quot;dev&quot; task will run MailDev using nodemon and restart automatically when
-changes are detected. On <code>*.scss</code> file save, the css will also be recompiled.
-Using <code>test/send.js</code>, a few test emails will be sent every time the application
-restarts.</p>
-<p>The project uses the <a href="https://standardjs.com">JavaScript Standard coding style</a>.
-To lint your code before submitting your PR, run <code>npm run lint</code>.</p>
-<p>To run the test suite:</p>
-<pre><code>$ npm test
-</code></pre>
-<h2 id="changelog"><a href="https://github.com/maildev/maildev/releases">Changelog</a></h2>
-<h2 id="thanks">Thanks</h2>
-<p><strong>MailDev</strong> is built on using great open source projects including
-<a href="http://expressjs.com">Express</a>,
-<a href="http://angularjs.org/">AngularJS</a>,
-<a href="http://fontawesome.io/">Font Awesome</a> and two great projects from
-<a href="https://github.com/andris9">Andris Reinman</a>:
-<a href="https://github.com/nodemailer/smtp-server">smtp-server</a>
-and <a href="https://github.com/nodemailer/mailparser">mailparser</a>.
-Many thanks to Andris as his projects are the backbone of this app and to
-<a href="http://mailcatcher.me/">MailCatcher</a> for the inspiration.</p>
-<p>Additionally, thanks to all the awesome <a href="https://github.com/maildev/maildev/graphs/contributors">contributors</a>
-to the project.</p>
-<h2 id="license">License</h2>
-<p>MIT</p>
+})</code></pre>
+          <p style="margin-top: 1.25rem">
+            <a href="setup/"
+              >See setup for Django, Rails, Spring &amp; more →</a
+            >
+          </p>
+        </div>
+      </section>
+    </main>
 
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <a class="brand" href="./" style="margin-bottom: 0.5rem">
+            <svg viewBox="0 0 64 64" aria-hidden="true">
+              <rect width="64" height="64" rx="14" fill="currentColor" />
+              <g
+                fill="none"
+                stroke="#FAFAFA"
+                stroke-width="3.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="14" y="20" width="36" height="26" rx="4" />
+                <path d="M14.5 23.5 L32 36 L49.5 23.5" />
+              </g>
+            </svg>
+            MailDev
+          </a>
+          <p style="margin: 0">
+            Open source email testing for developers. MIT licensed.
+          </p>
+        </div>
+        <div class="footer-links">
+          <a href="mcp/">MCP</a>
+          <a href="setup/">Setup</a>
+          <a href="vs/mailcatcher/">vs Mailcatcher</a>
+          <a href="https://github.com/maildev/maildev">GitHub</a>
+          <a href="https://www.npmjs.com/package/maildev">npm</a>
+          <a href="https://hub.docker.com/r/maildev/maildev">Docker Hub</a>
+          <a href="https://github.com/maildev/maildev/tree/main/docs">Docs</a>
+          <a href="llms.txt">llms.txt</a>
+        </div>
+      </div>
+    </footer>
 
-<!-- README content end -->
-
-    </article>
-  </div>
-
-  <footer class="bg-brand py-12  text-center">
-    <div class="container max-w-screen-md mx-auto px-4">
-      <p class="text-white"><small>Hosted on GitHub Pages</small></p>
-    </div>
-  </footer>
-
-  <script>window.twttr = (function(d, s, id) {
-    var js, fjs = d.getElementsByTagName(s)[0],
-      t = window.twttr || {};
-    if (d.getElementById(id)) return t;
-    js = d.createElement(s);
-    js.id = id;
-    js.src = "https://platform.twitter.com/widgets.js";
-    fjs.parentNode.insertBefore(js, fjs);
-    t._e = [];
-    t.ready = function(f) {
-      t._e.push(f);
-    };
-    return t;
-  }(document, "script", "twitter-wjs"));</script>
-
-  <script>
-    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-    (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-    m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-    ga('create', 'UA-43857085-1', 'djfarrelly.github.io');
-    ga('send', 'pageview');
-  </script>
-
-  <!--
-    Feather icons (https://github.com/feathericons/feather) copyright notice:
-
-      The MIT License (MIT)
-
-      Copyright (c) 2013-2017 Cole Bemis
-
-      Permission is hereby granted, free of charge, to any person obtaining a copy
-      of this software and associated documentation files (the "Software"), to deal
-      in the Software without restriction, including without limitation the rights
-      to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-      copies of the Software, and to permit persons to whom the Software is
-      furnished to do so, subject to the following conditions:
-
-      The above copyright notice and this permission notice shall be included in all
-      copies or substantial portions of the Software.
-
-      THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-      IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-      FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-      AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-      LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-      OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-      SOFTWARE.
-  -->
-
-</body>
+    <script>
+      // Lazy-load the live GitHub star count; falls back to the inline value.
+      (function () {
+        var els = document.querySelectorAll("[data-gh-stars]");
+        if (!els.length) return;
+        function set(n) {
+          var t = n.toLocaleString("en-US");
+          els.forEach(function (e) {
+            e.textContent = t;
+          });
+        }
+        try {
+          var c = JSON.parse(localStorage.getItem("maildev-gh-stars") || "null");
+          if (c && typeof c.n === "number" && Date.now() - c.ts < 3600000) {
+            set(c.n);
+            return;
+          }
+        } catch (e) {}
+        fetch("https://api.github.com/repos/maildev/maildev")
+          .then(function (r) {
+            return r.ok ? r.json() : null;
+          })
+          .then(function (d) {
+            if (d && typeof d.stargazers_count === "number") {
+              set(d.stargazers_count);
+              try {
+                localStorage.setItem(
+                  "maildev-gh-stars",
+                  JSON.stringify({ n: d.stargazers_count, ts: Date.now() })
+                );
+              } catch (e) {}
+            }
+          })
+          .catch(function () {});
+      })();
+    </script>
+  </body>
 </html>

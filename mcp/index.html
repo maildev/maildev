@@ -1,0 +1,362 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Email testing with AI agents (MCP) — MailDev</title>
+    <meta
+      name="description"
+      content="Let your AI agent read your development inbox. MailDev 3.0 ships a built-in Model Context Protocol (MCP) server, so MCP clients like Claude, Cursor, and Codex can search emails, extract verification links, and confirm delivery in plain language."
+    />
+    <link rel="canonical" href="https://maildev.github.io/maildev/mcp/" />
+
+    <meta property="og:type" content="article" />
+    <meta property="og:site_name" content="MailDev" />
+    <meta property="og:title" content="Email testing with AI agents (MCP) — MailDev" />
+    <meta
+      property="og:description"
+      content="Let AI agents read your development inbox via MailDev's built-in Model Context Protocol server."
+    />
+    <meta property="og:url" content="https://maildev.github.io/maildev/mcp/" />
+    <meta
+      property="og:image"
+      content="https://maildev.github.io/maildev/assets/img/og.png"
+    />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta
+      name="twitter:image"
+      content="https://maildev.github.io/maildev/assets/img/og.png"
+    />
+
+    <link rel="icon" type="image/svg+xml" href="../icon.svg" />
+    <link rel="icon" href="../favicon.ico" sizes="any" />
+    <link rel="alternate" type="text/markdown" href="../mcp.md" />
+
+    <link rel="stylesheet" href="../assets/font/inter-3-15/inter-block.css" />
+    <link rel="stylesheet" href="../assets/css/site.css" />
+
+    <script
+      async
+      src="https://www.googletagmanager.com/gtag/js?id=G-5G748V38MT"
+    ></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+      gtag("config", "G-5G748V38MT");
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container nav">
+        <a class="brand" href="../">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <rect width="64" height="64" rx="14" fill="currentColor" />
+            <g
+              fill="none"
+              stroke="#FAFAFA"
+              stroke-width="3.5"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            >
+              <rect x="14" y="20" width="36" height="26" rx="4" />
+              <path d="M14.5 23.5 L32 36 L49.5 23.5" />
+            </g>
+          </svg>
+          MailDev
+        </a>
+        <nav class="nav-links">
+          <a href="./">MCP</a>
+          <a href="../setup/" class="hide-sm">Setup</a>
+          <a
+            href="https://github.com/maildev/maildev/tree/main/docs"
+            class="hide-sm"
+            >Docs ↗</a
+          >
+          <a
+            class="star-pill"
+            href="https://github.com/maildev/maildev"
+            aria-label="Star MailDev on GitHub"
+          >
+            <svg class="gh" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+            <svg class="star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.26 6.9.6-5.2 4.52 1.55 6.74L12 17.77l-6.15 3.35L7.4 14.38 2.2 9.86l6.9-.6L12 2z"/></svg>
+            <span data-gh-stars>5,900+</span>
+          </a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      <article
+        class="container article"
+        style="padding-top: 3.5rem; padding-bottom: 4rem"
+      >
+        <a class="back-link" href="../">← Back to MailDev</a>
+        <span class="eyebrow">New in 3.0</span>
+        <h1>Email testing with AI agents</h1>
+        <p class="lead">
+          MailDev 3.0 ships a built-in
+          <strong>Model Context Protocol (MCP)</strong> server, so AI agents can
+          search your development inbox, pull verification links, analyze
+          content, and confirm delivery — in natural language. It works with any
+          MCP client, including <strong>Claude</strong> (Desktop and Code),
+          <strong>Cursor</strong>, <strong>Codex</strong>, and Windsurf.
+        </p>
+
+        <p>
+          <strong>Why it matters:</strong> instead of clicking through your
+          inbox to grab a token or confirm an email fired during a test, you
+          just ask. “Get me the verification link from the signup email to
+          user@test.com.” “Did the password reset go out?” Your agent picks the
+          right tools and answers.
+        </p>
+
+        <blockquote
+          style="
+            border-left: 3px solid var(--accent);
+            padding: 0.5rem 1rem;
+            margin: 1.5rem 0;
+            color: var(--fg-muted);
+          "
+        >
+          ⚠️ <strong>Development only.</strong> The MCP server has full access to
+          email content. Run it in trusted environments, bound to localhost, and
+          never expose it to the internet.
+        </blockquote>
+
+        <div class="callout">
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M4 17V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z" />
+            <path d="m8 9 3 3-3 3" />
+            <path d="M13 15h3" />
+          </svg>
+          <p>
+            <strong>Don't want to use MCP?</strong> MailDev also has a full
+            <a href="https://github.com/maildev/maildev/blob/main/docs/rest.md"
+              >REST API</a
+            >
+            — list, read, search, download, and delete emails over plain JSON.
+            Perfect for driving your inbox from test suites and CI in any
+            language, no AI required.
+          </p>
+        </div>
+
+        <h2>Enable it</h2>
+        <p>
+          There are two transports. The integrated HTTP transport is the
+          simplest — just add the <code>--mcp</code> flag:
+        </p>
+        <pre><code><span class="cmd">maildev --mcp</span>
+<span class="comment"># SMTP  → localhost:1025</span>
+<span class="comment"># Web   → http://localhost:1080</span>
+<span class="comment"># MCP   → http://localhost:1080/mcp</span></code></pre>
+        <p>
+          For stdio-based clients (many desktop AI tools), run the standalone
+          server shipped by <code>@maildev/mcp</code>:
+        </p>
+        <pre><code><span class="cmd">maildev-mcp</span>
+<span class="comment"># connects to a running MailDev over its REST API</span>
+<span class="comment"># override with --url / MAILDEV_API_URL</span></code></pre>
+
+        <h2>Connect your MCP client</h2>
+        <p>
+          Add MailDev to your client's <code>mcpServers</code> config — a
+          project <code>.mcp.json</code> for Claude Code, Cursor, and Codex, or
+          <code>~/Library/Application Support/Claude/claude_desktop_config.json</code>
+          for Claude Desktop on macOS. Each entry takes an explicit
+          <code>type</code>.
+        </p>
+        <h3>HTTP transport (integrated <code>--mcp</code>)</h3>
+        <pre><code>{
+  "mcpServers": {
+    "maildev": {
+      "type": "http",
+      "url": "http://localhost:1080/mcp"
+    }
+  }
+}</code></pre>
+        <h3>stdio transport (standalone <code>maildev-mcp</code>)</h3>
+        <pre><code>{
+  "mcpServers": {
+    "maildev": {
+      "type": "stdio",
+      "command": "maildev-mcp",
+      "env": { "MAILDEV_API_URL": "http://localhost:1080" }
+    }
+  }
+}</code></pre>
+        <p class="muted">
+          Cursor, Codex, Windsurf, Claude Code, and Claude Desktop all accept
+          the same entry shape — check your client's MCP settings for which file
+          to edit. Restart the client after saving.
+        </p>
+
+        <h2>What your agent can do</h2>
+        <p>
+          The server exposes <strong>5 tools</strong>,
+          <strong>3 resources</strong>, and
+          <strong>4 ready-made prompts</strong>.
+        </p>
+
+        <h3>Tools</h3>
+        <ul>
+          <li>
+            <code>maildev_search_emails</code> — search by query, from, to,
+            subject, attachments, read state, or time range
+          </li>
+          <li>
+            <code>maildev_get_email</code> — full content + attachments for one
+            email
+          </li>
+          <li>
+            <code>maildev_get_latest_email</code> — the most recent email(s)
+          </li>
+          <li><code>maildev_delete_email</code> — delete an email by ID</li>
+          <li>
+            <code>maildev_get_attachment</code> — download an attachment as
+            base64
+          </li>
+        </ul>
+
+        <h3>Resources</h3>
+        <ul>
+          <li><code>maildev://emails</code> — the full inbox</li>
+          <li>
+            <code>maildev://stats</code> —
+            <code>{ emailCount, unreadCount, newestEmail, oldestEmail }</code>
+          </li>
+          <li><code>maildev://email/{id}</code> — a specific email by ID</li>
+        </ul>
+
+        <h3>Prompts</h3>
+        <ul>
+          <li>
+            <code>verify-signup-email</code> — find a signup/verification email
+            and extract its link
+          </li>
+          <li>
+            <code>check-password-reset</code> — find a reset email and extract
+            the token/link
+          </li>
+          <li>
+            <code>analyze-email-content</code> — pull key info like prices,
+            dates, and links
+          </li>
+          <li>
+            <code>monitor-email-delivery</code> — watch for an expected email and
+            verify its contents
+          </li>
+        </ul>
+
+        <h2>Try asking</h2>
+        <ul>
+          <li>“Did I receive any emails in the last 5 minutes?”</li>
+          <li>
+            “Get me the verification link from the signup email to
+            user@test.com”
+          </li>
+          <li>“Summarize the latest order confirmation email”</li>
+          <li>“Did the password reset email go out to user@test.com?”</li>
+          <li>“Delete the old test emails”</li>
+        </ul>
+
+        <p style="margin-top: 2rem">
+          Full reference, including programmatic setup and troubleshooting,
+          lives in the
+          <a href="https://github.com/maildev/maildev/blob/main/docs/mcp.md"
+            >MCP docs on GitHub</a
+          >.
+        </p>
+
+        <p style="margin-top: 2rem">
+          <a class="btn btn-primary" href="../#install"
+            >Get started with MailDev</a
+          >
+        </p>
+      </article>
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-grid">
+        <div>
+          <a class="brand" href="../" style="margin-bottom: 0.5rem">
+            <svg viewBox="0 0 64 64" aria-hidden="true">
+              <rect width="64" height="64" rx="14" fill="currentColor" />
+              <g
+                fill="none"
+                stroke="#FAFAFA"
+                stroke-width="3.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+              >
+                <rect x="14" y="20" width="36" height="26" rx="4" />
+                <path d="M14.5 23.5 L32 36 L49.5 23.5" />
+              </g>
+            </svg>
+            MailDev
+          </a>
+          <p style="margin: 0">
+            Open source email testing for developers. MIT licensed.
+          </p>
+        </div>
+        <div class="footer-links">
+          <a href="./">MCP</a>
+          <a href="../setup/">Setup</a>
+          <a href="../vs/mailcatcher/">vs Mailcatcher</a>
+          <a href="https://github.com/maildev/maildev">GitHub</a>
+          <a href="https://www.npmjs.com/package/maildev">npm</a>
+          <a href="https://hub.docker.com/r/maildev/maildev">Docker Hub</a>
+          <a href="../llms.txt">llms.txt</a>
+        </div>
+      </div>
+    </footer>
+
+    <script>
+      // Lazy-load the live GitHub star count; falls back to the inline value.
+      (function () {
+        var els = document.querySelectorAll("[data-gh-stars]");
+        if (!els.length) return;
+        function set(n) {
+          var t = n.toLocaleString("en-US");
+          els.forEach(function (e) {
+            e.textContent = t;
+          });
+        }
+        try {
+          var c = JSON.parse(localStorage.getItem("maildev-gh-stars") || "null");
+          if (c && typeof c.n === "number" && Date.now() - c.ts < 3600000) {
+            set(c.n);
+            return;
+          }
+        } catch (e) {}
+        fetch("https://api.github.com/repos/maildev/maildev")
+          .then(function (r) {
+            return r.ok ? r.json() : null;
+          })
+          .then(function (d) {
+            if (d && typeof d.stargazers_count === "number") {
+              set(d.stargazers_count);
+              try {
+                localStorage.setItem(
+                  "maildev-gh-stars",
+                  JSON.stringify({ n: d.stargazers_count, ts: Date.now() })
+                );
+              } catch (e) {}
+            }
+          })
+          .catch(function () {});
+      })();
+    </script>
+  </body>
+</html>

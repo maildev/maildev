@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://maildev.github.io/maildev/sitemap.xml

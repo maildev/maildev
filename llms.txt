@@ -1,0 +1,23 @@
+# MailDev
+
+> MailDev is a free, open-source local SMTP server and modern web inbox that catches every email your app sends during development. Point your mail transport at localhost:1025 and view the results at localhost:1080 — nothing reaches real inboxes. MailDev 3.0 adds a built-in Model Context Protocol (MCP) server, so AI agents like Claude, Cursor, and Codex can read the dev inbox.
+
+Key facts:
+- Install: `npm install -g maildev` then `maildev`, or `docker run -p 1080:1080 -p 1025:1025 maildev/maildev`
+- Default ports: SMTP 1025 (where your app sends mail), Web UI + REST API + MCP 1080
+- Enable MCP: `maildev --mcp` (endpoint at http://localhost:1080/mcp), or run the standalone `maildev-mcp` stdio server for desktop AI tools. Works with any MCP client (Claude Desktop/Code, Cursor, Codex, Windsurf).
+- License: MIT. Repository: https://github.com/maildev/maildev. Package: https://www.npmjs.com/package/maildev
+- MailDev 3.0 is a complete TypeScript rewrite (React web UI, Fastify API, MCP server) organized as a pnpm monorepo.
+
+## Pages
+- [Home](https://maildev.github.io/maildev/index.md): Overview, features, and quickstart.
+- [Email testing with AI agents (MCP)](https://maildev.github.io/maildev/mcp.md): How to enable the MCP server and let AI agents (Claude, Cursor, Codex, and other MCP clients) search your inbox, extract verification links, and confirm delivery. Lists the 5 tools, 3 resources, and 4 prompts.
+- [Connect your app](https://maildev.github.io/maildev/setup.md): Send development email to MailDev from Nodemailer, Django, Rails, and Spring Boot.
+- [MailDev vs Mailcatcher](https://maildev.github.io/maildev/vs-mailcatcher.md): Factual comparison of the two local email-testing tools.
+
+## Documentation (GitHub)
+- [MCP / Claude integration](https://github.com/maildev/maildev/blob/main/docs/mcp.md): Transports, Claude Desktop config, tools, resources, and prompts.
+- [REST API](https://github.com/maildev/maildev/blob/main/docs/rest.md): JSON API under /api for listing, reading, searching, downloading, and deleting mail.
+- [Programmatic API](https://github.com/maildev/maildev/blob/main/docs/api.md): Embedding MailDev in a Node.js application.
+- [Docker](https://github.com/maildev/maildev/blob/main/docs/docker.md): Running under Docker and Docker Compose.
+- [HTTPS](https://github.com/maildev/maildev/blob/main/docs/https.md): Serving the UI over TLS.

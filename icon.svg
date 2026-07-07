@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" width="16" height="16">
+  <!-- Matches the MailDev UI favicon (packages/ui useFaviconBadge): blue envelope body + darker flap -->
+  <rect x="0" y="4" width="16" height="10" fill="#3b82f6"/>
+  <polygon points="0,4 8,10 16,4" fill="#2563eb"/>
+</svg>

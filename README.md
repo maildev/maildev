@@ -19,3 +19,10 @@ compile step.
 ## Notes
 
 - Regenerate screenshots by running MailDev locally and re-capturing the UI.
+- The social card (`assets/img/og.png`) is rendered from an HTML template at
+  `assets/og/og.html`. Edit the copy/design there, then re-render:
+
+  ```bash
+  npx playwright screenshot --viewport-size=1200,630 \
+    assets/og/og.html assets/img/og.png
+  ```

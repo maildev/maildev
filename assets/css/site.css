@@ -365,12 +365,12 @@ table.compare td.no { color: var(--fg-muted); }
 /* ---------- Sponsor ---------- */
 .sponsor-band { padding: 1rem 0 4rem; }
 .sponsor {
-  display: flex; align-items: center; gap: 1.5rem;
+  display: flex; align-items: center; gap: 1rem;
   background: var(--card); border: 1px solid var(--border);
   border-radius: var(--radius-lg); padding: 1.5rem; box-shadow: var(--shadow);
   max-width: 760px; margin: 0 auto;
 }
-.sponsor img { width: 150px; flex-shrink: 0; }
+.sponsor img { max-width: 240px; flex-shrink: 0; }
 .sponsor p { margin: 0; font-size: 0.95rem; color: var(--fg-muted); }
 @media (max-width: 560px) { .sponsor { flex-direction: column; text-align: center; } }
 

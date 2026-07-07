@@ -1,0 +1,155 @@
+<!doctype html>
+<!--
+  Source for the 1200x630 Open Graph social card (../img/og.png).
+  Edit the copy/design here, then re-render to PNG (see ../../README.md):
+    npx playwright screenshot --viewport-size=1200,630 assets/og/og.html assets/img/og.png
+-->
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <style>
+      * {
+        margin: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        width: 1200px;
+        height: 630px;
+      }
+      body {
+        font-family:
+          -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        background: #fafafa;
+        color: #182436;
+        padding: 72px 80px;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: relative;
+        overflow: hidden;
+      }
+      .glow {
+        position: absolute;
+        width: 720px;
+        height: 720px;
+        border-radius: 50%;
+        background: radial-gradient(
+          circle,
+          rgba(37, 99, 235, 0.14),
+          transparent 70%
+        );
+        top: -260px;
+        right: -180px;
+      }
+      .grid-fade {
+        position: absolute;
+        inset: 0;
+        background-image:
+          linear-gradient(rgba(24, 36, 54, 0.04) 1px, transparent 1px),
+          linear-gradient(90deg, rgba(24, 36, 54, 0.04) 1px, transparent 1px);
+        background-size: 40px 40px;
+        mask-image: radial-gradient(circle at 78% 12%, #000, transparent 60%);
+        -webkit-mask-image: radial-gradient(
+          circle at 78% 12%,
+          #000,
+          transparent 60%
+        );
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        z-index: 1;
+      }
+      .brand .mark {
+        width: 76px;
+        height: 76px;
+        border-radius: 18px;
+        background: #182436;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .brand .mark svg {
+        width: 46px;
+        height: 46px;
+      }
+      .brand .name {
+        font-size: 46px;
+        font-weight: 800;
+        letter-spacing: -0.02em;
+      }
+      .brand .ver {
+        font-size: 20px;
+        font-weight: 600;
+        color: #2563eb;
+        border: 1px solid rgba(37, 99, 235, 0.35);
+        background: rgba(37, 99, 235, 0.08);
+        border-radius: 999px;
+        padding: 6px 16px;
+        margin-left: 6px;
+      }
+      h1 {
+        font-size: 66px;
+        font-weight: 800;
+        line-height: 1.05;
+        letter-spacing: -0.03em;
+        max-width: 940px;
+        z-index: 1;
+      }
+      h1 .accent {
+        color: #2563eb;
+      }
+      .foot {
+        display: flex;
+        align-items: center;
+        gap: 28px;
+        font-size: 24px;
+        color: #556072;
+        z-index: 1;
+      }
+      .foot .chip {
+        color: #182436;
+        font-weight: 600;
+      }
+      .dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #2563eb;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="grid-fade"></div>
+    <div class="glow"></div>
+    <div class="brand">
+      <span class="mark">
+        <svg
+          viewBox="0 0 64 64"
+          fill="none"
+          stroke="#FAFAFA"
+          stroke-width="4"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <rect x="12" y="18" width="40" height="30" rx="5" />
+          <path d="M12.5 21.5 L32 37 L51.5 21.5" />
+        </svg>
+      </span>
+      <span class="name">MailDev</span>
+      <span class="ver">3.0</span>
+    </div>
+    <h1>
+      The local email inbox for developers and
+      <span class="accent">agents</span>
+    </h1>
+    <div class="foot">
+      <span class="chip">SMTP catcher</span><span class="dot"></span>
+      <span class="chip">Web UI</span><span class="dot"></span>
+      <span class="chip">REST API</span><span class="dot"></span>
+      <span class="chip">MCP for Agents</span>
+    </div>
+  </body>
+</html>

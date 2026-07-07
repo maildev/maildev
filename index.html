@@ -25,7 +25,7 @@
     <meta property="og:url" content="https://maildev.github.io/maildev/" />
     <meta
       property="og:image"
-      content="https://maildev.github.io/maildev/assets/img/og.png"
+      content="https://maildev.github.io/maildev/assets/img/og.png?v=2"
     />
     <meta name="twitter:card" content="summary_large_image" />
     <meta
@@ -38,7 +38,7 @@
     />
     <meta
       name="twitter:image"
-      content="https://maildev.github.io/maildev/assets/img/og.png"
+      content="https://maildev.github.io/maildev/assets/img/og.png?v=2"
     />
 
     <link rel="icon" type="image/svg+xml" href="icon.svg" />
@@ -115,8 +115,26 @@
             href="https://github.com/maildev/maildev"
             aria-label="Star MailDev on GitHub"
           >
-            <svg class="gh" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-            <svg class="star" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2l2.9 6.26 6.9.6-5.2 4.52 1.55 6.74L12 17.77l-6.15 3.35L7.4 14.38 2.2 9.86l6.9-.6L12 2z"/></svg>
+            <svg
+              class="gh"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+              />
+            </svg>
+            <svg
+              class="star"
+              viewBox="0 0 24 24"
+              fill="currentColor"
+              aria-hidden="true"
+            >
+              <path
+                d="M12 2l2.9 6.26 6.9.6-5.2 4.52 1.55 6.74L12 17.77l-6.15 3.35L7.4 14.38 2.2 9.86l6.9-.6L12 2z"
+              />
+            </svg>
             <span data-gh-stars>5,900+</span>
           </a>
         </nav>
@@ -184,10 +202,13 @@
         <div class="container">
           <div class="sponsor">
             <a href="https://www.inngest.com/?ref=maildev" aria-label="Inngest">
-              <img src="assets/img/original/inngest-logo.svg" alt="Inngest" />
+              <img
+                src="assets/img/inngest-logotype-on-white.png"
+                alt="Inngest"
+              />
             </a>
             <p>
-              MailDev is sponsored by ⭐️
+              MailDev is sponsored by
               <strong
                 ><a href="https://www.inngest.com/?ref=maildev"
                   >Inngest</a
@@ -608,7 +629,9 @@ const transport = nodemailer.createTransport({
           });
         }
         try {
-          var c = JSON.parse(localStorage.getItem("maildev-gh-stars") || "null");
+          var c = JSON.parse(
+            localStorage.getItem("maildev-gh-stars") || "null",
+          );
           if (c && typeof c.n === "number" && Date.now() - c.ts < 3600000) {
             set(c.n);
             return;
@@ -624,7 +647,7 @@ const transport = nodemailer.createTransport({
               try {
                 localStorage.setItem(
                   "maildev-gh-stars",
-                  JSON.stringify({ n: d.stargazers_count, ts: Date.now() })
+                  JSON.stringify({ n: d.stargazers_count, ts: Date.now() }),
                 );
               } catch (e) {}
             }

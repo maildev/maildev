@@ -124,21 +124,23 @@ await maildev.stop()
 MailDev also has a **REST API**. For more info
 [view the docs](https://github.com/maildev/maildev/blob/main/docs/rest.md).
 
-## Claude Integration (MCP)
+## AI Agent Integration (MCP)
 
-MailDev includes a Model Context Protocol (MCP) server for integration with Claude. Enable it with `--mcp`:
+MailDev includes a Model Context Protocol (MCP) server so AI agents can work with
+your dev inbox. It works with any MCP client — Claude (Desktop and Code), Cursor,
+Codex, Windsurf, and more. Enable it with `--mcp`:
 
 ```bash
 maildev --mcp
 ```
 
-This exposes an MCP endpoint at `/mcp` that allows Claude to:
+This exposes an MCP endpoint at `/mcp` that lets an agent:
 - Search and retrieve emails
 - Extract verification links and tokens
 - Analyze email content
 - Monitor email delivery
 
-For detailed setup instructions — both transports, Claude Desktop config, and the
+For detailed setup instructions — both transports, client config, and the
 available tools, resources, and prompts — [see the MCP docs](https://github.com/maildev/maildev/blob/main/docs/mcp.md).
 
 ## Outgoing Email

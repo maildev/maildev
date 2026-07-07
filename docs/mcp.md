@@ -1,9 +1,10 @@
-# Claude Integration (MCP)
+# AI Agent Integration (MCP)
 
 MailDev 3.0 includes a [Model Context Protocol (MCP)](https://modelcontextprotocol.io)
-server, letting AI assistants like Claude interact with your development inbox
-using natural language — searching emails, extracting verification links,
-analyzing content, and monitoring delivery.
+server, letting AI agents interact with your development inbox using natural
+language — searching emails, extracting verification links, analyzing content,
+and monitoring delivery. It works with any MCP client, including Claude (Desktop
+and Code), Cursor, Codex, and Windsurf.
 
 > ⚠️ **Development only.** The MCP server has full access to email content. Run
 > it in trusted environments, bound to localhost, and never expose it to the
@@ -37,7 +38,7 @@ under it (e.g. `/maildev/mcp`).
 
 ### Standalone stdio transport
 
-For stdio-based clients such as Claude Desktop, run the dedicated MCP CLI shipped
+For stdio-based clients (many desktop AI tools), run the dedicated MCP CLI shipped
 by the `@maildev/mcp` package:
 
 ```bash
@@ -60,20 +61,37 @@ maildev-mcp --url http://localhost:1080
 
 ---
 
-## Configuring Claude Desktop
+## Configuring your MCP client
 
-Edit your Claude Desktop configuration file:
+Add MailDev to your client's `mcpServers` config. Claude Code, Cursor, and Codex
+read a project-level `.mcp.json`; Claude Desktop uses its own config file:
 
 - **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
 - **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
 - **Linux**: `~/.config/Claude/claude_desktop_config.json`
 
-**For stdio mode** (standalone `maildev-mcp`):
+Each server entry takes an explicit `type`.
+
+**HTTP mode** (integrated `--mcp`, recommended):
 
 ```json
 {
   "mcpServers": {
     "maildev": {
+      "type": "http",
+      "url": "http://localhost:1080/mcp"
+    }
+  }
+}
+```
+
+**stdio mode** (standalone `maildev-mcp`):
+
+```json
+{
+  "mcpServers": {
+    "maildev": {
+      "type": "stdio",
       "command": "maildev-mcp",
       "env": {
         "MAILDEV_API_URL": "http://localhost:1080"
@@ -83,19 +101,7 @@ Edit your Claude Desktop configuration file:
 }
 ```
 
-**For HTTP mode** (integrated `--mcp`):
-
-```json
-{
-  "mcpServers": {
-    "maildev": {
-      "url": "http://localhost:1080/mcp"
-    }
-  }
-}
-```
-
-Restart Claude Desktop after updating the config.
+Restart your client after updating the config.
 
 ---
 
@@ -199,7 +205,7 @@ Download an email attachment as base64-encoded content.
 
 ## Usage examples
 
-Once connected, you can ask Claude things like:
+Once connected, you can ask your agent things like:
 
 > "Did I receive any emails in the last 5 minutes?"
 
@@ -211,19 +217,19 @@ Once connected, you can ask Claude things like:
 
 > "Delete the old test emails"
 
-Claude selects the appropriate tools (search, get, get-latest, delete,
+The agent selects the appropriate tools (search, get, get-latest, delete,
 get-attachment) to answer.
 
 ---
 
 ## Troubleshooting
 
-**Claude can't connect to the MCP server**
+**Your client can't connect to the MCP server**
 
 1. Verify MailDev is running and the API is reachable:
    `curl http://localhost:1080/api/healthz`
-2. Check the MCP config in Claude Desktop.
-3. Restart Claude Desktop after config changes.
+2. Check the MCP config in your client (`.mcp.json` or the Claude Desktop config file).
+3. Restart your client after config changes.
 4. For stdio mode, confirm `MAILDEV_API_URL` points at the running instance.
 
 **Tools return errors**
@@ -231,7 +237,7 @@ get-attachment) to answer.
 1. Confirm the REST API is accessible (see the health check above).
 2. If authentication is enabled, provide the API key via `MAILDEV_API_KEY`
    (stdio) or the appropriate auth header.
-3. Review the tool parameters in Claude's output.
+3. Review the tool parameters in the agent's output.
 
 **Slow performance**
 

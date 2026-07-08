@@ -228,6 +228,116 @@ describe('APIServer', () => {
       expect(deleted).toBeUndefined()
     })
 
+    it('should delete multiple emails on POST /email/delete', async () => {
+      const emails: Email[] = [
+        {
+          id: 'bulk-1',
+          time: new Date(),
+          read: false,
+          subject: 'Bulk Email 1',
+          source: '/path/1.eml',
+          size: 100,
+          sizeHuman: '100 B',
+          from: [{ address: 'a@test.com' }],
+          to: [{ address: 'b@test.com' }],
+          headers: {},
+          attachments: [],
+          envelope: { from: { address: 'a@test.com' }, to: [{ address: 'b@test.com' }] },
+          calculatedBcc: [],
+        },
+        {
+          id: 'bulk-2',
+          time: new Date(),
+          read: false,
+          subject: 'Bulk Email 2',
+          source: '/path/2.eml',
+          size: 200,
+          sizeHuman: '200 B',
+          from: [{ address: 'c@test.com' }],
+          to: [{ address: 'd@test.com' }],
+          headers: {},
+          attachments: [],
+          envelope: { from: { address: 'c@test.com' }, to: [{ address: 'd@test.com' }] },
+          calculatedBcc: [],
+        },
+        {
+          id: 'keep-me',
+          time: new Date(),
+          read: false,
+          subject: 'Keep Email',
+          source: '/path/3.eml',
+          size: 300,
+          sizeHuman: '300 B',
+          from: [{ address: 'e@test.com' }],
+          to: [{ address: 'f@test.com' }],
+          headers: {},
+          attachments: [],
+          envelope: { from: { address: 'e@test.com' }, to: [{ address: 'f@test.com' }] },
+          calculatedBcc: [],
+        },
+      ]
+
+      for (const email of emails) {
+        await storage.save(email)
+      }
+
+      server = createAPIServer({ storage, port: 0 })
+      await server.start()
+
+      const response = await server.server.inject({
+        method: 'POST',
+        url: '/api/email/delete',
+        payload: {
+          ids: ['bulk-1', 'bulk-2', 'bulk-1', 'missing'],
+        },
+      })
+
+      expect(response.statusCode).toBe(200)
+      expect(response.json()).toEqual({
+        deleted: ['bulk-1', 'bulk-2'],
+        notFound: ['missing'],
+      })
+
+      expect(await storage.getById('bulk-1')).toBeUndefined()
+      expect(await storage.getById('bulk-2')).toBeUndefined()
+      expect(await storage.getById('keep-me')).toBeDefined()
+    })
+
+    it('should reject invalid bulk delete payloads', async () => {
+      server = createAPIServer({ storage, port: 0 })
+      await server.start()
+
+      const missingBodyResponse = await server.server.inject({
+        method: 'POST',
+        url: '/api/email/delete',
+      })
+
+      expect(missingBodyResponse.statusCode).toBe(400)
+      expect(missingBodyResponse.json()).toEqual({
+        error: 'Request body must include an ids array of email IDs',
+      })
+
+      const invalidPayloads: Array<Record<string, unknown>> = [
+        {},
+        { ids: 'not-an-array' },
+        { ids: ['valid-id', ''] },
+        { ids: ['valid-id', 123] },
+      ]
+
+      for (const payload of invalidPayloads) {
+        const response = await server.server.inject({
+          method: 'POST',
+          url: '/api/email/delete',
+          payload,
+        })
+
+        expect(response.statusCode).toBe(400)
+        expect(response.json()).toEqual({
+          error: 'Request body must include an ids array of email IDs',
+        })
+      }
+    })
+
     it('should delete all emails on DELETE /email/all', async () => {
       const emails: Email[] = [
         {

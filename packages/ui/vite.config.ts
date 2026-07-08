@@ -4,6 +4,10 @@ import tailwindcss from '@tailwindcss/vite'
 import { resolve } from 'path'
 
 export default defineConfig({
+  // Relative base so the built asset URLs resolve against the injected
+  // <base href> tag, letting MailDev be served under any base path
+  // (root or a reverse-proxy sub-path) without a rebuild.
+  base: './',
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

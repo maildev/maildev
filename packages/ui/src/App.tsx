@@ -6,6 +6,7 @@ import { useUIStore } from './stores/ui'
 import { useEmailList, useMarkReadOnOpen } from './hooks/useEmails'
 import { useFaviconBadge } from './hooks/useFaviconBadge'
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
+import { useEmailRoute } from './hooks/useEmailRoute'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -31,6 +32,9 @@ function AppContent() {
 
   // Reflect the read state the server sets when an email is opened
   useMarkReadOnOpen()
+
+  // Deep-link the selected email and follow browser back/forward navigation
+  useEmailRoute()
 
   // Apply theme class to document
   useEffect(() => {

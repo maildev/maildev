@@ -1,5 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { parseEmailRoute, updateEmailRoute } from '../lib/emailRoute'
 
 interface UIState {
   /** Currently selected email ID */
@@ -19,6 +20,7 @@ interface UIState {
 
   // Actions
   setSelectedEmail: (id: string | null) => void
+  syncSelectedEmailFromRoute: (id: string | null) => void
   toggleTheme: () => void
   setTheme: (theme: 'light' | 'dark') => void
   setSearchQuery: (query: string) => void
@@ -32,7 +34,7 @@ interface UIState {
 export const useUIStore = create<UIState>()(
   persist(
     (set) => ({
-      selectedEmailId: null,
+      selectedEmailId: typeof window === 'undefined' ? null : parseEmailRoute(window.location.hash),
       theme: 'light',
       searchQuery: '',
       sidebarCollapsed: false,
@@ -40,7 +42,12 @@ export const useUIStore = create<UIState>()(
       autoShowNewMail: false,
       commandPaletteOpen: false,
 
-      setSelectedEmail: (id) => set({ selectedEmailId: id }),
+      setSelectedEmail: (id) => {
+        set({ selectedEmailId: id })
+        updateEmailRoute(id)
+      },
+
+      syncSelectedEmailFromRoute: (id) => set({ selectedEmailId: id }),
 
       toggleTheme: () =>
         set((state) => ({

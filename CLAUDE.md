@@ -1,7 +1,54 @@
-# MailDev — Development Guide
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 **MailDev 3.0** is a mail server + web UI for viewing and testing email during
 development, with first-class Claude support via the Model Context Protocol (MCP).
+
+---
+
+## Architecture
+
+Packages form a strict dependency chain (all ESM — `"type": "module"`, so
+relative imports must carry `.js` extensions even in `.ts` source):
+
+```
+core ──→ smtp, api, mcp, ui ──→ cli   (cli depends on every other package)
+```
+
+- **`core`** — the shared foundation. Owns the `Email` type and the `Storage`
+  interface with two implementations: `MemoryStorage` (default) and
+  `FileStorage` (used when a mail directory is configured). Everything upstream
+  talks to storage through this interface, never a concrete class. Also holds
+  the id/format/filter/clone/bcc utilities.
+- **`smtp`** — an `EventEmitter`-based SMTP server (wraps `smtp-server`). On
+  receipt it parses (`mailparser`), sanitizes HTML (`dompurify`/`jsdom`),
+  extracts attachments to disk, writes the `Email` to storage, then emits a
+  `new` event. Also implements outbound **relay** and **auto-relay**.
+- **`api`** — a Fastify server exposing the REST API (`/email`, attachments,
+  config, etc.), a **Socket.io** WebSocket that pushes live email events to the
+  UI, and optionally the **MCP HTTP transport** at `/mcp`.
+- **`ui`** — React 19 + Vite + Tailwind SPA (TanStack Query, Zustand, React
+  Router). Its `./server` export (`registerUI`) mounts the built assets onto the
+  API's Fastify instance via `@fastify/static`.
+- **`mcp`** — the MCP server (tools/resources/prompts). Key subtlety: its
+  handlers do **not** touch storage directly — they go through `MailDevClient`,
+  an **HTTP client that calls the REST API**. So MCP always sits in front of a
+  running MailDev over HTTP, whether embedded (`--mcp`) or standalone stdio
+  (`maildev-mcp`).
+- **`cli`** — the user-facing binary. `config/` layers defaults → file →
+  env → flags into a validated `MailDevConfig`; the **`Orchestrator`**
+  (`server/orchestrator.ts`) is the wiring hub that instantiates storage, the
+  SMTP server, and the API server (with UI + MCP), starts them in order, and
+  bridges SMTP's `new` event to logging.
+
+**Live-email data flow:** SMTP receives → parse/sanitize/store → emit `new` →
+API's Socket.io broadcasts → UI updates in real time. The REST API and MCP are
+read/query paths over the same storage.
+
+**Versioning quirk:** each publishable package hardcodes a `VERSION` constant as
+a dev fallback; `scripts/set-version.mjs` (run in each `build`) rewrites it in
+`dist` to match `package.json`. Releases are managed with **changesets**.
 
 ---
 

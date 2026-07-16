@@ -28,7 +28,7 @@ RUN pnpm install --frozen-lockfile
 FROM deps AS build
 WORKDIR /workspace
 RUN pnpm build
-RUN pnpm --filter=maildev deploy --prod /prod
+RUN pnpm --filter=maildev deploy --prod --legacy /prod
 
 # ── Production ───────────────────────────────────────────────────────────────
 FROM base AS prod
@@ -43,5 +43,9 @@ ENV MAILDEV_SMTP_PORT=1025
 
 ENTRYPOINT ["node", "dist/bin/maildev.js"]
 
-HEALTHCHECK --interval=10s --timeout=1s \
-  CMD wget -q -O - "http://localhost:${MAILDEV_WEB_PORT}${MAILDEV_BASE_PATHNAME}/api/healthz" || exit 1
+HEALTHCHECK --interval=10s --timeout=1s --start-period=5s --retries=3 \
+  CMD if [ "$(cat /tmp/maildev-https 2>/dev/null)" = "true" ]; then \
+    curl -k -f "https://localhost:${MAILDEV_WEB_PORT}${MAILDEV_BASE_PATHNAME}/api/healthz"; \
+  else \
+    curl -f "http://localhost:${MAILDEV_WEB_PORT}${MAILDEV_BASE_PATHNAME}/api/healthz"; \
+  fi

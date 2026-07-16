@@ -7,6 +7,7 @@
 import Fastify, { type FastifyInstance, type FastifyRequest, type FastifyReply } from 'fastify'
 import cors from '@fastify/cors'
 import { randomUUID } from 'node:crypto'
+import { readFileSync } from 'node:fs'
 import { EventEmitter } from 'node:events'
 import { Server as SocketServer } from 'socket.io'
 import { Server as MCPServer } from '@modelcontextprotocol/sdk/server/index.js'
@@ -43,10 +44,23 @@ export class APIServer extends EventEmitter {
     this.smtp = options.smtp
     this.options = options
 
-    // Create Fastify instance
-    this.app = Fastify({
+    // Create Fastify instance with HTTPS if configured
+    const fastifyOptions: Record<string, unknown> = {
       logger: options.logger ?? false,
-    })
+    }
+
+    if (options.https && options.httpsCert && options.httpsKey) {
+      try {
+        const cert = readFileSync(options.httpsCert, 'utf-8')
+        const key = readFileSync(options.httpsKey, 'utf-8')
+        fastifyOptions.https = { cert, key }
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        throw new Error(`Failed to read HTTPS certificate/key files: ${message}`)
+      }
+    }
+
+    this.app = Fastify(fastifyOptions as Parameters<typeof Fastify>[0]) as unknown as FastifyInstance
   }
 
   /**
@@ -88,7 +102,8 @@ export class APIServer extends EventEmitter {
     await this.app.listen({ port, host })
 
     const printHost = host === '0.0.0.0' ? 'localhost' : host
-    console.info(`MailDev API running at http://${printHost}:${port}${this.options.basePath ?? ''}`)
+    const protocol = this.options.https ? 'https' : 'http'
+    console.info(`MailDev API running at ${protocol}://${printHost}:${port}${this.options.basePath ?? ''}`)
 
     this.emit('listening', { port, host })
   }

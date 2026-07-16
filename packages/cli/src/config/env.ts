@@ -22,6 +22,8 @@ const ENV_MAPPING: Record<string, keyof PartialMailDevConfig> = {
   MAILDEV_WEB_USER: 'webUser',
   MAILDEV_WEB_PASS: 'webPass',
   MAILDEV_BASE_PATHNAME: 'basePathname',
+  MAILDEV_HTTPS_CERT: 'httpsCert',
+  MAILDEV_HTTPS_KEY: 'httpsKey',
 
   // Outgoing/Relay
   MAILDEV_OUTGOING_HOST: 'outgoingHost',
@@ -118,6 +120,7 @@ function envVarToConfigKey(envVar: string): keyof PartialMailDevConfig | null {
     webPort: 'web',
     incomingSecure: 'incomingSecure',
     outgoingSecure: 'outgoingSecure',
+    https: 'https',
     disableWeb: 'disableWeb',
     verbose: 'verbose',
     silent: 'silent',

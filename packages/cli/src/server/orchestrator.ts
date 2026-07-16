@@ -7,6 +7,7 @@
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { readFile } from 'node:fs/promises'
+import { writeFileSync } from 'node:fs'
 import { MemoryStorage, FileStorage, type Storage } from '@maildev/core'
 import { createSMTPServer, type SMTPServer, type RelayConfig, type AutoRelayConfig, type RelayRule } from '@maildev/smtp'
 import { createAPIServer, type APIServer } from '@maildev/api'
@@ -131,10 +132,26 @@ export class Orchestrator {
       if (this.config.verbose !== undefined) {
         apiOptions.logger = this.config.verbose
       }
+      if (this.config.https) {
+        apiOptions.https = this.config.https
+        if (this.config.httpsCert) {
+          apiOptions.httpsCert = this.config.httpsCert
+        }
+        if (this.config.httpsKey) {
+          apiOptions.httpsKey = this.config.httpsKey
+        }
+      }
       if (this.config.mcp) {
         apiOptions.mcp = { enabled: true }
       }
       this.api = createAPIServer(apiOptions)
+
+      // Write HTTPS status file for Docker health check
+      try {
+        writeFileSync('/tmp/maildev-https', this.config.https ? 'true' : 'false')
+      } catch (error) {
+        this.logger.debug(`Failed to write HTTPS status file: ${error instanceof Error ? error.message : 'Unknown error'}`)
+      }
 
       await this.api.registerPlugins()
       await registerUI(this.api.server, { basePath })

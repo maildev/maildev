@@ -30,3 +30,36 @@ Add the following arguments to your MailDev startup:
 https://192.168.1.103:1080
 ```
 As it's a self signed certificate, you need to accept it in your browser.
+
+## Using HTTPS in Docker
+
+### Prerequisites
+Generate certificates as described above, or use this command to generate a self-signed certificate:
+
+```shell script
+openssl req -x509 -newkey rsa:2048 -keyout maildev.key -out maildev.crt -days 365 -nodes
+```
+
+### Running the container with HTTPS
+
+Mount the certificate files and pass the HTTPS environment variables:
+
+```shell script
+docker run --rm \
+  -v $(pwd)/maildev.crt:/etc/ssl/certs/maildev.crt \
+  -v $(pwd)/maildev.key:/etc/ssl/private/maildev.key \
+  -e MAILDEV_HTTPS=true \
+  -e MAILDEV_HTTPS_CERT=/etc/ssl/certs/maildev.crt \
+  -e MAILDEV_HTTPS_KEY=/etc/ssl/private/maildev.key \
+  -p 1080:1080 \
+  -p 1025:1025 \
+  maildev/maildev
+```
+
+The container will now serve MailDev over HTTPS. Access it at `https://localhost:1080` (or your container's hostname/IP).
+
+### Using environment variables
+Alternatively, you can pass HTTPS options through environment variables:
+- `MAILDEV_HTTPS` - Set to `true` to enable HTTPS
+- `MAILDEV_HTTPS_CERT` - Path to the certificate file (inside the container)
+- `MAILDEV_HTTPS_KEY` - Path to the private key file (inside the container)

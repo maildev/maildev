@@ -20,7 +20,7 @@ The root `package.json` is `private` (legacy v2 code) and is **not** published.
 ## Prerequisites
 
 - Node.js `>=20`
-- [pnpm](https://pnpm.io) `9.15.4` (pinned via `packageManager`)
+- [pnpm](https://pnpm.io) `10.34.4` (pinned via `packageManager`)
 
 ## Development
 

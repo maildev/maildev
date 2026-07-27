@@ -1,6 +1,7 @@
 import type { Email } from '@maildev/core'
+import { getBasePath } from './basePath'
 
-const API_BASE = '/api'
+const API_BASE = `${getBasePath()}/api`
 
 export interface ConfigResponse {
   version: string

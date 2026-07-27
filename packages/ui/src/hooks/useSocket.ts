@@ -3,6 +3,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { io, Socket } from 'socket.io-client'
 import type { Email } from '@maildev/core'
 import { useUIStore } from '../stores/ui'
+import { getBasePath } from '../lib/basePath'
 
 // Notification debounce - max 1 notification per 2 seconds
 let lastNotificationTime = 0
@@ -69,7 +70,7 @@ export function useSocket() {
   useEffect(() => {
     // Connect to Socket.io
     const socket = io({
-      path: '/socket.io',
+      path: `${getBasePath()}/socket.io`,
       transports: ['websocket', 'polling'],
     })
 

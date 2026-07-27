@@ -109,6 +109,15 @@ export class Orchestrator {
     await this.smtp.start()
     this.logger.debug(`SMTP server started on ${this.config.ip}:${this.config.smtp}`)
 
+    // 6b. Restore persisted emails when a mail directory is configured, so mail
+    // survives restarts (e.g. across pod/container restarts with a mounted
+    // volume). Only when explicitly persisting — the tmpdir fallback is not
+    // restored to avoid resurrecting mail from unrelated previous runs.
+    if (this.config.mailDirectory) {
+      await this.smtp.loadMailsFromDirectory()
+      this.logger.debug('Restored persisted emails from mail directory')
+    }
+
     // 7. Set up email event handlers
     this.setupEmailHandlers()
 

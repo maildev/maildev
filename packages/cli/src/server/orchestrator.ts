@@ -109,6 +109,19 @@ export class Orchestrator {
     await this.smtp.start()
     this.logger.debug(`SMTP server started on ${this.config.ip}:${this.config.smtp}`)
 
+    // 6b. Discard .eml files left over from previous runs beyond the limit.
+    // A directory that has accumulated messages across many sessions is the
+    // usual reason a long-lived MailDev becomes slow to start.
+    if (this.config.maxEmails > 0) {
+      this.logger.debug(
+        `Keeping at most ${this.config.maxEmails} emails (use --max-emails 0 for no limit)`
+      )
+      const pruned = await this.smtp.pruneMailDir(this.config.maxEmails)
+      if (pruned > 0) {
+        this.logger.info(`Removed ${pruned} old email(s) from ${mailDir}`)
+      }
+    }
+
     // 7. Set up email event handlers
     this.setupEmailHandlers()
 
@@ -212,14 +225,17 @@ export class Orchestrator {
    * Create storage instance based on config
    */
   private async createStorage(): Promise<Storage> {
+    const maxEmails = this.config.maxEmails
+
     if (this.config.mailDirectory) {
       this.logger.debug(`Using file storage: ${this.config.mailDirectory}`)
       return new FileStorage({
         mailDirectory: this.config.mailDirectory,
+        maxEmails,
       })
     }
     this.logger.debug('Using in-memory storage')
-    return new MemoryStorage()
+    return new MemoryStorage({ maxEmails })
   }
 
   /**

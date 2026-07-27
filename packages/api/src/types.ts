@@ -2,7 +2,7 @@
  * @maildev/api - Type definitions
  */
 
-import type { Storage, Email } from '@maildev/core'
+import type { Storage, Email, EmailSummary } from '@maildev/core'
 import type { SMTPServer } from '@maildev/smtp'
 
 /**
@@ -78,6 +78,40 @@ export interface EmailQuery {
 }
 
 /**
+ * Query parameters accepted by `GET /api/email/summary`
+ */
+export interface SummaryQuery {
+  /** Number of results to skip */
+  skip?: string
+  /** Maximum number of results (clamped to MAX_PAGE_SIZE) */
+  limit?: string
+  /** Free-text search over subject, participants and body */
+  search?: string
+  /** Sort by received time: 'desc' (default) or 'asc' */
+  sort?: string
+  /** Only return unread emails when 'true' */
+  unread?: string
+}
+
+/**
+ * A page of email summaries plus the counts needed to render pagination
+ */
+export interface SummaryResponse {
+  /** The requested page, newest first by default */
+  items: EmailSummary[]
+  /** Emails matching the query, ignoring skip/limit */
+  total: number
+  /** Emails held by the server, ignoring the query */
+  storeTotal: number
+  /** Unread emails held by the server, ignoring the query */
+  unread: number
+  /** The skip that was applied */
+  skip: number
+  /** The limit that was applied */
+  limit: number
+}
+
+/**
  * Config response structure
  */
 export interface ConfigResponse {
@@ -115,5 +149,5 @@ export interface ErrorResponse {
 }
 
 // Re-export types from other packages for convenience
-export type { Storage, Email }
+export type { Storage, Email, EmailSummary }
 export type { SMTPServer }

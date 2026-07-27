@@ -7,12 +7,12 @@
 import { SMTPServer as SMTPServerLib } from 'smtp-server'
 import type { SMTPServerSession, SMTPServerDataStream } from 'smtp-server'
 import { EventEmitter } from 'node:events'
-import { createReadStream, createWriteStream, existsSync, mkdirSync, statSync, readFileSync } from 'node:fs'
-import { rm, readdir, readFile, writeFile } from 'node:fs/promises'
+import { createReadStream, createWriteStream, existsSync, mkdirSync, readFileSync } from 'node:fs'
+import { rm, readdir, readFile, writeFile, stat } from 'node:fs/promises'
 import { join } from 'node:path'
 import { pipeline } from 'node:stream/promises'
 import { PassThrough, type Readable } from 'node:stream'
-import { formatBytes, calculateBcc, makeId, type Storage, type Email, type Attachment } from '@maildev/core'
+import { formatBytes, calculateBcc, makeId, mapLimit, type Storage, type Email, type Attachment } from '@maildev/core'
 import { parseEmailStream, parseEmailBuffer } from './parser.js'
 import { createAuthCallback } from './auth.js'
 import { createLogger } from './logger.js'
@@ -37,6 +37,20 @@ import type {
 const DEFAULT_PORT = 1025
 const DEFAULT_HOST = '::'
 
+/** Cap on concurrent filesystem operations, to stay well clear of EMFILE */
+const FS_CONCURRENCY = 16
+
+/** How many emails to parse before saving them, when restoring from disk */
+const RESTORE_CHUNK_SIZE = 64
+
+/** An .eml file found in the mail directory */
+interface EmlFile {
+  /** Email ID, i.e. the filename without the .eml suffix */
+  id: string
+  /** Last modified time, used to order the directory newest-first */
+  mtimeMs: number
+}
+
 const HIDEABLE_EXTENSIONS: HideableExtension[] = [
   'STARTTLS',
   'PIPELINING',
@@ -58,6 +72,7 @@ export class SMTPServer extends EventEmitter {
   private options: SMTPServerOptions
   private logger: Logger
   private relayClient: RelayClient | null = null
+  private unsubscribeEvict: () => void
 
   constructor(options: SMTPServerOptions) {
     super()
@@ -71,6 +86,11 @@ export class SMTPServer extends EventEmitter {
 
     // Ensure mail directory exists
     this.ensureMailDir()
+
+    // We wrote the .eml and attachments, so we clean them up when the store
+    // drops an email to stay within its limit. Otherwise the store stays
+    // bounded while the directory on disk grows forever.
+    this.unsubscribeEvict = this.storage.onEvicted((email) => this.removeEmailFiles(email.id))
   }
 
   /**
@@ -107,6 +127,8 @@ export class SMTPServer extends EventEmitter {
    */
   async stop(): Promise<void> {
     this.emit('close')
+
+    this.unsubscribeEvict()
 
     if (this.relayClient) {
       await this.relayClient.close()
@@ -222,18 +244,7 @@ export class SMTPServer extends EventEmitter {
    * Mark all emails as read
    */
   async markAllRead(): Promise<number> {
-    const emails = await this.storage.getAll()
-    let count = 0
-
-    for (const email of emails) {
-      if (!email.read) {
-        email.read = true
-        await this.storage.save(email)
-        count++
-      }
-    }
-
-    return count
+    return this.storage.markAllRead()
   }
 
   /**
@@ -245,21 +256,7 @@ export class SMTPServer extends EventEmitter {
       throw new Error('Email not found')
     }
 
-    // Delete .eml file
-    const emlPath = join(this.mailDir, `${id}.eml`)
-    try {
-      await rm(emlPath)
-    } catch (err) {
-      this.logger.error('Error deleting email file:', err)
-    }
-
-    // Delete attachments directory if exists
-    const attachDir = getAttachmentDir(this.mailDir, id)
-    try {
-      await rm(attachDir, { recursive: true })
-    } catch {
-      // Directory may not exist
-    }
+    await this.removeEmailFiles(id)
 
     this.logger.warn('Deleting email -', email.subject)
 
@@ -361,42 +358,110 @@ export class SMTPServer extends EventEmitter {
 
   /**
    * Load existing emails from the mail directory
+   *
+   * Only the newest `maxEmails` are restored — reading and parsing a directory
+   * that has accumulated tens of thousands of messages would otherwise stall
+   * startup and immediately blow past the store's limit anyway.
    */
   async loadMailsFromDirectory(): Promise<void> {
+    let files: EmlFile[]
     try {
-      const files = await readdir(this.mailDir)
+      files = await this.listEmlFiles()
+    } catch (err) {
+      this.logger.error('Error reading mail directory:', err)
+      return
+    }
 
-      for (const file of files) {
-        if (!file.endsWith('.eml')) {
+    const max = this.storage.options.maxEmails ?? 0
+    const selected = max > 0 ? files.slice(0, max) : files
+
+    if (selected.length < files.length) {
+      this.logger.warn(
+        `Restoring the ${selected.length} most recent of ${files.length} emails in ${this.mailDir}`
+      )
+    }
+
+    // Reading and parsing dominates the cost, so a chunk at a time runs in
+    // parallel; saving is cheap and happens in order afterwards. Working in
+    // chunks rather than parsing the whole directory up front keeps only one
+    // chunk of parsed emails in memory beyond the store itself.
+    //
+    // Oldest first, so arrival order — and therefore eviction order — matches
+    // the order the emails were originally received.
+    const ordered = [...selected].reverse()
+
+    for (let offset = 0; offset < ordered.length; offset += RESTORE_CHUNK_SIZE) {
+      const chunk = ordered.slice(offset, offset + RESTORE_CHUNK_SIZE)
+
+      const parsedChunk = await mapLimit(chunk, FS_CONCURRENCY, async (file) => {
+        try {
+          const data = await readFile(join(this.mailDir, `${file.id}.eml`), 'utf8')
+          this.logger.log('Restoring email:', file.id)
+          return { id: file.id, parsed: await parseEmailBuffer(data) }
+        } catch (err) {
+          this.logger.error(`Error restoring email ${file.id}:`, err)
+          return null
+        }
+      })
+
+      for (const entry of parsedChunk) {
+        if (!entry) {
           continue
         }
 
-        const filePath = join(this.mailDir, file)
-        const id = file.slice(0, -4) // Remove .eml extension
+        const { id, parsed } = entry
+
+        // Build envelope from parsed headers
+        const envelope: StoredEnvelope = {
+          from: parsed.from?.[0] ? { address: parsed.from[0].address } : false,
+          to: (parsed.to || []).map((addr) => ({ address: addr.address })),
+          host: 'restored',
+          remoteAddress: 'restored',
+        }
 
         try {
-          const data = await readFile(filePath, 'utf8')
-
-          this.logger.log('Restoring email:', id)
-
-          const parsed = await parseEmailBuffer(data)
-
-          // Build envelope from parsed headers
-          const envelope: StoredEnvelope = {
-            from: parsed.from?.[0] ? { address: parsed.from[0].address } : false,
-            to: (parsed.to || []).map((addr) => ({ address: addr.address })),
-            host: 'restored',
-            remoteAddress: 'restored',
-          }
-
           await this.saveEmail(id, envelope, parsed, true)
         } catch (err) {
           this.logger.error(`Error restoring email ${id}:`, err)
         }
       }
+    }
+  }
+
+  /**
+   * Delete the oldest .eml files so at most `keep` remain on disk
+   *
+   * Files outliving the emails they belong to is what makes a long-lived
+   * MailDev slow to restart and eventually forces a manual wipe of the mail
+   * directory. Running this at startup keeps that from happening.
+   * @param keep - How many of the newest emails to retain (0 = keep everything)
+   * @returns Number of emails removed from disk
+   */
+  async pruneMailDir(keep: number): Promise<number> {
+    if (keep <= 0) {
+      return 0
+    }
+
+    let files: EmlFile[]
+    try {
+      files = await this.listEmlFiles()
     } catch (err) {
       this.logger.error('Error reading mail directory:', err)
+      return 0
     }
+
+    if (files.length <= keep) {
+      return 0
+    }
+
+    const stale = files.slice(keep)
+    await mapLimit(stale, FS_CONCURRENCY, (file) => this.removeEmailFiles(file.id))
+
+    this.logger.warn(
+      `Removed ${stale.length} old email(s) from ${this.mailDir} (keeping the newest ${keep})`
+    )
+
+    return stale.length
   }
 
   /**
@@ -528,7 +593,7 @@ export class SMTPServer extends EventEmitter {
     isRestored = false
   ): Promise<Email> {
     const emlPath = join(this.mailDir, `${id}.eml`)
-    const stat = statSync(emlPath)
+    const emlStat = await stat(emlPath)
 
     // Transform attachments for storage
     const transformedAttachments: Attachment[] = parsed.attachments
@@ -573,8 +638,8 @@ export class SMTPServer extends EventEmitter {
       read: isRestored,
       subject: parsed.subject || '',
       source: emlPath,
-      size: stat.size,
-      sizeHuman: formatBytes(stat.size),
+      size: emlStat.size,
+      sizeHuman: formatBytes(emlStat.size),
       from: parsed.from || [],
       to: parsed.to || [],
       headers: this.headersToRecord(parsed.headers),
@@ -717,15 +782,58 @@ export class SMTPServer extends EventEmitter {
     try {
       const files = await readdir(this.mailDir)
 
-      await Promise.all(
-        files.map((file) =>
-          rm(join(this.mailDir, file), { recursive: true }).catch((err) => {
-            this.logger.error('Error deleting file:', file, err)
-          })
-        )
-      )
+      // Bounded concurrency: an inbox with tens of thousands of emails would
+      // otherwise try to unlink every file at once and hit EMFILE.
+      await mapLimit(files, FS_CONCURRENCY, async (file) => {
+        try {
+          await rm(join(this.mailDir, file), { recursive: true, force: true })
+        } catch (err) {
+          this.logger.error('Error deleting file:', file, err)
+        }
+      })
     } catch (err) {
       this.logger.error('Error clearing mail directory:', err)
+    }
+  }
+
+  /**
+   * List the .eml files in the mail directory, newest first
+   */
+  private async listEmlFiles(): Promise<EmlFile[]> {
+    const entries = await readdir(this.mailDir, { withFileTypes: true })
+    const emlEntries = entries.filter(
+      (entry) => entry.isFile() && entry.name.endsWith('.eml')
+    )
+
+    const files = await mapLimit(emlEntries, FS_CONCURRENCY, async (entry) => {
+      try {
+        const info = await stat(join(this.mailDir, entry.name))
+        return { id: entry.name.slice(0, -4), mtimeMs: info.mtimeMs }
+      } catch {
+        // Raced with a delete; treat it as gone
+        return null
+      }
+    })
+
+    return files
+      .filter((file): file is EmlFile => file !== null)
+      .sort((a, b) => b.mtimeMs - a.mtimeMs)
+  }
+
+  /**
+   * Remove an email's .eml file and attachment directory, if they exist
+   */
+  private async removeEmailFiles(id: string): Promise<void> {
+    try {
+      await rm(join(this.mailDir, `${id}.eml`), { force: true })
+    } catch (err) {
+      this.logger.error('Error deleting email file:', err)
+    }
+
+    try {
+      await rm(getAttachmentDir(this.mailDir, id), { recursive: true, force: true })
+    } catch {
+      // Directory may not exist
     }
   }
 }

@@ -4,6 +4,14 @@
 
 import type { Email } from '@maildev/core'
 
+/**
+ * How many of the most recent emails the tools work over
+ *
+ * Keeps a single request from pulling an entire inbox of message bodies across
+ * the wire.
+ */
+const EMAIL_FETCH_LIMIT = 1000
+
 export interface MailDevClientOptions {
   /** Base URL for the MailDev API (default: http://localhost:1080) */
   baseUrl?: string
@@ -73,10 +81,15 @@ export class MailDevClient {
   }
 
   /**
-   * Get all emails
+   * Get the most recent emails
+   *
+   * Bounded on purpose: this pulls full emails, bodies included, over HTTP.
+   * Against a server configured with `--max-emails 0` an unbounded fetch can
+   * run to hundreds of megabytes. Tools therefore search the most recent
+   * {@link EMAIL_FETCH_LIMIT} emails rather than the entire inbox.
    */
   async getEmails(): Promise<Email[]> {
-    return this.fetch<Email[]>('/email')
+    return this.fetch<Email[]>(`/email?limit=${EMAIL_FETCH_LIMIT}&sort=desc`)
   }
 
   /**

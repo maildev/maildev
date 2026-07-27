@@ -14,7 +14,10 @@ import {
   ListPromptsRequestSchema,
   GetPromptRequestSchema,
 } from '@modelcontextprotocol/sdk/types.js'
-import type { Email } from '@maildev/core'
+import { toSummary, type Email } from '@maildev/core'
+
+/** Most emails the `maildev://emails` resource will return in one read */
+const RESOURCE_EMAIL_LIMIT = 200
 
 /**
  * Interface for email data access
@@ -379,8 +382,8 @@ export function registerMCPHandlers(server: Server, dataSource: EmailDataSource)
       resources: [
         {
           uri: 'maildev://emails',
-          name: 'All Emails',
-          description: 'List of all emails in the MailDev inbox',
+          name: 'Recent Emails',
+          description: `Summaries of the ${RESOURCE_EMAIL_LIMIT} most recent emails in the MailDev inbox (without message bodies)`,
           mimeType: 'application/json',
         },
         {
@@ -399,12 +402,29 @@ export function registerMCPHandlers(server: Server, dataSource: EmailDataSource)
     try {
       if (uri === 'maildev://emails') {
         const emails = await dataSource.getEmails()
+
+        // Newest first, capped, and without the bodies. Serialising a large
+        // inbox in full produces hundreds of megabytes of JSON — use
+        // maildev_get_email for the content of a specific message.
+        const newestFirst = [...emails].sort(
+          (a, b) => new Date(b.time).getTime() - new Date(a.time).getTime()
+        )
+        const page = newestFirst.slice(0, RESOURCE_EMAIL_LIMIT)
+
         return {
           contents: [
             {
               uri,
               mimeType: 'application/json',
-              text: JSON.stringify(emails, null, 2),
+              text: JSON.stringify(
+                {
+                  total: emails.length,
+                  returned: page.length,
+                  emails: page.map(toSummary),
+                },
+                null,
+                2
+              ),
             },
           ],
         }

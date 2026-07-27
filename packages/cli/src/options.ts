@@ -123,6 +123,10 @@ export function configureOptions(program: Command): void {
       '--mail-directory <path>',
       'Directory to persist emails (uses in-memory storage if not set)'
     )
+    .option(
+      '--max-emails <count>',
+      `Maximum emails to keep; the oldest are discarded with their files (0 = unlimited) (default: ${DEFAULT_CONFIG.maxEmails})`
+    )
 
     // === Logging Options ===
     .option(
@@ -163,6 +167,7 @@ Environment Variables:
   MAILDEV_WEB_USER      Web auth username
   MAILDEV_WEB_PASS      Web auth password
   MAILDEV_MAIL_DIRECTORY Directory for persisting emails
+  MAILDEV_MAX_EMAILS    Maximum emails to keep (default: 1000, 0 = unlimited)
 `
 
 /**

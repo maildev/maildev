@@ -236,6 +236,20 @@ export interface MailDevConfig {
    */
   mailDirectory?: string
 
+  /**
+   * Maximum number of emails to keep
+   *
+   * Once the limit is reached the oldest email is dropped, and its .eml file
+   * and attachments are deleted along with it. Set to 0 for no limit — at which
+   * point both memory use and the mail directory grow until the process falls
+   * over.
+   *
+   * CLI: --max-emails <count>
+   * Env: MAILDEV_MAX_EMAILS
+   * @default 1000
+   */
+  maxEmails: number
+
   // === Logging Options ===
 
   /**
@@ -307,6 +321,7 @@ export interface CLIOptions {
   autoRelay?: boolean | string
   autoRelayRules?: string
   mailDirectory?: string
+  maxEmails?: string
   verbose?: boolean
   silent?: boolean
   logMailContents?: boolean

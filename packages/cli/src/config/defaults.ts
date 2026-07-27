@@ -20,6 +20,11 @@ export const DEFAULT_CONFIG: MailDevConfig = {
   webIp: '0.0.0.0',
   basePathname: '/',
 
+  // Storage. Bounded by default: an unbounded inbox eventually exhausts memory
+  // and fills the mail directory, and 1000 messages is far more than a
+  // development mail catcher needs. Use --max-emails 0 to keep everything.
+  maxEmails: 1000,
+
   // Logging (all off by default)
   verbose: false,
   silent: false,

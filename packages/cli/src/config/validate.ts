@@ -161,6 +161,14 @@ export function validateConfig(config: MailDevConfig): ValidationResult {
     })
   }
 
+  // Validate storage limit
+  if (!Number.isInteger(config.maxEmails) || config.maxEmails < 0) {
+    errors.push({
+      field: 'maxEmails',
+      message: 'maxEmails must be a non-negative integer (0 = unlimited)',
+    })
+  }
+
   // Validate auto-relay rules file
   if (config.autoRelayRules) {
     const rulesError = validateFilePath(config.autoRelayRules, 'autoRelayRules')
@@ -182,6 +190,12 @@ export function validateConfig(config: MailDevConfig): ValidationResult {
 
   if (config.disableWeb && config.mcp) {
     warnings.push('MCP is enabled but web interface is disabled - MCP requires the web server')
+  }
+
+  if (config.maxEmails === 0) {
+    warnings.push(
+      'maxEmails is 0 (unlimited) - memory use and the mail directory will grow without bound'
+    )
   }
 
   return {

@@ -17,6 +17,7 @@ const SMTP_PORT = parseInt(process.env.SMTP_PORT ?? '1025', 10)
 const API_PORT = parseInt(process.env.API_PORT ?? '1080', 10)
 const API_HOST = process.env.API_HOST ?? '0.0.0.0'
 const MAIL_DIR = process.env.MAIL_DIR ?? join(tmpdir(), 'maildev-dev')
+const MAX_EMAILS = parseInt(process.env.MAX_EMAILS ?? '1000', 10)
 
 async function main() {
   console.log('Starting MailDev development server...\n')
@@ -24,8 +25,9 @@ async function main() {
   // Ensure mail directory exists
   mkdirSync(MAIL_DIR, { recursive: true })
 
-  // Create shared storage
-  const storage = new MemoryStorage()
+  // Create shared storage. Bounded, matching the CLI default, so a long dev
+  // session or a load test can't exhaust memory or fill the mail directory.
+  const storage = new MemoryStorage({ maxEmails: MAX_EMAILS })
   await storage.initialize()
 
   // Create and start SMTP server
@@ -37,6 +39,14 @@ async function main() {
 
   await smtp.start()
   console.log(`  SMTP server listening on port ${SMTP_PORT}`)
+
+  // Discard .eml files left behind by earlier runs
+  if (MAX_EMAILS > 0) {
+    const pruned = await smtp.pruneMailDir(MAX_EMAILS)
+    if (pruned > 0) {
+      console.log(`  Removed ${pruned} old email(s) from ${MAIL_DIR}`)
+    }
+  }
 
   // Create and start API server with MCP enabled
   const api = createAPIServer({

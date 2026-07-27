@@ -28,6 +28,9 @@ function cliOptionsToConfig(options: CLIOptions): PartialMailDevConfig {
   if (options.outgoingPort !== undefined) {
     config.outgoingPort = parseInt(options.outgoingPort, 10)
   }
+  if (options.maxEmails !== undefined) {
+    config.maxEmails = parseInt(options.maxEmails, 10)
+  }
 
   // String options
   if (options.ip !== undefined) config.ip = options.ip

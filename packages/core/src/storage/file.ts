@@ -1,8 +1,12 @@
-import { mkdir, rm, readdir, stat } from 'node:fs/promises'
+import { mkdir, rm, readdir } from 'node:fs/promises'
 import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import type { Email, StorageOptions } from '../types/index.js'
+import { mapLimit } from '../utils/concurrency.js'
 import { MemoryStorage } from './memory.js'
+
+/** Cap on concurrent filesystem operations, to stay well clear of EMFILE */
+const FS_CONCURRENCY = 16
 
 /**
  * File-based storage implementation
@@ -52,24 +56,12 @@ export class FileStorage extends MemoryStorage {
    * Delete an email and its files from disk
    */
   override async delete(id: string): Promise<boolean> {
-    const email = await this.getById(id)
-    if (!email) {
-      return false
-    }
-
-    // Delete from memory
     const deleted = await super.delete(id)
     if (!deleted) {
       return false
     }
 
-    // Delete .eml file and attachment directory
-    try {
-      await rm(join(this.mailDirectory, `${id}.eml`), { force: true })
-      await rm(join(this.mailDirectory, id), { recursive: true, force: true })
-    } catch {
-      // Ignore errors if files don't exist
-    }
+    await this.removeEmailFiles(id)
 
     return true
   }
@@ -82,14 +74,19 @@ export class FileStorage extends MemoryStorage {
 
     // Clean up the mail directory
     try {
-      const entries = await readdir(this.mailDirectory)
-      for (const entry of entries) {
-        const entryPath = join(this.mailDirectory, entry)
-        const entryStat = await stat(entryPath)
-        if (entryStat.isDirectory() || entry.endsWith('.eml')) {
-          await rm(entryPath, { recursive: true, force: true })
-        }
-      }
+      const entries = await readdir(this.mailDirectory, { withFileTypes: true })
+      const removable = entries.filter(
+        (entry) => entry.isDirectory() || entry.name.endsWith('.eml')
+      )
+
+      // Bounded concurrency: a directory holding tens of thousands of emails
+      // would otherwise open every handle at once.
+      await mapLimit(removable, FS_CONCURRENCY, async (entry) => {
+        await rm(join(this.mailDirectory, entry.name), {
+          recursive: true,
+          force: true,
+        })
+      })
     } catch {
       // Ignore errors if directory doesn't exist
     }
@@ -119,5 +116,27 @@ export class FileStorage extends MemoryStorage {
    */
   getAttachmentDirectory(id: string): string {
     return join(this.mailDirectory, id)
+  }
+
+  /**
+   * Discard the files belonging to emails evicted by `maxEmails`
+   *
+   * Without this the store stays bounded but the mail directory does not, which
+   * is what forces a manual wipe of the directory to recover.
+   */
+  protected override async onEvict(emails: Email[]): Promise<void> {
+    await mapLimit(emails, FS_CONCURRENCY, (email) => this.removeEmailFiles(email.id))
+  }
+
+  /**
+   * Remove an email's .eml file and attachment directory, if they exist
+   */
+  private async removeEmailFiles(id: string): Promise<void> {
+    try {
+      await rm(this.getEmailPath(id), { force: true })
+      await rm(this.getAttachmentDirectory(id), { recursive: true, force: true })
+    } catch {
+      // Ignore errors if files don't exist
+    }
   }
 }

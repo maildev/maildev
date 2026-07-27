@@ -37,6 +37,9 @@ Override ports/host via env vars (read in `packages/api/src/dev.ts`):
 SMTP_PORT=2525 API_PORT=8080 API_HOST=127.0.0.1 pnpm dev
 ```
 
+The dev server keeps the newest 1000 emails, discarding older ones along with
+their files. Override with `MAX_EMAILS` (`0` for no limit).
+
 To run the actual built CLI binary instead of the dev server:
 
 ```bash

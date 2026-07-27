@@ -39,6 +39,14 @@ describe('loadEnvConfig', () => {
     expect(config.web).toBe(3080)
   })
 
+  it('should parse MAILDEV_MAX_MESSAGE_SIZE as number', () => {
+    process.env.MAILDEV_MAX_MESSAGE_SIZE = '1048576'
+
+    const config = loadEnvConfig()
+    expect(config.maxMessageSize).toBe(1048576)
+    expect(typeof config.maxMessageSize).toBe('number')
+  })
+
   it('should load MAILDEV_IP as string', () => {
     process.env.MAILDEV_IP = '127.0.0.1'
 

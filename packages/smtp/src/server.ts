@@ -11,7 +11,7 @@ import { createReadStream, createWriteStream, existsSync, mkdirSync, statSync, r
 import { rm, readdir, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { pipeline } from 'node:stream/promises'
-import { PassThrough, type Readable } from 'node:stream'
+import { PassThrough, Transform, type Readable } from 'node:stream'
 import { formatBytes, calculateBcc, makeId, type Storage, type Email, type Attachment } from '@maildev/core'
 import { parseEmailStream, parseEmailBuffer } from './parser.js'
 import { createAuthCallback } from './auth.js'
@@ -411,6 +411,14 @@ export class SMTPServer extends EventEmitter {
       disabledCommands: ['AUTH'] as string[],
     }
 
+    // Advertise and enforce a maximum message size. smtp-server rejects
+    // messages that declare an oversized SIZE at MAIL FROM, and flags the DATA
+    // stream with `sizeExceeded` when the body itself runs over (see
+    // processIncomingEmail). 0/undefined disables the limit.
+    if (this.options.maxMessageSize && this.options.maxMessageSize > 0) {
+      config.size = this.options.maxMessageSize
+    }
+
     // Load TLS certificates
     if (this.options.certPath) {
       config.cert = readFileSync(this.options.certPath)
@@ -477,19 +485,43 @@ export class SMTPServer extends EventEmitter {
     const id = makeId()
     const emlPath = join(this.mailDir, `${id}.eml`)
 
+    // Cap the bytes forwarded to the writer/parser at maxMessageSize. This
+    // bounds the work spent parsing a single message regardless of how much
+    // DATA the client actually sends, which is what stops a malicious multipart
+    // body with a huge number of parts from tying up the parser. The cap keeps
+    // draining the source after the limit (so the SMTP DATA command still
+    // completes) and records that the message was truncated so it can be
+    // rejected below. Well-behaved clients that declare an oversized SIZE are
+    // already refused earlier by smtp-server's `size` option.
+    const limit = this.options.maxMessageSize && this.options.maxMessageSize > 0
+      ? this.options.maxMessageSize
+      : 0
+    const sizeState = { exceeded: false }
+    const source = limit ? stream.pipe(this.createSizeCap(limit, sizeState)) : stream
+
     // Create two pass-through streams to duplicate the data
     const emlPassThrough = new PassThrough()
     const parsePassThrough = new PassThrough()
 
     // Pipe to both streams
-    stream.pipe(emlPassThrough)
-    stream.pipe(parsePassThrough)
+    source.pipe(emlPassThrough)
+    source.pipe(parsePassThrough)
 
     // Write to disk and parse in parallel
     const [, parsed] = await Promise.all([
       pipeline(emlPassThrough, createWriteStream(emlPath)),
       parseEmailStream(parsePassThrough),
     ])
+
+    // Reject messages that ran past the size limit. The file only holds the
+    // truncated prefix, so discard it and refuse the message rather than storing
+    // a partial.
+    if (sizeState.exceeded) {
+      await rm(emlPath, { force: true })
+      const error = new Error('Message exceeds maximum allowed size') as Error & { responseCode?: number }
+      error.responseCode = 552 // permanent: exceeded storage allocation
+      throw error
+    }
 
     // Save attachments
     if (parsed.attachments && parsed.attachments.length > 0) {
@@ -516,6 +548,31 @@ export class SMTPServer extends EventEmitter {
     await this.saveEmail(id, envelope, parsed)
 
     return id
+  }
+
+  /**
+   * Build a Transform that forwards at most `limit` bytes downstream and then
+   * keeps draining its input (so the source stream can finish) while dropping
+   * the excess. Sets `state.exceeded` once the limit is crossed.
+   */
+  private createSizeCap(limit: number, state: { exceeded: boolean }): Transform {
+    let bytes = 0
+    return new Transform({
+      transform(chunk: Buffer, _encoding, callback) {
+        if (state.exceeded) {
+          callback() // already over the limit: drain and drop
+          return
+        }
+        bytes += chunk.length
+        if (bytes > limit) {
+          state.exceeded = true
+          const allowed = chunk.length - (bytes - limit)
+          callback(null, allowed > 0 ? chunk.subarray(0, allowed) : undefined)
+          return
+        }
+        callback(null, chunk)
+      },
+    })
   }
 
   /**

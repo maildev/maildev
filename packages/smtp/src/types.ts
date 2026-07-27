@@ -29,6 +29,12 @@ export interface SMTPServerOptions {
   auth?: SMTPAuth
   /** SMTP extensions to hide */
   hideExtensions?: HideableExtension[]
+  /**
+   * Maximum accepted message size in bytes. Larger messages are rejected
+   * before being stored. Advertised via the SMTP SIZE extension. 0 or
+   * undefined disables the limit.
+   */
+  maxMessageSize?: number
   /** Auto-relay configuration */
   autoRelay?: AutoRelayConfig
   /** Logger instance or false to disable */

@@ -20,6 +20,8 @@ export function Header() {
   const setNotificationsEnabled = useUIStore((state) => state.setNotificationsEnabled)
   const autoShowNewMail = useUIStore((state) => state.autoShowNewMail)
   const setAutoShowNewMail = useUIStore((state) => state.setAutoShowNewMail)
+  const loadingBarEnabled = useUIStore((state) => state.loadingBarEnabled)
+  const setLoadingBarEnabled = useUIStore((state) => state.setLoadingBarEnabled)
 
   // Check if notifications are supported
   const notificationsSupported = typeof window !== 'undefined' && 'Notification' in window
@@ -63,13 +65,17 @@ export function Header() {
   }
 
   return (
-    <header className="flex h-14 items-center justify-between border-b border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4">
+    <header
+      data-testid="header"
+      className="flex h-14 items-center justify-between border-b border-[hsl(var(--border))] bg-[hsl(var(--background))] px-4"
+    >
       <div className="flex items-center gap-3">
         <Tooltip content="Toggle sidebar (s)">
           <button
             onClick={toggleSidebar}
             className="rounded-md p-2 hover:bg-[hsl(var(--muted))]"
             aria-label="Toggle sidebar"
+            data-testid="toggle-sidebar-button"
           >
             <svg
               className="h-5 w-5"
@@ -108,6 +114,7 @@ export function Header() {
               'disabled:cursor-not-allowed disabled:opacity-50'
             )}
             aria-label="Refresh emails"
+            data-testid="refresh-button"
           >
             <svg
               className={cn('h-4 w-4', isRefreshing && 'animate-spin')}
@@ -136,6 +143,7 @@ export function Header() {
               'disabled:cursor-not-allowed disabled:opacity-50'
             )}
             aria-label="Mark all as read"
+            data-testid="mark-all-read-button"
           >
             <svg
               className="h-4 w-4"
@@ -164,6 +172,7 @@ export function Header() {
               'disabled:cursor-not-allowed disabled:opacity-50'
             )}
             aria-label="Delete all emails"
+            data-testid="delete-all-button"
           >
             <svg
               className="h-4 w-4"
@@ -187,6 +196,7 @@ export function Header() {
             onClick={toggleTheme}
             className="rounded-md p-2 hover:bg-[hsl(var(--muted))]"
             aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+            data-testid="theme-toggle"
           >
             {theme === 'light' ? (
               <svg
@@ -227,6 +237,7 @@ export function Header() {
               onClick={() => setShowSettings(!showSettings)}
               className="rounded-md p-2 hover:bg-[hsl(var(--muted))]"
               aria-label="Settings"
+              data-testid="settings-button"
             >
               <svg
                 className="h-5 w-5"
@@ -252,7 +263,10 @@ export function Header() {
 
           {/* Settings menu */}
           {showSettings && (
-            <div className="absolute right-0 top-full z-50 mt-1 w-64 rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--card))] py-1 shadow-lg">
+            <div
+              data-testid="settings-menu"
+              className="absolute right-0 top-full z-50 mt-1 w-64 rounded-md border border-[hsl(var(--border))] bg-[hsl(var(--card))] py-1 shadow-lg"
+            >
               {/* Browser notifications */}
               <button
                 onClick={handleNotificationsToggle}
@@ -262,6 +276,7 @@ export function Header() {
                   'hover:bg-[hsl(var(--muted))]',
                   (!notificationsSupported || !isSecureContext) && 'cursor-not-allowed opacity-50'
                 )}
+                data-testid="notifications-toggle"
               >
                 <div className="flex items-center gap-2">
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -300,6 +315,7 @@ export function Header() {
               <button
                 onClick={() => setAutoShowNewMail(!autoShowNewMail)}
                 className="flex w-full items-center justify-between px-3 py-2 text-sm hover:bg-[hsl(var(--muted))]"
+                data-testid="auto-show-new-mail-toggle"
               >
                 <div className="flex items-center gap-2">
                   <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -330,6 +346,40 @@ export function Header() {
                     className={cn(
                       'h-4 w-4 rounded-full bg-white shadow transition-transform mt-0.5',
                       autoShowNewMail ? 'translate-x-4 ml-0.5' : 'translate-x-0.5'
+                    )}
+                  />
+                </div>
+              </button>
+
+              {/* Loading bar */}
+              <button
+                onClick={() => setLoadingBarEnabled(!loadingBarEnabled)}
+                className="flex w-full items-center justify-between px-3 py-2 text-sm hover:bg-[hsl(var(--muted))]"
+                data-testid="loading-bar-toggle"
+              >
+                <div className="flex items-center gap-2">
+                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M13 10V3L4 14h7v7l9-11h-7z"
+                    />
+                  </svg>
+                  <span>Show loading bar</span>
+                </div>
+                <div
+                  className={cn(
+                    'h-5 w-9 rounded-full transition-colors',
+                    loadingBarEnabled
+                      ? 'bg-blue-600 dark:bg-blue-500'
+                      : 'bg-gray-300 dark:bg-gray-600'
+                  )}
+                >
+                  <div
+                    className={cn(
+                      'h-4 w-4 rounded-full bg-white shadow transition-transform mt-0.5',
+                      loadingBarEnabled ? 'translate-x-4 ml-0.5' : 'translate-x-0.5'
                     )}
                   />
                 </div>

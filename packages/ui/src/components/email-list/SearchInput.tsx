@@ -78,6 +78,7 @@ export function SearchInput() {
         onFocus={() => setIsFocused(true)}
         onBlur={() => setIsFocused(false)}
         placeholder="Search emails..."
+        data-testid="search-input"
         className={cn(
           'w-full rounded-md border border-[hsl(var(--input))] bg-[hsl(var(--background))]',
           'py-2 pl-10 pr-10 text-sm',
@@ -99,6 +100,7 @@ export function SearchInput() {
               onClick={() => setSearchQuery('')}
               className="rounded-sm p-0.5 hover:bg-[hsl(var(--muted))]"
               aria-label="Clear search"
+              data-testid="search-clear-button"
             >
               <svg
                 className="h-4 w-4 text-[hsl(var(--muted-foreground))]"

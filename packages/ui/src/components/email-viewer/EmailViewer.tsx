@@ -9,7 +9,10 @@ export function EmailViewer() {
 
   if (!selectedEmailId) {
     return (
-      <div className="flex h-full flex-col items-center justify-center gap-3 text-[hsl(var(--muted-foreground))]">
+      <div
+        data-testid="email-viewer-empty"
+        className="flex h-full flex-col items-center justify-center gap-3 text-[hsl(var(--muted-foreground))]"
+      >
         <svg
           className="h-16 w-16"
           fill="none"
@@ -30,7 +33,10 @@ export function EmailViewer() {
 
   if (isLoading) {
     return (
-      <div className="flex h-full items-center justify-center text-[hsl(var(--muted-foreground))]">
+      <div
+        data-testid="email-viewer-loading"
+        className="flex h-full items-center justify-center text-[hsl(var(--muted-foreground))]"
+      >
         <svg
           className="mr-2 h-5 w-5 animate-spin"
           fill="none"
@@ -57,14 +63,17 @@ export function EmailViewer() {
 
   if (error || !email) {
     return (
-      <div className="flex h-full items-center justify-center text-[hsl(var(--destructive))]">
+      <div
+        data-testid="email-viewer-error"
+        className="flex h-full items-center justify-center text-[hsl(var(--destructive))]"
+      >
         Failed to load email
       </div>
     )
   }
 
   return (
-    <div className="flex h-full flex-col">
+    <div data-testid="email-viewer" data-email-id={email.id} className="flex h-full flex-col">
       <EmailHeader email={email} />
       <EmailContent email={email} />
     </div>

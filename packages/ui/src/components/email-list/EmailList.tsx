@@ -8,7 +8,10 @@ export function EmailList() {
 
   if (isLoading) {
     return (
-      <div className="flex h-32 items-center justify-center text-[hsl(var(--muted-foreground))]">
+      <div
+        data-testid="email-list-loading"
+        className="flex h-32 items-center justify-center text-[hsl(var(--muted-foreground))]"
+      >
         <svg
           className="mr-2 h-5 w-5 animate-spin"
           fill="none"
@@ -35,7 +38,10 @@ export function EmailList() {
 
   if (error) {
     return (
-      <div className="flex h-32 items-center justify-center text-[hsl(var(--destructive))]">
+      <div
+        data-testid="email-list-error"
+        className="flex h-32 items-center justify-center text-[hsl(var(--destructive))]"
+      >
         Failed to load emails
       </div>
     )
@@ -43,7 +49,10 @@ export function EmailList() {
 
   if (!emails || emails.length === 0) {
     return (
-      <div className="flex h-32 flex-col items-center justify-center gap-2 text-[hsl(var(--muted-foreground))]">
+      <div
+        data-testid="email-list-empty"
+        className="flex h-32 flex-col items-center justify-center gap-2 text-[hsl(var(--muted-foreground))]"
+      >
         <svg
           className="h-8 w-8"
           fill="none"
@@ -75,14 +84,17 @@ export function EmailList() {
 
   if (sortedEmails.length === 0) {
     return (
-      <div className="flex h-32 items-center justify-center text-[hsl(var(--muted-foreground))]">
+      <div
+        data-testid="email-list-no-results"
+        className="flex h-32 items-center justify-center text-[hsl(var(--muted-foreground))]"
+      >
         <span className="text-sm">No emails match "{searchQuery}"</span>
       </div>
     )
   }
 
   return (
-    <div className="divide-y divide-[hsl(var(--border))]">
+    <div data-testid="email-list" className="divide-y divide-[hsl(var(--border))]">
       {sortedEmails.map((email) => (
         <EmailListItem key={email.id} email={email} />
       ))}

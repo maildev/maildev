@@ -88,6 +88,21 @@ export interface ConfigResponse {
 }
 
 /**
+ * Request body for deleting multiple emails.
+ */
+export interface BulkDeleteEmailsRequest {
+  ids: string[]
+}
+
+/**
+ * Response for deleting multiple emails.
+ */
+export interface BulkDeleteEmailsResponse {
+  deleted: string[]
+  notFound: string[]
+}
+
+/**
  * API Server events
  */
 export interface APIServerEvents {

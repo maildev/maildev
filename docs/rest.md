@@ -70,6 +70,8 @@ All paths are relative to the `/api` prefix.
 
 **DELETE /api/email/:id** - Delete a given email by id
 
+**POST   /api/email/delete** - Delete multiple emails by id
+
 **DELETE /api/email/all** - Delete all emails
 
 **PATCH  /api/email/read-all** - Mark all emails as read (returns the count)
@@ -93,6 +95,26 @@ directory
 **GET    /api/config** - Get the application configuration
 
 **GET    /api/healthz** - Health check
+
+## Bulk Delete
+
+The **POST /api/email/delete** endpoint deletes a specific set of emails in one
+request. The request body must include an `ids` array.
+
+```json
+{
+  "ids": ["XwgKAxto", "29wQJq2q"]
+}
+```
+
+It returns the IDs that were deleted and any IDs that were not found:
+
+```json
+{
+  "deleted": ["XwgKAxto"],
+  "notFound": ["29wQJq2q"]
+}
+```
 
 ## Real-time updates
 

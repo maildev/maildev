@@ -15,7 +15,12 @@ import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js'
 import { registerMCPHandlers, type EmailDataSource } from '@maildev/mcp'
 import type { Storage, Email } from '@maildev/core'
 import type { SMTPServer } from '@maildev/smtp'
-import type { APIServerOptions, AuthConfig, ConfigResponse } from './types.js'
+import type {
+  APIServerOptions,
+  AuthConfig,
+  BulkDeleteEmailsRequest,
+  ConfigResponse,
+} from './types.js'
 import { VERSION } from './index.js'
 
 const DEFAULT_PORT = 1080
@@ -220,21 +225,51 @@ export class APIServer extends EventEmitter {
     )
 
     // Delete single email
-    this.app.delete<{ Params: { id: string } }>(
-      `${apiPath}/email/:id`,
+    this.app.delete<{ Params: { id: string } }>(`${apiPath}/email/:id`, async (request, reply) => {
+      const { id } = request.params
+
+      try {
+        const deleted = await this.deleteEmail(id)
+        if (!deleted) {
+          return reply.status(404).send({ error: 'Email was not found' })
+        }
+        return true
+      } catch (err) {
+        const message = err instanceof Error ? err.message : 'Unknown error'
+        return reply.status(500).send({ error: message })
+      }
+    })
+
+    // Delete multiple emails
+    this.app.post<{ Body: BulkDeleteEmailsRequest }>(
+      `${apiPath}/email/delete`,
       async (request, reply) => {
-        const { id } = request.params
+        const ids = request.body?.ids
+
+        if (
+          !Array.isArray(ids) ||
+          ids.some((id) => typeof id !== 'string' || id.trim().length === 0)
+        ) {
+          return reply
+            .status(400)
+            .send({ error: 'Request body must include an ids array of email IDs' })
+        }
+
+        const uniqueIds = Array.from(new Set(ids))
+        const deleted: string[] = []
+        const notFound: string[] = []
 
         try {
-          if (this.smtp) {
-            await this.smtp.deleteEmail(id)
-          } else {
-            const deleted = await this.storage.delete(id)
-            if (!deleted) {
-              return reply.status(404).send({ error: 'Email was not found' })
+          for (const id of uniqueIds) {
+            const wasDeleted = await this.deleteEmail(id)
+            if (wasDeleted) {
+              deleted.push(id)
+            } else {
+              notFound.push(id)
             }
           }
-          return true
+
+          return { deleted, notFound }
         } catch (err) {
           const message = err instanceof Error ? err.message : 'Unknown error'
           return reply.status(500).send({ error: message })
@@ -427,6 +462,23 @@ export class APIServer extends EventEmitter {
         return reply.status(500).send({ error: message })
       }
     })
+  }
+
+  /**
+   * Delete one email using SMTP when available so delete events are emitted.
+   */
+  private async deleteEmail(id: string): Promise<boolean> {
+    const email = await this.storage.getById(id)
+    if (!email) {
+      return false
+    }
+
+    if (this.smtp) {
+      await this.smtp.deleteEmail(id)
+      return true
+    }
+
+    return this.storage.delete(id)
   }
 
   /**

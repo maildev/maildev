@@ -18,6 +18,10 @@ export function EmailListItem({ email }: EmailListItemProps) {
   return (
     <button
       onClick={() => setSelectedEmail(email.id)}
+      data-testid="email-list-item"
+      data-email-id={email.id}
+      data-selected={isSelected}
+      data-read={email.read}
       className={cn(
         'w-full px-3 py-3 text-left transition-colors',
         'hover:bg-[hsl(var(--muted)/0.5)]',

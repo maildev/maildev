@@ -12,6 +12,7 @@ export function Layout() {
   useSocket()
 
   const sidebarCollapsed = useUIStore((state) => state.sidebarCollapsed)
+  const loadingBarEnabled = useUIStore((state) => state.loadingBarEnabled)
   const { isRefreshing } = useRefreshEmails()
 
   // Keep loading bar visible for minimum time so it's noticeable
@@ -28,16 +29,30 @@ export function Layout() {
   }, [isRefreshing, showLoadingBar])
 
   return (
-    <div className="flex h-screen flex-col bg-[hsl(var(--background))]">
-      {/* Global loading bar */}
-      {showLoadingBar && (
-        <div className="absolute top-0 left-0 right-0 z-50 h-0.5 overflow-hidden bg-[hsl(var(--primary)/0.2)]">
+    <div
+      data-testid="app"
+      className="flex h-screen flex-col bg-[hsl(var(--background))]"
+    >
+      {/* Global loading bar. Kept mounted and toggled via opacity so background
+          refreshes don't add/remove a DOM node (which caused a reflow every few
+          seconds). Can be turned off entirely in Settings. */}
+      {loadingBarEnabled && (
+        <div
+          data-testid="loading-bar"
+          data-active={showLoadingBar}
+          aria-hidden={!showLoadingBar}
+          className={cn(
+            'pointer-events-none absolute top-0 left-0 right-0 z-50 h-0.5 overflow-hidden bg-[hsl(var(--primary)/0.2)] transition-opacity duration-200',
+            showLoadingBar ? 'opacity-100' : 'opacity-0'
+          )}
+        >
           <div className="h-full w-1/3 animate-loading-bar bg-[hsl(var(--primary))]" />
         </div>
       )}
       <Header />
       <div className="flex flex-1 overflow-hidden">
         <aside
+          data-testid="sidebar-container"
           className={cn(
             'flex-shrink-0 overflow-hidden border-r border-[hsl(var(--border))] transition-all duration-200',
             sidebarCollapsed ? 'w-0 border-r-0' : 'w-80 lg:w-96'
@@ -45,7 +60,7 @@ export function Layout() {
         >
           <Sidebar />
         </aside>
-        <main className="flex-1 overflow-hidden">
+        <main data-testid="email-viewer-pane" className="flex-1 overflow-hidden">
           <EmailViewer />
         </main>
       </div>

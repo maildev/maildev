@@ -111,7 +111,7 @@ export function EmailHeader({ email }: EmailHeaderProps) {
 
           {/* Email info */}
           <div className="min-w-0 flex-1">
-            <h1 className="text-lg font-semibold text-[hsl(var(--foreground))]">
+            <h1 data-testid="email-subject" className="text-lg font-semibold text-[hsl(var(--foreground))]">
               {email.subject || '(no subject)'}
             </h1>
             <div className="mt-1 text-sm text-[hsl(var(--muted-foreground))]">
@@ -155,6 +155,7 @@ export function EmailHeader({ email }: EmailHeaderProps) {
               onClick={handleDownload}
               className="rounded-md p-2 hover:bg-[hsl(var(--muted))]"
               aria-label="Download email"
+              data-testid="download-email-button"
             >
               <svg
                 className="h-4 w-4"
@@ -299,6 +300,7 @@ export function EmailHeader({ email }: EmailHeaderProps) {
                 'disabled:cursor-not-allowed disabled:opacity-50'
               )}
               aria-label="Delete email"
+              data-testid="delete-email-button"
             >
               <svg
                 className="h-4 w-4"
@@ -320,13 +322,14 @@ export function EmailHeader({ email }: EmailHeaderProps) {
 
       {/* Attachments */}
       {email.attachments && email.attachments.length > 0 && (
-        <div className="mt-3 flex flex-wrap gap-2">
+        <div data-testid="email-attachments" className="mt-3 flex flex-wrap gap-2">
           {email.attachments.map((attachment, index) => (
             <Tooltip key={index} content={`Download ${attachment.filename ?? 'attachment'}`}>
               <a
                 href={api.emails.attachmentUrl(email.id, attachment.generatedFileName)}
                 target="_blank"
                 rel="noopener noreferrer"
+                data-testid="email-attachment"
                 className={cn(
                   'inline-flex items-center gap-1.5 rounded-md border border-[hsl(var(--border))]',
                   'px-2 py-1 text-xs text-[hsl(var(--foreground))]',

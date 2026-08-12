@@ -14,6 +14,8 @@ interface UIState {
   notificationsEnabled: boolean
   /** Auto-show new emails when they arrive */
   autoShowNewMail: boolean
+  /** Show the top loading bar during background refreshes */
+  loadingBarEnabled: boolean
   /** Command palette open state */
   commandPaletteOpen: boolean
 
@@ -25,6 +27,7 @@ interface UIState {
   toggleSidebar: () => void
   setNotificationsEnabled: (enabled: boolean) => void
   setAutoShowNewMail: (enabled: boolean) => void
+  setLoadingBarEnabled: (enabled: boolean) => void
   openCommandPalette: () => void
   closeCommandPalette: () => void
 }
@@ -38,6 +41,7 @@ export const useUIStore = create<UIState>()(
       sidebarCollapsed: false,
       notificationsEnabled: false,
       autoShowNewMail: false,
+      loadingBarEnabled: true,
       commandPaletteOpen: false,
 
       setSelectedEmail: (id) => set({ selectedEmailId: id }),
@@ -60,6 +64,8 @@ export const useUIStore = create<UIState>()(
 
       setAutoShowNewMail: (enabled) => set({ autoShowNewMail: enabled }),
 
+      setLoadingBarEnabled: (enabled) => set({ loadingBarEnabled: enabled }),
+
       openCommandPalette: () => set({ commandPaletteOpen: true }),
 
       closeCommandPalette: () => set({ commandPaletteOpen: false }),
@@ -71,6 +77,7 @@ export const useUIStore = create<UIState>()(
         sidebarCollapsed: state.sidebarCollapsed,
         notificationsEnabled: state.notificationsEnabled,
         autoShowNewMail: state.autoShowNewMail,
+        loadingBarEnabled: state.loadingBarEnabled,
       }),
     }
   )

@@ -36,6 +36,20 @@ describe('getEmailDocumentHeight', () => {
     expect(getEmailDocumentHeight(doc)).toBe(1200)
   })
 
+  it('ignores documentElement.clientHeight so it can shrink back to content', () => {
+    const doc = document.implementation.createHTMLDocument('email')
+
+    // clientHeight reflects the iframe's own (previously set) viewport height,
+    // not the content. A shorter email must not stay pinned to the old height.
+    setMetric(doc.documentElement, 'clientHeight', 2000)
+    setMetric(doc.documentElement, 'scrollHeight', 400)
+    setMetric(doc.documentElement, 'offsetHeight', 400)
+    setMetric(doc.body, 'scrollHeight', 400)
+    setMetric(doc.body, 'offsetHeight', 400)
+
+    expect(getEmailDocumentHeight(doc)).toBe(400)
+  })
+
   it('accounts for content extending beyond body scroll height', () => {
     const doc = document.implementation.createHTMLDocument('email')
     const footer = doc.createElement('footer')

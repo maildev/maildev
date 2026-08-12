@@ -190,11 +190,14 @@ export function getEmailDocumentHeight(doc: Document): number {
   const bodyStyle = doc.defaultView?.getComputedStyle(body)
   const bodyMarginBottom = bodyStyle ? parseFloat(bodyStyle.marginBottom) || 0 : 0
 
+  // NB: documentElement.clientHeight is intentionally omitted — for the root
+  // element it reports the iframe's own viewport height (i.e. whatever height
+  // we last set), which would ratchet the measurement up and prevent it from
+  // ever shrinking to fit shorter content.
   return Math.ceil(
     Math.max(
       documentElement.scrollHeight,
       documentElement.offsetHeight,
-      documentElement.clientHeight,
       body.scrollHeight,
       body.offsetHeight,
       childBottom + bodyMarginBottom
@@ -246,15 +249,26 @@ function HtmlContent({ html, viewport }: { html: string | undefined; viewport: s
 
   useEffect(() => cleanupIframe, [cleanupIframe])
 
+  // Changing the email swaps the iframe's srcDoc, which reloads it and fires
+  // onLoad -> handleIframeLoad re-attaches listeners. Reset the height so the
+  // new content is measured from scratch.
   useEffect(() => {
     cleanupIframe()
     setIframeHeight(null)
-  }, [cleanupIframe, html, viewport])
+  }, [cleanupIframe, html])
 
-  // Forward keyboard shortcuts from iframe to parent window
-  const handleIframeLoad = () => {
-    cleanupIframe()
+  // Changing the viewport only resizes the existing iframe; it does NOT reload
+  // it, so onLoad never fires again. Keep the already-attached listeners in
+  // place and just re-measure for the new width (resetting first so switching
+  // to a wider viewport can shrink the height back down).
+  useEffect(() => {
+    setIframeHeight(null)
+    scheduleIframeResize()
+  }, [scheduleIframeResize, viewport])
 
+  // Forward keyboard shortcuts from iframe to parent window and observe the
+  // loaded document so the iframe height tracks its content.
+  const setupIframe = useCallback(() => {
     const iframe = iframeRef.current
     const iframeWindow = iframe?.contentWindow
     const iframeDocument = iframe?.contentDocument
@@ -319,7 +333,18 @@ function HtmlContent({ html, viewport }: { html: string | undefined; viewport: s
           fonts?: { ready?: Promise<unknown> }
         }
       ).fonts
-      fonts?.ready?.then(scheduleIframeResize).catch(() => undefined)
+      // A promise can't be cancelled, so gate the callback behind a disposed
+      // flag tied to this iframe's cleanup — otherwise a late font load could
+      // resize a torn-down or already-replaced iframe.
+      let fontsDisposed = false
+      cleanupCallbacks.push(() => {
+        fontsDisposed = true
+      })
+      fonts?.ready
+        ?.then(() => {
+          if (!fontsDisposed) scheduleIframeResize()
+        })
+        .catch(() => undefined)
     } catch {
       // Ignore cross-origin errors (shouldn't happen with srcdoc)
     }
@@ -330,7 +355,12 @@ function HtmlContent({ html, viewport }: { html: string | undefined; viewport: s
       }
     }
     scheduleIframeResize()
-  }
+  }, [scheduleIframeResize])
+
+  const handleIframeLoad = useCallback(() => {
+    cleanupIframe()
+    setupIframe()
+  }, [cleanupIframe, setupIframe])
 
   if (!html) {
     return (

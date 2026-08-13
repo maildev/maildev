@@ -259,10 +259,10 @@ function HtmlContent({ html, viewport }: { html: string | undefined; viewport: s
 
   // Changing the viewport only resizes the existing iframe; it does NOT reload
   // it, so onLoad never fires again. Keep the already-attached listeners in
-  // place and just re-measure for the new width (resetting first so switching
-  // to a wider viewport can shrink the height back down).
+  // place and just re-measure for the new width. (We deliberately do NOT reset
+  // the height to null first: the reset raced the measurement rAF so it never
+  // shrank anyway, and it caused a one-frame collapse that lost scroll position.)
   useEffect(() => {
-    setIframeHeight(null)
     scheduleIframeResize()
   }, [scheduleIframeResize, viewport])
 

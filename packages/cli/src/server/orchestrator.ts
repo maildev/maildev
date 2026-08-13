@@ -89,6 +89,9 @@ export class Orchestrator {
     if (this.config.hideExtensions) {
       smtpOptions.hideExtensions = this.config.hideExtensions
     }
+    if (this.config.maxMessageSize !== undefined) {
+      smtpOptions.maxMessageSize = this.config.maxMessageSize
+    }
     this.smtp = createSMTPServer(smtpOptions)
 
     // 4. Configure relay if outgoing host is set

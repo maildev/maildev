@@ -49,6 +49,10 @@ export function configureOptions(program: Command): void {
       '--hide-extensions <extensions>',
       'Comma-separated SMTP extensions to hide (STARTTLS,PIPELINING,8BITMIME,SMTPUTF8)'
     )
+    .option(
+      '--max-message-size <bytes>',
+      `Maximum accepted message size in bytes, 0 to disable (default: ${DEFAULT_CONFIG.maxMessageSize})`
+    )
 
     // === Web/API Server Options ===
     .option(
@@ -163,6 +167,7 @@ Environment Variables:
   MAILDEV_WEB_USER      Web auth username
   MAILDEV_WEB_PASS      Web auth password
   MAILDEV_MAIL_DIRECTORY Directory for persisting emails
+  MAILDEV_MAX_MESSAGE_SIZE Max accepted message size in bytes (default: 52428800)
 `
 
 /**

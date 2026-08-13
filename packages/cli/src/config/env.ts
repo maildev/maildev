@@ -15,6 +15,7 @@ const ENV_MAPPING: Record<string, keyof PartialMailDevConfig> = {
   MAILDEV_IP: 'ip',
   MAILDEV_INCOMING_USER: 'incomingUser',
   MAILDEV_INCOMING_PASS: 'incomingPass',
+  MAILDEV_MAX_MESSAGE_SIZE: 'maxMessageSize',
 
   // Web/API
   MAILDEV_WEB_PORT: 'web',
@@ -43,6 +44,7 @@ const NUMBER_VARS = new Set([
   'MAILDEV_SMTP_PORT',
   'MAILDEV_WEB_PORT',
   'MAILDEV_OUTGOING_PORT',
+  'MAILDEV_MAX_MESSAGE_SIZE',
 ])
 
 /**

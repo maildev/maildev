@@ -67,6 +67,7 @@ Usage: maildev [options]
 | `--base-pathname <path>`         | `MAILDEV_BASE_PATHNAME`    | Base path for URLs                                                                        |
 | `--disable-web`                  | `MAILDEV_DISABLE_WEB`      | Disable the use of the web interface                                                      |
 | `--hide-extensions <extensions>` | `MAILDEV_HIDE_EXTENSIONS`  | Comma separated list of SMTP extensions to NOT advertise                                  |
+| `--max-message-size <bytes>`     | `MAILDEV_MAX_MESSAGE_SIZE` | Max accepted message size in bytes; larger messages are rejected. 0 disables (default: 52428800) |
 | `--mcp`                          | `MAILDEV_MCP`              | Enable MCP server for Claude integration                                                  |
 | `--config <file>`                |                            | Path to configuration file                                                                |
 | `-v, --verbose`                  |                            | Enable verbose logging                                                                    |

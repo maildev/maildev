@@ -63,6 +63,25 @@ describe('validateConfig', () => {
     })
   })
 
+  describe('max message size validation', () => {
+    it('should accept 0 (limit disabled)', () => {
+      const result = validateConfig(createConfig({ maxMessageSize: 0 }))
+      expect(result.valid).toBe(true)
+    })
+
+    it('should reject a negative size', () => {
+      const result = validateConfig(createConfig({ maxMessageSize: -1 }))
+      expect(result.valid).toBe(false)
+      expect(result.errors.some((e) => e.field === 'maxMessageSize')).toBe(true)
+    })
+
+    it('should reject a non-integer size', () => {
+      const result = validateConfig(createConfig({ maxMessageSize: 1.5 }))
+      expect(result.valid).toBe(false)
+      expect(result.errors.some((e) => e.field === 'maxMessageSize')).toBe(true)
+    })
+  })
+
   describe('authentication validation', () => {
     it('should require password when username is set (SMTP)', () => {
       const config = createConfig({ incomingUser: 'user' })

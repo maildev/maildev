@@ -143,6 +143,15 @@ export class Orchestrator {
       if (this.config.verbose !== undefined) {
         apiOptions.logger = this.config.verbose
       }
+      if (this.config.https) {
+        apiOptions.https = true
+        if (this.config.httpsCert) {
+          apiOptions.httpsCert = this.config.httpsCert
+        }
+        if (this.config.httpsKey) {
+          apiOptions.httpsKey = this.config.httpsKey
+        }
+      }
       if (this.config.mcp) {
         apiOptions.mcp = { enabled: true }
       }

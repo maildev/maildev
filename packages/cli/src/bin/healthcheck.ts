@@ -6,7 +6,7 @@
  * MAILDEV_* environment variables the server uses and probes the endpoint that
  * is actually listening:
  *
- *   - Web UI enabled  -> HTTP GET http://127.0.0.1:<web><basePath>/api/healthz
+ *   - Web UI enabled  -> HTTP(S) GET http(s)://127.0.0.1:<web><basePath>/api/healthz
  *   - Web UI disabled -> TCP connect to 127.0.0.1:<smtp>
  *
  * Design notes (each addresses a reported bug):
@@ -16,10 +16,14 @@
  *     `--disable-web` containers still report healthy. (#544)
  *   - Normalizes the base path so a trailing slash can't produce a `//` in the
  *     probe URL. (#542)
+ *   - Probes over HTTPS (ignoring the self-signed cert) when MAILDEV_HTTPS is
+ *     set, so TLS-enabled containers don't report unhealthy. The env var is the
+ *     same one that turns HTTPS on, so the probe always matches the server.
  */
 
 import net from 'node:net'
 import http from 'node:http'
+import https from 'node:https'
 import { fileURLToPath } from 'node:url'
 
 const DEFAULT_WEB_PORT = 1080
@@ -33,6 +37,8 @@ export interface HealthcheckPlan {
   port: number
   /** Request path for `web` mode. */
   path?: string
+  /** Use HTTPS (ignoring cert validation) for `web` mode. */
+  secure?: boolean
 }
 
 function parseBoolean(value: string | undefined): boolean {
@@ -71,19 +77,28 @@ export function resolveHealthcheck(env: NodeJS.ProcessEnv): HealthcheckPlan {
     host: HOST,
     port: parsePort(env.MAILDEV_WEB_PORT, DEFAULT_WEB_PORT),
     path: `${basePath}/api/healthz`,
+    secure: parseBoolean(env.MAILDEV_HTTPS),
   }
 }
 
 function checkWeb(plan: HealthcheckPlan): Promise<boolean> {
   return new Promise((resolve) => {
-    const req = http.request(
-      { host: plan.host, port: plan.port, path: plan.path, method: 'GET', timeout: TIMEOUT_MS },
-      (res) => {
-        res.resume() // drain
-        const status = res.statusCode ?? 0
-        resolve(status >= 200 && status < 300)
-      }
-    )
+    // Ignore certificate validation: MailDev's HTTPS mode typically uses a
+    // self-signed cert, and this is a loopback liveness probe.
+    const transport = plan.secure ? https : http
+    const options = {
+      host: plan.host,
+      port: plan.port,
+      path: plan.path,
+      method: 'GET',
+      timeout: TIMEOUT_MS,
+      ...(plan.secure ? { rejectUnauthorized: false } : {}),
+    }
+    const req = transport.request(options, (res) => {
+      res.resume() // drain
+      const status = res.statusCode ?? 0
+      resolve(status >= 200 && status < 300)
+    })
     req.on('error', () => resolve(false))
     req.on('timeout', () => {
       req.destroy()

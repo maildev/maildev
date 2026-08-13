@@ -6,6 +6,7 @@ import { useUIStore } from './stores/ui'
 import { useEmails } from './hooks/useEmails'
 import { useFaviconBadge } from './hooks/useFaviconBadge'
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
+import { useEmailRoute } from './hooks/useEmailRoute'
 import type { Email } from '@maildev/core'
 
 const queryClient = new QueryClient({
@@ -32,6 +33,9 @@ function AppContent() {
 
   // Global keyboard shortcuts
   useKeyboardShortcuts()
+
+  // Deep-link the selected email and follow browser back/forward navigation
+  useEmailRoute()
 
   // Apply theme class to document
   useEffect(() => {

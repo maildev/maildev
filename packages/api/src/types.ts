@@ -15,6 +15,12 @@ export interface APIServerOptions {
   host?: string
   /** Base path for all routes (default: '/') */
   basePath?: string
+  /** Serve the API/UI over HTTPS (requires httpsCert and httpsKey) */
+  https?: boolean
+  /** Path to the HTTPS certificate file (PEM) */
+  httpsCert?: string
+  /** Path to the HTTPS private key file (PEM) */
+  httpsKey?: string
   /** Storage backend for emails */
   storage: Storage
   /** SMTP server instance for events (optional) */

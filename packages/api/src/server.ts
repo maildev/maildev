@@ -4,9 +4,15 @@
  * REST API and WebSocket server for MailDev.
  */
 
-import Fastify, { type FastifyInstance, type FastifyRequest, type FastifyReply } from 'fastify'
+import Fastify, {
+  type FastifyInstance,
+  type FastifyServerOptions,
+  type FastifyRequest,
+  type FastifyReply,
+} from 'fastify'
 import cors from '@fastify/cors'
 import { randomUUID } from 'node:crypto'
+import { readFileSync } from 'node:fs'
 import { EventEmitter } from 'node:events'
 import { Server as SocketServer } from 'socket.io'
 import { Server as MCPServer } from '@modelcontextprotocol/sdk/server/index.js'
@@ -48,10 +54,31 @@ export class APIServer extends EventEmitter {
     this.smtp = options.smtp
     this.options = options
 
-    // Create Fastify instance
-    this.app = Fastify({
+    // Create Fastify instance, serving over HTTPS when configured. Typed as a
+    // plain record because Fastify's overloaded call signature collapses
+    // `Parameters<typeof Fastify>[0]` to `never`.
+    const fastifyOptions: Record<string, unknown> = {
       logger: options.logger ?? false,
-    })
+    }
+
+    if (options.https) {
+      if (!options.httpsCert || !options.httpsKey) {
+        throw new Error('HTTPS is enabled but httpsCert and httpsKey were not provided')
+      }
+      try {
+        fastifyOptions.https = {
+          cert: readFileSync(options.httpsCert),
+          key: readFileSync(options.httpsKey),
+        }
+      } catch (error) {
+        const message = error instanceof Error ? error.message : 'Unknown error'
+        throw new Error(`Failed to read HTTPS certificate/key files: ${message}`)
+      }
+    }
+
+    // Fastify's instance type differs for HTTPS; we hold it as the common
+    // FastifyInstance either way.
+    this.app = Fastify(fastifyOptions as unknown as FastifyServerOptions) as unknown as FastifyInstance
   }
 
   /**
@@ -93,7 +120,8 @@ export class APIServer extends EventEmitter {
     await this.app.listen({ port, host })
 
     const printHost = host === '0.0.0.0' ? 'localhost' : host
-    console.info(`MailDev API running at http://${printHost}:${port}${this.options.basePath ?? ''}`)
+    const protocol = this.options.https ? 'https' : 'http'
+    console.info(`MailDev API running at ${protocol}://${printHost}:${port}${this.options.basePath ?? ''}`)
 
     this.emit('listening', { port, host })
   }

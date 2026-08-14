@@ -48,5 +48,5 @@ ENV MAILDEV_SMTP_PORT=1025
 
 ENTRYPOINT ["node", "dist/bin/maildev.js"]
 
-HEALTHCHECK --interval=10s --timeout=5s \
+HEALTHCHECK --interval=10s --timeout=5s --start-period=5s --retries=3 \
   CMD ["node", "dist/bin/healthcheck.js"]

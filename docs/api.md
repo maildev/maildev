@@ -54,6 +54,7 @@ const maildev = new MailDev({
 
   // Storage
   mailDirectory: '/tmp/maildev',  // Persist emails to disk (optional)
+  maxEmails: 0,            // Keep at most this many emails (0 = unlimited, default)
 
   // Authentication
   incomingUser: 'user',    // SMTP auth username
@@ -123,6 +124,41 @@ smtp.on('new', (email) => {
   console.log('Subject:', email.subject)
   console.log('Text:', email.text)
   console.log('HTML:', email.html)
+})
+```
+
+### Limiting how many emails are kept
+
+MailDev keeps every email by default (`maxEmails: 0`). Set a positive
+`maxEmails` and it keeps the newest that many messages, discarding the oldest as
+new mail arrives. When emails are persisted to disk, the `.eml` file and any
+attachments are deleted along with the message, so the mail directory stays
+bounded too.
+
+```typescript
+const maildev = new MailDev({
+  mailDirectory: '/var/mail/maildev',
+  maxEmails: 5000,
+})
+```
+
+`maxEmails: 0` (the default) keeps everything. Be aware that both memory use and
+the mail directory then grow without limit: with typical messages, 10,000 emails
+is around 150 MB of heap, and nothing is ever removed from disk — so set a
+positive limit for long-running or high-volume use.
+
+### Listing a large inbox
+
+`smtp.getAllEmails()` materialises every email, bodies included. For listings,
+use `storage.listSummaries()` instead — it returns a page of summaries without
+the message bodies, plus the counts needed to paginate.
+
+```typescript
+const { items, total, unread } = await servers.storage.listSummaries({
+  skip: 0,
+  limit: 50,
+  search: 'welcome',   // optional: subject, participants and body text
+  sort: 'desc',        // 'desc' (default) is newest first
 })
 ```
 
@@ -366,8 +402,19 @@ import { FileStorage } from '@maildev/core'
 
 const storage = new FileStorage({
   mailDirectory: '/var/mail/maildev',
+  maxEmails: 1000, // optional: cap the store (0/omitted = unlimited)
 })
 await storage.initialize()
+```
+
+When `maxEmails` is exceeded, the oldest email is dropped and its files are
+deleted. To clean up anything else you wrote alongside an email, register an
+evict handler — `save()` awaits it, so once it resolves the email is fully gone:
+
+```typescript
+storage.onEvicted(async (email) => {
+  await removeMyIndexEntry(email.id)
+})
 ```
 
 ### Custom Logger
@@ -425,9 +472,12 @@ MailDev v3 is written in TypeScript and exports all types:
 import type {
   MailDevConfig,
   Email,
+  EmailSummary,
   Address,
   Attachment,
   Storage,
+  ListOptions,
+  ListResult,
 } from 'maildev'
 
 import type {

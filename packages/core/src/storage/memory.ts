@@ -1,6 +1,7 @@
 import { EventEmitter } from 'node:events'
 import type {
   Email,
+  EvictHandler,
   ListOptions,
   ListResult,
   Storage,
@@ -17,7 +18,9 @@ import { filterEmails, matchesSearchTerm } from '../utils/filter.js'
  * all O(1) and the oldest email is always the first entry — which is what makes
  * `maxEmails` eviction cheap.
  *
- * Emits `add`, `delete` and `clear`.
+ * Emits `add`, `delete` and `clear`. Emails dropped by `maxEmails` go to the
+ * handlers registered with {@link MemoryStorage.onEvicted}, which `save()`
+ * awaits so cleanup is finished rather than merely scheduled.
  */
 export class MemoryStorage extends EventEmitter implements Storage {
   readonly options: StorageOptions
@@ -25,6 +28,8 @@ export class MemoryStorage extends EventEmitter implements Storage {
   protected emails = new Map<string, Email>()
   /** Kept in sync on every mutation so `stats()` never has to scan */
   private unreadCount = 0
+  /** Cleanup handlers awaited before an eviction is considered complete */
+  private evictHandlers = new Set<EvictHandler>()
 
   constructor(options: StorageOptions = {}) {
     super()
@@ -37,7 +42,8 @@ export class MemoryStorage extends EventEmitter implements Storage {
   /**
    * Get all emails in the store
    *
-   * Materialises the entire store; use sparingly for anything that faces a user.
+   * Materialises the entire store; prefer {@link MemoryStorage.list} for
+   * anything that faces a user.
    */
   async getAll(): Promise<Email[]> {
     return [...this.emails.values()]
@@ -73,20 +79,7 @@ export class MemoryStorage extends EventEmitter implements Storage {
     }
     this.emit('add', email)
 
-    // Enforce maxEmails by dropping the oldest entries. Iteration order is
-    // insertion order, so the first entries walked are the oldest.
-    const max = this.options.maxEmails ?? 0
-    if (max > 0) {
-      for (const [id, oldest] of this.emails) {
-        if (this.emails.size <= max) {
-          break
-        }
-        this.emails.delete(id)
-        if (!oldest.read) {
-          this.unreadCount--
-        }
-      }
-    }
+    await this.evictOverflow()
   }
 
   /**
@@ -191,6 +184,70 @@ export class MemoryStorage extends EventEmitter implements Storage {
   async close(): Promise<void> {
     this.emails.clear()
     this.unreadCount = 0
+  }
+
+  /**
+   * Register a handler for emails dropped by the `maxEmails` limit
+   */
+  onEvicted(handler: EvictHandler): () => void {
+    this.evictHandlers.add(handler)
+    return () => {
+      this.evictHandlers.delete(handler)
+    }
+  }
+
+  /**
+   * Hook for subclasses that persisted something alongside the email
+   *
+   * Called with the emails dropped to honour `maxEmails`, oldest first, before
+   * the registered {@link MemoryStorage.onEvicted} handlers run.
+   * @param emails - Emails that were just removed from the store
+   */
+  protected async onEvict(_emails: Email[]): Promise<void> {
+    // Nothing to clean up for a purely in-memory store
+  }
+
+  /**
+   * Drop the oldest emails until the store is back within `maxEmails`
+   */
+  private async evictOverflow(): Promise<void> {
+    const max = this.options.maxEmails ?? 0
+    if (max <= 0 || this.emails.size <= max) {
+      return
+    }
+
+    // Iteration order is insertion order, so this walks oldest-first.
+    const evicted: Email[] = []
+    for (const email of this.emails.values()) {
+      if (this.emails.size - evicted.length <= max) {
+        break
+      }
+      evicted.push(email)
+    }
+
+    for (const email of evicted) {
+      this.emails.delete(email.id)
+      if (!email.read) {
+        this.unreadCount--
+      }
+    }
+
+    await this.onEvict(evicted)
+
+    // Awaited, so that by the time save() resolves the email is gone from the
+    // store and from disk. A handler that throws must not fail the save that
+    // triggered the eviction — the new email is already committed and the old
+    // one already removed — so isolate each handler and surface failures via a
+    // non-'error' event (which is a no-op when nobody is listening).
+    for (const email of evicted) {
+      for (const handler of this.evictHandlers) {
+        try {
+          await handler(email)
+        } catch (err) {
+          this.emit('evictHandlerError', err, email)
+        }
+      }
+    }
   }
 
   /**

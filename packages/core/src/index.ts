@@ -23,6 +23,7 @@ export type {
   Storage,
   StorageEvents,
   StorageStats,
+  EvictHandler,
   SortOrder,
   ListOptions,
   ListResult,
@@ -39,6 +40,7 @@ export { clone } from './utils/clone.js'
 export { delay } from './utils/delay.js'
 export { filterEmails, matchesSearchTerm } from './utils/filter.js'
 export { toSummary } from './utils/summary.js'
+export { mapLimit } from './utils/concurrency.js'
 
 // Helpers
 export { calculateBcc } from './helpers/bcc.js'

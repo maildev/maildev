@@ -295,21 +295,7 @@ export class APIServer extends EventEmitter {
     // Mark all emails as read
     this.app.patch(`${apiPath}/email/read-all`, async (_request, reply) => {
       try {
-        if (this.smtp) {
-          const count = await this.smtp.markAllRead()
-          return count
-        } else {
-          const emails = await this.storage.getAll()
-          let count = 0
-          for (const email of emails) {
-            if (!email.read) {
-              email.read = true
-              await this.storage.save(email)
-              count++
-            }
-          }
-          return count
-        }
+        return this.smtp ? await this.smtp.markAllRead() : await this.storage.markAllRead()
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Unknown error'
         return reply.status(500).send({ error: message })

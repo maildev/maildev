@@ -21,8 +21,9 @@ export { EmailHeader } from './components/email-viewer/EmailHeader'
 export { EmailContent } from './components/email-viewer/EmailContent'
 
 // Re-export hooks
-export { useEmails, useEmail, useConfig, filterEmails } from './hooks/useEmails'
+export { useEmailList, useEmail, useConfig, EMAIL_PAGE_SIZE } from './hooks/useEmails'
 export { useSocket } from './hooks/useSocket'
+export { useDebouncedValue } from './hooks/useDebouncedValue'
 
 // Re-export stores
 export { useUIStore } from './stores/ui'

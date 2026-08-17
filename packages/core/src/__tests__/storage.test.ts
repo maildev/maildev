@@ -171,6 +171,79 @@ describe('MemoryStorage', () => {
     })
   })
 
+  describe('list', () => {
+    const at = (minutes: number) => new Date(Date.UTC(2026, 0, 1, 0, minutes))
+
+    beforeEach(async () => {
+      // Saved out of time order on purpose, so sorting is actually exercised
+      await storage.save(createTestEmail('b', { time: at(2), subject: 'Second' }))
+      await storage.save(createTestEmail('a', { time: at(1), subject: 'First' }))
+      await storage.save(createTestEmail('c', { time: at(3), subject: 'Third', read: true }))
+    })
+
+    it('should return everything newest first by default', async () => {
+      const result = await storage.list()
+
+      expect(result.items.map((e) => e.id)).toEqual(['c', 'b', 'a'])
+      expect(result.total).toBe(3)
+      expect(result.storeTotal).toBe(3)
+      expect(result.unread).toBe(2)
+    })
+
+    it('should sort ascending on request', async () => {
+      const result = await storage.list({ sort: 'asc' })
+      expect(result.items.map((e) => e.id)).toEqual(['a', 'b', 'c'])
+    })
+
+    it('should apply skip and limit while reporting the full total', async () => {
+      const result = await storage.list({ skip: 1, limit: 1 })
+
+      expect(result.items.map((e) => e.id)).toEqual(['b'])
+      expect(result.total).toBe(3)
+      expect(result.skip).toBe(1)
+      expect(result.limit).toBe(1)
+    })
+
+    it('should treat limit 0 as no limit', async () => {
+      const result = await storage.list({ limit: 0 })
+      expect(result.items).toHaveLength(3)
+    })
+
+    it('should return an empty page when skipping past the end', async () => {
+      const result = await storage.list({ skip: 99, limit: 10 })
+
+      expect(result.items).toEqual([])
+      expect(result.total).toBe(3)
+    })
+
+    it('should search subject, addresses and body text', async () => {
+      await storage.save(
+        createTestEmail('d', {
+          time: at(4),
+          subject: 'Unrelated',
+          text: 'mentions parachute in the body',
+          from: [{ address: 'bodhi@example.com', name: 'Bodhi' }],
+        })
+      )
+
+      expect((await storage.list({ search: 'third' })).items.map((e) => e.id)).toEqual(['c'])
+      expect((await storage.list({ search: 'parachute' })).items.map((e) => e.id)).toEqual(['d'])
+      expect((await storage.list({ search: 'bodhi@' })).items.map((e) => e.id)).toEqual(['d'])
+    })
+
+    it('should report the matching total separately from the store total', async () => {
+      const result = await storage.list({ search: 'Third' })
+
+      expect(result.total).toBe(1)
+      expect(result.storeTotal).toBe(3)
+    })
+
+    it('should filter to unread only', async () => {
+      const result = await storage.list({ unreadOnly: true })
+      expect(result.items.map((e) => e.id)).toEqual(['b', 'a'])
+    })
+  })
+
   describe('delete', () => {
     it('should return false for non-existent email', async () => {
       const result = await storage.delete('nonexistent')

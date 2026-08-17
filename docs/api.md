@@ -126,6 +126,31 @@ smtp.on('new', (email) => {
 })
 ```
 
+### Listing a large inbox
+
+`smtp.getAllEmails()` materialises every email, bodies included. For listings,
+use `storage.list()` instead — it returns a page of emails plus the counts
+needed to paginate, so the work stays proportional to the page size rather than
+the size of the store.
+
+```typescript
+const { items, total, unread } = await servers.storage.list({
+  skip: 0,
+  limit: 50,
+  search: 'welcome',   // optional: subject, participants and body text
+  sort: 'desc',        // 'desc' (default) is newest first
+})
+```
+
+To drop the message bodies and headers — as the REST `/api/email/summary`
+endpoint and the web UI do — map the page through `toSummary`:
+
+```typescript
+import { toSummary } from '@maildev/core'
+
+const summaries = items.map(toSummary)
+```
+
 ### Getting All Emails
 
 ```typescript
@@ -425,9 +450,12 @@ MailDev v3 is written in TypeScript and exports all types:
 import type {
   MailDevConfig,
   Email,
+  EmailSummary,
   Address,
   Attachment,
   Storage,
+  ListOptions,
+  ListResult,
 } from 'maildev'
 
 import type {

@@ -1,12 +1,11 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { Layout } from './components/layout/Layout'
 import { CommandPalette } from './components/ui/CommandPalette'
 import { useUIStore } from './stores/ui'
-import { useEmails } from './hooks/useEmails'
+import { useEmailList } from './hooks/useEmails'
 import { useFaviconBadge } from './hooks/useFaviconBadge'
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
-import type { Email } from '@maildev/core'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -20,15 +19,12 @@ const queryClient = new QueryClient({
 function AppContent() {
   const theme = useUIStore((state) => state.theme)
   const openCommandPalette = useUIStore((state) => state.openCommandPalette)
-  const { data: emails = [] } = useEmails()
-
-  // Count unread emails
-  const unreadCount = useMemo(() => {
-    return (emails as Email[]).filter((email) => !email.read).length
-  }, [emails])
+  // The server keeps the unread count, so it covers the whole inbox rather
+  // than just the pages that happen to be loaded
+  const { unread } = useEmailList()
 
   // Update favicon with unread count
-  useFaviconBadge(unreadCount)
+  useFaviconBadge(unread)
 
   // Global keyboard shortcuts
   useKeyboardShortcuts()

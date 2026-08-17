@@ -1,12 +1,14 @@
 import { EventEmitter } from 'node:events'
 import type {
   Email,
+  ListOptions,
+  ListResult,
   Storage,
   StorageOptions,
   StorageQuery,
   StorageStats,
 } from '../types/index.js'
-import { filterEmails } from '../utils/filter.js'
+import { filterEmails, matchesSearchTerm } from '../utils/filter.js'
 
 /**
  * In-memory storage implementation
@@ -144,6 +146,25 @@ export class MemoryStorage extends EventEmitter implements Storage {
   }
 
   /**
+   * Get a page of emails, newest first by default
+   */
+  async list(options: ListOptions = {}): Promise<ListResult<Email>> {
+    const matched = this.match(options)
+    const skip = Math.max(0, Math.trunc(options.skip ?? 0))
+    const limit = Math.max(0, Math.trunc(options.limit ?? 0))
+    const items = limit > 0 ? matched.slice(skip, skip + limit) : matched.slice(skip)
+
+    return {
+      items,
+      total: matched.length,
+      storeTotal: this.emails.size,
+      unread: this.unreadCount,
+      skip,
+      limit,
+    }
+  }
+
+  /**
    * Get the total count of emails
    */
   async count(): Promise<number> {
@@ -170,5 +191,31 @@ export class MemoryStorage extends EventEmitter implements Storage {
   async close(): Promise<void> {
     this.emails.clear()
     this.unreadCount = 0
+  }
+
+  /**
+   * Apply the search/unread filters and sort by received time
+   */
+  private match(options: ListOptions): Email[] {
+    const search = options.search?.trim() ?? ''
+    const matched: Email[] = []
+
+    for (const email of this.emails.values()) {
+      if (options.unreadOnly && email.read) {
+        continue
+      }
+      if (search && !matchesSearchTerm(email, search)) {
+        continue
+      }
+      matched.push(email)
+    }
+
+    // Decorate/sort/undecorate: `time` may be a string once it has been through
+    // JSON, and converting inside the comparator would do it O(n log n) times.
+    const direction = options.sort === 'asc' ? 1 : -1
+    return matched
+      .map((email) => ({ email, time: new Date(email.time).getTime() }))
+      .sort((a, b) => direction * (a.time - b.time))
+      .map((entry) => entry.email)
   }
 }

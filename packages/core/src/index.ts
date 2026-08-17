@@ -17,11 +17,15 @@ export type {
   EmailPriority,
   Email,
   EmailInput,
+  EmailSummary,
   StorageQuery,
   StorageOptions,
   Storage,
   StorageEvents,
   StorageStats,
+  SortOrder,
+  ListOptions,
+  ListResult,
 } from './types/index.js'
 
 // Storage implementations
@@ -33,7 +37,8 @@ export { makeId } from './utils/id.js'
 export { formatBytes } from './utils/format.js'
 export { clone } from './utils/clone.js'
 export { delay } from './utils/delay.js'
-export { filterEmails } from './utils/filter.js'
+export { filterEmails, matchesSearchTerm } from './utils/filter.js'
+export { toSummary } from './utils/summary.js'
 
 // Helpers
 export { calculateBcc } from './helpers/bcc.js'

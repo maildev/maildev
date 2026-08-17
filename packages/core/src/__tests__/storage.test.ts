@@ -102,6 +102,66 @@ describe('MemoryStorage', () => {
       expect(emails.find((e) => e.id === '4')).toBeDefined()
     })
 
+    it('should notify evict handlers for each email dropped by maxEmails', async () => {
+      const limitedStorage = new MemoryStorage({ maxEmails: 2 })
+      const evicted: string[] = []
+      limitedStorage.onEvicted((email) => {
+        evicted.push(email.id)
+      })
+
+      for (const id of ['1', '2', '3', '4']) {
+        await limitedStorage.save(createTestEmail(id))
+      }
+
+      // Oldest first, and only the ones that actually overflowed
+      expect(evicted).toEqual(['1', '2'])
+    })
+
+    it('should await async evict handlers before save resolves', async () => {
+      const limitedStorage = new MemoryStorage({ maxEmails: 1 })
+      const cleaned: string[] = []
+      limitedStorage.onEvicted(async (email) => {
+        await new Promise((resolve) => setTimeout(resolve, 5))
+        cleaned.push(email.id)
+      })
+
+      await limitedStorage.save(createTestEmail('1'))
+      await limitedStorage.save(createTestEmail('2'))
+
+      // Cleanup is complete by the time save() resolves, not merely scheduled
+      expect(cleaned).toEqual(['1'])
+    })
+
+    it('should stop notifying an unregistered evict handler', async () => {
+      const limitedStorage = new MemoryStorage({ maxEmails: 1 })
+      const evicted: string[] = []
+      const unregister = limitedStorage.onEvicted((email) => {
+        evicted.push(email.id)
+      })
+
+      await limitedStorage.save(createTestEmail('1'))
+      await limitedStorage.save(createTestEmail('2'))
+      unregister()
+      await limitedStorage.save(createTestEmail('3'))
+
+      expect(evicted).toEqual(['1'])
+    })
+
+    it('should not evict when updating an existing email', async () => {
+      const limitedStorage = new MemoryStorage({ maxEmails: 2 })
+      const evicted: string[] = []
+      limitedStorage.onEvicted((email) => {
+        evicted.push(email.id)
+      })
+
+      await limitedStorage.save(createTestEmail('1'))
+      await limitedStorage.save(createTestEmail('2'))
+      await limitedStorage.save(createTestEmail('1', { read: true }))
+
+      expect(evicted).toEqual([])
+      expect(await limitedStorage.count()).toBe(2)
+    })
+
     it('should keep an updated email in its original position', async () => {
       const limitedStorage = new MemoryStorage({ maxEmails: 2 })
 

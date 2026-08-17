@@ -7,6 +7,7 @@ export type {
   EmailPriority,
   Email,
   EmailInput,
+  EmailSummary,
 } from './email.js'
 
 // Storage types
@@ -16,4 +17,7 @@ export type {
   Storage,
   StorageEvents,
   StorageStats,
+  SortOrder,
+  ListOptions,
+  ListResult,
 } from './storage.js'

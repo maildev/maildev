@@ -19,6 +19,45 @@ export interface StorageOptions {
 }
 
 /**
+ * Sort direction for listings, applied to the email's received time
+ */
+export type SortOrder = 'asc' | 'desc'
+
+/**
+ * Options for a paginated listing
+ */
+export interface ListOptions {
+  /** Number of matching emails to skip */
+  skip?: number
+  /** Maximum emails to return (0 or omitted = no limit) */
+  limit?: number
+  /** Sort by received time. Defaults to 'desc' (newest first) */
+  sort?: SortOrder
+  /** Case-insensitive substring match on subject, addresses and body text */
+  search?: string
+  /** Restrict the listing to unread emails */
+  unreadOnly?: boolean
+}
+
+/**
+ * A page of results, plus the counts a UI needs to render pagination
+ */
+export interface ListResult<T> {
+  /** The requested page */
+  items: T[]
+  /** Emails matching the query, ignoring skip/limit */
+  total: number
+  /** Emails in the store, ignoring the query */
+  storeTotal: number
+  /** Unread emails in the store, ignoring the query */
+  unread: number
+  /** The skip that was applied */
+  skip: number
+  /** The limit that was applied (0 = no limit) */
+  limit: number
+}
+
+/**
  * Summary counts for the whole store
  */
 export interface StorageStats {
@@ -84,6 +123,15 @@ export interface Storage {
    * @returns Array of matching emails
    */
   filter(query: StorageQuery): Promise<Email[]>
+
+  /**
+   * Get a page of emails, newest first by default
+   *
+   * Prefer this over {@link Storage.getAll} for anything user facing: it keeps
+   * the work proportional to the page size rather than the size of the store.
+   * @param options - Pagination, sorting and search options
+   */
+  list(options?: ListOptions): Promise<ListResult<Email>>
 
   /**
    * Get the total count of emails

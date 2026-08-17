@@ -14,6 +14,7 @@
  */
 import { describe, it, expect } from 'vitest'
 import { MemoryStorage } from '../storage/memory.js'
+import { toSummary } from '../utils/summary.js'
 import type { Email } from '../types/index.js'
 
 /** Emails used for the scale checks */
@@ -96,6 +97,39 @@ describe('MemoryStorage at scale', () => {
 
     expect(elapsed).toBeLessThan(20)
     expect(await storage.stats()).toEqual({ total: COUNT, unread: COUNT })
+  })
+
+  it('should return a page quickly', async () => {
+    const storage = new MemoryStorage()
+    await fill(storage)
+
+    let page: Awaited<ReturnType<MemoryStorage['list']>> | undefined
+    const elapsed = await timed(async () => {
+      page = await storage.list({ limit: 50 })
+    })
+
+    expect(elapsed).toBeLessThan(150)
+    expect(page?.items).toHaveLength(50)
+    expect(page?.total).toBe(COUNT)
+    // Newest first
+    expect(page?.items[0]?.id).toBe(`email-${COUNT - 1}`)
+  })
+
+  it('should keep a summary page small regardless of how much mail is stored', async () => {
+    const storage = new MemoryStorage()
+    const body = 'x'.repeat(12_000)
+
+    for (let i = 0; i < 2000; i++) {
+      await storage.save({ ...createTestEmail(i), html: body, text: body })
+    }
+
+    const everything = JSON.stringify(await storage.getAll())
+    const page = await storage.list({ limit: 50 })
+    const summaries = JSON.stringify(page.items.map(toSummary))
+
+    // The full listing is what the UI used to fetch every five seconds
+    expect(everything.length).toBeGreaterThan(20_000_000)
+    expect(summaries.length).toBeLessThan(50_000)
   })
 
   it('should stay within maxEmails while ingesting far more', async () => {

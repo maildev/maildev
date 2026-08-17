@@ -1,10 +1,10 @@
 ---
-'@maildev/core': major
-'@maildev/api': major
-'@maildev/smtp': minor
-'@maildev/mcp': minor
-'@maildev/ui': minor
-'maildev': minor
+'@maildev/core': patch
+'@maildev/api': patch
+'@maildev/smtp': patch
+'@maildev/mcp': patch
+'@maildev/ui': patch
+'maildev': patch
 ---
 
 Keep MailDev responsive with tens of thousands of emails

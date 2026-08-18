@@ -222,7 +222,18 @@ export class SMTPServer extends EventEmitter {
    * Mark all emails as read
    */
   async markAllRead(): Promise<number> {
-    return this.storage.markAllRead()
+    const emails = await this.storage.getAll()
+    let count = 0
+
+    for (const email of emails) {
+      if (!email.read) {
+        email.read = true
+        await this.storage.save(email)
+        count++
+      }
+    }
+
+    return count
   }
 
   /**

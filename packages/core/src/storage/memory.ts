@@ -1,31 +1,15 @@
-import { EventEmitter } from 'node:events'
-import type {
-  Email,
-  Storage,
-  StorageOptions,
-  StorageQuery,
-  StorageStats,
-} from '../types/index.js'
+import type { Email, Storage, StorageOptions, StorageQuery } from '../types/index.js'
 import { filterEmails } from '../utils/filter.js'
 
 /**
  * In-memory storage implementation
- *
- * Emails are held in an insertion-ordered Map, so lookup, save and delete are
- * all O(1) and the oldest email is always the first entry — which is what makes
- * `maxEmails` eviction cheap.
- *
- * Emits `add`, `delete` and `clear`.
+ * Stores emails in a simple array with no persistence
  */
-export class MemoryStorage extends EventEmitter implements Storage {
+export class MemoryStorage implements Storage {
   readonly options: StorageOptions
-  /** Insertion-ordered, so the first entry is always the oldest email */
-  protected emails = new Map<string, Email>()
-  /** Kept in sync on every mutation so `stats()` never has to scan */
-  private unreadCount = 0
+  protected emails: Email[] = []
 
   constructor(options: StorageOptions = {}) {
-    super()
     this.options = {
       maxEmails: 0,
       ...options,
@@ -34,18 +18,16 @@ export class MemoryStorage extends EventEmitter implements Storage {
 
   /**
    * Get all emails in the store
-   *
-   * Materialises the entire store; use sparingly for anything that faces a user.
    */
   async getAll(): Promise<Email[]> {
-    return [...this.emails.values()]
+    return [...this.emails]
   }
 
   /**
    * Get a single email by ID
    */
   async getById(id: string): Promise<Email | undefined> {
-    return this.emails.get(id)
+    return this.emails.find((email) => email.id === id)
   }
 
   /**
@@ -53,35 +35,19 @@ export class MemoryStorage extends EventEmitter implements Storage {
    * If maxEmails is set and exceeded, removes oldest emails
    */
   async save(email: Email): Promise<void> {
-    const existing = this.emails.get(email.id)
+    // Check if email with this ID already exists
+    const existingIndex = this.emails.findIndex((e) => e.id === email.id)
+    if (existingIndex >= 0) {
+      // Update existing email
+      this.emails[existingIndex] = email
+    } else {
+      // Add new email
+      this.emails.push(email)
 
-    if (existing) {
-      // Re-setting an existing key keeps its position, so updates (marking an
-      // email read, say) never disturb the arrival ordering.
-      if (existing.read !== email.read) {
-        this.unreadCount += email.read ? -1 : 1
-      }
-      this.emails.set(email.id, email)
-      return
-    }
-
-    this.emails.set(email.id, email)
-    if (!email.read) {
-      this.unreadCount++
-    }
-    this.emit('add', email)
-
-    // Enforce maxEmails by dropping the oldest entries. Iteration order is
-    // insertion order, so the first entries walked are the oldest.
-    const max = this.options.maxEmails ?? 0
-    if (max > 0) {
-      for (const [id, oldest] of this.emails) {
-        if (this.emails.size <= max) {
-          break
-        }
-        this.emails.delete(id)
-        if (!oldest.read) {
-          this.unreadCount--
+      // Enforce maxEmails limit
+      if (this.options.maxEmails && this.options.maxEmails > 0) {
+        while (this.emails.length > this.options.maxEmails) {
+          this.emails.shift() // Remove oldest
         }
       }
     }
@@ -91,48 +57,20 @@ export class MemoryStorage extends EventEmitter implements Storage {
    * Delete an email by ID
    */
   async delete(id: string): Promise<boolean> {
-    const email = this.emails.get(id)
-    if (!email) {
-      return false
+    const index = this.emails.findIndex((email) => email.id === id)
+    if (index >= 0) {
+      this.emails.splice(index, 1)
+      return true
     }
-
-    this.emails.delete(id)
-    if (!email.read) {
-      this.unreadCount--
-    }
-    this.emit('delete', id)
-
-    return true
+    return false
   }
 
   /**
    * Delete all emails from the store
    */
   async deleteAll(): Promise<number> {
-    const count = this.emails.size
-    this.emails.clear()
-    this.unreadCount = 0
-    this.emit('clear')
-    return count
-  }
-
-  /**
-   * Mark every unread email as read in a single pass
-   */
-  async markAllRead(): Promise<number> {
-    if (this.unreadCount === 0) {
-      return 0
-    }
-
-    let count = 0
-    for (const email of this.emails.values()) {
-      if (!email.read) {
-        email.read = true
-        count++
-      }
-    }
-    this.unreadCount = 0
-
+    const count = this.emails.length
+    this.emails = []
     return count
   }
 
@@ -140,21 +78,14 @@ export class MemoryStorage extends EventEmitter implements Storage {
    * Filter emails by query criteria
    */
   async filter(query: StorageQuery): Promise<Email[]> {
-    return filterEmails([...this.emails.values()], query)
+    return filterEmails(this.emails, query)
   }
 
   /**
    * Get the total count of emails
    */
   async count(): Promise<number> {
-    return this.emails.size
-  }
-
-  /**
-   * Get total and unread counts without loading any emails
-   */
-  async stats(): Promise<StorageStats> {
-    return { total: this.emails.size, unread: this.unreadCount }
+    return this.emails.length
   }
 
   /**
@@ -168,7 +99,6 @@ export class MemoryStorage extends EventEmitter implements Storage {
    * Close the storage (clears all emails)
    */
   async close(): Promise<void> {
-    this.emails.clear()
-    this.unreadCount = 0
+    this.emails = []
   }
 }

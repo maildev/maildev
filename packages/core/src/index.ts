@@ -21,6 +21,7 @@ export type {
   StorageOptions,
   Storage,
   StorageEvents,
+  StorageStats,
 } from './types/index.js'
 
 // Storage implementations

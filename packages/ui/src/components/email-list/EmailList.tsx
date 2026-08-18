@@ -1,10 +1,38 @@
-import { useEmails, filterEmails } from '../../hooks/useEmails'
+import { useEffect, useRef } from 'react'
+import { useEmailList } from '../../hooks/useEmails'
 import { useUIStore } from '../../stores/ui'
 import { EmailListItem } from './EmailListItem'
 
+/** How far ahead of the end of the list to start loading the next page */
+const PREFETCH_MARGIN = '400px'
+
 export function EmailList() {
-  const { data: emails, isLoading, error } = useEmails()
+  const { items, total, isLoading, error, hasNextPage, isFetchingNextPage, fetchNextPage } =
+    useEmailList()
   const searchQuery = useUIStore((state) => state.searchQuery)
+  const sentinelRef = useRef<HTMLDivElement | null>(null)
+
+  // Load the next page as the sentinel approaches the viewport. Only what has
+  // been scrolled to is ever rendered, so a 10,000 email inbox costs the same
+  // as a 50 email one until the user actually scrolls.
+  useEffect(() => {
+    const sentinel = sentinelRef.current
+    if (!sentinel || !hasNextPage) {
+      return
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((entry) => entry.isIntersecting) && !isFetchingNextPage) {
+          void fetchNextPage()
+        }
+      },
+      { rootMargin: PREFETCH_MARGIN }
+    )
+
+    observer.observe(sentinel)
+    return () => observer.disconnect()
+  }, [hasNextPage, isFetchingNextPage, fetchNextPage])
 
   if (isLoading) {
     return (
@@ -47,7 +75,18 @@ export function EmailList() {
     )
   }
 
-  if (!emails || emails.length === 0) {
+  if (items.length === 0) {
+    if (searchQuery.trim()) {
+      return (
+        <div
+          data-testid="email-list-no-results"
+          className="flex h-32 items-center justify-center text-[hsl(var(--muted-foreground))]"
+        >
+          <span className="text-sm">No emails match "{searchQuery}"</span>
+        </div>
+      )
+    }
+
     return (
       <div
         data-testid="email-list-empty"
@@ -72,32 +111,25 @@ export function EmailList() {
     )
   }
 
-  // Filter emails by search query
-  const filteredEmails = filterEmails(emails, searchQuery)
-
-  // Sort by time descending (newest first)
-  const sortedEmails = [...filteredEmails].sort((a, b) => {
-    const timeA = new Date(a.time).getTime()
-    const timeB = new Date(b.time).getTime()
-    return timeB - timeA
-  })
-
-  if (sortedEmails.length === 0) {
-    return (
-      <div
-        data-testid="email-list-no-results"
-        className="flex h-32 items-center justify-center text-[hsl(var(--muted-foreground))]"
-      >
-        <span className="text-sm">No emails match "{searchQuery}"</span>
-      </div>
-    )
-  }
-
   return (
     <div data-testid="email-list" className="divide-y divide-[hsl(var(--border))]">
-      {sortedEmails.map((email) => (
+      {items.map((email) => (
         <EmailListItem key={email.id} email={email} />
       ))}
+
+      <div ref={sentinelRef} aria-hidden="true" />
+
+      {isFetchingNextPage && (
+        <div className="p-3 text-center text-xs text-[hsl(var(--muted-foreground))]">
+          Loading more...
+        </div>
+      )}
+
+      {!hasNextPage && total > items.length && (
+        <div className="p-3 text-center text-xs text-[hsl(var(--muted-foreground))]">
+          Showing {items.length} of {total}
+        </div>
+      )}
     </div>
   )
 }

@@ -31,6 +31,9 @@ function cliOptionsToConfig(options: CLIOptions): PartialMailDevConfig {
   if (options.maxMessageSize !== undefined) {
     config.maxMessageSize = parseInt(options.maxMessageSize, 10)
   }
+  if (options.maxEmails !== undefined) {
+    config.maxEmails = parseInt(options.maxEmails, 10)
+  }
 
   // String options
   if (options.ip !== undefined) config.ip = options.ip

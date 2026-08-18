@@ -19,6 +19,16 @@ export interface StorageOptions {
 }
 
 /**
+ * Summary counts for the whole store
+ */
+export interface StorageStats {
+  /** Total emails held */
+  total: number
+  /** How many of them are unread */
+  unread: number
+}
+
+/**
  * Storage interface for email persistence
  * Implementations: MemoryStorage, FileStorage
  */
@@ -60,6 +70,12 @@ export interface Storage {
    */
   deleteAll(): Promise<number>
 
+  /**
+   * Mark every unread email as read in a single pass
+   * @returns Number of emails that changed from unread to read
+   */
+  markAllRead(): Promise<number>
+
   // Query Operations
 
   /**
@@ -74,6 +90,11 @@ export interface Storage {
    * @returns Number of stored emails
    */
   count(): Promise<number>
+
+  /**
+   * Get total and unread counts without loading any emails
+   */
+  stats(): Promise<StorageStats>
 
   // Lifecycle
 

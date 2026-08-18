@@ -15,5 +15,4 @@ export type {
   StorageOptions,
   Storage,
   StorageEvents,
-  StorageStats,
 } from './storage.js'

@@ -1,7 +1,7 @@
 import { useEffect, useRef } from 'react'
 import { useQueryClient } from '@tanstack/react-query'
 import { io, Socket } from 'socket.io-client'
-import type { EmailSummary } from '@maildev/core'
+import type { Email } from '@maildev/core'
 import { useUIStore } from '../stores/ui'
 import { getBasePath } from '../lib/basePath'
 
@@ -9,14 +9,10 @@ import { getBasePath } from '../lib/basePath'
 let lastNotificationTime = 0
 const NOTIFICATION_DEBOUNCE_MS = 2000
 
-// Collapse bursts of mail into a single refetch. Delivering a few hundred
-// emails in a second would otherwise queue up one refetch per email.
-const REFRESH_COALESCE_MS = 300
-
 /**
  * Show a browser notification for a new email
  */
-function showNotification(email: EmailSummary, onSelect: (id: string) => void) {
+function showNotification(email: Email, onSelect: (id: string) => void) {
   const now = Date.now()
   if (now - lastNotificationTime < NOTIFICATION_DEBOUNCE_MS) {
     return
@@ -80,19 +76,6 @@ export function useSocket() {
 
     socketRef.current = socket
 
-    // Trailing-edge coalescing: the first event schedules a refetch and any
-    // that arrive before it fires ride along with it.
-    let refreshTimer: ReturnType<typeof setTimeout> | null = null
-    const scheduleRefresh = () => {
-      if (refreshTimer) {
-        return
-      }
-      refreshTimer = setTimeout(() => {
-        refreshTimer = null
-        queryClient.invalidateQueries({ queryKey: ['emails'] })
-      }, REFRESH_COALESCE_MS)
-    }
-
     socket.on('connect', () => {
       console.log('Socket.io connected')
     })
@@ -101,8 +84,10 @@ export function useSocket() {
       console.log('Socket.io disconnected')
     })
 
-    socket.on('newMail', (email: EmailSummary) => {
-      scheduleRefresh()
+    socket.on('newMail', (email: Email) => {
+      console.log('New email received:', email.id)
+      // Invalidate and refetch emails
+      queryClient.invalidateQueries({ queryKey: ['emails'] })
 
       // Show browser notification if enabled
       if (notificationsEnabledRef.current) {
@@ -116,15 +101,14 @@ export function useSocket() {
     })
 
     socket.on('deleteMail', (data: { id: string; index?: number }) => {
-      scheduleRefresh()
+      console.log('Email deleted:', data.id)
+      // Invalidate and refetch emails
+      queryClient.invalidateQueries({ queryKey: ['emails'] })
       // Also invalidate the specific email query
       queryClient.invalidateQueries({ queryKey: ['email', data.id] })
     })
 
     return () => {
-      if (refreshTimer) {
-        clearTimeout(refreshTimer)
-      }
       socket.disconnect()
     }
   }, [queryClient])

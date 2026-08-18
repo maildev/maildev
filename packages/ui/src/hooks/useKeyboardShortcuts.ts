@@ -1,7 +1,8 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useUIStore } from '../stores/ui'
-import { useEmailList, useRefreshEmails, useMarkAllRead } from './useEmails'
+import { useEmails, useRefreshEmails, useMarkAllRead, filterEmails } from './useEmails'
 import { api } from '../lib/api'
+import type { Email } from '@maildev/core'
 
 /**
  * Global keyboard shortcuts for the application
@@ -18,17 +19,27 @@ import { api } from '../lib/api'
  * - ?: Open command palette (show available commands)
  */
 export function useKeyboardShortcuts() {
-  // Shares the sidebar's list: same filtering, same order, one request
-  const { items: visibleEmails } = useEmailList()
+  const { data: emails = [] } = useEmails()
   const { refresh } = useRefreshEmails()
   const markAllReadMutation = useMarkAllRead()
 
   const selectedEmailId = useUIStore((s) => s.selectedEmailId)
   const setSelectedEmail = useUIStore((s) => s.setSelectedEmail)
+  const searchQuery = useUIStore((s) => s.searchQuery)
   const commandPaletteOpen = useUIStore((s) => s.commandPaletteOpen)
   const openCommandPalette = useUIStore((s) => s.openCommandPalette)
   const toggleSidebar = useUIStore((s) => s.toggleSidebar)
   const setSearchQuery = useUIStore((s) => s.setSearchQuery)
+
+  // Filter and sort emails the same way as the sidebar
+  const visibleEmails = useMemo(() => {
+    const filtered = filterEmails(emails as Email[], searchQuery)
+    return [...filtered].sort((a, b) => {
+      const timeA = new Date(a.time).getTime()
+      const timeB = new Date(b.time).getTime()
+      return timeB - timeA
+    })
+  }, [emails, searchQuery])
 
   useEffect(() => {
     function handleKeyDown(e: KeyboardEvent) {
@@ -61,7 +72,7 @@ export function useKeyboardShortcuts() {
           e.preventDefault()
           if (visibleEmails.length > 0) {
             const nextIndex = currentIndex < visibleEmails.length - 1 ? currentIndex + 1 : 0
-            setSelectedEmail(visibleEmails[nextIndex]!.id)
+            setSelectedEmail(visibleEmails[nextIndex].id)
           }
           break
         }
@@ -71,7 +82,7 @@ export function useKeyboardShortcuts() {
           e.preventDefault()
           if (visibleEmails.length > 0) {
             const prevIndex = currentIndex > 0 ? currentIndex - 1 : visibleEmails.length - 1
-            setSelectedEmail(visibleEmails[prevIndex]!.id)
+            setSelectedEmail(visibleEmails[prevIndex].id)
           }
           break
         }

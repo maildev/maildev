@@ -27,12 +27,6 @@ export const DEFAULT_CONFIG: MailDevConfig = {
   webIp: '0.0.0.0',
   basePathname: '/',
 
-  // Storage. Unbounded by default, preserving MailDev's historical behaviour
-  // and keeping persisted mail durable (see the restore-on-startup path). Set
-  // --max-emails to a positive number to cap the store and keep both memory and
-  // the mail directory bounded, dropping the oldest mail (and its files) first.
-  maxEmails: 0,
-
   // Logging (all off by default)
   verbose: false,
   silent: false,

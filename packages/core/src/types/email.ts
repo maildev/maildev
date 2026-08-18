@@ -104,39 +104,6 @@ export interface Email {
 }
 
 /**
- * Lightweight projection of an email, for list views.
- *
- * Deliberately omits `html`, `text` and `headers` — the fields that dominate an
- * email's size. Listing an inbox as summaries costs a few hundred bytes per
- * email instead of tens of kilobytes, which is the difference between a
- * responsive UI and a multi-hundred-megabyte response.
- */
-export interface EmailSummary {
-  /** Unique identifier (8-character alphanumeric) */
-  id: string
-  /** Timestamp when the email was received */
-  time: Date
-  /** Whether the email has been read */
-  read: boolean
-  /** Email subject line */
-  subject: string
-  /** Size of the email in bytes */
-  size: number
-  /** Human-readable size (e.g., "2.5 KB") */
-  sizeHuman: string
-  /** Parsed From header addresses */
-  from: Address[]
-  /** Parsed To header addresses */
-  to: Address[]
-  /** Parsed CC header addresses */
-  cc?: Address[]
-  /** How many attachments the email has (metadata comes with the full email) */
-  attachmentCount: number
-  /** Opening characters of the plain text body, for the list preview */
-  preview: string
-}
-
-/**
  * Input for creating a new email (some fields are auto-generated)
  */
 export interface EmailInput {

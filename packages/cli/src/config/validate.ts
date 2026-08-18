@@ -169,14 +169,6 @@ export function validateConfig(config: MailDevConfig): ValidationResult {
     })
   }
 
-  // Validate storage limit
-  if (!Number.isInteger(config.maxEmails) || config.maxEmails < 0) {
-    errors.push({
-      field: 'maxEmails',
-      message: 'maxEmails must be a non-negative integer (0 = unlimited)',
-    })
-  }
-
   // Validate auto-relay rules file
   if (config.autoRelayRules) {
     const rulesError = validateFilePath(config.autoRelayRules, 'autoRelayRules')

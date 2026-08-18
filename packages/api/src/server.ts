@@ -19,45 +19,18 @@ import { Server as MCPServer } from '@modelcontextprotocol/sdk/server/index.js'
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js'
 import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js'
 import { registerMCPHandlers, type EmailDataSource } from '@maildev/mcp'
-import { toSummary, type Storage, type Email, type SortOrder } from '@maildev/core'
+import type { Storage, Email } from '@maildev/core'
 import type { SMTPServer } from '@maildev/smtp'
 import type {
   APIServerOptions,
   AuthConfig,
   BulkDeleteEmailsRequest,
   ConfigResponse,
-  SummaryQuery,
-  SummaryResponse,
 } from './types.js'
 import { VERSION } from './index.js'
 
 const DEFAULT_PORT = 1080
 const DEFAULT_HOST = '0.0.0.0'
-
-/**
- * Upper bound on how many summaries a single request can ask for
- *
- * A client that asks for everything still gets a bounded response, so no single
- * request can pin the event loop serialising the whole inbox.
- */
-const MAX_PAGE_SIZE = 200
-
-/** Page size used when a request doesn't ask for one */
-const DEFAULT_PAGE_SIZE = 50
-
-/**
- * Parse a query-string integer, ignoring anything that isn't a positive number
- * @param value - Raw query parameter
- * @returns The parsed value, or undefined if absent or unusable
- */
-function parsePositiveInt(value: string | undefined): number | undefined {
-  if (value === undefined || value === '') {
-    return undefined
-  }
-
-  const parsed = Number.parseInt(value, 10)
-  return Number.isFinite(parsed) && parsed >= 0 ? parsed : undefined
-}
 
 /**
  * MailDev API Server
@@ -240,49 +213,11 @@ export class APIServer extends EventEmitter {
       }
     })
 
-    // Paginated summaries — what the web UI lists.
-    //
-    // Registered before /email/:id so the literal path wins, same as
-    // /email/all and /email/read-all below.
-    this.app.get(`${apiPath}/email/summary`, async (request): Promise<SummaryResponse> => {
-      const query = request.query as SummaryQuery
-      const skip = parsePositiveInt(query.skip) ?? 0
-      const requested = parsePositiveInt(query.limit)
-      // A missing or zero limit means "a page", not "everything" — storage
-      // treats limit 0 as unbounded, which would defeat MAX_PAGE_SIZE.
-      const limit =
-        requested === undefined || requested === 0
-          ? DEFAULT_PAGE_SIZE
-          : Math.min(requested, MAX_PAGE_SIZE)
-      const sort: SortOrder = query.sort === 'asc' ? 'asc' : 'desc'
-
-      // Storage returns full emails; the body-free summary projection happens
-      // here, at the API boundary, so a listing stays a few hundred bytes per
-      // email rather than tens of kilobytes.
-      const result = await this.storage.list({
-        skip,
-        limit,
-        sort,
-        ...(query.search ? { search: query.search } : {}),
-        ...(query.unread === 'true' ? { unreadOnly: true } : {}),
-      })
-
-      return {
-        items: result.items.map(toSummary),
-        total: result.total,
-        storeTotal: result.storeTotal,
-        unread: result.unread,
-        skip: result.skip,
-        limit: result.limit,
-      }
-    })
-
     // Get all emails
     this.app.get(`${apiPath}/email`, async (request: FastifyRequest) => {
       const query = request.query as Record<string, string>
-      const { skip, limit, sort, ...filterQuery } = query
-      const skipCount = parsePositiveInt(skip) ?? 0
-      const limitCount = parsePositiveInt(limit)
+      const { skip, ...filterQuery } = query
+      const skipCount = skip ? parseInt(skip, 10) : 0
 
       const emails = await this.storage.getAll()
 
@@ -292,21 +227,8 @@ export class APIServer extends EventEmitter {
         result = this.filterEmails(emails, filterQuery)
       }
 
-      // Order by received time only when asked. Without `sort` the emails come
-      // back in arrival order, which is what this endpoint has always done.
-      if (sort === 'desc' || sort === 'asc') {
-        const direction = sort === 'asc' ? 1 : -1
-        result = result
-          .map((email) => ({ email, time: new Date(email.time).getTime() }))
-          .sort((a, b) => direction * (a.time - b.time))
-          .map((entry) => entry.email)
-      }
-
-      // Apply pagination. No implicit limit here: this endpoint predates
-      // /email/summary and callers rely on getting the whole inbox back.
-      return limitCount === undefined
-        ? result.slice(skipCount)
-        : result.slice(skipCount, skipCount + limitCount)
+      // Apply pagination
+      return result.slice(skipCount)
     })
 
     // Get single email
@@ -401,7 +323,21 @@ export class APIServer extends EventEmitter {
     // Mark all emails as read
     this.app.patch(`${apiPath}/email/read-all`, async (_request, reply) => {
       try {
-        return this.smtp ? await this.smtp.markAllRead() : await this.storage.markAllRead()
+        if (this.smtp) {
+          const count = await this.smtp.markAllRead()
+          return count
+        } else {
+          const emails = await this.storage.getAll()
+          let count = 0
+          for (const email of emails) {
+            if (!email.read) {
+              email.read = true
+              await this.storage.save(email)
+              count++
+            }
+          }
+          return count
+        }
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Unknown error'
         return reply.status(500).send({ error: message })
@@ -592,19 +528,22 @@ export class APIServer extends EventEmitter {
       },
     })
 
-    // Subscribe once and broadcast, rather than adding a pair of SMTP listeners
-    // per connected socket — that grew with every open tab and tripped the
-    // EventEmitter max-listeners warning.
-    //
-    // Only the summary goes over the wire: clients use the event to refresh
-    // their list and show a notification, and shipping full bodies to every
-    // tab on every delivery is what made a burst of mail so expensive.
-    this.smtp.on('new', (email: Email) => {
-      this.io?.emit('newMail', toSummary(email))
-    })
+    this.io.on('connection', (socket) => {
+      const newHandler = (email: Email) => {
+        socket.emit('newMail', email)
+      }
 
-    this.smtp.on('delete', (data: { id: string; index?: number }) => {
-      this.io?.emit('deleteMail', data)
+      const deleteHandler = (data: { id: string; index?: number }) => {
+        socket.emit('deleteMail', data)
+      }
+
+      this.smtp!.on('new', newHandler)
+      this.smtp!.on('delete', deleteHandler)
+
+      socket.on('disconnect', () => {
+        this.smtp!.off('new', newHandler)
+        this.smtp!.off('delete', deleteHandler)
+      })
     })
   }
 

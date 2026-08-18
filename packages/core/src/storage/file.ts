@@ -1,12 +1,8 @@
-import { mkdir, rm, readdir } from 'node:fs/promises'
-import { join, resolve, sep } from 'node:path'
+import { mkdir, rm, readdir, stat } from 'node:fs/promises'
+import { join } from 'node:path'
 import { tmpdir } from 'node:os'
 import type { Email, StorageOptions } from '../types/index.js'
-import { mapLimit } from '../utils/concurrency.js'
 import { MemoryStorage } from './memory.js'
-
-/** Cap on concurrent filesystem operations, to stay well clear of EMFILE */
-const FS_CONCURRENCY = 16
 
 /**
  * File-based storage implementation
@@ -34,13 +30,6 @@ export class FileStorage extends MemoryStorage {
    * Save an email to the store and disk
    */
   override async save(email: Email): Promise<void> {
-    // Reject ids that would resolve outside the mail directory before one ever
-    // enters the store, so a later delete/evict can't turn it into a path that
-    // escapes (e.g. `rm -rf` on a directory above mailDirectory). Ids are
-    // normally 8-char alphanumeric from makeId(); a caller passing an arbitrary
-    // id through the embeddable API is where this would otherwise bite.
-    this.assertSafeEmailId(email.id)
-
     // Update the source path to point to this storage's directory
     const emailWithSource: Email = {
       ...email,
@@ -63,12 +52,24 @@ export class FileStorage extends MemoryStorage {
    * Delete an email and its files from disk
    */
   override async delete(id: string): Promise<boolean> {
+    const email = await this.getById(id)
+    if (!email) {
+      return false
+    }
+
+    // Delete from memory
     const deleted = await super.delete(id)
     if (!deleted) {
       return false
     }
 
-    await this.removeEmailFiles(id)
+    // Delete .eml file and attachment directory
+    try {
+      await rm(join(this.mailDirectory, `${id}.eml`), { force: true })
+      await rm(join(this.mailDirectory, id), { recursive: true, force: true })
+    } catch {
+      // Ignore errors if files don't exist
+    }
 
     return true
   }
@@ -81,19 +82,14 @@ export class FileStorage extends MemoryStorage {
 
     // Clean up the mail directory
     try {
-      const entries = await readdir(this.mailDirectory, { withFileTypes: true })
-      const removable = entries.filter(
-        (entry) => entry.isDirectory() || entry.name.endsWith('.eml')
-      )
-
-      // Bounded concurrency: a directory holding tens of thousands of emails
-      // would otherwise open every handle at once.
-      await mapLimit(removable, FS_CONCURRENCY, async (entry) => {
-        await rm(join(this.mailDirectory, entry.name), {
-          recursive: true,
-          force: true,
-        })
-      })
+      const entries = await readdir(this.mailDirectory)
+      for (const entry of entries) {
+        const entryPath = join(this.mailDirectory, entry)
+        const entryStat = await stat(entryPath)
+        if (entryStat.isDirectory() || entry.endsWith('.eml')) {
+          await rm(entryPath, { recursive: true, force: true })
+        }
+      }
     } catch {
       // Ignore errors if directory doesn't exist
     }
@@ -115,7 +111,6 @@ export class FileStorage extends MemoryStorage {
    * Get the path to an email's .eml file
    */
   getEmailPath(id: string): string {
-    this.assertSafeEmailId(id)
     return join(this.mailDirectory, `${id}.eml`)
   }
 
@@ -123,48 +118,6 @@ export class FileStorage extends MemoryStorage {
    * Get the path to an email's attachment directory
    */
   getAttachmentDirectory(id: string): string {
-    this.assertSafeEmailId(id)
     return join(this.mailDirectory, id)
-  }
-
-  /**
-   * Guard against an id that would escape the mail directory
-   *
-   * Throws unless both `<id>.eml` and `<id>/` resolve to paths inside
-   * `mailDirectory`. Permits ordinary filenames (dots included) while rejecting
-   * path separators and `..` traversal, so the recursive, forced removals in
-   * delete/eviction can never touch anything outside the directory.
-   * @param id - Email id to validate
-   */
-  private assertSafeEmailId(id: string): void {
-    const base = resolve(this.mailDirectory)
-    const contained = (target: string): boolean =>
-      target === base || target.startsWith(base + sep)
-
-    if (!id || !contained(resolve(base, `${id}.eml`)) || !contained(resolve(base, id))) {
-      throw new Error(`Unsafe email id: ${JSON.stringify(id)}`)
-    }
-  }
-
-  /**
-   * Discard the files belonging to emails evicted by `maxEmails`
-   *
-   * Without this the store stays bounded but the mail directory does not, which
-   * is what forces a manual wipe of the directory to recover.
-   */
-  protected override async onEvict(emails: Email[]): Promise<void> {
-    await mapLimit(emails, FS_CONCURRENCY, (email) => this.removeEmailFiles(email.id))
-  }
-
-  /**
-   * Remove an email's .eml file and attachment directory, if they exist
-   */
-  private async removeEmailFiles(id: string): Promise<void> {
-    try {
-      await rm(this.getEmailPath(id), { force: true })
-      await rm(this.getAttachmentDirectory(id), { recursive: true, force: true })
-    } catch {
-      // Ignore errors if files don't exist
-    }
   }
 }

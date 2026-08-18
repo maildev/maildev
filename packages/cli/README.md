@@ -47,7 +47,6 @@ Usage: maildev [options]
 | `--ip <ip address>`              | `MAILDEV_IP`               | IP Address to bind SMTP service to (default: `::`)                                        |
 | `--web-ip <ip address>`          | `MAILDEV_WEB_IP`           | IP Address to bind HTTP service to (default: `0.0.0.0`)                                   |
 | `--mail-directory <path>`        | `MAILDEV_MAIL_DIRECTORY`   | Directory for persisting mail                                                             |
-| `--max-emails <count>`           | `MAILDEV_MAX_EMAILS`       | Maximum emails to keep; oldest are discarded with their files (default: 0 = unlimited) |
 | `--https`                        | `MAILDEV_HTTPS`            | Switch from http to https protocol                                                        |
 | `--https-key <file>`             | `MAILDEV_HTTPS_KEY`        | The file path to the ssl private key                                                      |
 | `--https-cert <file>`            | `MAILDEV_HTTPS_CERT`       | The file path to the ssl cert file                                                        |
@@ -74,24 +73,6 @@ Usage: maildev [options]
 | `-v, --verbose`                  |                            | Enable verbose logging                                                                    |
 | `--silent`                       |                            | Disable all output                                                                        |
 | `--log-mail-contents`            |                            | Log a JSON representation of each incoming mail                                           |
-
-## Storage limit
-
-MailDev keeps every email by default (`--max-emails 0`), preserving its
-historical behaviour and keeping persisted mail durable across restarts. Set a
-positive limit to cap the store: when a new email arrives and the limit is
-reached, the oldest is discarded — along with its `.eml` file and attachments,
-so a persisted mail directory stays bounded as well. Any backlog left in the
-mail directory by earlier runs is trimmed to the same limit at startup.
-
-```bash
-maildev --max-emails 1000     # keep the newest 1000
-maildev --max-emails 0        # keep everything (the default)
-```
-
-Leaving the limit unset keeps everything. Be aware that memory use and the mail
-directory then grow with the inbox; with typical messages, 10,000 emails is
-around 150 MB of heap, so set a limit for long-running or high-volume use.
 
 ## Configuration File
 

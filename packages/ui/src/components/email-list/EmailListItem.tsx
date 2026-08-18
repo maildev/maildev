@@ -1,9 +1,9 @@
-import type { EmailSummary } from '@maildev/core'
+import type { Email } from '@maildev/core'
 import { useUIStore } from '../../stores/ui'
 import { cn, formatDate, truncate, getInitials } from '../../lib/utils'
 
 interface EmailListItemProps {
-  email: EmailSummary
+  email: Email
 }
 
 export function EmailListItem({ email }: EmailListItemProps) {
@@ -13,7 +13,7 @@ export function EmailListItem({ email }: EmailListItemProps) {
   const isSelected = selectedEmailId === email.id
   const fromAddress = email.from?.[0]?.address ?? 'unknown'
   const fromName = email.from?.[0]?.name
-  const hasAttachments = email.attachmentCount > 0
+  const hasAttachments = email.attachments && email.attachments.length > 0
 
   return (
     <button
@@ -87,9 +87,9 @@ export function EmailListItem({ email }: EmailListItemProps) {
             )}
           </div>
 
-          {email.preview && (
+          {email.text && (
             <p className="mt-0.5 truncate text-xs text-[hsl(var(--muted-foreground))]">
-              {truncate(email.preview, 100)}
+              {truncate(email.text.replace(/\s+/g, ' ').trim(), 100)}
             </p>
           )}
         </div>

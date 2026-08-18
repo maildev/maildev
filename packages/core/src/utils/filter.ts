@@ -1,4 +1,4 @@
-import type { Address, Email, StorageQuery } from '../types/index.js'
+import type { Email, StorageQuery } from '../types/index.js'
 
 /**
  * Get nested property values using dot notation
@@ -97,39 +97,4 @@ export function filterEmails(emails: Email[], query: StorageQuery): Email[] {
     }
     return true
   })
-}
-
-/**
- * Check whether any address in the list contains the (lowercased) needle
- */
-function addressesMatch(addresses: Address[] | undefined, needle: string): boolean {
-  return (
-    addresses?.some(
-      (address) =>
-        address.address?.toLowerCase().includes(needle) ||
-        address.name?.toLowerCase().includes(needle)
-    ) ?? false
-  )
-}
-
-/**
- * Free-text search across the fields a user would expect to search on:
- * subject, participants, and the plain text body
- * @param email - Email to test
- * @param term - Search term; an empty term matches everything
- * @returns Whether the email matches
- */
-export function matchesSearchTerm(email: Email, term: string): boolean {
-  const needle = term.trim().toLowerCase()
-  if (!needle) {
-    return true
-  }
-
-  return (
-    (email.subject?.toLowerCase().includes(needle) ?? false) ||
-    addressesMatch(email.from, needle) ||
-    addressesMatch(email.to, needle) ||
-    addressesMatch(email.cc, needle) ||
-    (email.text?.toLowerCase().includes(needle) ?? false)
-  )
 }

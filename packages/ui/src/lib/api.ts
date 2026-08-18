@@ -1,4 +1,4 @@
-import type { Email, EmailSummary } from '@maildev/core'
+import type { Email } from '@maildev/core'
 import { getBasePath } from './basePath'
 
 const API_BASE = `${getBasePath()}/api`
@@ -11,33 +11,6 @@ export interface ConfigResponse {
 }
 
 /**
- * One page of the inbox, as returned by `GET /api/email/summary`
- */
-export interface EmailSummaryPage {
-  /** The requested page, newest first */
-  items: EmailSummary[]
-  /** Emails matching the search, ignoring pagination */
-  total: number
-  /** Emails held by the server, ignoring the search */
-  storeTotal: number
-  /** Unread emails held by the server */
-  unread: number
-  /** The skip that was applied */
-  skip: number
-  /** The limit that was applied */
-  limit: number
-}
-
-/**
- * Parameters for a summary page request
- */
-export interface EmailSummaryParams {
-  skip?: number
-  limit?: number
-  search?: string
-}
-
-/**
  * MailDev API client
  */
 export const api = {
@@ -46,28 +19,7 @@ export const api = {
    */
   emails: {
     /**
-     * Get one page of email summaries
-     *
-     * This is what the list view uses. Summaries carry no message bodies, so a
-     * page stays a few kilobytes no matter how large the inbox is.
-     */
-    getSummaries: async (params: EmailSummaryParams = {}): Promise<EmailSummaryPage> => {
-      const query = new URLSearchParams()
-      if (params.skip) query.set('skip', String(params.skip))
-      if (params.limit) query.set('limit', String(params.limit))
-      if (params.search) query.set('search', params.search)
-
-      const response = await fetch(`${API_BASE}/email/summary?${query.toString()}`)
-      if (!response.ok) {
-        throw new Error(`Failed to fetch emails: ${response.statusText}`)
-      }
-      return response.json()
-    },
-
-    /**
-     * Get all emails, bodies included
-     *
-     * Only appropriate for small inboxes — prefer `getSummaries` for listings.
+     * Get all emails
      */
     getAll: async (): Promise<Email[]> => {
       const response = await fetch(`${API_BASE}/email`)

@@ -1,65 +1,16 @@
-import { useMemo } from 'react'
-import {
-  useQuery,
-  useInfiniteQuery,
-  useMutation,
-  useQueryClient,
-  useIsFetching,
-} from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient, useIsFetching } from '@tanstack/react-query'
 import { api } from '../lib/api'
-import { useUIStore } from '../stores/ui'
-import { useDebouncedValue } from './useDebouncedValue'
-import type { EmailSummary } from '@maildev/core'
-
-/** How many summaries to fetch per page */
-export const EMAIL_PAGE_SIZE = 50
-
-/** How long the search box must settle before we query the server */
-const SEARCH_DEBOUNCE_MS = 200
+import type { Email } from '@maildev/core'
 
 /**
- * The inbox listing: a page at a time, filtered and sorted by the server
- *
- * Every consumer calls this hook and React Query dedupes them onto a single
- * request, so the whole app shares one view of the list.
+ * Hook to fetch all emails
  */
-export function useEmailList() {
-  const searchQuery = useUIStore((state) => state.searchQuery)
-  const search = useDebouncedValue(searchQuery, SEARCH_DEBOUNCE_MS)
-
-  const query = useInfiniteQuery({
-    queryKey: ['emails', 'summary', search],
-    queryFn: ({ pageParam }) =>
-      api.emails.getSummaries({ skip: pageParam, limit: EMAIL_PAGE_SIZE, search }),
-    initialPageParam: 0,
-    getNextPageParam: (lastPage) => {
-      const loaded = lastPage.skip + lastPage.items.length
-      return loaded < lastPage.total ? loaded : undefined
-    },
+export function useEmails() {
+  return useQuery({
+    queryKey: ['emails'],
+    queryFn: api.emails.getAll,
+    refetchInterval: 5000, // Refetch every 5 seconds as fallback
   })
-
-  const pages = query.data?.pages
-  const items: EmailSummary[] = useMemo(
-    () => pages?.flatMap((page) => page.items) ?? [],
-    [pages]
-  )
-
-  // Counts come from the most recent page, so they reflect the latest fetch
-  const latest = pages?.[pages.length - 1]
-
-  return {
-    ...query,
-    /** Summaries loaded so far, newest first */
-    items,
-    /** Emails matching the current search */
-    total: latest?.total ?? 0,
-    /** Emails held by the server, ignoring the search */
-    storeTotal: latest?.storeTotal ?? 0,
-    /** Unread emails held by the server */
-    unread: latest?.unread ?? 0,
-    /** Whether a search is currently narrowing the list */
-    isSearching: search.trim().length > 0,
-  }
 }
 
 /**
@@ -172,3 +123,49 @@ export function useRefreshEmails() {
   }
 }
 
+/**
+ * Filter emails by search query
+ */
+export function filterEmails(emails: Email[], query: string): Email[] {
+  if (!query.trim()) {
+    return emails
+  }
+
+  const lowerQuery = query.toLowerCase()
+
+  return emails.filter((email) => {
+    // Search in subject
+    if (email.subject?.toLowerCase().includes(lowerQuery)) {
+      return true
+    }
+
+    // Search in from addresses
+    if (
+      email.from?.some(
+        (addr) =>
+          addr.address?.toLowerCase().includes(lowerQuery) ||
+          addr.name?.toLowerCase().includes(lowerQuery)
+      )
+    ) {
+      return true
+    }
+
+    // Search in to addresses
+    if (
+      email.to?.some(
+        (addr) =>
+          addr.address?.toLowerCase().includes(lowerQuery) ||
+          addr.name?.toLowerCase().includes(lowerQuery)
+      )
+    ) {
+      return true
+    }
+
+    // Search in text content
+    if (email.text?.toLowerCase().includes(lowerQuery)) {
+      return true
+    }
+
+    return false
+  })
+}

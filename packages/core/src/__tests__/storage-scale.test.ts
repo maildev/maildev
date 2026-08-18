@@ -2,10 +2,17 @@
  * Guardrails against the regressions that made MailDev unusable with a large
  * inbox.
  *
- * Budgets sit roughly 10x above what the current implementation needs and well
- * below what the previous array-backed store took, so they trip on an
- * algorithmic regression (a per-operation O(n) scan reappearing) rather than on
- * a slow machine. Reference timings at 20,000 emails:
+ * Ingest is the one operation heavy enough to time reliably and the one that
+ * used to go quadratic (every save scanned the array for an existing id), so we
+ * guard it by scale rather than by wall-clock: on any given machine, filling 4x
+ * the mail should cost ~4x the time if save is O(1) but ~16x if it is O(n).
+ * Comparing those two ratios makes the check independent of how fast — or how
+ * loaded — the CI runner happens to be.
+ *
+ * The remaining operations are O(1) or a single O(n) pass and run in well under
+ * a millisecond even at 20,000 emails, so a very loose absolute ceiling is
+ * enough to catch an accidental per-item scan. Reference timings at 20,000
+ * emails:
  *
  *   operation      before    after
  *   save all       ~1070ms     41ms
@@ -19,6 +26,16 @@ import type { Email } from '../types/index.js'
 
 /** Emails used for the scale checks */
 const COUNT = 20_000
+
+/** A quarter of the load, to measure how ingest scales with inbox size */
+const SMALL = COUNT / 4
+
+/**
+ * Filling 4x the mail costs ~4x the time when save is O(1) and ~16x when it is
+ * quadratic. Trip well below the quadratic factor but far enough above the
+ * linear one that noise, GC and JIT can never false-fail the guard.
+ */
+const MAX_SCALING = 8
 
 const createTestEmail = (index: number): Email => ({
   id: `email-${index}`,
@@ -39,10 +56,10 @@ const createTestEmail = (index: number): Email => ({
   text: `Body of message ${index}`,
 })
 
-/** Populate a store with COUNT emails, returning how long it took */
-async function fill(storage: MemoryStorage): Promise<number> {
+/** Populate a store with `count` emails, returning how long it took */
+async function fill(storage: MemoryStorage, count = COUNT): Promise<number> {
   const started = performance.now()
-  for (let i = 0; i < COUNT; i++) {
+  for (let i = 0; i < count; i++) {
     await storage.save(createTestEmail(i))
   }
   return performance.now() - started
@@ -56,12 +73,19 @@ async function timed(operation: () => Promise<unknown>): Promise<number> {
 }
 
 describe('MemoryStorage at scale', () => {
-  it(`should ingest ${COUNT} emails without degrading`, async () => {
-    const storage = new MemoryStorage()
+  it(`should ingest ${COUNT} emails without a per-save slowdown`, async () => {
+    // Warm the JIT so the baseline below isn't measured cold, which would
+    // shrink the ratio and could mask a regression.
+    await fill(new MemoryStorage(), 1000)
 
-    // Was quadratic: every save scanned the array to look for an existing id.
-    expect(await fill(storage)).toBeLessThan(400)
-    expect(await storage.count()).toBe(COUNT)
+    // Was quadratic: every save scanned the array to look for an existing id,
+    // so 4x the mail cost ~16x the time rather than ~4x.
+    const smallMs = await fill(new MemoryStorage(), SMALL)
+    const large = new MemoryStorage()
+    const largeMs = await fill(large, COUNT)
+
+    expect(largeMs / smallMs).toBeLessThan(MAX_SCALING)
+    expect(await large.count()).toBe(COUNT)
   })
 
   it('should look emails up by id in constant time', async () => {
@@ -133,14 +157,19 @@ describe('MemoryStorage at scale', () => {
   })
 
   it('should stay within maxEmails while ingesting far more', async () => {
-    const storage = new MemoryStorage({ maxEmails: 1000 })
+    // Warm the eviction path so the baseline below isn't measured cold.
+    await fill(new MemoryStorage({ maxEmails: 100 }), 1000)
 
-    const elapsed = await fill(storage)
+    const smallMs = await fill(new MemoryStorage({ maxEmails: 1000 }), SMALL)
+    const large = new MemoryStorage({ maxEmails: 1000 })
+    const largeMs = await fill(large, COUNT)
 
-    expect(elapsed).toBeLessThan(400)
-    expect(await storage.count()).toBe(1000)
+    // Eviction is O(1) per save, so ingest stays linear even while the store is
+    // permanently full.
+    expect(largeMs / smallMs).toBeLessThan(MAX_SCALING)
+    expect(await large.count()).toBe(1000)
     // The newest survive, the oldest are gone
-    expect(await storage.getById(`email-${COUNT - 1}`)).toBeDefined()
-    expect(await storage.getById('email-0')).toBeUndefined()
+    expect(await large.getById(`email-${COUNT - 1}`)).toBeDefined()
+    expect(await large.getById('email-0')).toBeUndefined()
   })
 })

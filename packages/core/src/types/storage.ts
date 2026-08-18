@@ -14,7 +14,13 @@ export interface StorageQuery {
 export interface StorageOptions {
   /** Directory for storing .eml files (FileStorage only) */
   mailDirectory?: string
-  /** Maximum number of emails to store (0 = unlimited) */
+  /**
+   * Maximum number of emails to keep (0 = unlimited)
+   *
+   * Once the limit is reached, saving a new email drops the oldest one. File
+   * backed storage deletes its .eml file and attachments at the same time, so
+   * the mail directory stays bounded too.
+   */
   maxEmails?: number
 }
 
@@ -144,6 +150,18 @@ export interface Storage {
    */
   stats(): Promise<StorageStats>
 
+  // Eviction
+
+  /**
+   * Register a handler for emails dropped by the `maxEmails` limit
+   *
+   * This is how files written for an email get deleted at the moment the store
+   * forgets about it, which is what keeps the mail directory bounded.
+   * @param handler - Called with each evicted email; awaited by `save()`
+   * @returns Function that unregisters the handler
+   */
+  onEvicted(handler: EvictHandler): () => void
+
   // Lifecycle
 
   /**
@@ -168,3 +186,11 @@ export interface StorageEvents {
   /** Emitted when all emails are deleted */
   clear: () => void
 }
+
+/**
+ * Called with an email that was dropped to stay within `maxEmails`
+ *
+ * Whoever wrote files for the email cleans them up here. `save()` awaits the
+ * handler, so once it resolves the email is gone from both the store and disk.
+ */
+export type EvictHandler = (email: Email) => Promise<void> | void

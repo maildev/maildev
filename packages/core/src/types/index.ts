@@ -17,6 +17,7 @@ export type {
   Storage,
   StorageEvents,
   StorageStats,
+  EvictHandler,
   SortOrder,
   ListOptions,
   ListResult,

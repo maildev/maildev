@@ -3,7 +3,7 @@ import { useEffect } from 'react'
 import { Layout } from './components/layout/Layout'
 import { CommandPalette } from './components/ui/CommandPalette'
 import { useUIStore } from './stores/ui'
-import { useEmailList } from './hooks/useEmails'
+import { useEmailList, useMarkReadOnOpen } from './hooks/useEmails'
 import { useFaviconBadge } from './hooks/useFaviconBadge'
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts'
 
@@ -28,6 +28,9 @@ function AppContent() {
 
   // Global keyboard shortcuts
   useKeyboardShortcuts()
+
+  // Reflect the read state the server sets when an email is opened
+  useMarkReadOnOpen()
 
   // Apply theme class to document
   useEffect(() => {

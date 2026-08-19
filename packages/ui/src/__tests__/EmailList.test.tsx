@@ -1,8 +1,9 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { render, screen, waitFor, act } from '@testing-library/react'
+import { render, screen, waitFor, act, fireEvent } from '@testing-library/react'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import type { ReactNode } from 'react'
 import { EmailList } from '../components/email-list/EmailList'
+import { useMarkReadOnOpen } from '../hooks/useEmails'
 import { useUIStore } from '../stores/ui'
 import type { EmailSummary } from '@maildev/core'
 
@@ -28,7 +29,7 @@ let requestedUrls: string[] = []
 /** Intersection observers created by the component, so tests can trigger them */
 let observerCallbacks: IntersectionObserverCallback[] = []
 
-function renderList(): void {
+function renderList(ui: ReactNode = <EmailList />): void {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
   })
@@ -37,7 +38,18 @@ function renderList(): void {
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
   )
 
-  render(<EmailList />, { wrapper })
+  render(<>{ui}</>, { wrapper })
+}
+
+/** The list plus the hook that reflects opens back into it */
+function ListWithReadTracking() {
+  useMarkReadOnOpen()
+  return <EmailList />
+}
+
+/** The row (a button) that renders the given subject */
+function rowFor(subject: string): HTMLElement | null {
+  return screen.getByText(subject).closest('[data-testid="email-list-item"]')
 }
 
 /** Pretend the sentinel scrolled into view */
@@ -165,6 +177,22 @@ describe('EmailList', () => {
     await waitFor(() => {
       expect(screen.getAllByRole('button')).toHaveLength(1)
     })
+  })
+
+  it('should mark a row read as soon as its email is opened', async () => {
+    renderList(<ListWithReadTracking />)
+    await screen.findByText('Message 119')
+
+    expect(rowFor('Message 119')?.getAttribute('data-read')).toBe('false')
+
+    // Clicking selects the email, which is what the server marks read on fetch
+    fireEvent.click(rowFor('Message 119')!)
+
+    await waitFor(() => {
+      expect(rowFor('Message 119')?.getAttribute('data-read')).toBe('true')
+    })
+    // No refetch was needed to reflect it — just the one initial page load
+    expect(requestedUrls).toHaveLength(1)
   })
 
   it('should show a message when a search matches nothing', async () => {

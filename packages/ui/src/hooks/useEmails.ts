@@ -1,12 +1,14 @@
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
 import {
   useQuery,
   useInfiniteQuery,
   useMutation,
   useQueryClient,
   useIsFetching,
+  type InfiniteData,
+  type QueryClient,
 } from '@tanstack/react-query'
-import { api } from '../lib/api'
+import { api, type EmailSummaryPage } from '../lib/api'
 import { useUIStore } from '../stores/ui'
 import { useDebouncedValue } from './useDebouncedValue'
 import type { EmailSummary } from '@maildev/core'
@@ -60,6 +62,71 @@ export function useEmailList() {
     /** Whether a search is currently narrowing the list */
     isSearching: search.trim().length > 0,
   }
+}
+
+/**
+ * Optimistically flip an email to read in every cached summary page.
+ *
+ * The list renders from `['emails', 'summary', …]` snapshots, one per search
+ * term, so we patch them all: mark the matching item read and drop the
+ * server-wide unread count the badge reads from. Idempotent — an email that is
+ * already read leaves the cache untouched, so re-opening never over-counts.
+ */
+function markSummaryRead(queryClient: QueryClient, id: string) {
+  queryClient.setQueriesData<InfiniteData<EmailSummaryPage>>(
+    { queryKey: ['emails', 'summary'] },
+    (data) => {
+      if (!data) {
+        return data
+      }
+
+      let flipped = false
+      const pages = data.pages.map((page) => ({
+        ...page,
+        items: page.items.map((item) => {
+          if (item.id !== id || item.read) {
+            return item
+          }
+          flipped = true
+          return { ...item, read: true }
+        }),
+      }))
+
+      if (!flipped) {
+        return data
+      }
+
+      return {
+        ...data,
+        pages: pages.map((page) => ({
+          ...page,
+          unread: Math.max(0, page.unread - 1),
+        })),
+      }
+    }
+  )
+}
+
+/**
+ * Keep the list in step with the read state the server sets when an email is
+ * opened.
+ *
+ * Opening an email marks it read on the server as a side effect of
+ * `GET /email/:id`, but nothing pushes that back to the cached summary pages,
+ * so the row would stay unread until an unrelated refetch. Mounted once, this
+ * patches the cache the moment an email is selected — whether via click,
+ * keyboard, or a notification — matching what the fetch is about to do.
+ */
+export function useMarkReadOnOpen() {
+  const queryClient = useQueryClient()
+  const selectedEmailId = useUIStore((state) => state.selectedEmailId)
+
+  useEffect(() => {
+    if (!selectedEmailId) {
+      return
+    }
+    markSummaryRead(queryClient, selectedEmailId)
+  }, [queryClient, selectedEmailId])
 }
 
 /**

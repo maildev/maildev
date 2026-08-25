@@ -1,5 +1,7 @@
 # @maildev/core
 
+## 3.0.0-rc.3
+
 ## 3.0.0-rc.2
 
 ### Patch Changes

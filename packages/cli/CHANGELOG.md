@@ -1,5 +1,21 @@
 # maildev
 
+## 3.0.0-rc.3
+
+### Patch Changes
+
+- 4b515c6: Fix the integrated MCP HTTP transport (`maildev --mcp`) so it supports more than
+  one session. Each session now gets its own MCP server instance instead of
+  sharing a single one, which previously made the second client fail to connect
+  with "Already connected to a transport." Requests carrying an unknown session ID
+  now return a proper JSON-RPC error, and open MCP sessions are closed on shutdown.
+- Updated dependencies [4b515c6]
+  - @maildev/api@3.0.0-rc.3
+  - @maildev/core@3.0.0-rc.3
+  - @maildev/smtp@3.0.0-rc.3
+  - @maildev/mcp@3.0.0-rc.3
+  - @maildev/ui@3.0.0-rc.3
+
 ## 3.0.0-rc.2
 
 ### Patch Changes

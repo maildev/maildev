@@ -15,6 +15,7 @@
     "email-summary-pagination",
     "fix-email-preview-footer",
     "fix-email-preview-iframe-resize",
+    "fix-mcp-multiple-sessions",
     "https-web-server",
     "map-backed-storage",
     "max-emails-eviction",

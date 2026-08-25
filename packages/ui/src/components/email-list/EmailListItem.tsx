@@ -11,8 +11,9 @@ export function EmailListItem({ email }: EmailListItemProps) {
   const setSelectedEmail = useUIStore((state) => state.setSelectedEmail)
 
   const isSelected = selectedEmailId === email.id
-  const fromAddress = email.from?.[0]?.address ?? 'unknown'
-  const fromName = email.from?.[0]?.name
+  const toAddress = email.to?.[0]?.address ?? 'unknown'
+  const toName = email.to?.[0]?.name
+  const extraRecipients = Math.max((email.to?.length ?? 0) - 1, 0)
   const hasAttachments = email.attachmentCount > 0
 
   return (
@@ -39,20 +40,43 @@ export function EmailListItem({ email }: EmailListItemProps) {
               : 'bg-[hsl(var(--muted))] text-[hsl(var(--muted-foreground))]'
           )}
         >
-          {getInitials(fromAddress)}
+          {getInitials(toAddress)}
         </div>
 
         {/* Content */}
         <div className="min-w-0 flex-1">
           <div className="flex items-center justify-between gap-2">
-            <span
-              className={cn(
-                'truncate text-sm',
-                !email.read && 'text-[hsl(var(--foreground))]',
-                email.read && 'text-[hsl(var(--muted-foreground))]'
+            <span className="flex min-w-0 items-center gap-1.5">
+              <span
+                className={cn(
+                  'min-w-0 truncate text-sm',
+                  !email.read && 'text-[hsl(var(--foreground))]',
+                  email.read && 'text-[hsl(var(--muted-foreground))]'
+                )}
+              >
+                {toName ? (
+                  <>
+                    {toName}
+                    <span className="text-[hsl(var(--muted-foreground))]">
+                      {' '}
+                      &lt;{toAddress}&gt;
+                    </span>
+                  </>
+                ) : (
+                  toAddress
+                )}
+              </span>
+              {extraRecipients > 0 && (
+                <span
+                  className={cn(
+                    'flex-shrink-0 rounded-full border border-[hsl(var(--border))] px-1.5 py-0.5',
+                    'text-xs font-medium leading-none text-[hsl(var(--muted-foreground))]'
+                  )}
+                  title={`${extraRecipients} more recipient${extraRecipients > 1 ? 's' : ''}`}
+                >
+                  +{extraRecipients}
+                </span>
               )}
-            >
-              {fromName || fromAddress}
             </span>
             <span className="flex-shrink-0 text-xs text-[hsl(var(--muted-foreground))]">
               {formatDate(email.time)}

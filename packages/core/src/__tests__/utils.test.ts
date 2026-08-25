@@ -96,9 +96,12 @@ describe('delay', () => {
     await delay(50)
     const elapsed = Date.now() - start
 
-    // Allow some tolerance for timing
+    // delay() is a setTimeout wrapper, so its only guarantee is waiting *at
+    // least* the requested time (minus a few ms of timer coalescing slop). An
+    // upper bound is unenforceable — a loaded CI runner can park the event loop
+    // and fire the callback arbitrarily late — so asserting one only tests
+    // whether the runner is idle, not the code, and false-fails under load.
     expect(elapsed).toBeGreaterThanOrEqual(45)
-    expect(elapsed).toBeLessThan(100)
   })
 
   it('should resolve with void', async () => {

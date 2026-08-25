@@ -50,6 +50,7 @@ export function EmailHeader({ email }: EmailHeaderProps) {
   }, [])
 
   const fromAddress = email.from?.[0]?.address ?? 'unknown'
+  const fromDisplay = email.from?.[0] ? formatEmailAddress(email.from[0]) : fromAddress
   const toAddresses = email.to?.map(formatEmailAddress).join(', ') ?? ''
   const ccAddresses = email.cc?.map(formatEmailAddress).join(', ')
   const bccAddresses = email.calculatedBcc?.map(formatEmailAddress).join(', ')
@@ -115,28 +116,24 @@ export function EmailHeader({ email }: EmailHeaderProps) {
               {email.subject || '(no subject)'}
             </h1>
             <div className="mt-1 text-sm text-[hsl(var(--muted-foreground))]">
-              <div className="flex flex-wrap items-center gap-x-2">
-                <span className="font-medium text-[hsl(var(--foreground))]">
-                  {email.from?.[0]?.name || fromAddress}
-                </span>
-                {email.from?.[0]?.name && (
-                  <span className="text-xs">&lt;{fromAddress}&gt;</span>
-                )}
+              <div>
+                <span className="font-medium text-[hsl(var(--foreground))]">from </span>
+                <span>{fromDisplay}</span>
               </div>
               <div className="mt-0.5">
-                <span className="text-xs">to </span>
-                <span className="text-xs">{toAddresses}</span>
+                <span className="font-medium text-[hsl(var(--foreground))]">to </span>
+                <span>{toAddresses}</span>
               </div>
               {ccAddresses && (
                 <div className="mt-0.5">
-                  <span className="text-xs">cc </span>
-                  <span className="text-xs">{ccAddresses}</span>
+                  <span className="font-medium text-[hsl(var(--foreground))]">cc </span>
+                  <span>{ccAddresses}</span>
                 </div>
               )}
               {bccAddresses && (
                 <div className="mt-0.5">
-                  <span className="text-xs">bcc </span>
-                  <span className="text-xs">{bccAddresses}</span>
+                  <span className="font-medium text-[hsl(var(--foreground))]">bcc </span>
+                  <span>{bccAddresses}</span>
                 </div>
               )}
             </div>

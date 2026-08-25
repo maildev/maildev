@@ -9,7 +9,13 @@ Cursor, and Codex can read the dev inbox.
 
 ## Get started
 
-Install with npm:
+Run it with npx:
+
+```bash
+npx maildev
+```
+
+Or install it globally:
 
 ```bash
 npm install -g maildev

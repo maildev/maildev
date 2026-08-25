@@ -7,6 +7,20 @@ It's a static, no-build site — plain HTML and one hand-written stylesheet
 (`assets/css/site.css`). Edit the `.html` files directly and push; there is no
 compile step.
 
+## Run it locally
+
+Needs nothing but Python 3 (preinstalled on macOS and most Linux distros):
+
+```bash
+make serve          # http://localhost:8000
+make open           # ...and open a browser
+make serve PORT=8080
+```
+
+`make help` lists every target. The server mirrors GitHub Pages — clean
+directory URLs like `/mcp/` resolve to `mcp/index.html` — but sends
+`Cache-Control: no-store`, so edits show up on a plain reload.
+
 ## Structure
 
 - `index.html` — landing page
@@ -15,6 +29,7 @@ compile step.
 - `assets/img/screenshots/` — 3.0 UI screenshots
 - `*.md`, `llms.txt` — agent/LLM-readable copies of each page (for GEO)
 - `sitemap.xml`, `robots.txt`, `icon.svg`, `assets/img/og.png` — SEO/social
+- `Makefile`, `scripts/serve.py` — local preview server
 
 ## Notes
 
@@ -23,6 +38,5 @@ compile step.
   `assets/og/og.html`. Edit the copy/design there, then re-render:
 
   ```bash
-  npx playwright screenshot --viewport-size=1200,630 \
-    assets/og/og.html assets/img/og.png
+  make og
   ```

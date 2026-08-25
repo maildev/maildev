@@ -185,6 +185,77 @@ section { padding: 4.5rem 0; }
 .hero-cta { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; margin-bottom: 1rem; }
 .hero-note { font-size: 0.9rem; color: var(--fg-muted); }
 
+/* big copyable install command */
+.install-cmd {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 0 auto 0.85rem;
+  padding: 0.55rem 0.6rem 0.55rem 1.25rem;
+  background: var(--navy);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  max-width: 100%;
+  text-align: left;
+}
+.install-cmd code {
+  background: none;
+  padding: 0;
+  color: #e8eef7;
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  white-space: nowrap;
+  overflow-x: auto;
+}
+.install-cmd .prompt { color: #5b6472; margin-right: 0.35rem; }
+@media (prefers-color-scheme: dark) {
+  /* --navy matches the dark canvas, so drop the command block a shade deeper */
+  .install-cmd { background: var(--code-bg); }
+}
+.copy-btn {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: calc(var(--radius) - 3px);
+  border: 1px solid rgba(232, 238, 247, 0.18);
+  background: rgba(232, 238, 247, 0.08);
+  color: #e8eef7;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.copy-btn:hover { background: rgba(232, 238, 247, 0.16); }
+.copy-btn:active { transform: translateY(1px); }
+.copy-btn svg { width: 15px; height: 15px; }
+.copy-btn.copied { color: #7ee2a8; border-color: rgba(126, 226, 168, 0.4); }
+@media (max-width: 480px) {
+  .install-cmd { gap: 0.5rem; padding-left: 0.9rem; }
+  .install-cmd code { font-size: 1rem; }
+  .copy-btn-label { display: none; }
+  .copy-btn { padding: 0.45rem 0.5rem; }
+}
+
+/* copy button on code blocks */
+.pre-wrap { position: relative; }
+.pre-wrap .copy-btn {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  opacity: 0;
+  transition: opacity 0.15s ease, background 0.15s ease;
+}
+.pre-wrap:hover .copy-btn,
+.pre-wrap .copy-btn:focus-visible,
+.pre-wrap .copy-btn.copied { opacity: 1; }
+@media (hover: none) { .pre-wrap .copy-btn { opacity: 1; } }
+
 /* screenshot frame with light/dark cross-fade */
 .shot-frame {
   position: relative;

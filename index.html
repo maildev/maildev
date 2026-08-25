@@ -166,8 +166,30 @@
               View on GitHub
             </a>
           </div>
+          <div class="install-cmd">
+            <code><span class="prompt" aria-hidden="true">$</span> npx maildev</code>
+            <button
+              class="copy-btn"
+              type="button"
+              data-copy="npx maildev"
+              aria-label="Copy npx maildev to clipboard"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 9h10v10H9zM5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"
+                />
+              </svg>
+              <span class="copy-btn-label">Copy</span>
+            </button>
+          </div>
           <p class="hero-note">
-            Free &amp; open source (MIT) · <code>npm i -g maildev</code>
+            Free &amp; open source (MIT) · run it often? install with
+            <code>npm i -g maildev</code>
           </p>
 
           <div
@@ -554,11 +576,14 @@
             </p>
           </div>
 
-          <h3>Install with npm</h3>
+          <h3>Run it with npx</h3>
+          <pre><code><span class="cmd">npx maildev</span></code></pre>
+
+          <h3>…or install it globally</h3>
           <pre><code><span class="cmd">npm install -g maildev</span>
 <span class="cmd">maildev</span></code></pre>
 
-          <h3>…or with Docker</h3>
+          <h3>…or run it with Docker</h3>
           <pre><code><span class="cmd">docker run -p 1080:1080 -p 1025:1025 maildev/maildev</span></code></pre>
 
           <h3>Send mail to it</h3>
@@ -616,6 +641,70 @@ const transport = nodemailer.createTransport({
         </div>
       </div>
     </footer>
+
+    <script>
+      // Copy-to-clipboard for the hero command and every code block.
+      (function () {
+        var ICON =
+          '<svg viewBox="0 0 24 24" aria-hidden="true"><path fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M9 9h10v10H9zM5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"/></svg><span class="copy-btn-label">Copy</span>';
+
+        // Wrap each <pre> and give it its own copy button.
+        document.querySelectorAll("pre").forEach(function (pre) {
+          var text = pre.textContent.replace(/\n+$/, "");
+          if (!text) return;
+          var wrap = document.createElement("div");
+          wrap.className = "pre-wrap";
+          pre.parentNode.insertBefore(wrap, pre);
+          wrap.appendChild(pre);
+          var btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "copy-btn";
+          btn.setAttribute("data-copy", text);
+          btn.setAttribute("aria-label", "Copy code to clipboard");
+          btn.innerHTML = ICON;
+          wrap.appendChild(btn);
+        });
+
+        function copy(text) {
+          if (navigator.clipboard && window.isSecureContext) {
+            return navigator.clipboard.writeText(text);
+          }
+          return new Promise(function (resolve, reject) {
+            var ta = document.createElement("textarea");
+            ta.value = text;
+            ta.setAttribute("readonly", "");
+            ta.style.position = "fixed";
+            ta.style.opacity = "0";
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+              document.execCommand("copy") ? resolve() : reject();
+            } catch (e) {
+              reject(e);
+            }
+            document.body.removeChild(ta);
+          });
+        }
+
+        document.addEventListener("click", function (ev) {
+          var btn = ev.target.closest ? ev.target.closest("[data-copy]") : null;
+          if (!btn) return;
+          copy(btn.getAttribute("data-copy")).then(
+            function () {
+              var label = btn.querySelector(".copy-btn-label");
+              btn.classList.add("copied");
+              if (label) label.textContent = "Copied";
+              clearTimeout(btn._t);
+              btn._t = setTimeout(function () {
+                btn.classList.remove("copied");
+                if (label) label.textContent = "Copy";
+              }, 1600);
+            },
+            function () {},
+          );
+        });
+      })();
+    </script>
 
     <script>
       // Lazy-load the live GitHub star count; falls back to the inline value.

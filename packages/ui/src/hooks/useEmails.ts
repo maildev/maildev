@@ -72,7 +72,7 @@ export function useEmailList() {
  * server-wide unread count the badge reads from. Idempotent — an email that is
  * already read leaves the cache untouched, so re-opening never over-counts.
  */
-function markSummaryRead(queryClient: QueryClient, id: string) {
+export function markSummaryRead(queryClient: QueryClient, id: string) {
   queryClient.setQueriesData<InfiniteData<EmailSummaryPage>>(
     { queryKey: ['emails', 'summary'] },
     (data) => {

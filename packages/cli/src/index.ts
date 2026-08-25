@@ -5,9 +5,10 @@
  * for reading and testing emails during development.
  */
 
-// The value below is a dev-time fallback. On build, scripts/set-version.mjs
-// rewrites this constant in dist/index.js to match package.json's version.
-export const VERSION = '3.0.0-rc.1'
+// 'development' is the dev-time placeholder. On build, scripts/set-version.mjs
+// rewrites this constant in dist/index.js to match package.json's version, so
+// released artifacts report the real version.
+export const VERSION = 'development'
 
 // Re-export configuration types and utilities
 export * from './config/types.js'

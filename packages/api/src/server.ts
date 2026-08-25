@@ -622,6 +622,20 @@ export class APIServer extends EventEmitter {
   /**
    * Setup MCP (Model Context Protocol) server for Claude integration
    */
+  /**
+   * Best-effort public base URL of the web UI (no trailing slash), derived
+   * from this server's own listen options. Used for MCP email deep links when
+   * no explicit URL is configured.
+   */
+  private defaultWebUrl(): string {
+    const host = this.options.host ?? DEFAULT_HOST
+    const printHost = host === '0.0.0.0' || host === '::' ? 'localhost' : host
+    const port = this.options.port ?? DEFAULT_PORT
+    const protocol = this.options.https ? 'https' : 'http'
+    const basePath = this.options.basePath ?? ''
+    return `${protocol}://${printHost}:${port}${basePath}`
+  }
+
   private setupMCP(): void {
     if (!this.options.mcp?.enabled) {
       return
@@ -669,8 +683,11 @@ export class APIServer extends EventEmitter {
       { capabilities: { tools: {}, resources: {}, prompts: {} } }
     )
 
-    // Register handlers with direct storage access
-    registerMCPHandlers(this.mcpServer, dataSource)
+    // Register handlers with direct storage access. Deep links point at this
+    // server's own web UI unless an explicit public URL is configured (e.g.
+    // when reached through a reverse proxy).
+    const webUrl = this.options.mcp?.webUrl ?? this.defaultWebUrl()
+    registerMCPHandlers(this.mcpServer, dataSource, { webUrl })
 
     // Helper to get or create transport for a session
     const getOrCreateTransport = async (sessionId: string | undefined) => {

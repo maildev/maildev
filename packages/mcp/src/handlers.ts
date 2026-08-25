@@ -46,9 +46,21 @@ export interface SearchOptions {
 }
 
 /**
+ * Build a deep link to an email in the MailDev web UI.
+ *
+ * MailDev routes the selected email through a hash fragment
+ * (`#/email/:id`), which keeps the link working under any base path or
+ * reverse-proxy sub-path without server cooperation. `webUrl` is the web UI
+ * base (no trailing slash), e.g. `http://localhost:1080`.
+ */
+function buildEmailWebUrl(webUrl: string, id: string): string {
+  return `${webUrl.replace(/\/+$/, '')}/#/email/${encodeURIComponent(id)}`
+}
+
+/**
  * Format an email for display in MCP responses
  */
-function formatEmailSummary(email: Email): string {
+function formatEmailSummary(email: Email, webUrl?: string): string {
   const from = email.from?.[0]?.address || 'unknown'
   const to = email.to?.map((a) => a.address).join(', ') || 'unknown'
   const date = new Date(email.time).toLocaleString()
@@ -57,8 +69,9 @@ function formatEmailSummary(email: Email): string {
     email.attachments && email.attachments.length > 0
       ? ` [${email.attachments.length} attachment(s)]`
       : ''
+  const url = webUrl ? `\nURL: ${buildEmailWebUrl(webUrl, email.id)}` : ''
 
-  return `ID: ${email.id}
+  return `ID: ${email.id}${url}
 Subject: ${email.subject || '(no subject)'}${read}
 From: ${from}
 To: ${to}
@@ -68,8 +81,8 @@ Date: ${date}${attachments}`
 /**
  * Format full email details
  */
-function formatEmailFull(email: Email): string {
-  const summary = formatEmailSummary(email)
+function formatEmailFull(email: Email, webUrl?: string): string {
+  const summary = formatEmailSummary(email, webUrl)
   const text = email.text || '(no text content)'
   const html = email.html ? '\n\n[HTML content available]' : ''
 
@@ -183,7 +196,22 @@ async function getStats(dataSource: EmailDataSource) {
 /**
  * Register MCP handlers on a server instance
  */
-export function registerMCPHandlers(server: Server, dataSource: EmailDataSource): void {
+/** Options for {@link registerMCPHandlers}. */
+export interface RegisterMCPHandlersOptions {
+  /**
+   * Base URL of the MailDev web UI (no trailing slash). When set, email tool
+   * and resource responses include a deep link so coding agents can hand back
+   * a clickable URL to the message.
+   */
+  webUrl?: string
+}
+
+export function registerMCPHandlers(
+  server: Server,
+  dataSource: EmailDataSource,
+  options: RegisterMCPHandlersOptions = {}
+): void {
+  const { webUrl } = options
   // ===================
   // TOOLS
   // ===================
@@ -316,7 +344,7 @@ export function registerMCPHandlers(server: Server, dataSource: EmailDataSource)
             return { content: [{ type: 'text', text: 'No emails found matching the criteria.' }] }
           }
 
-          const formatted = emails.map(formatEmailSummary).join('\n\n---\n\n')
+          const formatted = emails.map((email) => formatEmailSummary(email, webUrl)).join('\n\n---\n\n')
           return {
             content: [{ type: 'text', text: `Found ${emails.length} email(s):\n\n${formatted}` }],
           }
@@ -325,7 +353,7 @@ export function registerMCPHandlers(server: Server, dataSource: EmailDataSource)
         case 'maildev_get_email': {
           const { id } = args as { id: string }
           const email = await dataSource.getEmail(id)
-          return { content: [{ type: 'text', text: formatEmailFull(email) }] }
+          return { content: [{ type: 'text', text: formatEmailFull(email, webUrl) }] }
         }
 
         case 'maildev_get_latest_email': {
@@ -338,10 +366,10 @@ export function registerMCPHandlers(server: Server, dataSource: EmailDataSource)
 
           const firstEmail = emails[0]
           if (count === 1 && firstEmail) {
-            return { content: [{ type: 'text', text: formatEmailFull(firstEmail) }] }
+            return { content: [{ type: 'text', text: formatEmailFull(firstEmail, webUrl) }] }
           }
 
-          const formatted = emails.map(formatEmailFull).join('\n\n===\n\n')
+          const formatted = emails.map((email) => formatEmailFull(email, webUrl)).join('\n\n===\n\n')
           return { content: [{ type: 'text', text: formatted }] }
         }
 
@@ -448,12 +476,13 @@ export function registerMCPHandlers(server: Server, dataSource: EmailDataSource)
       if (emailMatch && emailMatch[1]) {
         const id = emailMatch[1]
         const email = await dataSource.getEmail(id)
+        const payload = webUrl ? { ...email, url: buildEmailWebUrl(webUrl, id) } : email
         return {
           contents: [
             {
               uri,
               mimeType: 'application/json',
-              text: JSON.stringify(email, null, 2),
+              text: JSON.stringify(payload, null, 2),
             },
           ],
         }

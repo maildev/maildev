@@ -15,6 +15,21 @@ export interface MailDevMCPServerOptions extends MailDevClientOptions {
   name?: string
   /** Server version */
   version?: string
+  /**
+   * Public base URL of the MailDev web UI (no trailing slash), used to build
+   * email deep links in responses. Defaults to `MAILDEV_WEB_URL`, otherwise
+   * derived from the API base URL.
+   */
+  webUrl?: string
+}
+
+/**
+ * Derive the web UI base URL from the API base URL by dropping a trailing
+ * `/api` segment (REST routes live under `<base>/api`, while the UI is served
+ * from `<base>`). Trailing slashes are stripped so link building is uniform.
+ */
+function deriveWebUrl(apiBaseUrl: string): string {
+  return apiBaseUrl.replace(/\/+$/, '').replace(/\/api$/, '')
 }
 
 /**
@@ -31,7 +46,8 @@ export function createServer(options: MailDevMCPServerOptions = {}): Server {
   )
 
   // Register handlers using the HTTP client as the data source
-  registerMCPHandlers(server, client)
+  const webUrl = options.webUrl || process.env.MAILDEV_WEB_URL || deriveWebUrl(client.getBaseUrl())
+  registerMCPHandlers(server, client, { webUrl })
 
   return server
 }

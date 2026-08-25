@@ -50,6 +50,11 @@ export class MailDevClient {
     }
   }
 
+  /** The configured MailDev API base URL. */
+  getBaseUrl(): string {
+    return this.baseUrl
+  }
+
   private async fetch<T>(path: string, options: RequestInit = {}): Promise<T> {
     const url = `${this.baseUrl}${path}`
     const headers: Record<string, string> = {

@@ -255,7 +255,9 @@ export function useCommands(): Command[] {
         action: () => {
           if (selectedEmailId && window.confirm('Delete this email?')) {
             api.emails.delete(selectedEmailId).then(() => {
-              setSelectedEmail(null)
+              // The deleted email's route is gone; replace so Back doesn't
+              // return to a now-404 selection.
+              setSelectedEmail(null, { replace: true })
               refresh()
             })
           }

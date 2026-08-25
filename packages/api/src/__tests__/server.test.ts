@@ -695,6 +695,70 @@ describe('APIServer', () => {
       expect(body).toContain('"name":"maildev"')
     })
 
+    it('should initialize multiple independent MCP sessions', async () => {
+      server = createAPIServer({ storage, port: 0, mcp: { enabled: true } })
+      await server.start()
+
+      const initPayload = {
+        method: 'POST' as const,
+        url: '/mcp',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json, text/event-stream',
+        },
+        payload: {
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'initialize',
+          params: {
+            protocolVersion: '2024-11-05',
+            capabilities: {},
+            clientInfo: { name: 'test', version: '1.0' },
+          },
+        },
+      }
+
+      // Each initialize spins up a fresh session bound to its own MCP server.
+      // Sharing a single server across sessions previously made the second
+      // connect() throw "Already connected to a transport".
+      const first = await server.server.inject(initPayload)
+      const second = await server.server.inject(initPayload)
+
+      expect(first.statusCode).toBe(200)
+      expect(second.statusCode).toBe(200)
+
+      const firstSession = first.headers['mcp-session-id']
+      const secondSession = second.headers['mcp-session-id']
+      expect(firstSession).toBeDefined()
+      expect(secondSession).toBeDefined()
+      expect(firstSession).not.toBe(secondSession)
+    })
+
+    it('should reject a request with an unknown session ID', async () => {
+      server = createAPIServer({ storage, port: 0, mcp: { enabled: true } })
+      await server.start()
+
+      const response = await server.server.inject({
+        method: 'POST',
+        url: '/mcp',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json, text/event-stream',
+          'mcp-session-id': 'does-not-exist',
+        },
+        payload: {
+          jsonrpc: '2.0',
+          id: 1,
+          method: 'tools/list',
+          params: {},
+        },
+      })
+
+      expect(response.statusCode).toBe(400)
+      const body = JSON.parse(response.body)
+      expect(body.error.message).toContain('No valid session ID')
+    })
+
     it('should list MCP tools', async () => {
       server = createAPIServer({ storage, port: 0, mcp: { enabled: true } })
       await server.start()

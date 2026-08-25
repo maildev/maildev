@@ -18,6 +18,7 @@ import { Server as SocketServer } from 'socket.io'
 import { Server as MCPServer } from '@modelcontextprotocol/sdk/server/index.js'
 import { StreamableHTTPServerTransport } from '@modelcontextprotocol/sdk/server/streamableHttp.js'
 import type { Transport } from '@modelcontextprotocol/sdk/shared/transport.js'
+import { isInitializeRequest } from '@modelcontextprotocol/sdk/types.js'
 import { registerMCPHandlers, type EmailDataSource } from '@maildev/mcp'
 import { toSummary, type Storage, type Email, type SortOrder } from '@maildev/core'
 import type { SMTPServer } from '@maildev/smtp'
@@ -70,7 +71,6 @@ export class APIServer extends EventEmitter {
   private smtp: SMTPServer | undefined
   private io: SocketServer | null = null
   private options: APIServerOptions
-  private mcpServer: MCPServer | null = null
   private mcpTransports: Map<string, StreamableHTTPServerTransport> = new Map()
   private pluginsRegistered = false
 
@@ -166,6 +166,12 @@ export class APIServer extends EventEmitter {
    */
   async stop(): Promise<void> {
     this.emit('close')
+
+    // Close any open MCP sessions (each closes its paired server too).
+    for (const transport of this.mcpTransports.values()) {
+      await transport.close()
+    }
+    this.mcpTransports.clear()
 
     if (this.io) {
       await new Promise<void>((resolve) => {
@@ -677,37 +683,20 @@ export class APIServer extends EventEmitter {
       },
     }
 
-    // Initialize MCP server
-    this.mcpServer = new MCPServer(
-      { name: 'maildev', version: VERSION },
-      { capabilities: { tools: {}, resources: {}, prompts: {} } }
-    )
-
-    // Register handlers with direct storage access. Deep links point at this
-    // server's own web UI unless an explicit public URL is configured (e.g.
-    // when reached through a reverse proxy).
+    // Deep links point at this server's own web UI unless an explicit public
+    // URL is configured (e.g. when reached through a reverse proxy).
     const webUrl = this.options.mcp?.webUrl ?? this.defaultWebUrl()
-    registerMCPHandlers(this.mcpServer, dataSource, { webUrl })
 
-    // Helper to get or create transport for a session
-    const getOrCreateTransport = async (sessionId: string | undefined) => {
-      if (sessionId && this.mcpTransports.has(sessionId)) {
-        return this.mcpTransports.get(sessionId)!
-      }
-
-      // Create new transport
-      const transport = new StreamableHTTPServerTransport({
-        sessionIdGenerator: () => randomUUID(),
-        onsessioninitialized: (id) => {
-          this.mcpTransports.set(id, transport)
-        },
-        onsessionclosed: (id) => {
-          this.mcpTransports.delete(id)
-        },
-      })
-
-      await this.mcpServer!.connect(transport as unknown as Transport)
-      return transport
+    // Build a fresh MCP server for each session. A single `Server` instance can
+    // only be bound to one transport at a time, so sharing one across sessions
+    // makes the second `connect()` throw "Already connected to a transport".
+    const createMcpServer = (): MCPServer => {
+      const server = new MCPServer(
+        { name: 'maildev', version: VERSION },
+        { capabilities: { tools: {}, resources: {}, prompts: {} } }
+      )
+      registerMCPHandlers(server, dataSource, { webUrl })
+      return server
     }
 
     // POST /mcp - Handle JSON-RPC requests
@@ -715,7 +704,37 @@ export class APIServer extends EventEmitter {
       const sessionId = request.headers['mcp-session-id'] as string | undefined
 
       try {
-        const transport = await getOrCreateTransport(sessionId)
+        let transport = sessionId ? this.mcpTransports.get(sessionId) : undefined
+
+        if (!transport) {
+          // Only spin up a new session (and its own server) for an initialize
+          // request. Any other request without a live session is a protocol
+          // error — respond with a JSON-RPC error rather than silently opening
+          // an orphaned transport.
+          if (sessionId || !isInitializeRequest(request.body)) {
+            return reply.status(400).send({
+              jsonrpc: '2.0',
+              error: {
+                code: -32000,
+                message: 'Bad Request: No valid session ID provided',
+              },
+              id: null,
+            })
+          }
+
+          transport = new StreamableHTTPServerTransport({
+            sessionIdGenerator: () => randomUUID(),
+            onsessioninitialized: (id) => {
+              this.mcpTransports.set(id, transport!)
+            },
+            onsessionclosed: (id) => {
+              this.mcpTransports.delete(id)
+            },
+          })
+
+          await createMcpServer().connect(transport as unknown as Transport)
+        }
+
         await transport.handleRequest(request.raw, reply.raw, request.body)
       } catch (error) {
         const message = error instanceof Error ? error.message : 'Unknown error'

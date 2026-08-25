@@ -1,4 +1,4 @@
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
 import { APIServer, createAPIServer } from '../server.js'
 import { MemoryStorage, type Email } from '@maildev/core'
 
@@ -176,6 +176,84 @@ describe('APIServer', () => {
       // Verify it was saved
       const saved = await storage.getById('test-789')
       expect(saved?.read).toBe(true)
+    })
+
+    it('should emit readMail over the socket only on the first open', async () => {
+      const testEmail: Email = {
+        id: 'socket-read',
+        time: new Date(),
+        read: false,
+        subject: 'Unread Email',
+        source: '/path/to/email.eml',
+        size: 512,
+        sizeHuman: '512 B',
+        from: [{ address: 'sender@test.com' }],
+        to: [{ address: 'recipient@test.com' }],
+        headers: {},
+        attachments: [],
+        envelope: {
+          from: { address: 'sender@test.com' },
+          to: [{ address: 'recipient@test.com' }],
+        },
+        calculatedBcc: [],
+      }
+      await storage.save(testEmail)
+
+      server = createAPIServer({ storage, port: 0 })
+      await server.start()
+
+      const emit = vi.fn()
+      // The socket only exists in SMTP mode; stand in a spy so the route's
+      // `this.io?.emit` is observable. `close` lets server.stop() tear it down.
+      ;(server as unknown as { io?: { emit: typeof emit; close: (cb: () => void) => void } }).io =
+        { emit, close: (cb) => cb() }
+
+      await server.server.inject({ method: 'GET', url: '/api/email/socket-read' })
+      expect(emit).toHaveBeenCalledWith('readMail', { id: 'socket-read' })
+
+      // Already read on the second open, so nothing is broadcast
+      emit.mockClear()
+      await server.server.inject({ method: 'GET', url: '/api/email/socket-read' })
+      expect(emit).not.toHaveBeenCalled()
+    })
+
+    it('should emit readAllMail only when read-all changed something', async () => {
+      const unread: Email = {
+        id: 'bulk-unread',
+        time: new Date(),
+        read: false,
+        subject: 'Unread',
+        source: '/path/to/email.eml',
+        size: 512,
+        sizeHuman: '512 B',
+        from: [{ address: 'sender@test.com' }],
+        to: [{ address: 'recipient@test.com' }],
+        headers: {},
+        attachments: [],
+        envelope: {
+          from: { address: 'sender@test.com' },
+          to: [{ address: 'recipient@test.com' }],
+        },
+        calculatedBcc: [],
+      }
+      await storage.save(unread)
+
+      server = createAPIServer({ storage, port: 0 })
+      await server.start()
+
+      const emit = vi.fn()
+      // The socket only exists in SMTP mode; stand in a spy so the route's
+      // `this.io?.emit` is observable. `close` lets server.stop() tear it down.
+      ;(server as unknown as { io?: { emit: typeof emit; close: (cb: () => void) => void } }).io =
+        { emit, close: (cb) => cb() }
+
+      await server.server.inject({ method: 'PATCH', url: '/api/email/read-all' })
+      expect(emit).toHaveBeenCalledWith('readAllMail')
+
+      // Everything is already read, so a second call changes nothing
+      emit.mockClear()
+      await server.server.inject({ method: 'PATCH', url: '/api/email/read-all' })
+      expect(emit).not.toHaveBeenCalled()
     })
 
     it('should return 404 for non-existent email', async () => {

@@ -3,6 +3,7 @@ import { useQueryClient } from '@tanstack/react-query'
 import { io, Socket } from 'socket.io-client'
 import type { EmailSummary } from '@maildev/core'
 import { useUIStore } from '../stores/ui'
+import { markSummaryRead } from './useEmails'
 import { getBasePath } from '../lib/basePath'
 
 // Notification debounce - max 1 notification per 2 seconds
@@ -119,6 +120,18 @@ export function useSocket() {
       scheduleRefresh()
       // Also invalidate the specific email query
       queryClient.invalidateQueries({ queryKey: ['email', data.id] })
+    })
+
+    // Another tab opened an email: flip it read in our list without a refetch.
+    // Idempotent, so the tab that opened it (already updated) is a no-op.
+    socket.on('readMail', (data: { id: string }) => {
+      markSummaryRead(queryClient, data.id)
+    })
+
+    // Another tab marked everything read: a coalesced refetch is the cheapest
+    // way to pull in the new read state and the zeroed unread count.
+    socket.on('readAllMail', () => {
+      scheduleRefresh()
     })
 
     return () => {

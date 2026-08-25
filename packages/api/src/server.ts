@@ -324,6 +324,9 @@ export class APIServer extends EventEmitter {
         if (!email.read) {
           email.read = true
           await this.storage.save(email)
+          // Let other tabs update their list and unread badge; the tab that
+          // opened the email has already done so optimistically.
+          this.io?.emit('readMail', { id })
         }
 
         return email
@@ -401,7 +404,15 @@ export class APIServer extends EventEmitter {
     // Mark all emails as read
     this.app.patch(`${apiPath}/email/read-all`, async (_request, reply) => {
       try {
-        return this.smtp ? await this.smtp.markAllRead() : await this.storage.markAllRead()
+        const count = this.smtp
+          ? await this.smtp.markAllRead()
+          : await this.storage.markAllRead()
+        // Only tabs other than the one that triggered it need telling, and only
+        // when something actually changed.
+        if (count > 0) {
+          this.io?.emit('readAllMail')
+        }
+        return count
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Unknown error'
         return reply.status(500).send({ error: message })

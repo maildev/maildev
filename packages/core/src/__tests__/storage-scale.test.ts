@@ -34,8 +34,14 @@ const SMALL = COUNT / 4
  * Filling 4x the mail costs ~4x the time when save is O(1) and ~16x when it is
  * quadratic. Trip well below the quadratic factor but far enough above the
  * linear one that noise, GC and JIT can never false-fail the guard.
+ *
+ * The large fill runs ~4x longer than the small one, so on a loaded runner it
+ * is ~4x more likely for a stray GC/scheduler stall to survive into its
+ * fastest run and inflate this ratio above the true ~4x. Keep the ceiling
+ * comfortably above that observed noise but still far short of the 16x that a
+ * genuine O(n²) regression would produce.
  */
-const MAX_SCALING = 8
+const MAX_SCALING = 10
 
 const createTestEmail = (index: number): Email => ({
   id: `email-${index}`,
@@ -93,11 +99,17 @@ async function fastest(
   return best
 }
 
-/** Fastest of a few fresh fills of `count` emails into a store from `make`. */
+/**
+ * Fastest of a few fresh fills of `count` emails into a store from `make`.
+ *
+ * Take several samples: the large fill is long enough that a single run often
+ * catches a GC/scheduler stall, and only its uncontended minimum reflects the
+ * true algorithmic cost the ratio guard compares against.
+ */
 async function fastestFill(
   count: number,
   make: () => MemoryStorage = () => new MemoryStorage(),
-  runs = 3
+  runs = 5
 ): Promise<number> {
   let best = Infinity
   for (let i = 0; i < runs; i++) {

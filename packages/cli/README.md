@@ -11,10 +11,6 @@
 
 **MailDev** is a simple way to test your project's generated email during development, with an easy to use web interface that runs on your machine built on top of [Node.js](http://www.nodejs.org).
 
-> MailDev is sponsored by ⭐️ **[Inngest](https://www.inngest.com/?ref=maildev)**.
->
-> **Inngest** is the durable execution platform for AI agents and workflows enabling you to ship reliable products with no infrastructure.
-
 ![MailDev Screenshot](https://github.com/maildev/maildev/blob/main/.github/assets/screenshot-3.0-rc.png?raw=true)
 
 ## Install

@@ -1,0 +1,66 @@
+{
+  "docs": [
+    {
+      "id": "getting-started",
+      "title": "Getting started",
+      "items": [
+        "docs/getting-started/overview",
+        "docs/getting-started/install",
+        "docs/getting-started/quickstart",
+        "docs/getting-started/web-ui"
+      ]
+    },
+    {
+      "id": "ai",
+      "title": "AI & agents",
+      "items": [
+        "docs/ai/mcp",
+        "docs/ai/claude-code"
+      ]
+    },
+    {
+      "id": "guides",
+      "title": "Guides",
+      "items": [
+        "docs/guides/docker",
+        "docs/guides/https",
+        "docs/guides/testing-in-ci"
+      ]
+    },
+    {
+      "id": "integrations",
+      "title": "Integrations",
+      "items": [
+        "docs/integrations/nodemailer",
+        "docs/integrations/django",
+        "docs/integrations/rails",
+        "docs/integrations/laravel"
+      ]
+    },
+    {
+      "id": "reference",
+      "title": "Reference",
+      "items": [
+        "docs/reference/cli",
+        "docs/reference/rest-api",
+        "docs/reference/node-api"
+      ]
+    },
+    {
+      "id": "comparisons",
+      "title": "Comparisons",
+      "items": [
+        "docs/comparisons/mailcatcher"
+      ]
+    }
+  ],
+  "redirects": {
+    "/setup/": "/docs/quickstart/",
+    "/mcp/": "/docs/ai/mcp/",
+    "/vs/mailcatcher/": "/docs/vs/mailcatcher/",
+    "/index.md": "/",
+    "/setup.md": "/docs/quickstart/",
+    "/mcp.md": "/docs/ai/mcp/",
+    "/vs-mailcatcher.md": "/docs/vs/mailcatcher/"
+  }
+}

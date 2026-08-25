@@ -5,15 +5,71 @@
     <priority>1.0</priority>
   </url>
   <url>
-    <loc>https://maildev.github.io/maildev/mcp/</loc>
+    <loc>https://maildev.github.io/maildev/docs/</loc>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://maildev.github.io/maildev/docs/install/</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maildev.github.io/maildev/setup/</loc>
+    <loc>https://maildev.github.io/maildev/docs/quickstart/</loc>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://maildev.github.io/maildev/vs/mailcatcher/</loc>
-    <priority>0.6</priority>
+    <loc>https://maildev.github.io/maildev/docs/web-ui/</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maildev.github.io/maildev/docs/ai/mcp/</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maildev.github.io/maildev/docs/ai/claude-code/</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maildev.github.io/maildev/docs/guides/docker/</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maildev.github.io/maildev/docs/guides/https/</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maildev.github.io/maildev/docs/guides/testing-in-ci/</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maildev.github.io/maildev/docs/integrations/nodemailer/</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maildev.github.io/maildev/docs/integrations/django/</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maildev.github.io/maildev/docs/integrations/rails/</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maildev.github.io/maildev/docs/integrations/laravel/</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maildev.github.io/maildev/docs/reference/cli/</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maildev.github.io/maildev/docs/reference/rest-api/</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maildev.github.io/maildev/docs/reference/node-api/</loc>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://maildev.github.io/maildev/docs/vs/mailcatcher/</loc>
+    <priority>0.8</priority>
   </url>
 </urlset>

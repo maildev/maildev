@@ -465,3 +465,315 @@ table.compare td.no { color: var(--fg-muted); }
 .footer-links { display: flex; gap: 1.25rem; flex-wrap: wrap; }
 .footer-links a { color: var(--fg-muted); }
 .footer-links a:hover { color: var(--fg); }
+
+/* ==========================================================================
+   Docs & blog shell
+   Added for the generated documentation section (see scripts/build.mjs).
+   Additive only — nothing above this line is modified. Every color goes
+   through a token declared in both :root and the dark-scheme block below.
+   ========================================================================== */
+
+:root {
+  --maxw-docs: 1320px;
+  --sidebar-w: 250px;
+  --toc-w: 200px;
+  --header-h: 60px;
+
+  /* How far the active-item pill bleeds left of the nav text. Must match the
+     sidebar's left padding, or the pill overflows and gets clipped. */
+  --nav-inset: 0.6rem;
+  --nav-active-bg: color-mix(in srgb, var(--accent) 9%, transparent);
+  --nav-active-fg: var(--accent);
+  --nav-rail: var(--border);
+  --callout-warn: #d97706;
+  --callout-tip: #16a34a;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --nav-active-bg: color-mix(in srgb, var(--accent) 16%, transparent);
+    --callout-warn: #fbbf24;
+    --callout-tip: #4ade80;
+  }
+}
+
+/* ---------- Shared article padding ---------- */
+/* Replaces the inline padding style that used to be copy-pasted per page. */
+.article-page { padding-top: 3.5rem; padding-bottom: 4rem; }
+
+/* ---------- Docs layout ---------- */
+.container.wide { max-width: var(--maxw-docs); }
+
+.docs-layout {
+  display: grid;
+  grid-template-columns: var(--sidebar-w) minmax(0, 1fr);
+  gap: 0 2.5rem;
+  align-items: start;
+  padding-top: 2rem;
+  padding-bottom: 4rem;
+}
+@media (min-width: 1200px) {
+  .docs-layout:not(.no-toc) {
+    grid-template-columns: var(--sidebar-w) minmax(0, 1fr) var(--toc-w);
+  }
+}
+@media (max-width: 899px) {
+  .docs-layout { grid-template-columns: minmax(0, 1fr); gap: 0; }
+}
+
+.docs-main { min-width: 0; max-width: 780px; }
+
+/* Marketing section padding would wreck the docs column. */
+.docs-main section { padding: 0; }
+
+/* ---------- Sidebar ---------- */
+/* A <details> element: native disclosure drawer below 900px, always-open rail
+   above it. No JavaScript, and only one copy of the link list per page. */
+.docs-sidebar {
+  position: sticky;
+  top: var(--header-h);
+  max-height: calc(100vh - var(--header-h) - 1rem);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 1.5rem 1rem 2rem var(--nav-inset);
+  border-right: 1px solid var(--nav-rail);
+  font-size: 0.925rem;
+}
+.docs-sidebar > summary {
+  display: none;
+  cursor: pointer;
+  font-weight: 600;
+  padding: 0.7rem 0;
+}
+.docs-sidebar > summary::marker { color: var(--fg-muted); }
+
+.docs-nav-group + .docs-nav-group { margin-top: 1.5rem; }
+.docs-nav-title {
+  margin: 0 0 0.5rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+}
+.docs-nav ul { list-style: none; margin: 0; padding: 0; }
+.docs-nav li { margin: 0; }
+.docs-nav a {
+  display: block;
+  padding: 0.32rem 0.6rem 0.32rem calc(var(--nav-inset) - 2px);
+  margin-left: calc(var(--nav-inset) * -1);
+  border-radius: calc(var(--radius) - 2px);
+  border-left: 2px solid transparent;
+  color: var(--fg-muted);
+  line-height: 1.4;
+}
+.docs-nav a:hover { color: var(--fg); background: var(--bg-alt); text-decoration: none; }
+.docs-nav a[aria-current='page'] {
+  color: var(--nav-active-fg);
+  background: var(--nav-active-bg);
+  border-left-color: var(--accent);
+  font-weight: 600;
+}
+
+@media (max-width: 899px) {
+  .docs-sidebar {
+    position: static;
+    max-height: none;
+    overflow: visible;
+    padding: 0 0 1.5rem var(--nav-inset);
+    margin-bottom: 2rem;
+    border-right: none;
+    border-bottom: 1px solid var(--nav-rail);
+  }
+  .docs-sidebar > summary { display: list-item; }
+  .docs-sidebar:not([open]) > summary { padding-bottom: 1rem; }
+}
+@media (min-width: 900px) {
+  /* Force the rail open on desktop regardless of the <details> toggle state.
+     Two rules because browsers implement the closed state two different ways:
+     older ones hide the children with display:none, newer ones use
+     ::details-content { content-visibility: hidden }. Both are covered. */
+  .docs-sidebar > .docs-nav { display: block; }
+  .docs-sidebar::details-content {
+    content-visibility: visible;
+    block-size: auto;
+  }
+}
+
+/* ---------- On-page table of contents ---------- */
+.docs-toc {
+  display: none;
+  position: sticky;
+  top: calc(var(--header-h) + 1.5rem);
+  max-height: calc(100vh - var(--header-h) - 3rem);
+  overflow-y: auto;
+  font-size: 0.875rem;
+}
+@media (min-width: 1200px) {
+  .docs-layout:not(.no-toc) .docs-toc { display: block; }
+}
+.docs-toc ul { list-style: none; margin: 0; padding: 0; }
+.docs-toc a { display: block; padding: 0.25rem 0; color: var(--fg-muted); line-height: 1.35; }
+.docs-toc a:hover { color: var(--fg); text-decoration: none; }
+.docs-toc a[aria-current='true'] { color: var(--accent); font-weight: 600; }
+.docs-toc .lvl-3 { padding-left: 0.85rem; font-size: 0.94em; }
+
+/* ---------- Breadcrumb ---------- */
+.docs-breadcrumb {
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+  margin-bottom: 0.85rem;
+}
+.docs-breadcrumb a { color: var(--fg-muted); }
+.docs-breadcrumb a:hover { color: var(--accent); }
+.docs-breadcrumb .sep, .page-meta .sep, .post-meta .sep { margin: 0 0.45rem; opacity: 0.5; }
+
+/* ---------- Docs typography ---------- */
+/* The global heading scale is tuned for the marketing page and is too loud for
+   a reference section, so the docs column gets its own scale. */
+.docs-main h1 { font-size: clamp(1.9rem, 3.5vw, 2.35rem); margin-bottom: 0.6rem; }
+.docs-main h2 {
+  font-size: 1.45rem;
+  margin: 2.75rem 0 1rem;
+  padding-bottom: 0.35rem;
+  border-bottom: 1px solid var(--border);
+}
+.docs-main h3 { font-size: 1.12rem; margin: 2rem 0 0.6rem; }
+.docs-main h4 { font-size: 1rem; margin: 1.5rem 0 0.5rem; }
+.docs-main > .lead { margin-bottom: 2rem; }
+.docs-main ul, .docs-main ol { padding-left: 1.4rem; }
+.docs-main li { margin-bottom: 0.4rem; }
+.docs-main li > ul, .docs-main li > ol { margin-top: 0.4rem; }
+.docs-main pre { margin: 1.25rem 0; }
+.docs-main table.compare { margin: 1.5rem 0; font-size: 0.94rem; }
+.docs-main table.compare td:first-child { font-weight: 500; }
+.docs-main blockquote {
+  margin: 1.75rem 0;
+  padding: 0.25rem 0 0.25rem 1.25rem;
+  border-left: 3px solid var(--border-strong);
+  color: var(--fg-muted);
+}
+.docs-main .vendored-note { font-size: 0.9rem; margin-top: -1.25rem; margin-bottom: 2rem; }
+
+/* html has scroll-behavior: smooth and the header is sticky, so anchor targets
+   need clearing or they land underneath it. */
+.docs-main :is(h1, h2, h3, h4),
+.article :is(h1, h2, h3, h4) {
+  scroll-margin-top: calc(var(--header-h) + 1.25rem);
+}
+
+/* ---------- Heading anchors ---------- */
+.heading-anchor {
+  margin-left: 0.4rem;
+  color: var(--fg-muted);
+  font-weight: 400;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+:is(h2, h3, h4):hover > .heading-anchor,
+.heading-anchor:focus-visible { opacity: 1; text-decoration: none; }
+@media (hover: none) { .heading-anchor { opacity: 0.35; } }
+
+/* ---------- Callout variants ---------- */
+.callout-warn { border-left-color: var(--callout-warn); }
+.callout-warn svg { color: var(--callout-warn); }
+.callout-tip { border-left-color: var(--callout-tip); }
+.callout-tip svg { color: var(--callout-tip); }
+.callout > div { min-width: 0; }
+.callout > div > :last-child { margin-bottom: 0; }
+.callout p + p { margin-top: 0.6rem; }
+.callout ul, .callout ol { margin: 0.5rem 0 0; padding-left: 1.2rem; }
+
+/* ---------- Prev / next ---------- */
+.prev-next {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 3.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+@media (max-width: 620px) { .prev-next { grid-template-columns: 1fr; } }
+.prev-next-card {
+  display: block;
+  padding: 0.9rem 1.1rem;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.prev-next-card:hover { border-color: var(--accent); text-decoration: none; }
+.prev-next-card:last-child { text-align: right; }
+.prev-next-dir {
+  display: block;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--fg-muted);
+  margin-bottom: 0.2rem;
+}
+.prev-next-title { font-weight: 600; color: var(--fg); }
+
+/* ---------- Page meta ---------- */
+.page-meta {
+  margin-top: 2rem;
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+}
+
+/* ---------- Screenshot placeholders ---------- */
+/* A figure whose asset has not been captured yet. Visible on purpose: an empty
+   slot in the docs should be obvious, not silent. */
+.figure-todo { margin: 2rem 0; }
+.figure-todo-slot {
+  margin: 0;
+  padding: 2.25rem 1.25rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: var(--fg-muted);
+  background: var(--bg-alt);
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius);
+}
+.figure-todo figcaption {
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+  text-align: center;
+}
+.docs-main figure img { border: 1px solid var(--border); border-radius: var(--radius); }
+.docs-main figure figcaption {
+  margin-top: 0.6rem;
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+  text-align: center;
+}
+
+/* ---------- Blog ---------- */
+/* The marketing h1 scale is too loud for a long-form post title. */
+.article.article-page h1 { font-size: clamp(1.9rem, 4vw, 2.6rem); }
+.article.article-page > .post-meta { margin-top: -0.4rem; }
+
+.post-list { list-style: none; margin: 2.5rem 0 0; padding: 0; }
+.post-list-item + .post-list-item {
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--border);
+}
+.post-list-item h2 { font-size: 1.5rem; margin: 0.25rem 0 0.5rem; }
+.post-list-item h2 a { color: var(--fg); }
+.post-list-item h2 a:hover { color: var(--accent); text-decoration: none; }
+.post-list-item p:last-child { margin-bottom: 0; }
+.post-meta {
+  font-size: 0.85rem;
+  color: var(--fg-muted);
+  margin-bottom: 1.25rem;
+}
+
+/* ---------- Shiki ---------- */
+/* Shiki's own background is stripped at build time so `pre` above stays
+   authoritative. Its .line spans are deliberately left inline: Shiki already
+   emits a literal newline between them, and inside `pre` that newline does the
+   line breaking. Making them block-level would add a second break per line and
+   double the leading. */
+pre.shiki { color: #e8eef7; }

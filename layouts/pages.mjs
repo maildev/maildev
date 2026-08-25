@@ -1,0 +1,203 @@
+// Page-type layouts. Each returns a full HTML document via base().
+
+import { base } from './base.mjs'
+import { breadcrumb, pageMeta, prevNext, sidebar, toc } from './partials.mjs'
+import { absoluteUrl, esc, formatDate } from '../scripts/lib/util.mjs'
+
+/** The landing page: a hand-written body from content/home.html plus site chrome. */
+export function home({ site, page, body }) {
+  return base({
+    site,
+    page,
+    body,
+    ogType: 'website',
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'MailDev',
+      applicationCategory: 'DeveloperApplication',
+      operatingSystem: 'macOS, Linux, Windows',
+      description: page.description,
+      url: `${site.baseUrl}/`,
+      downloadUrl: site.links.npm,
+      license: 'https://opensource.org/licenses/MIT',
+      softwareVersion: '3.0',
+      offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+      sameAs: [site.links.repo, site.links.npm, site.links.dockerHub],
+    },
+  })
+}
+
+/** A docs page: sidebar rail, breadcrumb, article, on-page TOC, prev/next. */
+export function doc({ site, page, sections }) {
+  const tocHtml = page.toc ? toc(page.headings) : ''
+  const body = `    <main class="docs-layout container wide${tocHtml ? '' : ' no-toc'}">
+${sidebar(sections, page)}
+      <article class="docs-main">
+${breadcrumb(page)}
+        <h1>${esc(page.title)}</h1>
+        <p class="lead">${esc(page.description)}</p>
+${page.sourceUrl ? `        <p class="muted vendored-note">Reference documentation, maintained in the <a href="${esc(page.sourceUrl)}">maildev repository</a>.</p>\n` : ''}${page.html}
+${prevNext(page)}
+${pageMeta(page, site)}
+      </article>
+${tocHtml}
+    </main>`
+
+  return base({
+    site,
+    page,
+    body,
+    ogType: 'article',
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Docs', item: `${site.baseUrl}/docs/` },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: page.title,
+          item: absoluteUrl(site.baseUrl, page.permalink),
+        },
+      ],
+    },
+  })
+}
+
+/** The blog index: newest first, no pagination yet. */
+export function blogIndex({ site, page, posts }) {
+  const items = posts
+    .map(
+      (post) => `        <li class="post-list-item">
+          <p class="post-meta"><time datetime="${esc(post.date)}">${esc(formatDate(post.date))}</time><span class="sep" aria-hidden="true">·</span>${post.readingMinutes} min read</p>
+          <h2><a href="${esc(post.permalink)}">${esc(post.title)}</a></h2>
+          <p class="muted">${esc(post.excerpt || post.description)}</p>
+        </li>`,
+    )
+    .join('\n')
+
+  const body = `    <main>
+      <div class="container narrow article-page">
+        <span class="eyebrow">Blog</span>
+        <h1>${esc(page.title)}</h1>
+        <p class="lead">${esc(page.description)}</p>
+        <ul class="post-list">
+${items || '        <li class="muted">No posts yet.</li>'}
+        </ul>
+        <p class="muted" style="margin-top: 2rem">
+          Subscribe via <a href="/blog/feed.xml">RSS</a>.
+        </p>
+      </div>
+    </main>`
+
+  return base({ site, page, body })
+}
+
+export function blogPost({ site, page }) {
+  const body = `    <main>
+      <article class="container narrow article article-page">
+        <a class="back-link" href="/blog/">← All posts</a>
+        <h1>${esc(page.title)}</h1>
+        <p class="post-meta">
+          <time datetime="${esc(page.date)}">${esc(formatDate(page.date))}</time>
+          <span class="sep" aria-hidden="true">·</span>${page.readingMinutes} min read
+          <span class="sep" aria-hidden="true">·</span>${esc(page.author || site.author)}
+        </p>
+        <p class="lead">${esc(page.description)}</p>
+${page.html}
+      </article>
+    </main>`
+
+  return base({
+    site,
+    page,
+    body,
+    ogType: 'article',
+    jsonLd: {
+      '@context': 'https://schema.org',
+      '@type': 'BlogPosting',
+      headline: page.title,
+      description: page.description,
+      datePublished: page.date,
+      author: { '@type': 'Organization', name: page.author || site.author },
+      mainEntityOfPage: absoluteUrl(site.baseUrl, page.permalink),
+    },
+  })
+}
+
+/**
+ * A redirect stub. GitHub Pages cannot issue 301s, so this combines a
+ * meta refresh (works with JS off), a canonical link (consolidates ranking
+ * signals), noindex, and a script that preserves the hash and query string.
+ * No analytics, so the hop is not double-counted.
+ */
+export function redirect({ site, from, to, relativeTo }) {
+  const absolute = absoluteUrl(site.baseUrl, to)
+  // The meta-refresh URL and the script target are not attribute values the
+  // root-relative rewrite can reach, so they need the relative form passed in.
+  const target = relativeTo
+  return `<!doctype html>
+<!-- Generated by scripts/build.mjs from data/nav.json — edit the source, not this file. -->
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="refresh" content="0; url=${esc(target)}" />
+    <meta name="robots" content="noindex" />
+    <title>Moved — MailDev</title>
+    <link rel="canonical" href="${esc(absolute)}" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <link rel="stylesheet" href="/assets/css/site.css" />
+    <script>
+      location.replace("${esc(target)}" + location.search + location.hash);
+    </script>
+  </head>
+  <body>
+    <main>
+      <div class="container narrow article-page">
+        <h1>This page moved</h1>
+        <p class="lead">
+          <code>${esc(from)}</code> is now at <a href="${esc(to)}">${esc(absolute)}</a>.
+        </p>
+      </div>
+    </main>
+  </body>
+</html>
+`
+}
+
+/** GitHub Pages serves this for any unknown path on the branch. */
+export function notFound({ site, sections }) {
+  const page = {
+    title: 'Page not found',
+    description: 'That page does not exist — it may have moved. Try the documentation index.',
+    permalink: '/404.html',
+    noindex: true,
+  }
+  const groups = sections
+    .map(
+      (section) =>
+        `          <li><a href="${esc(section.items[0].permalink)}">${esc(section.title)}</a></li>`,
+    )
+    .join('\n')
+
+  const body = `    <main>
+      <div class="container narrow article-page">
+        <span class="eyebrow">404</span>
+        <h1>Page not found</h1>
+        <p class="lead">
+          That page does not exist, or it moved. The documentation index is
+          probably what you want.
+        </p>
+        <ul>
+${groups}
+        </ul>
+        <p style="margin-top: 2rem">
+          <a class="btn btn-primary" href="/docs/">Browse the docs</a>
+        </p>
+      </div>
+    </main>`
+
+  return base({ site, page, body })
+}

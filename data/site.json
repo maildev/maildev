@@ -1,0 +1,31 @@
+{
+  "title": "MailDev",
+  "baseUrl": "https://maildev.github.io/maildev",
+  "tagline": "The local email inbox for developers",
+  "gaId": "G-5G748V38MT",
+  "author": "MailDev",
+  "ogImage": "/assets/img/og.png?v=2",
+  "links": {
+    "repo": "https://github.com/maildev/maildev",
+    "npm": "https://www.npmjs.com/package/maildev",
+    "dockerHub": "https://hub.docker.com/r/maildev/maildev",
+    "issues": "https://github.com/maildev/maildev/issues",
+    "editBase": "https://github.com/maildev/maildev/edit/gh-pages"
+  },
+  "headerNav": [
+    { "label": "Docs", "href": "/docs/" },
+    { "label": "MCP", "href": "/docs/ai/mcp/" },
+    { "label": "Blog", "href": "/blog/", "hideSm": true }
+  ],
+  "footerLinks": [
+    { "label": "Docs", "href": "/docs/" },
+    { "label": "Quick start", "href": "/docs/quickstart/" },
+    { "label": "MCP", "href": "/docs/ai/mcp/" },
+    { "label": "Blog", "href": "/blog/" },
+    { "label": "GitHub", "href": "https://github.com/maildev/maildev" },
+    { "label": "npm", "href": "https://www.npmjs.com/package/maildev" },
+    { "label": "Docker Hub", "href": "https://hub.docker.com/r/maildev/maildev" },
+    { "label": "llms.txt", "href": "/llms.txt" }
+  ],
+  "staticUrls": []
+}

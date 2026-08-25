@@ -1,0 +1,3141 @@
+# MailDev documentation — full text
+
+Every documentation page from https://maildev.github.io/maildev/docs/, concatenated in navigation
+order. Generated; do not edit.
+
+---
+
+# Overview
+Source: https://maildev.github.io/maildev/docs/
+Section: Getting started
+
+MailDev is a local SMTP server and web inbox for developers. Catch every email your app sends, read it in a browser or from an AI agent, and never risk sending test mail to a real person.
+
+MailDev sits between your application and the outside world during development.
+Your app sends mail over SMTP exactly as it would in production; MailDev catches
+it, and nothing leaves your machine.
+
+Two ports do all the work:
+
+| Port   | What listens there                                                                            |
+| ------ | --------------------------------------------------------------------------------------------- |
+| `1025` | The SMTP server your application sends to                                                     |
+| `1080` | The web inbox, the [REST API](https://maildev.github.io/maildev/docs/reference/rest-api/), and the [MCP server](https://maildev.github.io/maildev/docs/ai/mcp/) |
+
+## Start here
+
+- **[Install](https://maildev.github.io/maildev/docs/install/)** — npx, npm, or Docker.
+- **[Quick start](https://maildev.github.io/maildev/docs/quickstart/)** — point your framework at MailDev and send your first message.
+- **[The web inbox](https://maildev.github.io/maildev/docs/web-ui/)** — what you get in the UI.
+
+## Guides
+
+- **[Docker & Compose](https://maildev.github.io/maildev/docs/guides/docker/)** — run MailDev as a container or a Compose service.
+- **[HTTPS](https://maildev.github.io/maildev/docs/guides/https/)** — serve the web inbox over TLS.
+- **[Testing email in CI](https://maildev.github.io/maildev/docs/guides/testing-in-ci/)** — assert on delivered mail from your test suite.
+
+## Integrations
+
+Any language that speaks SMTP works without a plugin — send to `localhost:1025`
+with authentication and TLS turned off. There are copy-paste configs for
+[Nodemailer](https://maildev.github.io/maildev/docs/integrations/nodemailer/),
+[Django](https://maildev.github.io/maildev/docs/integrations/django/),
+[Ruby on Rails](https://maildev.github.io/maildev/docs/integrations/rails/), and
+[Laravel](https://maildev.github.io/maildev/docs/integrations/laravel/).
+
+## Reference
+
+- **[CLI & configuration](https://maildev.github.io/maildev/docs/reference/cli/)** — every flag, environment variable, and config-file key.
+- **[REST API](https://maildev.github.io/maildev/docs/reference/rest-api/)** — read, search, and delete mail over HTTP.
+- **[Programmatic API](https://maildev.github.io/maildev/docs/reference/node-api/)** — embed MailDev in a Node.js process.
+
+## AI agents
+
+MailDev 3.0 ships an MCP server, so a coding agent can read the inbox you are
+already looking at — pull a verification link out of a signup email, confirm a
+password reset arrived, check what a template actually rendered.
+
+- **[MCP server](https://maildev.github.io/maildev/docs/ai/mcp/)** — enable it and connect any MCP client.
+- **[Claude Code walkthrough](https://maildev.github.io/maildev/docs/ai/claude-code/)** — a full development loop with an agent driving MailDev.
+
+:::warn
+MailDev is a development tool. It accepts mail from anyone, stores it
+unencrypted, and has no authentication by default. Never expose it to the public
+internet, and never point production traffic at it.
+:::
+
+---
+
+# Install MailDev
+Source: https://maildev.github.io/maildev/docs/install/
+Section: Getting started
+
+Run MailDev with npx, install it globally with npm, or pull the Docker image. Node.js 20 or newer is the only requirement.
+
+## Run it without installing
+
+The fastest way to get an inbox. Nothing is added to your project or your global
+`node_modules`:
+
+```console
+npx maildev
+```
+
+MailDev prints the two addresses it is listening on and stays in the foreground:
+
+```
+MailDev webapp running at http://0.0.0.0:1080
+MailDev SMTP Server running at 0.0.0.0:1025
+```
+
+Open <http://localhost:1080> and leave it running while you work.
+
+## Install globally
+
+If you reach for MailDev often, a global install saves the download on every
+run:
+
+```console
+npm install -g maildev
+maildev
+```
+
+## Docker
+
+No Node.js toolchain required:
+
+```console
+docker run -p 1080:1080 -p 1025:1025 maildev/maildev
+```
+
+See the [Docker guide](https://maildev.github.io/maildev/docs/guides/docker/) for Compose, environment variables,
+and the image's health check.
+
+## As a project dependency
+
+Adding MailDev to the project that needs it keeps the version pinned in your
+lockfile, which matters most in CI:
+
+```console
+npm install --save-dev maildev
+```
+
+Then wire it into a script:
+
+```json
+{
+  "scripts": {
+    "dev:mail": "maildev",
+    "dev": "concurrently \"npm:dev:*\""
+  }
+}
+```
+
+You can also [start and stop it from Node.js directly](https://maildev.github.io/maildev/docs/reference/node-api/),
+which is usually the better shape for integration tests.
+
+## Requirements
+
+- **Node.js 20 or newer** for the npm package. MailDev 3.0 is ESM-only.
+- **Nothing** for the Docker image beyond a container runtime.
+
+Ports `1025` and `1080` need to be free. Both are configurable — see
+[`--smtp` and `--web`](https://maildev.github.io/maildev/docs/reference/cli/) if something else already owns them.
+
+## Verify the install
+
+```console
+maildev --version
+```
+
+And once it is running, the API's health endpoint answers without
+authentication:
+
+```console
+curl http://localhost:1080/api/healthz
+```
+
+## Which version am I on?
+
+MailDev 3.0 is a complete TypeScript rewrite: React web UI, Fastify API, and the
+new MCP server. If you are upgrading from 2.x, the CLI flags are unchanged but
+the [programmatic API moved from callbacks to promises](https://maildev.github.io/maildev/docs/reference/node-api/).
+
+:::note
+Hit a regression in 3.0? The 2.x line is still available — `npm install -g maildev@2`
+— and a report on the [issue tracker](https://github.com/maildev/maildev/issues)
+is genuinely useful.
+:::
+
+## Next
+
+Point an application at it: **[Quick start](https://maildev.github.io/maildev/docs/quickstart/)**.
+
+---
+
+# Quick start
+Source: https://maildev.github.io/maildev/docs/quickstart/
+Section: Getting started
+
+Point your app's mail transport at localhost:1025, send a message, and read it at localhost:1080. Copy-paste configuration for Node.js, Django, Rails, Laravel, Spring Boot, and anything else that speaks SMTP.
+
+MailDev runs an SMTP server on port **1025** and a web inbox on **1080**. Point
+your framework's mail transport at `localhost:1025` — no authentication, no TLS —
+then watch mail arrive at `http://localhost:1080`.
+
+## 1. Start MailDev
+
+```console
+npx maildev
+```
+
+Leave it running. Every other step assumes it is up.
+
+## 2. Point your app at it
+
+The universal answer is three settings: host `localhost`, port `1025`, auth and
+TLS off. Here is what that looks like in the common stacks.
+
+### Node.js (Nodemailer)
+
+```js
+// No auth or TLS needed against MailDev in development
+const transport = nodemailer.createTransport({
+  host: 'localhost',
+  port: 1025,
+})
+
+await transport.sendMail({
+  from: 'app@example.com',
+  to: 'user@test.com',
+  subject: 'Hello from MailDev',
+  text: 'It works!',
+})
+```
+
+More detail, including how to switch transports per environment, in the
+[Nodemailer guide](https://maildev.github.io/maildev/docs/integrations/nodemailer/).
+
+### Django
+
+```python
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False
+```
+
+See the [Django guide](https://maildev.github.io/maildev/docs/integrations/django/).
+
+### Ruby on Rails
+
+```ruby
+config.action_mailer.delivery_method = :smtp
+config.action_mailer.smtp_settings = {
+  address: 'localhost',
+  port: 1025,
+  enable_starttls_auto: false
+}
+```
+
+See the [Rails guide](https://maildev.github.io/maildev/docs/integrations/rails/).
+
+### Laravel
+
+```ini
+MAIL_MAILER=smtp
+MAIL_HOST=127.0.0.1
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+```
+
+See the [Laravel guide](https://maildev.github.io/maildev/docs/integrations/laravel/).
+
+### Spring Boot
+
+```properties
+spring.mail.host=localhost
+spring.mail.port=1025
+spring.mail.properties.mail.smtp.auth=false
+spring.mail.properties.mail.smtp.starttls.enable=false
+```
+
+## 3. Send a test message
+
+If you would rather check MailDev before touching your app, send something by
+hand. With Python's standard library:
+
+```python
+import smtplib
+from email.message import EmailMessage
+
+message = EmailMessage()
+message['From'] = 'app@example.com'
+message['To'] = 'user@test.com'
+message['Subject'] = 'Hello from MailDev'
+message.set_content('It works!')
+
+with smtplib.SMTP('localhost', 1025) as smtp:
+    smtp.send_message(message)
+```
+
+Or with `curl`, which speaks SMTP:
+
+```console
+curl smtp://localhost:1025 --mail-from app@example.com --mail-rcpt user@test.com \
+  --upload-file - <<< $'Subject: Hello from MailDev\r\n\r\nIt works!'
+```
+
+## 4. Read it
+
+Open <http://localhost:1080>. The message appears immediately — the inbox is
+pushed over a websocket, so there is nothing to refresh.
+
+For each message you get the rendered HTML, the plain-text alternative, the raw
+source with full headers, attachments, and a responsive preview at phone and
+tablet widths. Details in [the web inbox](https://maildev.github.io/maildev/docs/web-ui/).
+
+## Anything else
+
+MailDev speaks plain SMTP, so any language or framework works the same way. If
+your stack is not listed above, look for the setting that overrides the mail host
+and port, and turn off authentication and STARTTLS.
+
+- [REST API](https://maildev.github.io/maildev/docs/reference/rest-api/) — read and assert on mail from a test suite
+- [Programmatic API](https://maildev.github.io/maildev/docs/reference/node-api/) — embed MailDev in a Node.js process
+- [Testing email in CI](https://maildev.github.io/maildev/docs/guides/testing-in-ci/) — run it as a service container
+- [MCP server](https://maildev.github.io/maildev/docs/ai/mcp/) — let an AI agent read the inbox
+
+## Troubleshooting
+
+**Connection refused.** MailDev is not running, or it is bound somewhere your app
+cannot reach. Inside Docker, `localhost` is the container — use the service name
+or `host.docker.internal`; see the [Docker guide](https://maildev.github.io/maildev/docs/guides/docker/).
+
+**The app hangs when sending.** Almost always a TLS mismatch: the client is
+trying to negotiate STARTTLS or connect over implicit TLS. Turn encryption off
+for development, or configure [SMTP TLS](https://maildev.github.io/maildev/docs/guides/https/) on MailDev.
+
+**Mail sends but the inbox is empty.** Check which port your app actually used.
+Frameworks default to `25` or `587`, and a stray default will silently connect
+somewhere else — or nowhere.
+
+**Authentication failures.** MailDev accepts anonymous mail unless you set
+`--incoming-user` and `--incoming-pass`. Some clients insist on sending
+credentials anyway; MailDev accepts any credentials when none are configured.
+
+---
+
+# The web inbox
+Source: https://maildev.github.io/maildev/docs/web-ui/
+Section: Getting started
+
+A tour of the MailDev 3.0 web UI — message list, HTML and plain-text views, raw source, attachments, responsive preview, search, the command palette, and light and dark themes.
+
+The inbox at `http://localhost:1080` is where you spend your time. It is a React
+application talking to the same [REST API](https://maildev.github.io/maildev/docs/reference/rest-api/) you can
+script against, and it updates over a websocket — new mail appears without a
+refresh.
+
+## Reading a message
+
+Every message can be viewed four ways:
+
+- **HTML** — the rendered message, in an isolated iframe so its CSS cannot leak into the UI.
+- **Plain text** — the `text/plain` alternative, which is what a surprising number of recipients actually see.
+- **Raw source** — full headers and the MIME structure, for when the question is *why* a client rendered it that way.
+- **Attachments** — listed with their filenames and content types, downloadable individually.
+
+![The MailDev inbox showing a message's HTML, plain-text, and raw source views](https://maildev.github.io/maildev/assets/img/screenshots/formats.png)
+
+## Responsive preview
+
+Email clients are the last place where a 320px viewport still matters. The
+preview renders the HTML at phone and tablet widths without leaving the app, so a
+media query that misfires is visible before it ships.
+
+![Responsive preview of an HTML email at phone and tablet widths](https://maildev.github.io/maildev/assets/img/screenshots/responsive.png)
+
+## Search
+
+The search box filters on sender, recipient, and subject. The same filtering is
+available on the API via the `search` parameter on
+[`/api/email/summary`](https://maildev.github.io/maildev/docs/reference/rest-api/), which is what makes assertions
+in a test suite cheap.
+
+## Command palette
+
+<kbd class="kbd">⌘K</kbd> (<kbd class="kbd">Ctrl</kbd>+<kbd class="kbd">K</kbd> on
+Windows and Linux) opens the palette: jump to a message, delete, mark everything
+read, switch theme, or relay a message onward without reaching for the mouse.
+
+![The MailDev command palette](https://maildev.github.io/maildev/assets/img/screenshots/command-palette-light.png)
+
+## Light and dark
+
+The UI follows your operating system's color scheme by default, and you can pin
+it either way from the palette or from settings.
+
+## What else is in there
+
+- **Mark all read** — one action, or `PATCH /api/email/read-all` over the API.
+- **Bulk delete** — select several messages and remove them together.
+- **Download** — save a message as `.eml` to open in a real mail client.
+- **Relay** — forward a caught message to a real address, if you have configured
+  an [outgoing SMTP host](https://maildev.github.io/maildev/docs/reference/cli/).
+
+## Serving it somewhere other than the root
+
+Behind a reverse proxy, set `--base-pathname /maildev` and the UI, API, and MCP
+endpoint all move under that prefix. See
+[the CLI reference](https://maildev.github.io/maildev/docs/reference/cli/) for the full flag list, and
+[HTTPS](https://maildev.github.io/maildev/docs/guides/https/) if you are terminating TLS at MailDev rather than at
+the proxy.
+
+## Turning it off
+
+Only need the SMTP catcher and the API? `--disable-web` drops the UI. Useful in
+CI, where nobody is looking at a browser.
+
+---
+
+# MCP server
+Source: https://maildev.github.io/maildev/docs/ai/mcp/
+Section: AI & agents
+
+Enable MailDev's Model Context Protocol server so Claude, Cursor, Codex, and any other MCP client can search your development inbox, pull verification links out of emails, and confirm delivery.
+
+MailDev 3.0 ships a Model Context Protocol server. Your coding agent gets tools
+for searching and reading the same development inbox you have open in the
+browser — so "did the signup email arrive, and what was the verification link?"
+becomes something it can answer itself, mid-task, without you copying anything
+out of a browser tab.
+
+## Why it matters
+
+Email is the last leg of a lot of flows an agent otherwise handles end to end:
+signup and confirmation, password reset, magic links, invitations, order
+receipts. Without access to the inbox, an agent implements the feature and then
+stops, because the only way to verify it is for a human to go and look. With MCP
+it closes the loop: trigger the flow, read the message, follow the link, confirm
+the result.
+
+:::warn
+Development only. The MCP server exposes the full contents of every message
+MailDev has caught, with no authentication of its own. Run it on your own machine
+against your own dev inbox — never against anything holding real mail.
+:::
+
+:::note
+**Don't want to use MCP?** Everything the MCP server does is also available over
+the plain [REST API](https://maildev.github.io/maildev/docs/reference/rest-api/), which is a better fit for scripts
+and test suites.
+:::
+
+## Enable it
+
+Add `--mcp` to how you already start MailDev:
+
+```console
+maildev --mcp
+```
+
+The endpoint is at `http://localhost:1080/mcp` — the same port as the web UI and
+REST API, so a custom `--web` port or `--base-pathname` moves it too.
+
+For desktop AI tools that speak stdio rather than HTTP, there is a standalone
+server:
+
+```console
+maildev-mcp
+```
+
+It talks to a MailDev instance over the REST API, so MailDev itself does not need
+`--mcp` for this transport.
+
+| Option | Environment variable | Default | Description |
+| --- | --- | --- | --- |
+| `-u, --url <url>` | `MAILDEV_API_URL` | `http://localhost:1080` | MailDev instance to connect to |
+| `-k, --api-key <key>` | `MAILDEV_API_KEY` | — | Sent if the instance requires auth |
+| — | `MAILDEV_WEB_URL` | same as `--url` | Base URL used when building deep links |
+
+## Connect your MCP client
+
+### HTTP transport
+
+For clients that support remote MCP servers over HTTP. Add this to your MCP
+configuration:
+
+```json
+{
+  "mcpServers": {
+    "maildev": {
+      "type": "http",
+      "url": "http://localhost:1080/mcp"
+    }
+  }
+}
+```
+
+Each client gets its own session, tracked with an `mcp-session-id` header, so
+several tools can talk to one MailDev at the same time.
+
+### stdio transport
+
+For Claude Desktop and anything else that launches a subprocess:
+
+```json
+{
+  "mcpServers": {
+    "maildev": {
+      "type": "stdio",
+      "command": "maildev-mcp",
+      "env": {
+        "MAILDEV_API_URL": "http://localhost:1080"
+      }
+    }
+  }
+}
+```
+
+If MailDev is not installed globally, use `npx`:
+
+```json
+{
+  "mcpServers": {
+    "maildev": {
+      "command": "npx",
+      "args": ["-y", "maildev", "maildev-mcp"]
+    }
+  }
+}
+```
+
+### Where the config file lives
+
+| Client | Location |
+| --- | --- |
+| Claude Code | `.mcp.json` in the project root |
+| Cursor | `.cursor/mcp.json` in the project, or the global equivalent |
+| Codex | `.mcp.json` in the project root |
+| Claude Desktop (macOS) | `~/Library/Application Support/Claude/claude_desktop_config.json` |
+| Claude Desktop (Windows) | `%APPDATA%\Claude\claude_desktop_config.json` |
+| Claude Desktop (Linux) | `~/.config/Claude/claude_desktop_config.json` |
+
+For Claude Code specifically, the [step-by-step walkthrough](https://maildev.github.io/maildev/docs/ai/claude-code/)
+covers setup and a real development loop.
+
+## What your agent can do
+
+### Tools
+
+| Tool | Parameters | What it does |
+| --- | --- | --- |
+| `maildev_search_emails` | `query`, `from`, `to`, `subject`, `hasAttachment`, `isUnread`, `since`, `until`, `limit` (default 20) | Find messages by any combination of sender, recipient, subject, text, attachment presence, read state, or time window |
+| `maildev_get_email` | `id` | Fetch one message in full — headers, HTML, plain text, attachment list |
+| `maildev_get_latest_email` | `count` (default 1) | The most recent message, or the last *n* |
+| `maildev_delete_email` | `id` | Delete a message, so the next assertion starts clean |
+| `maildev_get_attachment` | `emailId`, `filename` | Retrieve an attachment as base64 |
+
+Responses include a deep link back into the web inbox
+(`http://localhost:1080/#/email/<id>`), so when an agent tells you what it found
+you can open the same message yourself in one click.
+
+### Resources
+
+| Resource | Contents |
+| --- | --- |
+| `maildev://emails` | The current inbox listing |
+| `maildev://stats` | `emailCount`, `unreadCount`, `newestEmail`, `oldestEmail` |
+| `maildev://email/{id}` | A single message |
+
+### Prompts
+
+Pre-built prompts for the flows that come up most:
+
+| Prompt | Arguments | Purpose |
+| --- | --- | --- |
+| `verify-signup-email` | `email` | Find the signup message for an address and extract its verification link |
+| `check-password-reset` | `email` | Locate the reset message and pull out the reset URL |
+| `analyze-email-content` | `emailId` or `"latest"` | Review a message's structure, links, and rendering |
+| `monitor-email-delivery` | `to`, `subject` (optional) | Wait for and confirm a specific delivery |
+
+## Try asking
+
+Once it is connected, these all work as plain requests:
+
+- "Did the signup email for `new-user@test.com` arrive? What's the verification link?"
+- "Show me the most recent email and tell me whether the plain-text version is usable."
+- "Search for password reset emails from the last hour."
+- "The invoice email has a PDF attached — check that it isn't zero bytes."
+- "Clear the inbox, then register a new account and confirm exactly one email was sent."
+
+The last one is the shape worth internalising: **clear, act, assert**. It gives
+the agent a deterministic inbox to reason about instead of whatever accumulated
+during the session.
+
+## Troubleshooting
+
+**The client shows no MailDev tools.** Check MailDev is running with `--mcp`, then
+confirm the endpoint answers:
+
+```console
+curl http://localhost:1080/api/healthz
+```
+
+**Connection refused on the HTTP transport.** The URL must match your actual
+`--web` port and `--base-pathname`. With `--base-pathname /maildev` the endpoint
+is `http://localhost:1080/maildev/mcp`.
+
+**`maildev-mcp: command not found`.** The binary comes with the `maildev`
+package. Install it globally, or use the `npx` form above.
+
+**Tools appear but every call fails.** The stdio server talks to MailDev over
+HTTP; if MailDev has [basic auth](https://maildev.github.io/maildev/docs/reference/cli/) enabled, pass
+`--api-key` or drop the auth in development.
+
+## Full reference
+
+The complete MCP documentation, including transport internals and the
+programmatic enablement path, lives in
+[`docs/mcp.md`](https://github.com/maildev/maildev/blob/main/docs/mcp.md) in the
+maildev repository.
+
+---
+
+# Claude Code walkthrough
+Source: https://maildev.github.io/maildev/docs/ai/claude-code/
+Section: AI & agents
+
+A complete development loop with Claude Code driving MailDev over MCP — connect the server, build an email flow, and let the agent verify delivery and follow the link it finds.
+
+This is the whole loop, start to finish: wire MailDev's
+[MCP server](https://maildev.github.io/maildev/docs/ai/mcp/) into Claude Code, build a signup-verification flow,
+and let the agent check its own work by reading the email that arrives.
+
+The interesting part is the last step. Without inbox access an agent writes the
+feature and then hands it back for you to test. With it, the agent triggers the
+flow, reads the message, extracts the link, follows it, and reports whether the
+account was actually verified.
+
+## What you need
+
+- Claude Code installed and working in a project
+- Node.js 20 or newer
+- An app that sends email, or five minutes to add one
+
+## 1. Start MailDev with MCP enabled
+
+```console
+npx maildev --mcp
+```
+
+Leave it running in its own terminal. The inbox is at
+<http://localhost:1080> and the MCP endpoint at `http://localhost:1080/mcp`.
+
+## 2. Register the server with Claude Code
+
+Add a `.mcp.json` to your project root:
+
+```json
+{
+    "mcpServers": {
+        "maildev": {
+            "type": "http",
+            "url": "http://localhost:1080/mcp"
+        }
+    }
+}
+```
+
+Committing this file means everyone on the team gets the same setup. Claude Code
+picks it up on the next start, and asks you to approve the server the first time.
+
+Confirm it connected:
+
+```console
+/mcp
+```
+
+<figure class="figure-todo">
+  <img src="https://maildev.github.io/maildev/assets/img/claude-code/mcp-status.png"/>
+  <figcaption>Claude Code's <code>/mcp</code> output showing the <code>maildev</code> server connected, with its five tools listed.</figcaption>
+</figure>
+
+## 3. Point your app at MailDev
+
+Whatever your stack, the settings are the same three: host `localhost`, port
+`1025`, no auth and no TLS. See the
+[quick start](https://maildev.github.io/maildev/docs/quickstart/) for your framework, or
+[Nodemailer](https://maildev.github.io/maildev/docs/integrations/nodemailer/) if you are on Node.
+
+```js
+const transport = nodemailer.createTransport({
+    host: process.env.SMTP_HOST ?? "localhost",
+    port: Number(process.env.SMTP_PORT ?? 1025),
+});
+```
+
+## 4. Ask for the feature
+
+Now the actual work. A prompt that sets up the verification loop explicitly:
+
+> Add email verification to the signup flow. On `POST /signup`, create the user
+> as unverified, generate a single-use token, and send a verification email with
+> a link to `/verify?token=…`. Then use the maildev MCP tools to confirm the
+> email actually arrives and that the link works end to end.
+
+Claude Code writes the route, the token handling, and the template. The last
+sentence is what changes its behavior — instead of stopping at "I've implemented
+this, you should test it", it goes and checks.
+
+<figure class="figure-todo">
+  <img src="https://maildev.github.io/maildev/assets/img/claude-code/verify-tool-use.png"/>
+  <figcaption>Claude Code calling <code>maildev_get_latest_email</code> and reporting the verification link it extracted.</figcaption>
+</figure>
+
+## 5. Watch it verify
+
+A typical sequence, which you can follow in the transcript:
+
+1. `maildev_delete_email` or a REST call to clear the inbox, so the check is deterministic.
+2. A request to `POST /signup` with a test address.
+3. `maildev_search_emails` filtered by that recipient.
+4. `maildev_get_email` for the full HTML.
+5. Extract the `/verify?token=…` URL and request it.
+6. Confirm the user's `verified` flag flipped.
+
+The same messages are in your browser at <http://localhost:1080> the whole time,
+so you can look over its shoulder. Responses from the MCP tools include a deep
+link (`http://localhost:1080/#/email/<id>`) that opens the exact message the
+agent read.
+
+<figure class="figure-todo">
+  <img src="https://maildev.github.io/maildev/assets/img/claude-code/tool-use-expanded.png"/>
+  <figcaption>The MailDev inbox showing the verification email the agent just read, with the HTML preview and the verification link visible.</figcaption>
+</figure>
+
+## 6. Iterate on the template
+
+This is where the loop pays for itself. Ask for a change and the agent can
+confirm the result rather than guessing:
+
+> The plain-text version of the verification email is just the HTML with tags
+> stripped, which reads badly. Rewrite it properly, resend, and check both parts
+> in MailDev.
+
+`maildev_get_email` returns the HTML and the plain-text alternative separately, so
+the agent sees exactly what a text-only client would. Broken `cid:` references,
+an empty text part, a subject line with an unrendered template variable in it —
+all visible without a human in the loop.
+
+## Prompts that work well
+
+**Be explicit about clearing first.** An inbox with forty messages from earlier in
+the session makes "did the email arrive?" ambiguous.
+
+> Clear the MailDev inbox, then register `alice@test.com` and confirm exactly one
+> email was sent to her.
+
+**Ask about the parts, not just arrival.** Arrival is the easy half.
+
+> Check the latest email: is the plain-text alternative present and readable, do
+> all links use the configured app URL rather than localhost, and is the subject
+> line free of unrendered template variables?
+
+**Use it for regression checks.** After a refactor of the mail layer:
+
+> Trigger each of the four transactional emails, then compare what MailDev
+> received against what the templates should produce. Report anything that
+> changed.
+
+**Attachments too.**
+
+> Generate an invoice for order 1234, then confirm the email has exactly one
+> attachment, that it is a PDF, and that it is not zero bytes.
+
+## Where this fits with tests
+
+An agent reading the inbox is for the development loop — fast, conversational,
+exploratory. It is not a substitute for assertions that run in CI. Once a flow
+works, write it down as a test: see
+[testing email in CI](https://maildev.github.io/maildev/docs/guides/testing-in-ci/) for the REST-API patterns, and
+the [programmatic API](https://maildev.github.io/maildev/docs/reference/node-api/) if you would rather start
+MailDev in-process.
+
+## Other MCP clients
+
+Nothing here is Claude Code-specific beyond the config file location. Cursor,
+Codex, Windsurf, and Claude Desktop all connect to the same server — see
+[the MCP guide](https://maildev.github.io/maildev/docs/ai/mcp/) for each one's configuration path and the stdio
+transport option.
+
+:::warn
+The MCP server hands an agent the full contents of every message MailDev holds.
+That is exactly what makes it useful, and exactly why it belongs on your own
+machine pointed at your own dev inbox — never at anything with real mail in it.
+:::
+
+---
+
+# Docker & Docker Compose
+Source: https://maildev.github.io/maildev/docs/guides/docker/
+Section: Guides
+
+Run MailDev as a container, wire it into a Compose stack so your app can reach it by service name, pass CLI flags and environment variables, and use the built-in health check.
+
+The official image is [`maildev/maildev`](https://hub.docker.com/r/maildev/maildev)
+on Docker Hub. It is built on `node:22-alpine`, runs as the unprivileged `node`
+user, and exposes the same two ports as the npm package.
+
+## Run it
+
+```console
+docker run -p 1080:1080 -p 1025:1025 maildev/maildev
+```
+
+Give it a name so you can stop and start it again:
+
+```console
+docker run -d --name maildev -p 1080:1080 -p 1025:1025 maildev/maildev
+docker stop maildev
+docker start maildev
+```
+
+## Passing flags
+
+The image's entrypoint is the MailDev binary, so anything after the image name
+goes straight to the CLI:
+
+```console
+docker run -p 1080:1080 -p 1025:1025 maildev/maildev --base-pathname /maildev --max-emails 200
+```
+
+## Environment variables
+
+Every CLI flag has an environment-variable equivalent, which is usually the
+better fit for a container. The image sets three by default:
+
+| Variable | Default | Meaning |
+| --- | --- | --- |
+| `MAILDEV_WEB_PORT` | `1080` | Web UI, REST API, and MCP endpoint |
+| `MAILDEV_SMTP_PORT` | `1025` | SMTP listener |
+| `TZ` | `UTC` | Timezone used for displayed timestamps |
+
+Set `TZ` if you want received timestamps in your own timezone:
+
+```console
+docker run -p 1080:1080 -p 1025:1025 -e TZ=Europe/Berlin maildev/maildev
+```
+
+The [CLI reference](https://maildev.github.io/maildev/docs/reference/cli/) lists every other variable.
+
+## Docker Compose
+
+The important part is that **your app must reach MailDev by service name, not
+`localhost`**. Inside a container, `localhost` is that container.
+
+```yaml
+services:
+  maildev:
+    image: maildev/maildev
+    ports:
+      - '1080:1080'
+    # The SMTP port does not need publishing if only other
+    # services in this stack send mail.
+
+  app:
+    build: .
+    environment:
+      SMTP_HOST: maildev
+      SMTP_PORT: 1025
+    depends_on:
+      maildev:
+        condition: service_healthy
+```
+
+`condition: service_healthy` works because the image ships a health check — see
+below. Publishing `1080` but not `1025` is the shape you usually want: you need
+the inbox in your browser, but only sibling containers need to send mail.
+
+## Reaching MailDev from the host
+
+If MailDev runs in Compose and your app runs on the host, publish the SMTP port
+(`- '1025:1025'`) and send to `localhost:1025` as usual.
+
+## Reaching the host from MailDev's container
+
+The reverse — an app on the host, MailDev in a container — needs no special
+setup, but if you configure [relaying](https://maildev.github.io/maildev/docs/reference/cli/) to an SMTP server on
+the host, use `host.docker.internal` rather than `localhost` on Docker Desktop.
+On Linux, add:
+
+```yaml
+    extra_hosts:
+      - 'host.docker.internal:host-gateway'
+```
+
+## Health check
+
+The image defines its own `HEALTHCHECK`, so orchestrators know when MailDev is
+ready:
+
+| Setting | Value |
+| --- | --- |
+| Interval | 10s |
+| Timeout | 5s |
+| Start period | 5s |
+| Retries | 3 |
+
+It probes the API's `/api/healthz` endpoint, honors `MAILDEV_BASE_PATHNAME`, and
+falls back to a plain TCP check on the SMTP port when the web UI is disabled with
+`--disable-web`. You can query the same endpoint yourself:
+
+```console
+docker exec maildev node dist/bin/healthcheck.js
+curl http://localhost:1080/api/healthz
+```
+
+## Persisting mail across restarts
+
+By default messages live in memory and vanish when the container stops. Mount a
+volume and point `--mail-directory` at it to keep them:
+
+```yaml
+services:
+  maildev:
+    image: maildev/maildev
+    ports:
+      - '1080:1080'
+    environment:
+      MAILDEV_MAIL_DIRECTORY: /home/node/mail
+      MAILDEV_MAX_EMAILS: '500'
+    volumes:
+      - maildev-mail:/home/node/mail
+
+volumes:
+  maildev-mail:
+```
+
+The container runs as `node` (uid 1000), so the mount has to be writable by that
+user. `MAILDEV_MAX_EMAILS` caps the store and evicts the oldest messages once the
+limit is reached — worth setting on a persistent volume so a long-running stack
+does not grow without bound.
+
+## Kubernetes
+
+Nothing about MailDev is Kubernetes-specific: one Deployment, one Service
+exposing `1025` and `1080`, and the same health endpoint for both probes.
+
+```yaml
+readinessProbe:
+  httpGet:
+    path: /api/healthz
+    port: 1080
+livenessProbe:
+  httpGet:
+    path: /api/healthz
+    port: 1080
+```
+
+:::warn
+MailDev has no authentication by default and accepts mail from anyone who can
+reach the port. Keep it inside your cluster or development network — never behind
+a public ingress. If you must expose the UI, put
+[basic auth](https://maildev.github.io/maildev/docs/reference/cli/) on it with `--web-user` and `--web-pass`.
+:::
+
+---
+
+# HTTPS & TLS
+Source: https://maildev.github.io/maildev/docs/guides/https/
+Section: Guides
+
+Serve the MailDev web inbox over HTTPS with a self-signed certificate, and configure TLS on the SMTP listener for clients that insist on an encrypted connection.
+
+There are two independent TLS surfaces in MailDev, and they are configured
+separately:
+
+- **The web inbox** on port 1080 — `--https`, `--https-key`, `--https-cert`.
+- **The SMTP listener** on port 1025 — `--incoming-secure`, `--incoming-key`, `--incoming-cert`.
+
+Most people want the second one, and only because a mail library refuses to talk
+plaintext.
+
+## Generate a certificate
+
+For local development a self-signed certificate is fine:
+
+```console
+openssl req -nodes -new -x509 -keyout key.pem -out cert.pem -days 365
+```
+
+You will be prompted for a handful of fields. The one that matters is **Common
+Name** — set it to the hostname you will actually use (`localhost` is the usual
+answer). A mismatch here is what produces the "certificate name does not match"
+errors later.
+
+To skip the prompts entirely:
+
+```console
+openssl req -nodes -new -x509 -days 365 -keyout key.pem -out cert.pem -subj "/CN=localhost"
+```
+
+## HTTPS for the web inbox
+
+```console
+maildev --https --https-key key.pem --https-cert cert.pem
+```
+
+The inbox is now at `https://localhost:1080`. Your browser will warn that the
+certificate is not trusted — expected for a self-signed certificate. Accept it
+once and the warning goes away for that host.
+
+The environment-variable form, which is easier in Compose:
+
+```yaml
+environment:
+  MAILDEV_HTTPS: 'true'
+  MAILDEV_HTTPS_KEY: /certs/key.pem
+  MAILDEV_HTTPS_CERT: /certs/cert.pem
+```
+
+:::note
+Enabling HTTPS changes the scheme for the [REST API](https://maildev.github.io/maildev/docs/reference/rest-api/)
+and the [MCP endpoint](https://maildev.github.io/maildev/docs/ai/mcp/) too, since they are served by the same
+process. Update any client that hardcodes `http://localhost:1080`. With a
+self-signed certificate, non-browser clients typically also need their TLS
+verification relaxed — `curl -k`, or `NODE_TLS_REJECT_UNAUTHORIZED=0` for Node.
+:::
+
+## TLS on the SMTP listener
+
+Some mail libraries will not connect without encryption, and a few make it
+awkward to turn off. Give the SMTP server a certificate:
+
+```console
+maildev --incoming-secure --incoming-cert cert.pem --incoming-key key.pem
+```
+
+`--incoming-secure` makes the listener use implicit TLS from the first byte,
+which is what clients configured for port 465 expect. Point your client at port
+1025 with SSL/TLS enabled — and, for a self-signed certificate, with certificate
+verification disabled:
+
+```js
+const transport = nodemailer.createTransport({
+  host: 'localhost',
+  port: 1025,
+  secure: true,
+  tls: { rejectUnauthorized: false },
+})
+```
+
+STARTTLS is advertised by default without any of this, so a client that upgrades
+opportunistically needs no configuration at all. If you would rather MailDev did
+not advertise it, hide the extension:
+
+```console
+maildev --hide-extensions STARTTLS
+```
+
+## Terminating TLS at a proxy instead
+
+If MailDev already sits behind nginx, Traefik, or Caddy, let the proxy own the
+certificate and leave MailDev on plain HTTP. Set `--base-pathname` to match the
+prefix the proxy mounts it under so the UI's asset and API URLs resolve:
+
+```console
+maildev --base-pathname /maildev
+```
+
+```nginx
+location /maildev/ {
+  proxy_pass http://127.0.0.1:1080;
+  proxy_http_version 1.1;
+  proxy_set_header Upgrade $http_upgrade;
+  proxy_set_header Connection "upgrade";
+  proxy_set_header Host $host;
+}
+```
+
+The `Upgrade` and `Connection` headers are not optional — the inbox uses a
+websocket for live updates, and without them new mail will not appear until you
+reload.
+
+:::warn
+TLS is not a substitute for access control. MailDev has no authentication unless
+you set `--web-user` and `--web-pass`, and even then it is a development tool
+holding plaintext mail. Do not put it on the public internet.
+:::
+
+---
+
+# Testing email in CI
+Source: https://maildev.github.io/maildev/docs/guides/testing-in-ci/
+Section: Guides
+
+Run MailDev as a GitHub Actions service container, assert on delivered mail over the REST API, and write end-to-end email tests with Playwright, Cypress, or Vitest.
+
+Email is one of the easier things to test end-to-end, once you have somewhere for
+it to land. MailDev gives you an SMTP endpoint your app can send to and an HTTP
+API your test can read from — which means "did the signup email arrive, and does
+its link work?" becomes an ordinary assertion.
+
+## The pattern
+
+1. Start MailDev before the suite.
+2. Clear the inbox before each test that cares about mail.
+3. Trigger the action in your app.
+4. Poll the [REST API](https://maildev.github.io/maildev/docs/reference/rest-api/) until the message shows up.
+5. Assert on it — subject, recipient, body, or a link extracted from the HTML.
+
+Step 4 needs a poll rather than a single read: SMTP delivery is asynchronous, so
+the request that triggered the mail usually returns before MailDev has it.
+
+## A reusable helper
+
+```ts
+const MAILDEV = process.env.MAILDEV_URL ?? 'http://localhost:1080'
+
+export async function clearInbox() {
+  await fetch(`${MAILDEV}/api/email/all`, { method: 'DELETE' })
+}
+
+export async function waitForEmail(
+  match: { to?: string; subject?: string },
+  { timeout = 10_000, interval = 200 } = {},
+) {
+  const deadline = Date.now() + timeout
+
+  while (Date.now() < deadline) {
+    const params = new URLSearchParams({ limit: '50' })
+    if (match.subject) params.set('search', match.subject)
+
+    const response = await fetch(`${MAILDEV}/api/email/summary?${params}`)
+    const { items } = await response.json()
+
+    const hit = items.find(
+      (email) =>
+        (!match.to || email.to.some((address) => address.address === match.to)) &&
+        (!match.subject || email.subject.includes(match.subject)),
+    )
+
+    if (hit) {
+      // The summary is a projection; fetch the full message for its body.
+      const full = await fetch(`${MAILDEV}/api/email/${hit.id}`)
+      return full.json()
+    }
+
+    await new Promise((resolve) => setTimeout(resolve, interval))
+  }
+
+  throw new Error(`No email matching ${JSON.stringify(match)} within ${timeout}ms`)
+}
+
+export function firstLink(html: string) {
+  return html.match(/href="(https?:\/\/[^"]+)"/)?.[1]
+}
+```
+
+## Vitest or Jest
+
+```ts
+import { beforeEach, expect, test } from 'vitest'
+import { clearInbox, firstLink, waitForEmail } from './maildev'
+
+beforeEach(clearInbox)
+
+test('signup sends a verification email', async () => {
+  await app.post('/signup').send({ email: 'new-user@test.com' })
+
+  const email = await waitForEmail({ to: 'new-user@test.com', subject: 'Verify' })
+
+  expect(email.subject).toBe('Verify your email address')
+  expect(email.html).toContain('Confirm my address')
+  expect(firstLink(email.html)).toMatch(/\/verify\?token=/)
+})
+```
+
+## Playwright
+
+The interesting version does not stop at reading the email — it follows the link,
+which tests the whole loop:
+
+```ts
+import { expect, test } from '@playwright/test'
+import { clearInbox, firstLink, waitForEmail } from './maildev'
+
+test.beforeEach(clearInbox)
+
+test('a new user can verify their address', async ({ page }) => {
+  await page.goto('/signup')
+  await page.getByLabel('Email').fill('new-user@test.com')
+  await page.getByRole('button', { name: 'Create account' }).click()
+
+  const email = await waitForEmail({ to: 'new-user@test.com' })
+  await page.goto(firstLink(email.html)!)
+
+  await expect(page.getByText('Your address is verified')).toBeVisible()
+})
+```
+
+## Cypress
+
+Cypress runs assertions in the browser, so the API calls go through `cy.request`:
+
+```js
+Cypress.Commands.add('clearInbox', () =>
+  cy.request('DELETE', `${Cypress.env('maildevUrl')}/api/email/all`),
+)
+
+Cypress.Commands.add('lastEmail', () =>
+  cy
+    .request(`${Cypress.env('maildevUrl')}/api/email/summary?limit=1`)
+    .its('body.items.0')
+    .then((summary) => {
+      expect(summary, 'an email was received').to.exist
+      return cy.request(`${Cypress.env('maildevUrl')}/api/email/${summary.id}`).its('body')
+    }),
+)
+```
+
+Cypress retries `cy.request` chains, so `cy.lastEmail()` inside a `should` block
+gets polling behavior for free.
+
+## GitHub Actions
+
+A service container is the cleanest way to get MailDev into a workflow — it is up
+before your steps run, and it goes away afterward:
+
+```yaml
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      maildev:
+        image: maildev/maildev
+        ports:
+          - 1025:1025
+          - 1080:1080
+        options: >-
+          --health-cmd "node dist/bin/healthcheck.js"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      SMTP_HOST: localhost
+      SMTP_PORT: 1025
+      MAILDEV_URL: http://localhost:1080
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm test
+```
+
+If your job itself runs in a container, `localhost` will not reach the service —
+use the service name `maildev` instead.
+
+## GitLab CI
+
+```yaml
+test:
+  image: node:22
+  services:
+    - name: maildev/maildev
+      alias: maildev
+  variables:
+    SMTP_HOST: maildev
+    SMTP_PORT: '1025'
+    MAILDEV_URL: http://maildev:1080
+  script:
+    - npm ci
+    - npm test
+```
+
+## Or skip the container entirely
+
+For a Node.js test suite, starting MailDev in-process is faster and needs no
+service definition at all — no ports to publish, no readiness race:
+
+```ts
+import MailDev from 'maildev'
+
+const maildev = new MailDev({ smtp: 1025, disableWeb: true })
+await maildev.start()
+
+maildev.on('new', (email) => {
+  console.log('caught', email.subject)
+})
+
+// ...run tests...
+await maildev.stop()
+```
+
+The `new` event removes the polling problem completely — you get a callback the
+moment a message arrives. See the
+[programmatic API](https://maildev.github.io/maildev/docs/reference/node-api/) for the full surface.
+
+## Keeping CI fast
+
+- **`--disable-web`** skips serving the UI. Nothing in CI is looking at it.
+- **`--max-emails 200`** bounds memory on a long suite.
+- **`--silent`** keeps the log clean; `--verbose` is what you want when a test is failing mysteriously.
+- **Clear between tests, not after.** A failed test that leaves mail behind is easier to debug when the inbox is still there.
+
+---
+
+# Nodemailer
+Source: https://maildev.github.io/maildev/docs/integrations/nodemailer/
+Section: Integrations
+
+Configure Nodemailer to send development mail to MailDev, switch transports per environment, and verify the connection before your app starts sending.
+
+Nodemailer needs three settings to talk to MailDev, and two of them are defaults.
+
+```js
+import nodemailer from 'nodemailer'
+
+const transport = nodemailer.createTransport({
+  host: 'localhost',
+  port: 1025,
+  // No `auth` and no `secure` — MailDev accepts anonymous plaintext SMTP.
+})
+
+await transport.sendMail({
+  from: 'app@example.com',
+  to: 'user@test.com',
+  subject: 'Hello from MailDev',
+  text: 'It works!',
+  html: '<p>It <b>works</b>!</p>',
+})
+```
+
+Open <http://localhost:1080> and the message is there.
+
+## Switching by environment
+
+The useful shape is one factory that returns a MailDev transport in development
+and your real provider everywhere else, so nothing in your application code knows
+the difference:
+
+```js
+function createMailTransport() {
+  if (process.env.NODE_ENV === 'production') {
+    return nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT),
+      secure: true,
+      auth: {
+        user: process.env.SMTP_USER,
+        pass: process.env.SMTP_PASS,
+      },
+    })
+  }
+
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST ?? 'localhost',
+    port: Number(process.env.SMTP_PORT ?? 1025),
+  })
+}
+```
+
+Reading host and port from the environment even in development is worth the extra
+line: it is what lets the same code run against a
+[Compose service](https://maildev.github.io/maildev/docs/guides/docker/) or a
+[CI service container](https://maildev.github.io/maildev/docs/guides/testing-in-ci/), where MailDev is not on
+`localhost`.
+
+## Verify the connection
+
+`verify()` opens a connection and runs the SMTP handshake without sending
+anything — a fast way to distinguish "my template is broken" from "nothing is
+listening":
+
+```js
+try {
+  await transport.verify()
+  console.log('SMTP ready')
+} catch (error) {
+  console.error('SMTP unavailable:', error.message)
+}
+```
+
+## Attachments
+
+MailDev parses attachments and offers them for download individually, so this is
+a real way to check that a generated PDF or CSV is not corrupt:
+
+```js
+await transport.sendMail({
+  from: 'app@example.com',
+  to: 'user@test.com',
+  subject: 'Your invoice',
+  text: 'Attached.',
+  attachments: [
+    { filename: 'invoice.pdf', content: pdfBuffer },
+    { filename: 'export.csv', path: './tmp/export.csv' },
+  ],
+})
+```
+
+## Inline images
+
+`cid:` references resolve in the HTML preview, so an embedded logo renders in the
+inbox exactly as it would in a mail client:
+
+```js
+await transport.sendMail({
+  to: 'user@test.com',
+  subject: 'With a logo',
+  html: '<img src="cid:logo" alt="Logo" />',
+  attachments: [{ filename: 'logo.png', path: './logo.png', cid: 'logo' }],
+})
+```
+
+## TLS, if you must
+
+MailDev advertises STARTTLS by default, so a transport with `requireTLS: true`
+will upgrade and work. For implicit TLS you need to
+[give MailDev a certificate](https://maildev.github.io/maildev/docs/guides/https/) and relax verification on the
+client:
+
+```js
+const transport = nodemailer.createTransport({
+  host: 'localhost',
+  port: 1025,
+  secure: true,
+  tls: { rejectUnauthorized: false },
+})
+```
+
+## React Email, MJML, and other template tools
+
+These libraries produce an HTML string; MailDev is what you look at it in. Render,
+then send:
+
+```js
+import { render } from '@react-email/render'
+import { WelcomeEmail } from './emails/welcome'
+
+await transport.sendMail({
+  from: 'app@example.com',
+  to: 'user@test.com',
+  subject: 'Welcome',
+  html: await render(<WelcomeEmail name="Ada" />),
+  text: await render(<WelcomeEmail name="Ada" />, { plainText: true }),
+})
+```
+
+The [responsive preview](https://maildev.github.io/maildev/docs/web-ui/) is the part worth using here — a template
+that looks right at desktop width and collapses at 320px is the most common email
+bug there is.
+
+## Testing
+
+For assertions in a test suite, either read the
+[REST API](https://maildev.github.io/maildev/docs/reference/rest-api/) or skip the separate process entirely and
+[embed MailDev](https://maildev.github.io/maildev/docs/reference/node-api/) — its `new` event fires the moment a
+message lands, which is much less fiddly than polling.
+
+## Troubleshooting
+
+**`ECONNREFUSED 127.0.0.1:1025`** — MailDev is not running, or it is in a
+container and your app is not. See [Docker](https://maildev.github.io/maildev/docs/guides/docker/).
+
+**The send hangs, then times out.** The transport is trying implicit TLS against a
+plaintext listener. Remove `secure: true`.
+
+**`Missing credentials for "PLAIN"`** — you passed an `auth` object with empty
+values. Omit `auth` entirely rather than supplying blanks.
+
+**Mail goes nowhere and there is no error.** Check the port. Nodemailer defaults
+to `587` when `port` is omitted, which is not where MailDev listens.
+
+---
+
+# Django
+Source: https://maildev.github.io/maildev/docs/integrations/django/
+Section: Integrations
+
+Configure Django's email backend to send development mail to MailDev, keep production settings separate, and test outgoing email with the Django test client.
+
+Django's SMTP backend needs four settings. Add them to your development settings
+module:
+
+```python
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'localhost'
+EMAIL_PORT = 1025
+EMAIL_HOST_USER = ''
+EMAIL_HOST_PASSWORD = ''
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = False
+DEFAULT_FROM_EMAIL = 'app@example.com'
+```
+
+`EMAIL_BACKEND` is the SMTP backend by default, so that line is optional — but
+being explicit helps if something else in your settings chain has swapped it for
+the console or locmem backend.
+
+## Reading it from the environment
+
+The version that also works in [Docker](https://maildev.github.io/maildev/docs/guides/docker/) and
+[CI](https://maildev.github.io/maildev/docs/guides/testing-in-ci/), where MailDev is not on `localhost`:
+
+```python
+import os
+
+EMAIL_HOST = os.environ.get('EMAIL_HOST', 'localhost')
+EMAIL_PORT = int(os.environ.get('EMAIL_PORT', 1025))
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+EMAIL_USE_TLS = os.environ.get('EMAIL_USE_TLS', 'false').lower() == 'true'
+```
+
+With `django-environ`, a single `EMAIL_URL` covers it:
+
+```python
+import environ
+
+env = environ.Env()
+vars().update(env.email_url('EMAIL_URL', default='smtp://localhost:1025'))
+```
+
+## Send a test message
+
+The shell is the quickest check:
+
+```console
+python manage.py shell
+```
+
+```python
+from django.core.mail import send_mail
+
+send_mail(
+    subject='Hello from MailDev',
+    message='It works!',
+    from_email='app@example.com',
+    recipient_list=['user@test.com'],
+)
+```
+
+Or use the management command, which exists precisely for this:
+
+```console
+python manage.py sendtestemail user@test.com
+```
+
+## HTML email
+
+MailDev shows the HTML part, the plain-text alternative, and the raw source
+separately, which makes it easy to notice that your text fallback is empty:
+
+```python
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
+
+context = {'name': 'Ada'}
+text_body = render_to_string('emails/welcome.txt', context)
+html_body = render_to_string('emails/welcome.html', context)
+
+message = EmailMultiAlternatives(
+    subject='Welcome',
+    body=text_body,
+    from_email='app@example.com',
+    to=['user@test.com'],
+)
+message.attach_alternative(html_body, 'text/html')
+message.send()
+```
+
+## Attachments
+
+```python
+message.attach_file('reports/summary.pdf')
+message.attach('data.csv', csv_string, 'text/csv')
+```
+
+Both appear in the inbox as downloadable files, so you can open the PDF your view
+actually generated rather than trusting that it worked.
+
+## Password reset and other built-in mail
+
+Django's auth views send through the same backend, so
+`django.contrib.auth`'s password-reset flow lands in MailDev with no extra
+configuration. That is the fastest way to check a customized
+`registration/password_reset_email.html` — trigger the flow, read the message, and
+click the link straight out of the HTML preview.
+
+## Testing
+
+For unit tests, Django's `locmem` backend and `mail.outbox` are the right tool —
+they need no external process and the test suite sets them up automatically.
+
+MailDev earns its place in **end-to-end** tests, where the mail is sent by a real
+server process that your test cannot reach into. Point the app at MailDev and read
+the [REST API](https://maildev.github.io/maildev/docs/reference/rest-api/):
+
+```python
+import time
+import requests
+
+MAILDEV = 'http://localhost:1080'
+
+
+def wait_for_email(subject, timeout=10):
+    deadline = time.time() + timeout
+    while time.time() < deadline:
+        response = requests.get(f'{MAILDEV}/api/email/summary', params={'search': subject})
+        items = response.json()['items']
+        if items:
+            return requests.get(f'{MAILDEV}/api/email/{items[0]["id"]}').json()
+        time.sleep(0.2)
+    raise AssertionError(f'No email matching {subject!r} arrived')
+
+
+def clear_inbox():
+    requests.delete(f'{MAILDEV}/api/email/all')
+```
+
+More patterns in [testing email in CI](https://maildev.github.io/maildev/docs/guides/testing-in-ci/).
+
+## Celery
+
+If you send mail from a Celery task, the worker needs the same settings — it is a
+separate process. Check that it loads the development settings module, or the
+worker will silently try your production SMTP host.
+
+## Troubleshooting
+
+**`ConnectionRefusedError: [Errno 111]`** — MailDev is not running, or Django is
+in a container and pointing at its own `localhost`.
+
+**`SMTPNotSupportedError: STARTTLS extension not supported`** — you have
+`EMAIL_USE_TLS = True` against a listener that does not require it. Set it to
+`False`, or [configure TLS on MailDev](https://maildev.github.io/maildev/docs/guides/https/).
+
+**Nothing arrives and no error is raised.** Something set
+`EMAIL_BACKEND` to `console` or `locmem` — check your settings chain, including
+anything a test runner injects.
+
+---
+
+# Ruby on Rails
+Source: https://maildev.github.io/maildev/docs/integrations/rails/
+Section: Integrations
+
+Point Action Mailer at MailDev in development, preview mailers in the browser, and assert on delivered mail in system tests.
+
+Add this to `config/environments/development.rb`:
+
+```ruby
+config.action_mailer.delivery_method = :smtp
+config.action_mailer.perform_deliveries = true
+config.action_mailer.raise_delivery_errors = true
+config.action_mailer.default_url_options = { host: 'localhost', port: 3000 }
+
+config.action_mailer.smtp_settings = {
+  address: 'localhost',
+  port: 1025,
+  enable_starttls_auto: false
+}
+```
+
+`enable_starttls_auto: false` is the line people miss. Without it, Action Mailer
+opportunistically upgrades the connection, and depending on your Ruby and
+OpenSSL versions that can fail against a self-signed or absent certificate.
+
+`raise_delivery_errors = true` is worth having in development: Rails swallows
+delivery failures by default, so a misconfigured host produces silence rather
+than an exception.
+
+## Reading it from the environment
+
+```ruby
+config.action_mailer.smtp_settings = {
+  address: ENV.fetch('SMTP_HOST', 'localhost'),
+  port: ENV.fetch('SMTP_PORT', 1025).to_i,
+  enable_starttls_auto: false
+}
+```
+
+Necessary as soon as Rails or MailDev runs in a container — see
+[Docker](https://maildev.github.io/maildev/docs/guides/docker/).
+
+## Send a test message
+
+```console
+bin/rails console
+```
+
+```ruby
+ActionMailer::Base.mail(
+  from: 'app@example.com',
+  to: 'user@test.com',
+  subject: 'Hello from MailDev',
+  body: 'It works!'
+).deliver_now
+```
+
+## Mailer previews versus MailDev
+
+Rails has built-in mailer previews at `/rails/mailers`, and they are genuinely
+useful — but they render a template, they do not deliver a message. MailDev shows
+you the message that actually went over the wire: final headers, the MIME
+structure Rails built, both body parts, and the attachments as they were encoded.
+
+Use previews while you iterate on markup; use MailDev to confirm what the
+application really sends, and to click through the links in it.
+
+## Multipart mail
+
+Give a mailer both `.html.erb` and `.text.erb` templates and Action Mailer builds
+a `multipart/alternative` message. MailDev shows each part separately, which is
+how you notice that your text alternative is still the scaffold placeholder:
+
+```ruby
+class UserMailer < ApplicationMailer
+  default from: 'app@example.com'
+
+  def welcome(user)
+    @user = user
+    mail(to: @user.email, subject: 'Welcome')
+  end
+end
+```
+
+## Attachments
+
+```ruby
+def invoice(user, pdf)
+  attachments['invoice.pdf'] = pdf
+  attachments.inline['logo.png'] = File.read(Rails.root.join('app/assets/images/logo.png'))
+  mail(to: user.email, subject: 'Your invoice')
+end
+```
+
+Inline attachments referenced with `cid:` render in MailDev's HTML preview, so an
+embedded logo shows up rather than appearing as a broken image.
+
+## Devise
+
+Devise sends through Action Mailer, so confirmation, password-reset, and unlock
+emails land in MailDev with no additional configuration. Make sure
+`config.action_mailer.default_url_options` is set — otherwise the links in those
+emails have no host and are unusable.
+
+## Active Job
+
+If deliveries are enqueued with `deliver_later`, mail only reaches MailDev once a
+job actually runs. In development, either use the inline adapter or keep a worker
+running:
+
+```ruby
+config.active_job.queue_adapter = :inline
+```
+
+## System tests
+
+For unit tests, `ActionMailer::Base.deliveries` is the right tool and needs no
+external process.
+
+MailDev is for the end-to-end case, where a real server process sends the mail.
+Read the [REST API](https://maildev.github.io/maildev/docs/reference/rest-api/):
+
+```ruby
+require 'net/http'
+require 'json'
+
+MAILDEV = URI('http://localhost:1080')
+
+def clear_inbox
+  Net::HTTP.start(MAILDEV.host, MAILDEV.port) do |http|
+    http.request(Net::HTTP::Delete.new('/api/email/all'))
+  end
+end
+
+def wait_for_email(subject, timeout: 10)
+  deadline = Time.now + timeout
+  while Time.now < deadline
+    response = Net::HTTP.get(URI("#{MAILDEV}/api/email/summary?search=#{URI.encode_www_form_component(subject)}"))
+    items = JSON.parse(response)['items']
+    return JSON.parse(Net::HTTP.get(URI("#{MAILDEV}/api/email/#{items.first['id']}"))) if items.any?
+
+    sleep 0.2
+  end
+  raise "No email matching #{subject.inspect} arrived"
+end
+```
+
+More patterns in [testing email in CI](https://maildev.github.io/maildev/docs/guides/testing-in-ci/).
+
+## Letter Opener, and why you might still want MailDev
+
+`letter_opener` writes each message to disk and opens it in a browser tab. It is
+frictionless for a solo Rails app.
+
+MailDev is the better fit when mail comes from more than one service, when you
+want an inbox rather than a stream of tabs, when you need to assert on delivery
+from a test suite over HTTP, or when you want an
+[AI agent to read the mail](https://maildev.github.io/maildev/docs/ai/mcp/). They also compose fine — nothing stops
+you using previews, `letter_opener`, and MailDev on different environments.
+
+## Troubleshooting
+
+**`Errno::ECONNREFUSED`** — MailDev is not running, or the address is wrong for
+your container setup.
+
+**`EOFError` or an OpenSSL error on delivery** — `enable_starttls_auto` is still
+`true`. Set it to `false`.
+
+**Mail never arrives, no error.** Either `perform_deliveries` is `false`, or the
+delivery method is still `:test` (the default in the test environment), or a
+`deliver_later` job is sitting in a queue with no worker.
+
+---
+
+# Laravel
+Source: https://maildev.github.io/maildev/docs/integrations/laravel/
+Section: Integrations
+
+Configure Laravel's mail driver to send development email to MailDev, use Mailable previews alongside it, and assert on delivered mail in Dusk and Pest tests.
+
+Laravel reads its mail configuration from the environment. Add this to `.env`:
+
+```ini
+MAIL_MAILER=smtp
+MAIL_HOST=127.0.0.1
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS="app@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
+```
+
+Then clear the config cache, or Laravel will keep using the old values:
+
+```console
+php artisan config:clear
+```
+
+:::note
+Use `127.0.0.1` rather than `localhost`. On some systems `localhost` resolves to
+IPv6 `::1` first, and if MailDev is bound to IPv4 only you get a connection
+refused that looks like MailDev is down when it is not.
+:::
+
+Older Laravel versions use `MAIL_DRIVER` instead of `MAIL_MAILER`. If the setting
+appears to have no effect, check which one `config/mail.php` reads.
+
+## Send a test message
+
+Tinker is the quickest path:
+
+```console
+php artisan tinker
+```
+
+```php
+Mail::raw('It works!', function ($message) {
+    $message->to('user@test.com')->subject('Hello from MailDev');
+});
+```
+
+## Mailables
+
+```php
+class OrderShipped extends Mailable
+{
+    public function __construct(public Order $order) {}
+
+    public function envelope(): Envelope
+    {
+        return new Envelope(subject: 'Your order has shipped');
+    }
+
+    public function content(): Content
+    {
+        return new Content(
+            markdown: 'mail.orders.shipped',
+            text: 'mail.orders.shipped-text',
+        );
+    }
+
+    public function attachments(): array
+    {
+        return [
+            Attachment::fromPath(storage_path('invoices/' . $this->order->id . '.pdf'))
+                ->as('invoice.pdf')
+                ->withMime('application/pdf'),
+        ];
+    }
+}
+```
+
+```php
+Mail::to($order->user)->send(new OrderShipped($order));
+```
+
+MailDev shows the rendered markdown-mail HTML, the text alternative, and the PDF
+as a downloadable attachment — so you can confirm the invoice your job generated
+is a valid file, not just that the code path ran.
+
+## Previews versus MailDev
+
+Laravel can render a Mailable straight from a route, which is a fast loop while
+you are working on markup:
+
+```php
+Route::get('/mail/preview', fn () => new OrderShipped(Order::first()));
+```
+
+That renders a template. MailDev shows the message that was actually delivered —
+final headers, both MIME parts, encoded attachments — and lets you click the links
+in it. Use both.
+
+## Queued mail
+
+`Mail::queue()` and queued Mailables only reach MailDev once a worker processes
+the job. Either run one:
+
+```console
+php artisan queue:work
+```
+
+or use the sync driver in development:
+
+```ini
+QUEUE_CONNECTION=sync
+```
+
+This is the single most common reason mail "disappears" in a Laravel app during
+development.
+
+## Sail and Docker
+
+Laravel Sail ships with Mailpit by default. To use MailDev instead, add it as a
+service in `docker-compose.yml`:
+
+```yaml
+    maildev:
+        image: 'maildev/maildev'
+        ports:
+            - '1080:1080'
+        networks:
+            - sail
+```
+
+and point the app at it by **service name**, since `127.0.0.1` inside the app
+container is the app container:
+
+```ini
+MAIL_HOST=maildev
+MAIL_PORT=1025
+```
+
+See the [Docker guide](https://maildev.github.io/maildev/docs/guides/docker/) for the general rule.
+
+## Testing
+
+For unit tests, `Mail::fake()` and `Mail::assertSent()` are the right tool — no
+external process, and assertions on the Mailable itself.
+
+MailDev belongs in **browser and end-to-end tests**, where mail leaves a real
+server process. Read the [REST API](https://maildev.github.io/maildev/docs/reference/rest-api/):
+
+```php
+function clearInbox(): void
+{
+    Http::delete('http://localhost:1080/api/email/all');
+}
+
+function waitForEmail(string $subject, int $timeoutMs = 10000): array
+{
+    $deadline = microtime(true) + $timeoutMs / 1000;
+
+    while (microtime(true) < $deadline) {
+        $items = Http::get('http://localhost:1080/api/email/summary', [
+            'search' => $subject,
+        ])->json('items');
+
+        if (! empty($items)) {
+            return Http::get('http://localhost:1080/api/email/' . $items[0]['id'])->json();
+        }
+
+        usleep(200_000);
+    }
+
+    throw new RuntimeException("No email matching '{$subject}' arrived");
+}
+```
+
+A Pest test using them:
+
+```php
+it('emails a verification link on registration', function () {
+    clearInbox();
+
+    $this->post('/register', [
+        'email' => 'new-user@test.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ]);
+
+    $email = waitForEmail('Verify');
+
+    expect($email['subject'])->toContain('Verify')
+        ->and($email['html'])->toContain('/verify-email/');
+});
+```
+
+More patterns in [testing email in CI](https://maildev.github.io/maildev/docs/guides/testing-in-ci/).
+
+## Symfony Mailer directly
+
+Laravel's mail layer sits on Symfony Mailer, so the underlying DSN form works
+anywhere Symfony Mailer is used — including a plain Symfony app:
+
+```ini
+MAILER_DSN=smtp://127.0.0.1:1025
+```
+
+## Troubleshooting
+
+**`Connection could not be established with host "127.0.0.1:1025"`** — MailDev is
+not running, or you are inside a container. Check both.
+
+**Changes to `.env` have no effect.** Run `php artisan config:clear`. A cached
+config file overrides the environment.
+
+**`Expected response code 250 but got an empty response`** — usually
+`MAIL_ENCRYPTION` is set to `tls` against a plaintext listener. Set it to `null`,
+or [configure TLS on MailDev](https://maildev.github.io/maildev/docs/guides/https/).
+
+**Nothing arrives from a job or notification.** No queue worker is running. Set
+`QUEUE_CONNECTION=sync` or start `queue:work`.
+
+---
+
+# CLI & configuration
+Source: https://maildev.github.io/maildev/docs/reference/cli/
+Section: Reference
+
+Every MailDev command-line flag, environment variable, and configuration-file key, with defaults and precedence rules.
+
+## Usage
+
+```console
+maildev [options]
+maildev init [--force] [--json]
+```
+
+Configuration comes from four places. Later entries win:
+
+1. Defaults
+2. A configuration file
+3. Environment variables
+4. Command-line flags
+
+## Scaffolding a config file
+
+`maildev init` walks you through the common settings and writes a configuration
+file in the current directory:
+
+```console
+maildev init
+maildev init --force   # overwrite an existing file
+maildev init --json    # write .maildevrc.json rather than prompting for a format
+```
+
+## Configuration files
+
+Searched in the current directory and then each parent, first match wins:
+
+| File | Format |
+| --- | --- |
+| `.maildevrc.json` | JSON |
+| `maildev.config.ts` | TypeScript |
+| `maildev.config.js` | CommonJS or ESM, depending on your `package.json` |
+| `maildev.config.mjs` | ES module |
+
+Point at a specific file with `--config <path>`.
+
+```json
+{
+  "smtp": 1025,
+  "web": 1080,
+  "maxEmails": 200,
+  "mailDirectory": "./tmp/mail",
+  "mcp": true
+}
+```
+
+Keys are the camelCase form of the flag name: `--base-pathname` is
+`basePathname`, `--max-emails` is `maxEmails`.
+
+## SMTP server
+
+| Flag | Environment variable | Default | Description |
+| --- | --- | --- | --- |
+| `-s, --smtp <port>` | `MAILDEV_SMTP_PORT` | `1025` | Port the SMTP server listens on |
+| `--ip <address>` | `MAILDEV_IP` | `::` | Address to bind the SMTP server to |
+| `--incoming-user <user>` | `MAILDEV_INCOMING_USER` | — | Require this SMTP username |
+| `--incoming-pass <password>` | `MAILDEV_INCOMING_PASS` | — | Require this SMTP password |
+| `--incoming-secure` | `MAILDEV_INCOMING_SECURE` | off | Use implicit TLS on the SMTP listener |
+| `--incoming-cert <path>` | — | — | TLS certificate for the SMTP listener |
+| `--incoming-key <path>` | — | — | TLS key for the SMTP listener |
+| `--hide-extensions <list>` | — | — | Comma-separated SMTP extensions not to advertise |
+| `--max-message-size <bytes>` | `MAILDEV_MAX_MESSAGE_SIZE` | `52428800` | Reject messages larger than this. `0` disables the limit |
+
+`--hide-extensions` accepts `STARTTLS`, `PIPELINING`, `8BITMIME`, and `SMTPUTF8`.
+Hiding `STARTTLS` is the usual reason to reach for it — some clients upgrade
+opportunistically and then fail, and not advertising the extension is easier than
+fixing the client.
+
+The default bind address `::` accepts both IPv6 and IPv4 connections on most
+systems. If a client resolves `localhost` to `::1` and cannot connect, bind
+explicitly with `--ip 0.0.0.0` or send to `127.0.0.1`.
+
+See [HTTPS & TLS](https://maildev.github.io/maildev/docs/guides/https/) for the certificate flags in context.
+
+## Web UI, REST API, and MCP
+
+All three are served by one process on one port.
+
+| Flag | Environment variable | Default | Description |
+| --- | --- | --- | --- |
+| `-w, --web <port>` | `MAILDEV_WEB_PORT` | `1080` | Port for the web UI, REST API, and MCP endpoint |
+| `--web-ip <address>` | `MAILDEV_WEB_IP` | `0.0.0.0` | Address to bind the web server to |
+| `--web-user <user>` | `MAILDEV_WEB_USER` | — | HTTP basic auth username for the UI and API |
+| `--web-pass <password>` | `MAILDEV_WEB_PASS` | — | HTTP basic auth password for the UI and API |
+| `--base-pathname <path>` | `MAILDEV_BASE_PATHNAME` | `/` | Serve everything under this prefix |
+| `--disable-web` | `MAILDEV_DISABLE_WEB` | off | Do not serve the web UI at all |
+| `--https` | `MAILDEV_HTTPS` | off | Serve the web UI over TLS |
+| `--https-key <path>` | `MAILDEV_HTTPS_KEY` | — | TLS private key for the web server |
+| `--https-cert <path>` | `MAILDEV_HTTPS_CERT` | — | TLS certificate for the web server |
+
+Setting `--web-user` and `--web-pass` puts HTTP basic auth in front of the UI and
+the whole REST API. `/api/healthz` stays unauthenticated on purpose, so container
+health checks keep working.
+
+`--base-pathname /maildev` moves the UI, the API (`/maildev/api`), and the MCP
+endpoint (`/maildev/mcp`) under that prefix. That is what you want behind a
+reverse proxy — see [HTTPS & TLS](https://maildev.github.io/maildev/docs/guides/https/) for an nginx example,
+including the websocket headers the live inbox needs.
+
+## Storage
+
+| Flag | Environment variable | Default | Description |
+| --- | --- | --- | --- |
+| `--mail-directory <path>` | `MAILDEV_MAIL_DIRECTORY` | — | Persist mail to disk. In-memory only when unset |
+| `--max-emails <count>` | `MAILDEV_MAX_EMAILS` | `0` | Keep at most this many messages. `0` means unlimited |
+
+Without `--mail-directory`, messages live in memory and are gone when the process
+exits. With it, messages are written as files and restored on startup — so
+restarting MailDev keeps your inbox.
+
+`--max-emails` bounds the store: once the limit is reached, the oldest message is
+discarded, and its files with it. Worth setting whenever you persist to disk or
+run a long test suite.
+
+## Relay & auto-relay
+
+MailDev can forward a caught message on to a real SMTP server — either on demand
+from the UI and API, or automatically for everything it receives.
+
+| Flag | Environment variable | Description |
+| --- | --- | --- |
+| `--outgoing-host <host>` | `MAILDEV_OUTGOING_HOST` | Relay host |
+| `--outgoing-port <port>` | `MAILDEV_OUTGOING_PORT` | Relay port |
+| `--outgoing-user <user>` | `MAILDEV_OUTGOING_USER` | Relay username |
+| `--outgoing-pass <password>` | `MAILDEV_OUTGOING_PASS` | Relay password |
+| `--outgoing-secure` | `MAILDEV_OUTGOING_SECURE` | Use TLS for the relay connection |
+| `--auto-relay [email]` | — | Relay every message automatically, optionally overriding the recipient |
+| `--auto-relay-rules <path>` | — | JSON file of allow/deny rules for auto-relay |
+
+With only the `--outgoing-*` flags set, nothing is forwarded until you ask for it —
+per message, from the UI or via
+[`POST /api/email/:id/relay`](https://maildev.github.io/maildev/docs/reference/rest-api/).
+
+`--auto-relay` forwards everything as it arrives. Given an address
+(`--auto-relay you@example.com`) it rewrites the recipient, which is how you get
+every test message into one real inbox.
+
+Rules narrow that down. **The last matching rule wins:**
+
+```json
+[
+  { "allow": "*" },
+  { "deny": "*@test.com" },
+  { "allow": "ok@test.com" },
+  { "deny": "*@utah.com" },
+  { "allow": "johnny@utah.com" }
+]
+```
+
+That relays everything except `@test.com` and `@utah.com` addresses, with
+`ok@test.com` and `johnny@utah.com` allowed back through.
+
+```console
+maildev --outgoing-host smtp.gmail.com --outgoing-secure --outgoing-user you@gmail.com --outgoing-pass secret --auto-relay --auto-relay-rules relay-rules.json
+```
+
+:::warn
+Auto-relay sends real email to real people. Rules are the only thing standing
+between a test run and a customer's inbox — start from `{ "deny": "*" }` and
+allow specific addresses, rather than the other way round.
+:::
+
+## MCP
+
+| Flag | Environment variable | Default | Description |
+| --- | --- | --- | --- |
+| `--mcp` | `MAILDEV_MCP` | off | Serve the MCP endpoint at `/mcp` |
+
+See [the MCP guide](https://maildev.github.io/maildev/docs/ai/mcp/) for client configuration, and the standalone
+`maildev-mcp` stdio server for desktop AI tools.
+
+## Logging
+
+| Flag | Environment variable | Default | Description |
+| --- | --- | --- | --- |
+| `-v, --verbose` | `MAILDEV_VERBOSE` | off | Verbose logging |
+| `--silent` | `MAILDEV_SILENT` | off | Suppress all output |
+| `--log-mail-contents` | — | off | Log a JSON representation of every received message |
+
+`--log-mail-contents` prints message bodies to stdout. Convenient when debugging
+a parser problem; do not leave it on in a shared log.
+
+## Other
+
+| Flag | Description |
+| --- | --- |
+| `--config <path>` | Load configuration from a specific file |
+| `-V, --version` | Print the version and exit |
+| `-h, --help` | Print usage and exit |
+
+:::note
+A handful of flags have no environment-variable equivalent in 3.0 —
+`--auto-relay`, `--auto-relay-rules`, `--hide-extensions`,
+`--log-mail-contents`, `--incoming-cert`, and `--incoming-key`. Set those on the
+command line, or in a [configuration file](#configuration-files), which is the
+better answer in Docker anyway.
+:::
+
+## Examples
+
+A persistent inbox with MCP enabled and a bounded store:
+
+```console
+maildev --mail-directory ./tmp/mail --max-emails 500 --mcp
+```
+
+Behind a reverse proxy at `/maildev`, with basic auth:
+
+```console
+maildev --base-pathname /maildev --web-user dev --web-pass secret
+```
+
+CI: no UI, quiet, bounded:
+
+```console
+maildev --disable-web --silent --max-emails 200
+```
+
+Different ports because something else owns the defaults:
+
+```console
+maildev --smtp 2025 --web 8080
+```
+
+---
+
+# REST API
+Source: https://maildev.github.io/maildev/docs/reference/rest-api/
+Section: Reference
+
+The JSON API under /api for listing, reading, searching, downloading, relaying, and deleting mail — plus the Socket.IO events the web inbox uses for live updates.
+
+<!-- Vendored from maildev/maildev docs/rest.md (sha256:57e5f5964ab0).
+     Do not edit here: run `make sync-docs` after changing it upstream. -->
+
+MailDev provides an easily consumable REST API. All routes are served under the
+`/api` prefix at `http://localhost:1080` unless configured otherwise. If a
+`--base-pathname` (or `basePathname`) is set, it is prepended to the prefix
+(e.g. `/maildev/api`). All data is returned as JSON unless specified.
+
+## Example email response
+
+Get all emails:
+
+```shell
+$ curl 'http://localhost:1080/api/email'
+```
+
+Returns:
+
+```json
+[
+    {
+        "id": "XwgKAxto",
+        "time": "2026-01-05T19:02:09.156Z",
+        "read": false,
+        "subject": "The ex-presidents are surfers",
+        "from": [
+            {
+                "address": "angelo.pappas@fbi.gov",
+                "name": "Angelo Pappas"
+            }
+        ],
+        "to": [
+            {
+                "address": "johnny.utah@fbi.gov",
+                "name": "Johnny Utah"
+            }
+        ],
+        "cc": [],
+        "date": "2026-01-05T19:02:09.000Z",
+        "text": "The wax at the bank was surfer wax!!!",
+        "html": "<!DOCTYPE html><html><head></head><body><p>The wax at the bank was surfer wax!!!</p></body></html>",
+        "headers": {
+            "content-type": "multipart/mixed; boundary=\"--_boundary\"",
+            "from": "Angelo Pappas <angelo.pappas@fbi.gov>",
+            "to": "Johnny Utah <johnny.utah@fbi.gov>",
+            "subject": "The ex-presidents are surfers",
+            "message-id": "<1412535729142-cc4cb0f1@fbi.gov>",
+            "date": "Sun, 05 Jan 2026 19:02:09 +0000",
+            "mime-version": "1.0"
+        },
+        "priority": "normal",
+        "attachments": [
+            {
+                "filename": "attachment-1.txt",
+                "generatedFileName": "attachment-1.txt",
+                "contentType": "text/plain",
+                "contentDisposition": "attachment",
+                "contentId": "0958713110a99ea2afc3b117c9d5feb3@maildev",
+                "size": 24
+            }
+        ],
+        "envelope": {
+            "from": { "address": "angelo.pappas@fbi.gov" },
+            "to": [{ "address": "johnny.utah@fbi.gov" }],
+            "host": "djf-3.local",
+            "remoteAddress": "127.0.0.1"
+        },
+        "size": 1024,
+        "sizeHuman": "1 KB"
+    }
+]
+```
+
+## Endpoints
+
+All paths are relative to the `/api` prefix.
+
+**GET /api/email/summary** - Get a page of email summaries, newest first
+(see [Listing a large inbox](#listing-a-large-inbox))
+
+**GET /api/email** - Get all emails (supports filtering and pagination)
+
+**GET /api/email/:id** - Get a given email by id (marks it as read)
+
+**DELETE /api/email/:id** - Delete a given email by id
+
+**POST /api/email/delete** - Delete multiple emails by id
+
+**DELETE /api/email/all** - Delete all emails
+
+**PATCH /api/email/read-all** - Mark all emails as read (returns the count)
+
+**GET /api/email/:id/html** - Get a given email's HTML body with embedded
+attachments
+
+**GET /api/email/:id/source** - Get the raw email source (RFC 822)
+
+**GET /api/email/:id/download** - Download a given email as an `.eml` file
+
+**GET /api/email/:id/attachment/:filename** - Get a given email's file
+attachment
+
+**POST /api/email/:id/relay/:relayTo?** - If configured, relay a given email to
+its real "to" address, or to the optional `relayTo` recipient override
+
+**GET /api/reloadMailsFromDirectory** - Reload emails from the configured mail
+directory
+
+**GET /api/config** - Get the application configuration
+
+**GET /api/healthz** - Health check
+
+## Bulk Delete
+
+The **POST /api/email/delete** endpoint deletes a specific set of emails in one
+request. The request body must include an `ids` array.
+
+```json
+{
+    "ids": ["XwgKAxto", "29wQJq2q"]
+}
+```
+
+It returns the IDs that were deleted and any IDs that were not found:
+
+```json
+{
+    "deleted": ["XwgKAxto"],
+    "notFound": ["29wQJq2q"]
+}
+```
+
+## Real-time updates
+
+In addition to the REST API, the web server exposes a [Socket.IO](https://socket.io/)
+endpoint at `/socket.io` for real-time notifications. It emits a `newMail` event
+when an email arrives and a `deleteMail` event when one is removed.
+
+The `newMail` payload is a summary (the same shape as
+**GET /api/email/summary** returns), not the full email — fetch
+**GET /api/email/:id** if you need the body.
+
+## Listing a large inbox
+
+**GET /api/email** returns every email in full, bodies included. That is
+convenient for a handful of messages and expensive for thousands: a 10,000
+email inbox serializes to well over 100 MB.
+
+**GET /api/email/summary** returns a bounded page of summaries instead — no
+`html`, `text` or `headers` — along with the counts needed to paginate. This is
+what the web interface uses.
+
+```plaintext
+GET /api/email/summary?skip=0&limit=50&search=welcome&sort=desc&unread=true
+```
+
+| Parameter | Default | Description                                           |
+| --------- | ------- | ----------------------------------------------------- |
+| `skip`    | `0`     | Matching emails to skip                               |
+| `limit`   | `50`    | Page size, clamped to 200                             |
+| `search`  | —       | Case-insensitive match on subject, participants, body |
+| `sort`    | `desc`  | `desc` for newest first, `asc` for oldest first       |
+| `unread`  | —       | `true` to return only unread emails                   |
+
+```json
+{
+    "items": [
+        {
+            "id": "abc123",
+            "time": "2026-07-27T09:12:44.000Z",
+            "read": false,
+            "subject": "The ex-presidents are surfers",
+            "size": 3072,
+            "sizeHuman": "3 KB",
+            "from": [
+                { "address": "angelo.pappas@fbi.gov", "name": "Angelo Pappas" }
+            ],
+            "to": [{ "address": "johnny.utah@fbi.gov", "name": "Johnny Utah" }],
+            "attachmentCount": 1,
+            "preview": "The wax at the bank was surfer wax!!!"
+        }
+    ],
+    "total": 1024,
+    "storeTotal": 1024,
+    "unread": 17,
+    "skip": 0,
+    "limit": 50
+}
+```
+
+`total` counts the emails matching `search`; `storeTotal` and `unread` describe
+the whole store and ignore the search.
+
+## Pagination
+
+The **GET /api/email** endpoint allows for simple skip/limit pagination.
+
+```plaintext
+GET /api/email?skip=10&limit=25
+```
+
+Without `limit` it returns every email from `skip` onwards. Emails come back in
+arrival order unless `sort` is given, in which case they are ordered by received
+time — `sort=desc` for newest first, `sort=asc` for oldest first. Combine it with
+`limit` to fetch the most recent emails:
+
+```plaintext
+GET /api/email?limit=25&sort=desc
+```
+
+## Filtering
+
+The **GET /api/email** endpoint allows simple filtering. Any query parameter
+that isn't a reserved keyword (`skip`, `limit`) is treated as an exact-match filter
+against a field of the returned email. Nested fields can be addressed with dot
+syntax (`from.address=value`).
+
+For example:
+
+`GET /api/email?subject=Big wave coming # only emails with the exact subject`
+
+`GET /api/email?from.address=angelo.pappas@fbi.gov # only emails from this sender`
+
+`GET /api/email?read=false&subject=test # only unread emails with the exact subject`
+
+---
+
+# Programmatic API
+Source: https://maildev.github.io/maildev/docs/reference/node-api/
+Section: Reference
+
+Embed MailDev in a Node.js application or test suite: construct a server, listen for mail events, read and delete messages, and swap the storage backend.
+
+<!-- Vendored from maildev/maildev docs/api.md (sha256:ee4d5a68dd3d).
+     Do not edit here: run `make sync-docs` after changing it upstream. -->
+
+MailDev v3 provides a modern TypeScript API for embedding into your Node.js applications. The API uses async/await patterns throughout.
+
+## Quick Start
+
+```typescript
+import { MailDev } from 'maildev'
+
+const maildev = new MailDev({
+  smtp: 1025,
+  web: 1080,
+})
+
+await maildev.start()
+
+// Access server instances
+const servers = maildev.getServers()
+
+// Listen for new emails
+servers.smtp.on('new', (email) => {
+  console.log('Received:', email.subject)
+})
+
+// Stop when done
+await maildev.stop()
+```
+
+## Installation
+
+```bash
+npm install maildev
+```
+
+## MailDev Class
+
+The `MailDev` class provides the simplest way to run MailDev programmatically.
+
+### Constructor Options
+
+```typescript
+import { MailDev } from 'maildev'
+
+const maildev = new MailDev({
+  // SMTP Server
+  smtp: 1025,              // SMTP port (default: 1025)
+  ip: '::',                // SMTP bind address (default: '::')
+
+  // Web/API Server
+  web: 1080,               // Web UI port (default: 1080)
+  webIp: '0.0.0.0',        // Web bind address (default: '0.0.0.0')
+  disableWeb: false,       // Disable web interface
+  basePathname: '/',       // Base path for web interface
+
+  // Storage
+  mailDirectory: '/tmp/maildev',  // Persist emails to disk (optional)
+  maxEmails: 0,            // Keep at most this many emails (0 = unlimited, default)
+
+  // Authentication
+  incomingUser: 'user',    // SMTP auth username
+  incomingPass: 'pass',    // SMTP auth password
+  webUser: 'admin',        // Web UI username
+  webPass: 'admin',        // Web UI password
+
+  // Relay (outgoing mail)
+  outgoingHost: 'smtp.example.com',
+  outgoingPort: 587,
+  outgoingUser: 'user',
+  outgoingPass: 'pass',
+  outgoingSecure: true,
+  autoRelay: true,         // Auto-forward emails
+
+  // Logging
+  verbose: false,
+  silent: false,
+  logMailContents: false,
+
+  // MCP (Claude integration)
+  mcp: true,               // Enable MCP server at /mcp endpoint
+})
+```
+
+### Methods
+
+**start()** - Start all servers (async)
+```typescript
+const servers = await maildev.start()
+// servers.smtp - SMTP server instance
+// servers.storage - Storage instance
+// servers.api - API server instance (if not disabled)
+```
+
+**stop()** - Stop all servers gracefully (async)
+```typescript
+await maildev.stop()
+```
+
+**isRunning()** - Check if servers are running
+```typescript
+if (maildev.isRunning()) {
+  console.log('MailDev is running')
+}
+```
+
+**getServers()** - Get server instances
+```typescript
+const servers = maildev.getServers()
+```
+
+## Working with Emails
+
+Once MailDev is running, you can access emails through the SMTP server instance.
+
+### Listening for New Emails
+
+```typescript
+const maildev = new MailDev()
+const { smtp } = await maildev.start()
+
+smtp.on('new', (email) => {
+  console.log('New email received!')
+  console.log('From:', email.from[0].address)
+  console.log('To:', email.to.map(t => t.address).join(', '))
+  console.log('Subject:', email.subject)
+  console.log('Text:', email.text)
+  console.log('HTML:', email.html)
+})
+```
+
+### Limiting how many emails are kept
+
+MailDev keeps every email by default (`maxEmails: 0`). Set a positive
+`maxEmails` and it keeps the newest that many messages, discarding the oldest as
+new mail arrives. When emails are persisted to disk, the `.eml` file and any
+attachments are deleted along with the message, so the mail directory stays
+bounded too.
+
+```typescript
+const maildev = new MailDev({
+  mailDirectory: '/var/mail/maildev',
+  maxEmails: 5000,
+})
+```
+
+`maxEmails: 0` (the default) keeps everything. Be aware that both memory use and
+the mail directory then grow without limit: with typical messages, 10,000 emails
+is around 150 MB of heap, and nothing is ever removed from disk — so set a
+positive limit for long-running or high-volume use.
+
+### Listing a large inbox
+
+`smtp.getAllEmails()` materialises every email, bodies included. For listings,
+use `storage.list()` instead — it returns a page of emails plus the counts
+needed to paginate, so the work stays proportional to the page size rather than
+the size of the store.
+
+```typescript
+const { items, total, unread } = await servers.storage.list({
+  skip: 0,
+  limit: 50,
+  search: 'welcome',   // optional: subject, participants and body text
+  sort: 'desc',        // 'desc' (default) is newest first
+})
+```
+
+To drop the message bodies and headers — as the REST `/api/email/summary`
+endpoint and the web UI do — map the page through `toSummary`:
+
+```typescript
+import { toSummary } from '@maildev/core'
+
+const summaries = items.map(toSummary)
+```
+
+### Getting All Emails
+
+```typescript
+const emails = await smtp.getAllEmails()
+console.log(`Total emails: ${emails.length}`)
+```
+
+### Getting a Single Email
+
+```typescript
+const email = await smtp.getEmail('email-id')
+console.log(email.subject)
+```
+
+### Getting Raw Email (EML format)
+
+```typescript
+const stream = await smtp.getRawEmail('email-id')
+stream.pipe(fs.createWriteStream('email.eml'))
+```
+
+### Deleting Emails
+
+```typescript
+// Delete single email
+await smtp.deleteEmail('email-id')
+
+// Delete all emails
+await smtp.deleteAllEmails()
+```
+
+### Mark All as Read
+
+```typescript
+const count = await smtp.markAllRead()
+console.log(`Marked ${count} emails as read`)
+```
+
+### Working with Attachments
+
+```typescript
+const email = await smtp.getEmail('email-id')
+
+for (const attachment of email.attachments) {
+  console.log(`Attachment: ${attachment.filename}`)
+  console.log(`Type: ${attachment.contentType}`)
+  console.log(`Size: ${attachment.size} bytes`)
+}
+
+// Get attachment content
+const { contentType, stream } = await smtp.getEmailAttachment('email-id', 'filename.pdf')
+stream.pipe(fs.createWriteStream('filename.pdf'))
+```
+
+## Email Object Structure
+
+```typescript
+interface Email {
+  id: string
+  time: Date
+  read: boolean
+  subject: string
+  source: string
+  size: number
+  sizeHuman: string
+  from: Address[]
+  to: Address[]
+  cc?: Address[]
+  bcc?: Address[]
+  calculatedBcc?: Address[]
+  date?: Date
+  html?: string
+  text?: string
+  headers: Record<string, string | string[]>
+  inReplyTo?: string
+  priority?: 'high' | 'normal' | 'low'
+  attachments: Attachment[]
+  envelope: Envelope
+}
+
+interface Address {
+  address: string
+  name?: string
+}
+
+interface Envelope {
+  from: EnvelopeAddress
+  to: EnvelopeAddress[]
+  host?: string
+  remoteAddress?: string
+}
+
+interface EnvelopeAddress extends Address {
+  args?: boolean | Record<string, unknown>
+}
+
+interface Attachment {
+  filename: string
+  generatedFileName: string
+  contentType: string
+  contentDisposition: 'inline' | 'attachment'
+  contentId?: string
+  size?: number
+  transferred?: boolean
+}
+```
+
+## Relay (Forwarding) Emails
+
+MailDev can relay emails to a real SMTP server.
+
+### Manual Relay
+
+```typescript
+const maildev = new MailDev({
+  outgoingHost: 'smtp.gmail.com',
+  outgoingPort: 587,
+  outgoingUser: 'you@gmail.com',
+  outgoingPass: 'app-password',
+  outgoingSecure: true,
+})
+
+const { smtp } = await maildev.start()
+
+// Relay a specific email
+smtp.on('new', async (email) => {
+  if (email.to.some(t => t.address === 'important@example.com')) {
+    await smtp.relayEmail(email.id)
+    console.log('Email relayed!')
+  }
+})
+```
+
+### Auto-Relay
+
+```typescript
+const maildev = new MailDev({
+  outgoingHost: 'smtp.example.com',
+  outgoingPort: 587,
+  outgoingUser: 'user',
+  outgoingPass: 'pass',
+  autoRelay: true,  // Relay all emails automatically
+})
+```
+
+### Auto-Relay to Specific Address
+
+```typescript
+const maildev = new MailDev({
+  outgoingHost: 'smtp.example.com',
+  outgoingPort: 587,
+  outgoingUser: 'user',
+  outgoingPass: 'pass',
+  autoRelay: 'catch-all@example.com',  // Override recipient
+})
+```
+
+## Events
+
+The SMTP server emits the following events:
+
+### 'new'
+Emitted when a new email is received.
+
+```typescript
+smtp.on('new', (email: Email) => {
+  console.log('New email:', email.subject)
+})
+```
+
+### 'delete'
+Emitted when an email is deleted.
+
+```typescript
+smtp.on('delete', (data: { id: string }) => {
+  console.log('Deleted email:', data.id)
+})
+```
+
+### 'error'
+Emitted on server errors.
+
+```typescript
+smtp.on('error', (error: Error) => {
+  console.error('SMTP error:', error.message)
+})
+```
+
+### 'close'
+Emitted when the server is closed.
+
+```typescript
+smtp.on('close', () => {
+  console.log('SMTP server closed')
+})
+```
+
+## Advanced Usage
+
+### Using Individual Packages
+
+For more control, you can use the underlying packages directly.
+
+```typescript
+import { MemoryStorage } from '@maildev/core'
+import { createSMTPServer } from '@maildev/smtp'
+import { createAPIServer } from '@maildev/api'
+
+// Create storage
+const storage = new MemoryStorage()
+await storage.initialize()
+
+// Create SMTP server
+const smtp = createSMTPServer({
+  port: 1025,
+  host: '::',
+  storage,
+  mailDir: '/tmp/maildev',
+})
+
+await smtp.start()
+
+// Create API server
+const api = createAPIServer({
+  port: 1080,
+  storage,
+  smtp,
+  mcp: { enabled: true },
+})
+
+await api.start()
+```
+
+### Using FileStorage for Persistence
+
+```typescript
+import { FileStorage } from '@maildev/core'
+
+const storage = new FileStorage({
+  mailDirectory: '/var/mail/maildev',
+  maxEmails: 1000, // optional: cap the store (0/omitted = unlimited)
+})
+await storage.initialize()
+```
+
+When `maxEmails` is exceeded, the oldest email is dropped and its files are
+deleted. To clean up anything else you wrote alongside an email, register an
+evict handler — `save()` awaits it, so once it resolves the email is fully gone:
+
+```typescript
+storage.onEvicted(async (email) => {
+  await removeMyIndexEntry(email.id)
+})
+```
+
+### Custom Logger
+
+```typescript
+import { MailDev, createLogger } from 'maildev'
+
+const logger = createLogger({
+  verbose: true,
+  silent: false,
+})
+
+// The MailDev class uses the logger internally
+const maildev = new MailDev({
+  verbose: true,
+})
+```
+
+### Middleware Integration
+
+You can run MailDev behind a proxy or within an existing Express/Fastify app:
+
+```typescript
+const maildev = new MailDev({
+  basePathname: '/maildev',
+  web: 3001,
+})
+
+await maildev.start()
+// MailDev UI now available at http://localhost:3001/maildev
+```
+
+Then proxy requests to MailDev:
+
+```typescript
+import express from 'express'
+import { createProxyMiddleware } from 'http-proxy-middleware'
+
+const app = express()
+
+app.use('/maildev', createProxyMiddleware({
+  target: 'http://localhost:3001',
+  ws: true,
+}))
+
+app.listen(3000)
+// MailDev accessible at http://localhost:3000/maildev
+```
+
+## TypeScript Support
+
+MailDev v3 is written in TypeScript and exports all types:
+
+```typescript
+import type {
+  MailDevConfig,
+  Email,
+  EmailSummary,
+  Address,
+  Attachment,
+  Storage,
+  ListOptions,
+  ListResult,
+} from 'maildev'
+
+import type {
+  SMTPServer,
+  SMTPServerOptions,
+  RelayConfig,
+} from '@maildev/smtp'
+
+import type {
+  APIServer,
+  APIServerOptions,
+} from '@maildev/api'
+```
+
+## Migration from v2
+
+### Key Changes
+
+1. **Promise-based API**: All methods are now async/await
+2. **No callbacks**: Replace callback patterns with promises
+3. **Package structure**: Core functionality split into `@maildev/core`, `@maildev/smtp`, `@maildev/api`
+4. **TypeScript**: Full type definitions included
+5. **Events unchanged**: Event names and payloads are compatible
+
+### Example Migration
+
+**v2 (callbacks):**
+```javascript
+const MailDev = require('maildev')
+
+const maildev = new MailDev()
+
+maildev.listen(function(err) {
+  if (err) throw err
+  console.log('MailDev running')
+})
+
+maildev.on('new', function(email) {
+  console.log('New email:', email.subject)
+})
+
+maildev.getAllEmail(function(err, emails) {
+  console.log('Total:', emails.length)
+})
+```
+
+**v3 (async/await):**
+```typescript
+import { MailDev } from 'maildev'
+
+const maildev = new MailDev()
+
+const { smtp } = await maildev.start()
+console.log('MailDev running')
+
+smtp.on('new', (email) => {
+  console.log('New email:', email.subject)
+})
+
+const emails = await smtp.getAllEmails()
+console.log('Total:', emails.length)
+```
+
+---
+
+# MailDev vs Mailcatcher
+Source: https://maildev.github.io/maildev/docs/vs/mailcatcher/
+Section: Comparisons
+
+A factual comparison of MailDev and Mailcatcher, two open-source local SMTP catchers — runtime, install, web UI, API surface, relaying, and AI agent support.
+
+Both MailDev and [Mailcatcher](https://mailcatcher.me/) are open-source SMTP
+"catchers": you point your app at a local SMTP port and outgoing mail is trapped
+and shown in a web UI instead of reaching real inboxes. They solve the same core
+problem. Here is how they differ.
+
+## At a glance
+
+| Feature | MailDev 3.0 | Mailcatcher |
+| --- | --- | --- |
+| Runtime | Node.js (TypeScript) | Ruby |
+| Install | npm or Docker | gem or Docker |
+| SMTP catch-all | Yes | Yes |
+| Web inbox | Yes — modern React UI | Yes — classic UI |
+| HTML / text / source / headers | Yes | Yes |
+| Responsive preview | Yes — resizable viewports | No |
+| Inbox search | Yes, plus a command palette | No |
+| Light & dark theme | Yes | No |
+| Real-time updates | WebSocket | WebSocket |
+| Attachments | Yes | Yes |
+| REST API | Yes — full JSON API | Yes — basic API |
+| Relay to real SMTP | Yes — with auto-relay rules | No |
+| Embeddable / programmatic API | Yes (typed) | No |
+| AI agent integration (MCP) | Built-in | No |
+| License | MIT | MIT |
+
+*Comparison compiled in good faith from public documentation and may go out of
+date. Corrections welcome
+[via a GitHub issue](https://github.com/maildev/maildev/issues/new).*
+
+## Where they genuinely overlap
+
+For the core job — catch mail, show it in a browser, never send it to a real
+person — either tool works, and both have been doing it for over a decade. If you
+already have Mailcatcher running and it does what you need, there is no urgent
+reason to switch.
+
+Both catch on an SMTP port, both render HTML and plain text, both show raw source
+and headers, both handle attachments, both push new mail to the UI over a
+websocket, and both are MIT licensed.
+
+## Pick MailDev if
+
+- **You work in JavaScript or TypeScript.** `npx maildev` needs no Ruby toolchain, and MailDev can be a devDependency pinned in your lockfile.
+- **You care about the UI.** Search, a command palette, [responsive preview](https://maildev.github.io/maildev/docs/web-ui/) at phone and tablet widths, and a dark theme.
+- **You script your inbox from tests.** The [REST API](https://maildev.github.io/maildev/docs/reference/rest-api/) covers listing with pagination and search, reading, deleting in bulk, marking read, downloading, and relaying — see [testing email in CI](https://maildev.github.io/maildev/docs/guides/testing-in-ci/).
+- **You want it in-process.** The [programmatic API](https://maildev.github.io/maildev/docs/reference/node-api/) starts and stops MailDev inside a Node.js test suite and emits an event per message, which removes the polling from email assertions entirely.
+- **You want an AI agent to read the inbox.** The built-in [MCP server](https://maildev.github.io/maildev/docs/ai/mcp/) gives Claude, Cursor, Codex, and other MCP clients tools for searching and reading your dev mail.
+- **You need to forward mail onward.** [Relay and auto-relay](https://maildev.github.io/maildev/docs/reference/cli/) can push caught messages to a real SMTP server, with allow/deny rules.
+
+## Mailcatcher fits if
+
+- **Your stack is Ruby-first** and `gem install mailcatcher` fits your tooling better than npm.
+- **You want the smaller, long-established tool** and none of the extras above matter to you.
+
+## Switching
+
+There is nothing to migrate — a catcher holds no state you care about. Both
+default to SMTP on `1025`, so if you have been using Mailcatcher's defaults, your
+application configuration already works:
+
+```console
+npx maildev
+```
+
+The web UI moves from Mailcatcher's port `1080`… which is also MailDev's default.
+In practice the only change is which process you start.
+
+If you script against Mailcatcher's API, the endpoints differ — see the
+[REST API reference](https://maildev.github.io/maildev/docs/reference/rest-api/) for MailDev's, which is under
+`/api` and returns richer message objects.
+
+## Other options
+
+MailDev is not the only alternative. Mailpit and MailHog are the Go-based tools
+in this space, smtp4dev and Papercut serve the .NET world, and Mailtrap is the
+hosted option. Comparisons for those are on the way — if there is one you
+particularly want,
+[say so on the issue tracker](https://github.com/maildev/maildev/issues).

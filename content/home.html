@@ -1,0 +1,477 @@
+    <main>
+      <!-- Hero -->
+      <section class="hero">
+        <div class="container">
+          <span class="eyebrow">MailDev 3.0</span>
+          <h1>The local email inbox<br />for developers</h1>
+          <p class="lead">
+            A local SMTP server and modern web UI that catches every email your
+            app sends during development. Now readable by your AI agent via the
+            Model Context Protocol.
+          </p>
+          <div class="hero-cta">
+            <a class="btn btn-primary" href="#install">Get started</a>
+            <a
+              class="btn btn-secondary"
+              href="https://github.com/maildev/maildev"
+            >
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+                <path
+                  d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"
+                />
+              </svg>
+              View on GitHub
+            </a>
+          </div>
+          <div class="install-cmd">
+            <code><span class="prompt" aria-hidden="true">$</span> npx maildev</code>
+            <button
+              class="copy-btn"
+              type="button"
+              data-copy="npx maildev"
+              aria-label="Copy npx maildev to clipboard"
+            >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M9 9h10v10H9zM5 15H4a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v1"
+                />
+              </svg>
+              <span class="copy-btn-label">Copy</span>
+            </button>
+          </div>
+          <p class="hero-note">
+            Free &amp; open source (MIT) · run it often? install with
+            <code>npm i -g maildev</code>
+          </p>
+
+          <div
+            class="shot-frame"
+            tabindex="0"
+            aria-label="MailDev 3.0 web interface, light and dark themes"
+          >
+            <img
+              class="shot-light"
+              src="/assets/img/screenshots/inbox-light.png"
+              width="1920"
+              height="1200"
+              alt="MailDev 3.0 web interface showing a caught email rendered as HTML, with a list of received emails"
+            />
+            <img
+              class="shot-dark"
+              src="/assets/img/screenshots/inbox-dark.png"
+              width="1920"
+              height="1200"
+              alt="MailDev 3.0 web interface in dark mode"
+            />
+          </div>
+          <p class="shot-hint">
+            Hover the screenshot to preview dark mode · ships with light &amp;
+            dark themes
+          </p>
+        </div>
+      </section>
+
+      <!-- Sponsor -->
+      <section class="sponsor-band">
+        <div class="container">
+          <div class="sponsor">
+            <a href="https://www.inngest.com/?ref=maildev" aria-label="Inngest">
+              <img
+                src="/assets/img/inngest-logotype-on-white.png"
+                alt="Inngest"
+              />
+            </a>
+            <p>
+              MailDev is sponsored by
+              <strong
+                ><a href="https://www.inngest.com/?ref=maildev"
+                  >Inngest</a
+                ></strong
+              >
+              — the durable execution platform for AI agents and workflows,
+              letting you ship reliable products with no infrastructure. Check
+              it out today!
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Flagship: MCP -->
+      <section class="section-alt" id="mcp">
+        <div class="container">
+          <div class="mcp">
+            <div>
+              <span class="eyebrow">New in 3.0</span>
+              <h2>Your dev inbox, readable by your AI agent</h2>
+              <p class="muted">
+                MailDev ships a built-in
+                <strong>Model Context Protocol (MCP)</strong> server, so AI
+                agents can search your inbox, pull verification links, and check
+                that email actually went out — in plain language. Works with any
+                MCP client, including Claude, Cursor, and Codex.
+              </p>
+              <p>Turn it on with a single flag:</p>
+              <pre><code><span class="cmd">maildev --mcp</span>
+<span class="comment"># MCP endpoint now live at http://localhost:1080/mcp</span></code></pre>
+              <p class="muted">
+                Or run the standalone <code>maildev-mcp</code> stdio server for
+                desktop AI tools.
+              </p>
+              <ul class="pill-list">
+                <li class="pill">5 tools</li>
+                <li class="pill">3 resources</li>
+                <li class="pill">4 prompts</li>
+              </ul>
+              <p style="margin-top: 1.25rem">
+                <a href="/docs/ai/mcp/">Read the MCP integration guide →</a>
+              </p>
+            </div>
+            <div class="chat">
+              <div class="chat-head">
+                <span class="dot" style="background: #ff5f57"></span>
+                <span class="dot" style="background: #febc2e"></span>
+                <span class="dot" style="background: #28c840"></span>
+                <span style="margin-left: 0.5rem">AI agent + MailDev</span>
+              </div>
+              <div class="chat-body">
+                <div class="bubble bubble-user">
+                  Get me the verification link from the signup email to
+                  user@test.com
+                </div>
+                <div class="bubble bubble-ai">
+                  Found the signup email sent 12s ago. The verification link
+                  is:<br /><code>https://app.test/verify?token=a1b2c3</code>
+                </div>
+                <div class="bubble bubble-user">
+                  Did the password reset email actually go out?
+                </div>
+                <div class="bubble bubble-ai">
+                  Yes — a “Reset your password” email was delivered to
+                  user@test.com 4s ago with a valid reset link. ✅
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Screenshot feature trio -->
+      <section>
+        <div class="container">
+          <div class="section-head">
+            <h2>Everything you need to test email locally</h2>
+            <p>
+              Catch mail on a local SMTP port and inspect it in a fast, modern
+              interface.
+            </p>
+          </div>
+          <div class="grid grid-3">
+            <div class="card card-shot">
+              <img
+                src="/assets/img/screenshots/formats.png"
+                width="1920"
+                height="1200"
+                loading="lazy"
+                alt="MailDev showing the raw source of an email with HTML, Plain Text, Headers and Source tabs"
+              />
+              <div class="card-body">
+                <h3>Every format</h3>
+                <p>
+                  Switch between rendered HTML, plain text, headers, and raw
+                  source for any message.
+                </p>
+              </div>
+            </div>
+            <div class="card card-shot">
+              <img
+                src="/assets/img/screenshots/responsive.png"
+                width="1920"
+                height="1200"
+                loading="lazy"
+                alt="MailDev previewing an HTML email at a 425px mobile viewport width"
+              />
+              <div class="card-body">
+                <h3>Responsive preview</h3>
+                <p>
+                  Resize the preview to any viewport to check how your emails
+                  render on mobile.
+                </p>
+              </div>
+            </div>
+            <div class="card card-shot">
+              <img
+                src="/assets/img/screenshots/command-palette-light.png"
+                width="1920"
+                height="1200"
+                loading="lazy"
+                alt="MailDev command palette open, showing email actions and keyboard shortcuts, launched with Command-K"
+              />
+              <div class="card-body">
+                <h3>Command palette <kbd class="kbd">⌘K</kbd></h3>
+                <p>
+                  Hit <kbd class="kbd">⌘K</kbd> to jump anywhere, run actions,
+                  and search your inbox — without leaving the keyboard.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Feature grid -->
+      <section class="section-alt">
+        <div class="container">
+          <div class="section-head">
+            <h2>Built for modern development</h2>
+            <p>
+              A complete TypeScript rewrite — same zero-config workflow,
+              brand-new foundation.
+            </p>
+          </div>
+          <div class="grid grid-3">
+            <div class="card feature">
+              <span class="icon"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="2" y="4" width="20" height="16" rx="2" />
+                  <path d="m22 7-10 5L2 7" /></svg
+              ></span>
+              <h3>SMTP catch-all</h3>
+              <p>
+                Point your app at <code>localhost:1025</code> and every outgoing
+                email lands in MailDev instead of a real inbox.
+              </p>
+            </div>
+            <div class="card feature">
+              <span class="icon"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M4 17V7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"
+                  />
+                  <path d="m8 9 3 3-3 3" />
+                  <path d="M13 15h3" /></svg
+              ></span>
+              <h3>REST API</h3>
+              <p>
+                A full JSON API under <code>/api</code> to list, read, search,
+                download, and delete mail from your tests.
+              </p>
+            </div>
+            <div class="card feature">
+              <span class="icon"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M12 2v4" />
+                  <path d="m6.34 6.34-.7-.7" />
+                  <path d="M2 12h4" />
+                  <circle cx="12" cy="12" r="4" />
+                  <path d="M18 12h4" />
+                  <path d="m18.36 6.34.7-.7" /></svg
+              ></span>
+              <h3>Real-time</h3>
+              <p>
+                New mail appears instantly over WebSockets — no refresh, no
+                polling.
+              </p>
+            </div>
+            <div class="card feature">
+              <span class="icon"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path
+                    d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"
+                  /></svg
+              ></span>
+              <h3>Attachments</h3>
+              <p>
+                Receive, preview, and download attachments exactly as they were
+                sent.
+              </p>
+            </div>
+            <div class="card feature">
+              <span class="icon"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m17 2 4 4-4 4" />
+                  <path d="M3 11v-1a4 4 0 0 1 4-4h14" />
+                  <path d="m7 22-4-4 4-4" />
+                  <path d="M21 13v1a4 4 0 0 1-4 4H3" /></svg
+              ></span>
+              <h3>Relay &amp; auto-relay</h3>
+              <p>
+                Selectively forward a message to a real SMTP server, or
+                auto-relay with allow/deny rules.
+              </p>
+            </div>
+            <div class="card feature">
+              <span class="icon"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
+                  <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" /></svg
+              ></span>
+              <h3>Notifications</h3>
+              <p>
+                Optional browser notifications the moment a new email is
+                received.
+              </p>
+            </div>
+            <div class="card feature">
+              <span class="icon"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="M22 12A10 10 0 1 1 12 2a7 7 0 0 0 10 10Z" /></svg
+              ></span>
+              <h3>Light &amp; dark</h3>
+              <p>
+                A polished interface that follows your theme, easy on the eyes
+                at 2am.
+              </p>
+            </div>
+            <div class="card feature">
+              <span class="icon"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <path d="m18 16 4-4-4-4" />
+                  <path d="m6 8-4 4 4 4" />
+                  <path d="m14.5 4-5 16" /></svg
+              ></span>
+              <h3>TypeScript &amp; embeddable</h3>
+              <p>
+                Fully typed. Use the CLI, Docker, or embed the programmatic API
+                in your own Node app.
+              </p>
+            </div>
+            <div class="card feature">
+              <span class="icon"
+                ><svg
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                >
+                  <rect x="3" y="3" width="18" height="18" rx="2" />
+                  <path d="M9 9h6v6H9z" />
+                  <path
+                    d="M9 3v2M15 3v2M9 19v2M15 19v2M3 9h2M3 15h2M19 9h2M19 15h2"
+                  /></svg
+              ></span>
+              <h3>Runs anywhere</h3>
+              <p>
+                One npm install or a single Docker command. Also serves over
+                HTTPS when you need it.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Quickstart -->
+      <section id="install">
+        <div class="container narrow">
+          <div class="section-head">
+            <h2>Get started in seconds</h2>
+            <p>
+              Install, point your mail transport at port 1025, and open the
+              inbox.
+            </p>
+          </div>
+
+          <h3>Run it with npx</h3>
+          <pre><code><span class="cmd">npx maildev</span></code></pre>
+
+          <h3>…or install it globally</h3>
+          <pre><code><span class="cmd">npm install -g maildev</span>
+<span class="cmd">maildev</span></code></pre>
+
+          <h3>…or run it with Docker</h3>
+          <pre><code><span class="cmd">docker run -p 1080:1080 -p 1025:1025 maildev/maildev</span></code></pre>
+
+          <h3>Send mail to it</h3>
+          <p class="muted">
+            Configure your app to send over SMTP on <code>localhost:1025</code>,
+            then open <code>http://localhost:1080</code>. For example, with
+            Nodemailer:
+          </p>
+          <pre><code><span class="comment">// Nodemailer — no auth needed in development</span>
+const transport = nodemailer.createTransport({
+  host: 'localhost',
+  port: 1025,
+})</code></pre>
+          <p style="margin-top: 1.25rem">
+            <a href="/docs/quickstart/"
+              >See setup for Django, Rails, Laravel &amp; more →</a
+            >
+          </p>
+          <p
+            style="
+              margin-top: 2.5rem;
+              display: flex;
+              gap: 0.75rem;
+              flex-wrap: wrap;
+            "
+          >
+            <a class="btn btn-primary" href="/docs/">Read the docs</a>
+            <a class="btn btn-secondary" href="/docs/ai/mcp/"
+              >Set up MCP for agents</a
+            >
+          </p>
+        </div>
+      </section>
+    </main>

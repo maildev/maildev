@@ -1,0 +1,23 @@
+{
+  "name": "maildev-website",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Source for the MailDev website (https://maildev.github.io/maildev/)",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "watch": "node scripts/build.mjs --watch",
+    "check": "node scripts/build.mjs --check"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "gray-matter": "^4.0.3",
+    "markdown-it": "^14.1.0",
+    "markdown-it-anchor": "^9.2.0",
+    "markdown-it-attrs": "^4.3.1",
+    "markdown-it-container": "^4.0.0",
+    "shiki": "3.13.0"
+  }
+}

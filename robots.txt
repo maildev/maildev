@@ -1,4 +1,10 @@
 User-agent: *
 Allow: /
 
+# Generator sources are deployed alongside the output; they are not pages.
+Disallow: /content/
+Disallow: /layouts/
+Disallow: /data/
+Disallow: /scripts/
+
 Sitemap: https://maildev.github.io/maildev/sitemap.xml

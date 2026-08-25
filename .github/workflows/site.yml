@@ -1,0 +1,33 @@
+# Verify-only. GitHub Pages still deploys this branch directly — pushing is
+# deploying — so this workflow never commits, pushes, or publishes. It only
+# fails when the committed HTML does not match what the generator produces.
+name: Site
+
+on:
+  push:
+    branches: [gh-pages]
+  pull_request:
+    branches: [gh-pages]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    name: Generated output is up to date
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22.x
+          cache: npm
+      - run: npm ci
+      # Compares generated output against what is committed, without writing —
+      # so this also catches invalid front matter and broken internal links.
+      - run: node scripts/build.mjs --check
+      - name: Warn if the vendored reference docs have drifted
+        continue-on-error: true
+        run: |
+          git clone --depth 1 --branch main https://github.com/maildev/maildev.git ../maildev
+          node scripts/sync-docs.mjs --check

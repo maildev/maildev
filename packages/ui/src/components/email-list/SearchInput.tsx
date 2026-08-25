@@ -20,7 +20,9 @@ export function SearchInput() {
     if (searchQuery !== prevSearchQueryRef.current) {
       prevSearchQueryRef.current = searchQuery
       if (searchQuery && visibleEmails.length > 0) {
-        setSelectedEmail(visibleEmails[0]!.id)
+        // Auto-selecting the top match as the user types is a side-effect of
+        // filtering, not deliberate navigation, so replace instead of push.
+        setSelectedEmail(visibleEmails[0]!.id, { replace: true })
       }
     }
   }, [searchQuery, visibleEmails, setSelectedEmail])

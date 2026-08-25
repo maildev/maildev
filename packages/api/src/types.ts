@@ -41,6 +41,13 @@ export interface APIServerOptions {
 export interface MCPConfig {
   /** Enable MCP server at /mcp endpoint */
   enabled: boolean
+  /**
+   * Public base URL of the web UI (no trailing slash), used to build
+   * deep links to emails in MCP responses. Defaults to the server's own
+   * address; set this when MailDev is reached through a different public URL
+   * (e.g. behind a reverse proxy).
+   */
+  webUrl?: string
 }
 
 /**

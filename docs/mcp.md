@@ -52,6 +52,7 @@ flags or environment variables:
 | ---------------- | ------------------ | ----------------------- | --------------------------------- |
 | `-u, --url`      | `MAILDEV_API_URL`  | `http://localhost:1080` | MailDev REST API base URL         |
 | `-k, --api-key`  | `MAILDEV_API_KEY`  | _(none)_                | API key, if authentication is on  |
+| _(none)_         | `MAILDEV_WEB_URL`  | derived from API URL    | Web UI base URL for email deep links |
 
 ```bash
 MAILDEV_API_URL=http://localhost:1080 maildev-mcp
@@ -135,7 +136,14 @@ await maildev.start()
 
 ## Tools
 
-The MCP server exposes 5 tools:
+The MCP server exposes 5 tools.
+
+Email listings and details include a **deep link** to the message in the web UI
+(`URL: http://localhost:1080/#/email/<id>`), so a coding agent can hand back a
+clickable link to open the email. The link uses a hash route, so it keeps
+working under a reverse-proxy sub-path. Over the integrated HTTP transport the
+link points at the running server; for the standalone stdio server it is derived
+from `MAILDEV_API_URL` and can be overridden with `MAILDEV_WEB_URL`.
 
 ### `maildev_search_emails`
 

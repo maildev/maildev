@@ -21,7 +21,7 @@ interface UIState {
   commandPaletteOpen: boolean
 
   // Actions
-  setSelectedEmail: (id: string | null) => void
+  setSelectedEmail: (id: string | null, options?: { replace?: boolean }) => void
   syncSelectedEmailFromRoute: (id: string | null) => void
   toggleTheme: () => void
   setTheme: (theme: 'light' | 'dark') => void
@@ -46,9 +46,9 @@ export const useUIStore = create<UIState>()(
       loadingBarEnabled: true,
       commandPaletteOpen: false,
 
-      setSelectedEmail: (id) => {
+      setSelectedEmail: (id, options) => {
         set({ selectedEmailId: id })
-        updateEmailRoute(id)
+        updateEmailRoute(id, options)
       },
 
       syncSelectedEmailFromRoute: (id) => set({ selectedEmailId: id }),

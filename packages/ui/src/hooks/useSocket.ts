@@ -110,9 +110,10 @@ export function useSocket() {
         showNotification(email, setSelectedEmailRef.current)
       }
 
-      // Auto-show new mail if enabled
+      // Auto-show new mail if enabled. Replace rather than push so a stream of
+      // arriving mail the user didn't act on doesn't flood browser history.
       if (autoShowNewMailRef.current) {
-        setSelectedEmailRef.current(email.id)
+        setSelectedEmailRef.current(email.id, { replace: true })
       }
     })
 

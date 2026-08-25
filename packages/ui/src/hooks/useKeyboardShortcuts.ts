@@ -113,7 +113,9 @@ export function useKeyboardShortcuts() {
               const nextEmail = visibleEmails[nextIndex]
 
               api.emails.delete(selectedEmailId).then(() => {
-                setSelectedEmail(nextEmail?.id ?? null)
+                // The deleted email's route is gone; replace so Back doesn't
+                // return to a now-404 selection.
+                setSelectedEmail(nextEmail?.id ?? null, { replace: true })
                 refresh()
               })
             }

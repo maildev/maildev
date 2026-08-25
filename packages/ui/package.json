@@ -45,7 +45,6 @@
     "clsx": "^2.1.1",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-router-dom": "^7.18.1",
     "socket.io-client": "^4.8.3",
     "tailwind-merge": "^2.6.0",
     "zustand": "^5.0.0"

@@ -1,15 +1,26 @@
 {
-  "mode": "exit",
+  "mode": "pre",
   "tag": "rc",
   "initialVersions": {
-    "@maildev/api": "3.0.0-alpha.0",
-    "maildev": "3.0.0-alpha.0",
-    "@maildev/core": "3.0.0-alpha.0",
-    "@maildev/mcp": "3.0.0-alpha.0",
-    "@maildev/smtp": "3.0.0-alpha.0",
-    "@maildev/ui": "3.0.0-alpha.0"
+    "@maildev/api": "3.0.0-rc.1",
+    "maildev": "3.0.0-rc.1",
+    "@maildev/core": "3.0.0-rc.1",
+    "@maildev/mcp": "3.0.0-rc.1",
+    "@maildev/smtp": "3.0.0-rc.1",
+    "@maildev/ui": "3.0.0-rc.1"
   },
   "changesets": [
-    "proud-chefs-travel"
+    "add-bulk-delete-emails",
+    "docker-healthcheck",
+    "email-summary-pagination",
+    "fix-email-preview-footer",
+    "fix-email-preview-iframe-resize",
+    "https-web-server",
+    "map-backed-storage",
+    "max-emails-eviction",
+    "max-message-size",
+    "proud-chefs-travel",
+    "restore-mail-on-startup",
+    "ui-loading-testability"
   ]
 }

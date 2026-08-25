@@ -1,6 +1,6 @@
 {
   "name": "@maildev/api",
-  "version": "3.0.0-rc.1",
+  "version": "3.0.0-rc.2",
   "description": "REST API and WebSocket server for MailDev",
   "type": "module",
   "main": "./dist/index.js",

@@ -351,9 +351,18 @@ export class SMTPServer extends EventEmitter {
     const rawStream = await this.getRawEmail(email.id)
     const result = await this.relayClient.relay(email, rawStream, isAutoRelay)
 
-    if (!result.success && result.error) {
-      throw result.error
+    if (!result.success) {
+      if (result.error) {
+        throw result.error
+      }
+      return
     }
+
+    // Record the successful relay on the stored email so the API and UI can
+    // tell whether (and where) a message was delivered.
+    email.relayedAt = new Date()
+    email.relayedTo = result.recipients ?? []
+    await this.storage.save(email)
   }
 
   /**

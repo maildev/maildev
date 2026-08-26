@@ -209,6 +209,8 @@ export interface RelayTask {
 export interface RelayResult {
   success: boolean
   message?: string
+  /** Recipients the email was delivered to (present on a successful relay) */
+  recipients?: string[]
   error?: Error
 }
 

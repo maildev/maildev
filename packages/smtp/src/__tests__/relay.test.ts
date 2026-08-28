@@ -4,7 +4,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import net, { type AddressInfo } from 'node:net'
 import nodemailer from 'nodemailer'
-import { MemoryStorage } from '@maildev/core'
+import { MemoryStorage, FileStorage } from '@maildev/core'
 import { SMTPServer } from '../server.js'
 
 /** Grab an ephemeral free port so parallel test files don't collide. */
@@ -81,5 +81,31 @@ describe('relay delivery status', () => {
     const stored = (await destStore.getAll())[0]!
     expect(stored.relayedAt).toBeUndefined()
     expect(stored.relayedTo).toBeUndefined()
+  })
+
+  it('restores relay status from disk on a fresh FileStorage-backed server', async () => {
+    // Use a disk-backed source so the relay status is persisted to a sidecar.
+    await source.stop()
+    const fileStore = new FileStorage({ mailDirectory: sourceDir })
+    await fileStore.initialize()
+    source = new SMTPServer({ storage: fileStore, mailDir: sourceDir, port: sourcePort, host: '127.0.0.1' })
+    await source.start()
+    source.setupRelay({ host: '127.0.0.1', port: destPort, secure: false })
+    source.setAutoRelay({ enabled: true })
+
+    await sendTo(sourcePort)
+    const id = (await fileStore.getAll())[0]!.id
+    expect((await fileStore.getById(id))!.relayedAt).toBeInstanceOf(Date)
+
+    // Simulate a restart: a brand-new store + server reading the same directory.
+    await source.stop()
+    const restoredStore = new FileStorage({ mailDirectory: sourceDir })
+    await restoredStore.initialize()
+    source = new SMTPServer({ storage: restoredStore, mailDir: sourceDir, port: sourcePort, host: '127.0.0.1' })
+    await source.loadMailsFromDirectory()
+
+    const restored = (await restoredStore.getById(id))!
+    expect(restored.relayedAt).toBeInstanceOf(Date)
+    expect(restored.relayedTo).toContain('b@example.com')
   })
 })

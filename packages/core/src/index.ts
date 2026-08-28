@@ -19,6 +19,7 @@ export type {
   Email,
   EmailInput,
   EmailSummary,
+  EmailMetadata,
   StorageQuery,
   StorageOptions,
   Storage,

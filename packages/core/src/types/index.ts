@@ -12,6 +12,7 @@ export type {
 
 // Storage types
 export type {
+  EmailMetadata,
   StorageQuery,
   StorageOptions,
   Storage,

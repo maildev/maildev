@@ -1,7 +1,7 @@
-import { mkdir, rm, readdir } from 'node:fs/promises'
+import { mkdir, rm, readdir, readFile, writeFile } from 'node:fs/promises'
 import { join, resolve, sep } from 'node:path'
 import { tmpdir } from 'node:os'
-import type { Email, StorageOptions } from '../types/index.js'
+import type { Email, EmailMetadata, StorageOptions } from '../types/index.js'
 import { mapLimit } from '../utils/concurrency.js'
 import { MemoryStorage } from './memory.js'
 
@@ -55,6 +55,20 @@ export class FileStorage extends MemoryStorage {
       await mkdir(attachmentDir, { recursive: true })
     }
 
+    // Persist any post-receipt state (relay status today) in a metadata sidecar
+    // so it survives a restart. The raw .eml can't carry it, so it lives beside
+    // the .eml and is read back by loadMailsFromDirectory. The store routes
+    // every mutation through save(), so writing the whole projection here keeps
+    // the sidecar in step without needing partial updates.
+    const metadata = this.buildMetadata(email)
+    if (metadata) {
+      await writeFile(
+        this.getMetadataPath(email.id),
+        JSON.stringify(metadata),
+        'utf8'
+      )
+    }
+
     // Note: Actual .eml file writing will be handled by SMTP package
     // This package provides the storage abstraction and directory management
   }
@@ -83,7 +97,10 @@ export class FileStorage extends MemoryStorage {
     try {
       const entries = await readdir(this.mailDirectory, { withFileTypes: true })
       const removable = entries.filter(
-        (entry) => entry.isDirectory() || entry.name.endsWith('.eml')
+        (entry) =>
+          entry.isDirectory() ||
+          entry.name.endsWith('.eml') ||
+          entry.name.endsWith('.meta.json')
       )
 
       // Bounded concurrency: a directory holding tens of thousands of emails
@@ -128,6 +145,60 @@ export class FileStorage extends MemoryStorage {
   }
 
   /**
+   * Get the path to an email's metadata sidecar
+   */
+  private getMetadataPath(id: string): string {
+    this.assertSafeEmailId(id)
+    return join(this.mailDirectory, `${id}.meta.json`)
+  }
+
+  /**
+   * Project the persisted-metadata fields out of an email
+   *
+   * Returns null when there's nothing to persist. Each persisted field adds a
+   * block here; the shape mirrors {@link EmailMetadata}.
+   */
+  private buildMetadata(email: Email): EmailMetadata | null {
+    const metadata: EmailMetadata = {}
+    if (email.relayedAt) {
+      metadata.relayedAt = email.relayedAt
+      metadata.relayedTo = email.relayedTo ?? []
+    }
+    return Object.keys(metadata).length > 0 ? metadata : null
+  }
+
+  /**
+   * Read the persisted metadata for an email, if any
+   *
+   * Used when restoring emails from disk so state recorded in a previous
+   * session (e.g. a relay) is not lost. Returns null when no sidecar exists or
+   * it is unreadable.
+   * @param id - Email ID
+   */
+  async readMetadata(id: string): Promise<EmailMetadata | null> {
+    let raw: string
+    try {
+      raw = await readFile(this.getMetadataPath(id), 'utf8')
+    } catch {
+      // No sidecar: no metadata was ever recorded for this email.
+      return null
+    }
+
+    try {
+      const parsed = JSON.parse(raw) as { relayedAt?: string; relayedTo?: string[] }
+      const metadata: EmailMetadata = {}
+      if (parsed.relayedAt) {
+        metadata.relayedAt = new Date(parsed.relayedAt)
+        metadata.relayedTo = parsed.relayedTo ?? []
+      }
+      return Object.keys(metadata).length > 0 ? metadata : null
+    } catch {
+      // A corrupt sidecar shouldn't stop the email from being restored.
+      return null
+    }
+  }
+
+  /**
    * Guard against an id that would escape the mail directory
    *
    * Throws unless both `<id>.eml` and `<id>/` resolve to paths inside
@@ -163,6 +234,7 @@ export class FileStorage extends MemoryStorage {
     try {
       await rm(this.getEmailPath(id), { force: true })
       await rm(this.getAttachmentDirectory(id), { recursive: true, force: true })
+      await rm(this.getMetadataPath(id), { force: true })
     } catch {
       // Ignore errors if files don't exist
     }

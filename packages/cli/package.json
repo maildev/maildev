@@ -39,10 +39,10 @@
   ],
   "author": "Dan Farrelly",
   "license": "MIT",
-  "homepage": "http://maildev.github.io/maildev/",
+  "homepage": "https://maildev.github.io/maildev/",
   "repository": {
     "type": "git",
-    "url": "http://github.com/maildev/maildev.git",
+    "url": "https://github.com/maildev/maildev.git",
     "directory": "packages/cli"
   },
   "engines": {

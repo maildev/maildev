@@ -1,6 +1,16 @@
 import type { Email } from './email.js'
 
 /**
+ * Per-email state persisted outside the raw `.eml` message
+ *
+ * Everything here is state set after receipt that can't be recovered by
+ * re-parsing the message (relay status today; a natural home for future
+ * mutable fields). Disk-backed storage writes it to a per-email metadata
+ * sidecar and restores it on startup. Extend this type as fields are added.
+ */
+export type EmailMetadata = Pick<Email, 'relayedAt' | 'relayedTo'>
+
+/**
  * Query object for filtering emails
  * Supports dot-notation for nested properties (e.g., "from.address")
  */
@@ -161,6 +171,15 @@ export interface Storage {
    * @returns Function that unregisters the handler
    */
   onEvicted(handler: EvictHandler): () => void
+
+  /**
+   * Read persisted metadata for an email, if the backend keeps any
+   *
+   * Only disk-backed storage implements this; in-memory storage has nothing to
+   * restore. Returns null when no metadata has been recorded for the email.
+   * @param id - Email ID
+   */
+  readMetadata?(id: string): Promise<EmailMetadata | null>
 
   // Lifecycle
 

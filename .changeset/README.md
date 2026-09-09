@@ -27,9 +27,17 @@ This will prompt you to:
 To release all pending changesets:
 
 ```bash
-pnpm version    # Updates versions based on changesets
-pnpm release    # Builds and publishes to npm
+pnpm run version   # Consumes changesets: bumps versions + writes CHANGELOGs
+pnpm release       # Builds, publishes to npm, and pushes the version tags
 ```
+
+> Use `pnpm run version`, **not** `pnpm version` — the latter runs pnpm's
+> built-in version command and skips the script.
+>
+> `pnpm run version` requires a `.env` file in the repo root with a
+> `GITHUB_TOKEN` (read access is enough). `@changesets/changelog-github` uses it
+> to link each entry's PR and author. See [CONTRIBUTING.md](../CONTRIBUTING.md#releasing)
+> for the full flow.
 
 ## Package Linking
 

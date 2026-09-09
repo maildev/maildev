@@ -1,0 +1,39 @@
+name: Draft GitHub Release
+
+on:
+  push:
+    tags:
+      - 'maildev@*' # the CLI package tag; ignores the 5 per-package tags
+
+permissions:
+  contents: write # needed to create releases
+
+jobs:
+  draft:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Derive version
+        id: v
+        run: echo "version=${GITHUB_REF_NAME#maildev@}" >> "$GITHUB_OUTPUT"
+
+      - name: Extract changelog section
+        run: |
+          # Pull the "## <version>" block out of the CLI changelog
+          awk -v ver="## ${{ steps.v.outputs.version }}" '
+            $0 == ver {grab=1; next}
+            grab && /^## / {exit}
+            grab {print}
+          ' packages/cli/CHANGELOG.md > RELEASE_NOTES.md
+          echo "---- notes ----"; cat RELEASE_NOTES.md
+
+      - name: Create draft release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release create "${{ github.ref_name }}" \
+            --draft \
+            --title "v${{ steps.v.outputs.version }}" \
+            --notes-file RELEASE_NOTES.md \
+            $([ -f .changeset/pre.json ] && echo --prerelease)

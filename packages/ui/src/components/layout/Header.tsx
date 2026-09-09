@@ -13,6 +13,12 @@ export function Header() {
   const [showSettings, setShowSettings] = useState(false)
   const settingsRef = useRef<HTMLDivElement>(null)
 
+  // Inline "click again to confirm" safeguard for delete-all (restores v2 behavior).
+  const [deleteAllArmed, setDeleteAllArmed] = useState(false)
+  const deleteAllTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+
+  const setSelectedEmail = useUIStore((state) => state.setSelectedEmail)
+
   const theme = useUIStore((state) => state.theme)
   const toggleTheme = useUIStore((state) => state.toggleTheme)
   const toggleSidebar = useUIStore((state) => state.toggleSidebar)
@@ -54,11 +60,38 @@ export function Header() {
     }
   }
 
+  // First click arms the button (it slides open to "Confirm: Yes" and turns red)
+  // and starts a 2s timer; a second click within that window deletes everything.
+  // If the window lapses, the button quietly resets to its idle state.
   const handleDeleteAll = () => {
-    if (window.confirm('Are you sure you want to delete all emails?')) {
-      deleteAllMutation.mutate()
+    if (!deleteAllArmed) {
+      setDeleteAllArmed(true)
+      deleteAllTimer.current = setTimeout(() => {
+        setDeleteAllArmed(false)
+        deleteAllTimer.current = null
+      }, 2000)
+      return
     }
+
+    if (deleteAllTimer.current) {
+      clearTimeout(deleteAllTimer.current)
+      deleteAllTimer.current = null
+    }
+    setDeleteAllArmed(false)
+    deleteAllMutation.mutate(undefined, {
+      // Clear the reading pane so a deleted email can't linger on screen.
+      onSuccess: () => setSelectedEmail(null),
+    })
   }
+
+  // Clean up the pending safeguard timer on unmount.
+  useEffect(() => {
+    return () => {
+      if (deleteAllTimer.current) {
+        clearTimeout(deleteAllTimer.current)
+      }
+    }
+  }, [])
 
   const handleMarkAllRead = () => {
     markAllReadMutation.mutate()
@@ -162,20 +195,25 @@ export function Header() {
         </Tooltip>
 
         {/* Delete all */}
-        <Tooltip content="Delete all emails" position="left">
+        <Tooltip
+          content={deleteAllArmed ? 'Click again to delete all emails' : 'Delete all emails'}
+          position="left"
+        >
           <button
             onClick={handleDeleteAll}
             disabled={deleteAllMutation.isPending}
             className={cn(
-              'rounded-md px-3 py-1.5 text-sm font-medium transition-colors',
-              'text-[hsl(var(--destructive))] hover:bg-[hsl(var(--destructive)/0.1)]',
+              'flex items-center overflow-hidden rounded-md px-3 py-1.5 text-sm font-medium transition-all duration-300 ease-out',
+              deleteAllArmed
+                ? 'bg-[hsl(var(--destructive))] text-[hsl(var(--destructive-foreground))]'
+                : 'text-[hsl(var(--destructive))] hover:bg-[hsl(var(--destructive)/0.1)]',
               'disabled:cursor-not-allowed disabled:opacity-50'
             )}
-            aria-label="Delete all emails"
+            aria-label={deleteAllArmed ? 'Confirm delete all emails' : 'Delete all emails'}
             data-testid="delete-all-button"
           >
             <svg
-              className="h-4 w-4"
+              className="h-4 w-4 shrink-0"
               fill="none"
               stroke="currentColor"
               viewBox="0 0 24 24"
@@ -187,6 +225,14 @@ export function Header() {
                 d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
               />
             </svg>
+            <span
+              className={cn(
+                'overflow-hidden whitespace-nowrap transition-all duration-300 ease-out',
+                deleteAllArmed ? 'ml-2 max-w-[8rem] opacity-100' : 'ml-0 max-w-0 opacity-0'
+              )}
+            >
+              Confirm: Yes
+            </span>
           </button>
         </Tooltip>
 

@@ -181,7 +181,7 @@ positive limit for long-running or high-volume use.
 
 ### Listing a large inbox
 
-`smtp.getAllEmails()` materialises every email, bodies included. For listings,
+`smtp.getAllEmails()` materializes every email, bodies included. For listings,
 use `storage.list()` instead — it returns a page of emails plus the counts
 needed to paginate, so the work stays proportional to the page size rather than
 the size of the store.

@@ -39,7 +39,7 @@ const DEFAULT_HOST = '0.0.0.0'
  * Upper bound on how many summaries a single request can ask for
  *
  * A client that asks for everything still gets a bounded response, so no single
- * request can pin the event loop serialising the whole inbox.
+ * request can pin the event loop serializing the whole inbox.
  */
 const MAX_PAGE_SIZE = 200
 

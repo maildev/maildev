@@ -39,7 +39,7 @@ const DEFAULT_HOST = '0.0.0.0'
  * Upper bound on how many summaries a single request can ask for
  *
  * A client that asks for everything still gets a bounded response, so no single
- * request can pin the event loop serialising the whole inbox.
+ * request can pin the event loop serializing the whole inbox.
  */
 const MAX_PAGE_SIZE = 200
 
@@ -73,6 +73,7 @@ export class APIServer extends EventEmitter {
   private options: APIServerOptions
   private mcpTransports: Map<string, StreamableHTTPServerTransport> = new Map()
   private pluginsRegistered = false
+  private boundAddress: { host: string; port: number } | null = null
 
   constructor(options: APIServerOptions) {
     super()
@@ -146,11 +147,37 @@ export class APIServer extends EventEmitter {
 
     await this.app.listen({ port, host })
 
+    // Record the port the OS actually bound. When `port: 0` was requested this
+    // is the assigned ephemeral port; getAddress()/getPort() then let the
+    // caller discover it.
+    const address = this.app.server.address()
+    const boundPort = address && typeof address === 'object' ? address.port : port
+    this.boundAddress = { host, port: boundPort }
+
     const printHost = host === '0.0.0.0' ? 'localhost' : host
     const protocol = this.options.https ? 'https' : 'http'
-    console.info(`MailDev API running at ${protocol}://${printHost}:${port}${this.options.basePath ?? ''}`)
+    console.info(`MailDev API running at ${protocol}://${printHost}:${boundPort}${this.options.basePath ?? ''}`)
 
-    this.emit('listening', { port, host })
+    this.emit('listening', { port: boundPort, host })
+  }
+
+  /**
+   * Get the address the API server is bound to, or null before it listens
+   *
+   * After listen(), the port reflects the actual bound port — so a server
+   * started with `port: 0` reports the OS-assigned ephemeral port here.
+   */
+  getAddress(): { host: string; port: number } | null {
+    return this.boundAddress
+  }
+
+  /**
+   * Get the port the API server is bound to, or null before it listens
+   *
+   * After listen() with `port: 0`, this is the OS-assigned ephemeral port.
+   */
+  getPort(): number | null {
+    return this.boundAddress?.port ?? null
   }
 
   /**

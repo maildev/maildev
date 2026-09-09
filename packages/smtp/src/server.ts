@@ -79,7 +79,11 @@ export class SMTPServer extends EventEmitter {
 
     this.storage = options.storage
     this.mailDir = options.mailDir
-    this.port = options.port || DEFAULT_PORT
+    // Use ?? so an explicit `port: 0` (bind an OS-assigned ephemeral port) is
+    // honored rather than falling back to the default — `0 || DEFAULT` would
+    // treat a meaningful 0 as absent. The real port is read back from the
+    // listening socket in start() and exposed via getAddress()/getPort().
+    this.port = options.port ?? DEFAULT_PORT
     this.host = options.host || DEFAULT_HOST
     this.options = options
     this.logger = createLogger(options.logger)
@@ -115,11 +119,38 @@ export class SMTPServer extends EventEmitter {
           return
         }
 
+        // Record the port the OS actually bound. When `port: 0` was requested
+        // this is the assigned ephemeral port; getAddress()/getPort() then let
+        // the caller discover it (e.g. one MailDev per parallel test worker).
+        const address = this.smtp!.server.address()
+        if (address && typeof address === 'object') {
+          this.port = address.port
+        }
+
         const printHost = this.host === '::' ? 'localhost' : this.host
         this.logger.info(`SMTP Server running at ${printHost}:${this.port}`)
         resolve()
       })
     })
+  }
+
+  /**
+   * Get the address the SMTP server is bound to
+   *
+   * After start(), the port reflects the actual bound port — so a server
+   * started with `port: 0` reports the OS-assigned ephemeral port here.
+   */
+  getAddress(): { host: string; port: number } {
+    return { host: this.host, port: this.port }
+  }
+
+  /**
+   * Get the port the SMTP server is bound to
+   *
+   * After start() with `port: 0`, this is the OS-assigned ephemeral port.
+   */
+  getPort(): number {
+    return this.port
   }
 
   /**

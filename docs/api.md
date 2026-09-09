@@ -107,6 +107,38 @@ if (maildev.isRunning()) {
 const servers = maildev.getServers()
 ```
 
+## Ephemeral ports
+
+Pass `smtp: 0` (and/or `web: 0`) to have the OS assign a free port, then read
+back the port that was actually bound. This is the reliable way to run one
+MailDev per worker under a parallel test runner without hand-assigning ports.
+
+```typescript
+const maildev = new MailDev({ smtp: 0, disableWeb: true })
+const { smtp } = await maildev.start()
+
+const { host, port } = smtp.getAddress()
+console.log(`SMTP listening on ${host}:${port}`)
+
+// Point your app's mail transport at `port` — e.g. nodemailer:
+// nodemailer.createTransport({ host, port, secure: false })
+```
+
+Both the SMTP and API servers expose the bound address:
+
+- `smtp.getAddress()` → `{ host, port }` (and `smtp.getPort()`)
+- `servers.api?.getAddress()` → `{ host, port } | null` (and `api.getPort()`)
+
+The API server's accessors return `null` until it is listening.
+
+```typescript
+const maildev = new MailDev({ smtp: 0, web: 0 })
+const { smtp, api } = await maildev.start()
+
+const smtpPort = smtp.getPort()          // OS-assigned SMTP port
+const webPort = api?.getPort()           // OS-assigned web/API port
+```
+
 ## Working with Emails
 
 Once MailDev is running, you can access emails through the SMTP server instance.
@@ -149,7 +181,7 @@ positive limit for long-running or high-volume use.
 
 ### Listing a large inbox
 
-`smtp.getAllEmails()` materialises every email, bodies included. For listings,
+`smtp.getAllEmails()` materializes every email, bodies included. For listings,
 use `storage.list()` instead — it returns a page of emails plus the counts
 needed to paginate, so the work stays proportional to the page size rather than
 the size of the store.

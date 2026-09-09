@@ -25,6 +25,24 @@ describe('APIServer', () => {
     })
   })
 
+  describe('getAddress', () => {
+    it('returns null before the server is listening', () => {
+      server = createAPIServer({ storage, port: 0 })
+      expect(server.getAddress()).toBeNull()
+      expect(server.getPort()).toBeNull()
+    })
+
+    it('exposes the OS-assigned ephemeral port after listening with port 0', async () => {
+      server = createAPIServer({ storage, port: 0 })
+      await server.start()
+
+      const address = server.getAddress()
+      expect(address).not.toBeNull()
+      expect(address!.port).toBeGreaterThan(0)
+      expect(server.getPort()).toBe(address!.port)
+    })
+  })
+
   describe('health check', () => {
     it('should return true on GET /api/healthz', async () => {
       server = createAPIServer({ storage, port: 0 })

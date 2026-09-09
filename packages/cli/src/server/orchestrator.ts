@@ -110,7 +110,10 @@ export class Orchestrator {
 
     // 6. Start SMTP server
     await this.smtp.start()
-    this.logger.debug(`SMTP server started on ${this.config.ip}:${this.config.smtp}`)
+    // Log the bound address, not the requested one, so `smtp: 0` reports the
+    // OS-assigned ephemeral port rather than 0.
+    const smtpAddress = this.smtp.getAddress()
+    this.logger.debug(`SMTP server started on ${smtpAddress.host}:${smtpAddress.port}`)
 
     // 6b. Keep the on-disk mail directory bounded when a limit is set: discard
     // .eml files left over from previous runs beyond the limit. A directory
@@ -178,7 +181,8 @@ export class Orchestrator {
       await this.api.registerPlugins()
       await registerUI(this.api.server, { basePath })
       await this.api.listen()
-      this.logger.debug(`API server started on ${this.config.webIp}:${this.config.web}`)
+      const apiAddress = this.api.getAddress()
+      this.logger.debug(`API server started on ${apiAddress?.host ?? this.config.webIp}:${apiAddress?.port ?? this.config.web}`)
     }
 
     this.running = true

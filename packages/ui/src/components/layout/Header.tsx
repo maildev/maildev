@@ -231,7 +231,7 @@ export function Header() {
                 deleteAllArmed ? 'ml-2 max-w-[8rem] opacity-100' : 'ml-0 max-w-0 opacity-0'
               )}
             >
-              Confirm: Yes
+              Confirm
             </span>
           </button>
         </Tooltip>

@@ -56,10 +56,8 @@ export function EmailHeader({ email }: EmailHeaderProps) {
   const bccAddresses = email.calculatedBcc?.map(formatEmailAddress).join(', ')
 
   const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this email?')) {
-      await deleteMutation.mutateAsync(email.id)
-      setSelectedEmail(null)
-    }
+    await deleteMutation.mutateAsync(email.id)
+    setSelectedEmail(null)
   }
 
   const handleDownload = () => {

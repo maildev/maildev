@@ -226,9 +226,10 @@ export function useCommands(): Command[] {
         category: 'email',
         icon: <TrashIcon />,
         action: () => {
-          if (window.confirm('Are you sure you want to delete all emails?')) {
-            deleteAllMutation.mutate()
-          }
+          deleteAllMutation.mutate(undefined, {
+            // Clear the reading pane so a deleted email can't linger on screen.
+            onSuccess: () => setSelectedEmail(null),
+          })
         },
         keywords: ['remove', 'clear', 'empty'],
       },
@@ -253,7 +254,7 @@ export function useCommands(): Command[] {
         category: 'email',
         icon: <TrashIcon />,
         action: () => {
-          if (selectedEmailId && window.confirm('Delete this email?')) {
+          if (selectedEmailId) {
             api.emails.delete(selectedEmailId).then(() => {
               // The deleted email's route is gone; replace so Back doesn't
               // return to a now-404 selection.

@@ -254,7 +254,7 @@ export function useCommands(): Command[] {
         category: 'email',
         icon: <TrashIcon />,
         action: () => {
-          if (selectedEmailId && window.confirm('Delete this email?')) {
+          if (selectedEmailId) {
             api.emails.delete(selectedEmailId).then(() => {
               // The deleted email's route is gone; replace so Back doesn't
               // return to a now-404 selection.

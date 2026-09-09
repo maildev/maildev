@@ -104,21 +104,19 @@ export function useKeyboardShortcuts() {
 
         case 'Delete':
         case 'Backspace': {
-          // Delete selected email
+          // Delete selected email (no confirmation — matches v2 behavior)
           if (selectedEmailId) {
             e.preventDefault()
-            if (window.confirm('Delete this email?')) {
-              // Find next email to select before deleting (from visible list)
-              const nextIndex = currentIndex < visibleEmails.length - 1 ? currentIndex + 1 : currentIndex - 1
-              const nextEmail = visibleEmails[nextIndex]
+            // Find next email to select before deleting (from visible list)
+            const nextIndex = currentIndex < visibleEmails.length - 1 ? currentIndex + 1 : currentIndex - 1
+            const nextEmail = visibleEmails[nextIndex]
 
-              api.emails.delete(selectedEmailId).then(() => {
-                // The deleted email's route is gone; replace so Back doesn't
-                // return to a now-404 selection.
-                setSelectedEmail(nextEmail?.id ?? null, { replace: true })
-                refresh()
-              })
-            }
+            api.emails.delete(selectedEmailId).then(() => {
+              // The deleted email's route is gone; replace so Back doesn't
+              // return to a now-404 selection.
+              setSelectedEmail(nextEmail?.id ?? null, { replace: true })
+              refresh()
+            })
           }
           break
         }

@@ -56,10 +56,10 @@ export function EmailHeader({ email }: EmailHeaderProps) {
   const bccAddresses = email.calculatedBcc?.map(formatEmailAddress).join(', ')
 
   const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this email?')) {
-      await deleteMutation.mutateAsync(email.id)
-      setSelectedEmail(null)
-    }
+    // Test emails are disposable and easily regenerated, so delete on click
+    // without a confirmation prompt (matching v2 behavior).
+    await deleteMutation.mutateAsync(email.id)
+    setSelectedEmail(null)
   }
 
   const handleDownload = () => {

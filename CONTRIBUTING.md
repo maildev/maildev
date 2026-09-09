@@ -87,6 +87,8 @@ pnpm --filter @maildev/core test:coverage   # with coverage
 
 Releases are managed with [Changesets](https://github.com/changesets/changesets). All six packages are **linked**, so they version together, and publish with `access: public`. Internal `workspace:*` dependencies are rewritten to real versions at publish time.
 
+Changelogs are generated with [`@changesets/changelog-github`](https://github.com/changesets/changesets/tree/main/packages/changelog-github), so each entry links its originating PR and credits the author.
+
 ### One-time setup
 
 Log into npm (interactive):
@@ -94,6 +96,20 @@ Log into npm (interactive):
 ```bash
 npm login
 ```
+
+Create a `.env` file in the repo root with a GitHub token (read access is enough — `public_repo` on a classic token, or a fine-grained token with **Contents: Read** on `maildev/maildev`):
+
+```bash
+# .env  (git-ignored)
+GITHUB_TOKEN=ghp_xxxxxxxxxxxxxxxxxxxx
+```
+
+`@changesets/changelog-github` calls the GitHub API during versioning to resolve PR numbers and author handles, and **hard-requires** `GITHUB_TOKEN`. The `pnpm run version` script loads `.env` via `scripts/with-env.sh` and fails fast if the file or token is missing, so a release can't silently produce a broken changelog.
+
+> **Use `pnpm run version`, not `pnpm version`.** `pnpm version` runs pnpm's
+> built-in version command and skips the `"version"` script (and its `.env`
+> guard) entirely. If you invoke `pnpm changeset version` directly, export
+> `GITHUB_TOKEN` in your shell first.
 
 ### Publishing an alpha / prerelease
 
@@ -121,18 +137,26 @@ Use Changesets' pre-release mode so version bumps and tagging happen automatical
 ```bash
 pnpm changeset pre enter alpha   # writes .changeset/pre.json
 pnpm changeset                   # describe the change
-pnpm changeset version           # bumps 3.0.0-alpha.0 → alpha.1
+pnpm run version                 # bumps 3.0.0-alpha.0 → alpha.1 (loads .env)
 pnpm build
 pnpm changeset publish           # auto-uses the `alpha` tag from pre.json
+git push --follow-tags           # push commits + version tags
 ```
 
 When you're ready to cut a stable release, exit pre-release mode first:
 
 ```bash
 pnpm changeset pre exit
-pnpm changeset version           # e.g. 3.0.0-alpha.N → 3.0.0
+pnpm run version                 # e.g. 3.0.0-alpha.N → 3.0.0 (loads .env)
 pnpm build
 pnpm changeset publish           # publishes to `latest`
+git push --follow-tags           # push commits + version tags
 ```
 
-> Note: the repo's `pnpm release` script (`turbo run build && changeset publish`) publishes to `latest`. Use the `--tag`/pre-mode flow above for prereleases so you don't overwrite the stable `latest`.
+Commit the version bump (the updated `package.json`s and `CHANGELOG.md`s) before publishing, so the pushed tag points at the changelog the release notes are extracted from.
+
+> Note: the repo's `pnpm release` script (`turbo run build && changeset publish && git push --follow-tags`) publishes to `latest` and pushes tags. Use the `--tag`/pre-mode flow above for prereleases so you don't overwrite the stable `latest`.
+
+### Drafting the GitHub Release
+
+Pushing the `maildev@<version>` tag triggers the [`.github/workflows/draft-release.yml`](.github/workflows/draft-release.yml) workflow, which extracts that version's section from `packages/cli/CHANGELOG.md` and opens a **draft** GitHub Release (marked pre-release while `.changeset/pre.json` exists). Review and publish it manually. Only the single `maildev@*` tag drives it — the five per-package tags are ignored, so each version drafts exactly one release.

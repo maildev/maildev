@@ -35,7 +35,7 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "changeset": "changeset",
-    "version": "changeset version",
+    "version": "./scripts/with-env.sh changeset version",
     "release": "turbo run build && changeset publish && git push --follow-tags",
     "send-test-emails": "node ./scripts/send.js",
     "docker-build": "./scripts/dockerBuild.sh",

@@ -8,6 +8,7 @@ dist-server
 .zip
 maildev-*
 .nodemonignore
+.env
 
 # Ignore npm debug log
 npm-debug.log

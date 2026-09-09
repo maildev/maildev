@@ -101,6 +101,10 @@ export interface Email {
   attachments: Attachment[]
   /** SMTP envelope data */
   envelope: Envelope
+  /** When the email was last successfully relayed to the outgoing server (absent if never relayed) */
+  relayedAt?: Date
+  /** Recipients the email was delivered to on the last successful relay */
+  relayedTo?: string[]
 }
 
 /**

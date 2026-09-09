@@ -122,6 +122,7 @@ export class RelayClient {
       return {
         success: true,
         message: `Relayed to ${recipients.join(', ')}`,
+        recipients,
       }
     } catch (error) {
       const err = error instanceof Error ? error : new Error(String(error))

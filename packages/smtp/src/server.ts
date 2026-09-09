@@ -80,7 +80,7 @@ export class SMTPServer extends EventEmitter {
     this.storage = options.storage
     this.mailDir = options.mailDir
     // Use ?? so an explicit `port: 0` (bind an OS-assigned ephemeral port) is
-    // honoured rather than falling back to the default — `0 || DEFAULT` would
+    // honored rather than falling back to the default — `0 || DEFAULT` would
     // treat a meaningful 0 as absent. The real port is read back from the
     // listening socket in start() and exposed via getAddress()/getPort().
     this.port = options.port ?? DEFAULT_PORT

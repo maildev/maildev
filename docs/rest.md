@@ -56,9 +56,15 @@ Returns:
     "remoteAddress": "127.0.0.1"
   },
   "size": 1024,
-  "sizeHuman": "1 KB"
+  "sizeHuman": "1 KB",
+  "relayedAt": "2026-01-05T19:05:11.482Z",
+  "relayedTo": ["johnny.utah@fbi.gov"]
 }]
 ```
+
+`relayedAt` and `relayedTo` are only present once an email has been relayed to
+the outgoing server (see the relay endpoint below); they are omitted for
+messages that have never been relayed.
 
 ## Endpoints
 
@@ -90,7 +96,12 @@ attachments
 attachment
 
 **POST   /api/email/:id/relay/:relayTo?** - If configured, relay a given email to
-its real "to" address, or to the optional `relayTo` recipient override
+its real "to" address, or to the optional `relayTo` recipient override. On
+success the email records `relayedAt` (timestamp of the last successful relay)
+and `relayedTo` (the recipients it was delivered to), returned by the endpoints
+above. When a mail directory is configured (file storage), this status is
+persisted to disk and survives a restart; with in-memory storage it is kept
+only for the lifetime of the process.
 
 **GET    /api/reloadMailsFromDirectory** - Reload emails from the configured mail
 directory

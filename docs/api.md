@@ -250,6 +250,8 @@ interface Email {
   priority?: 'high' | 'normal' | 'low'
   attachments: Attachment[]
   envelope: Envelope
+  relayedAt?: Date      // when the email was last successfully relayed
+  relayedTo?: string[]  // recipients delivered to on the last successful relay
 }
 
 interface Address {
@@ -304,6 +306,19 @@ smtp.on('new', async (email) => {
   }
 })
 ```
+
+After a successful relay (manual or auto) the email records `relayedAt` and
+`relayedTo`, so you can tell whether and where a message was delivered:
+
+```typescript
+const email = await smtp.getEmail('email-id')
+if (email.relayedAt) {
+  console.log(`Relayed at ${email.relayedAt} to ${email.relayedTo?.join(', ')}`)
+}
+```
+
+With `FileStorage` this status is persisted to disk and restored on startup;
+with in-memory storage it lives only for the lifetime of the process.
 
 ### Auto-Relay
 

@@ -12,7 +12,7 @@ import { rm, readdir, readFile, writeFile, stat } from 'node:fs/promises'
 import { join } from 'node:path'
 import { pipeline } from 'node:stream/promises'
 import { PassThrough, Transform, type Readable } from 'node:stream'
-import { formatBytes, calculateBcc, makeId, mapLimit, type Storage, type Email, type Attachment } from '@maildev/core'
+import { formatBytes, calculateBcc, makeId, mapLimit, type Storage, type Email, type EmailMetadata, type Attachment } from '@maildev/core'
 import { parseEmailStream, parseEmailBuffer } from './parser.js'
 import { createAuthCallback } from './auth.js'
 import { createLogger } from './logger.js'
@@ -429,7 +429,9 @@ export class SMTPServer extends EventEmitter {
         }
 
         try {
-          await this.saveEmail(id, envelope, parsed, true)
+          // Restore any metadata persisted alongside the .eml.
+          const metadata = await this.storage.readMetadata?.(id)
+          await this.saveEmail(id, envelope, parsed, true, metadata)
         } catch (err) {
           this.logger.error(`Error restoring email ${id}:`, err)
         }
@@ -656,7 +658,8 @@ export class SMTPServer extends EventEmitter {
     id: string,
     envelope: StoredEnvelope,
     parsed: ParsedEmail,
-    isRestored = false
+    isRestored = false,
+    metadata?: EmailMetadata | null
   ): Promise<Email> {
     const emlPath = join(this.mailDir, `${id}.eml`)
     const emlStat = await stat(emlPath)
@@ -732,6 +735,12 @@ export class SMTPServer extends EventEmitter {
     }
     if (parsed.priority) {
       email.priority = parsed.priority
+    }
+
+    // Carry forward metadata persisted in a previous session (restore only).
+    if (metadata?.relayedAt) {
+      email.relayedAt = metadata.relayedAt
+      email.relayedTo = metadata.relayedTo ?? []
     }
 
     await this.storage.save(email)

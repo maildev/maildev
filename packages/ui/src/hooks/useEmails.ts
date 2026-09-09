@@ -208,9 +208,17 @@ export function useMarkAllRead() {
  * Hook to relay an email
  */
 export function useRelayEmail() {
+  const queryClient = useQueryClient()
+
   return useMutation({
     mutationFn: ({ id, relayTo }: { id: string; relayTo?: string }) =>
       api.emails.relay(id, relayTo),
+    onSuccess: (_data, { id }) => {
+      // Refetch the email so the newly recorded relay status (relayedAt /
+      // relayedTo) shows without waiting for the next poll.
+      queryClient.invalidateQueries({ queryKey: ['email', id] })
+      queryClient.invalidateQueries({ queryKey: ['emails'] })
+    },
   })
 }
 

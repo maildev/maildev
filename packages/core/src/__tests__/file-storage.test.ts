@@ -124,6 +124,67 @@ describe('FileStorage', () => {
     })
   })
 
+  describe('metadata sidecar', () => {
+    it('persists relay status to a sidecar and reads it back', async () => {
+      storage = new FileStorage({ mailDirectory })
+      await storage.initialize()
+
+      const relayedAt = new Date('2026-01-02T03:04:05.000Z')
+      await storage.save(
+        createTestEmail('relayed', { relayedAt, relayedTo: ['b@example.com'] })
+      )
+      await writeEmailFiles('relayed')
+
+      expect(existsSync(join(mailDirectory, 'relayed.meta.json'))).toBe(true)
+
+      const meta = await storage.readMetadata('relayed')
+      expect(meta?.relayedAt).toEqual(relayedAt)
+      expect(meta?.relayedTo).toEqual(['b@example.com'])
+    })
+
+    it('writes no sidecar for an email with no persisted metadata', async () => {
+      storage = new FileStorage({ mailDirectory })
+      await storage.initialize()
+
+      await storage.save(createTestEmail('plain'))
+
+      expect(existsSync(join(mailDirectory, 'plain.meta.json'))).toBe(false)
+      expect(await storage.readMetadata('plain')).toBeNull()
+    })
+
+    it('removes the sidecar when the email is deleted', async () => {
+      storage = new FileStorage({ mailDirectory })
+      await storage.initialize()
+
+      await storage.save(
+        createTestEmail('gone', { relayedAt: new Date(), relayedTo: ['b@example.com'] })
+      )
+      expect(existsSync(join(mailDirectory, 'gone.meta.json'))).toBe(true)
+
+      await storage.delete('gone')
+      expect(existsSync(join(mailDirectory, 'gone.meta.json'))).toBe(false)
+    })
+
+    it('sweeps sidecars on deleteAll and eviction', async () => {
+      storage = new FileStorage({ mailDirectory, maxEmails: 1 })
+      await storage.initialize()
+
+      await storage.save(
+        createTestEmail('first', { relayedAt: new Date(), relayedTo: ['b@example.com'] })
+      )
+      await writeEmailFiles('first')
+      // Evicts 'first', whose sidecar must go with it
+      await storage.save(
+        createTestEmail('second', { relayedAt: new Date(), relayedTo: ['c@example.com'] })
+      )
+      await writeEmailFiles('second')
+      expect(existsSync(join(mailDirectory, 'first.meta.json'))).toBe(false)
+
+      await storage.deleteAll()
+      expect(await readdir(mailDirectory)).toEqual([])
+    })
+  })
+
   describe('source path', () => {
     it('should point source at the storage directory', async () => {
       storage = new FileStorage({ mailDirectory })

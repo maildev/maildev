@@ -13,7 +13,7 @@ export function Header() {
   const [showSettings, setShowSettings] = useState(false)
   const settingsRef = useRef<HTMLDivElement>(null)
 
-  // Inline "click again to confirm" safeguard for delete-all (restores v2 behavior).
+  // Inline "click again to confirm" safeguard for delete-all
   const [deleteAllArmed, setDeleteAllArmed] = useState(false)
   const deleteAllTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -60,9 +60,8 @@ export function Header() {
     }
   }
 
-  // First click arms the button (it slides open to "Confirm: Yes" and turns red)
-  // and starts a 2s timer; a second click within that window deletes everything.
-  // If the window lapses, the button quietly resets to its idle state.
+  // First click "arms" the button which transitions to "Confirm" for 2 seconds
+  // otherwise reverting state
   const handleDeleteAll = () => {
     if (!deleteAllArmed) {
       setDeleteAllArmed(true)

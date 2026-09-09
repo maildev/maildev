@@ -104,7 +104,7 @@ export function useKeyboardShortcuts() {
 
         case 'Delete':
         case 'Backspace': {
-          // Delete selected email (no confirmation — matches v2 behavior)
+          // Delete selected email (no confirmation)
           if (selectedEmailId) {
             e.preventDefault()
             // Find next email to select before deleting (from visible list)

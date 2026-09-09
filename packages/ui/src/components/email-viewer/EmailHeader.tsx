@@ -54,6 +54,9 @@ export function EmailHeader({ email }: EmailHeaderProps) {
   const toAddresses = email.to?.map(formatEmailAddress).join(', ') ?? ''
   const ccAddresses = email.cc?.map(formatEmailAddress).join(', ')
   const bccAddresses = email.calculatedBcc?.map(formatEmailAddress).join(', ')
+  const relayedToDisplay = email.relayedTo?.length
+    ? email.relayedTo.join(', ')
+    : 'original recipients'
 
   const handleDelete = async () => {
     if (window.confirm('Are you sure you want to delete this email?')) {
@@ -137,6 +140,36 @@ export function EmailHeader({ email }: EmailHeaderProps) {
                 </div>
               )}
             </div>
+
+            {/* Relay status - shown once the email has been relayed */}
+            {email.relayedAt && (
+              <div
+                data-testid="email-relayed-status"
+                className="mt-2 flex items-center gap-1.5 text-xs text-[hsl(var(--muted-foreground))]"
+              >
+                <svg
+                  className="h-3.5 w-3.5 flex-shrink-0 text-[hsl(var(--primary))]"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                  aria-hidden="true"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={2}
+                    d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+                  />
+                </svg>
+                <span>
+                  Relayed to{' '}
+                  <span className="font-medium text-[hsl(var(--foreground))]">
+                    {relayedToDisplay}
+                  </span>{' '}
+                  · {formatDate(email.relayedAt)}
+                </span>
+              </div>
+            )}
           </div>
         </div>
 

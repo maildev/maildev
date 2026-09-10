@@ -120,6 +120,50 @@ describe('loadEnvConfig', () => {
     expect(config.ip).toBe('0.0.0.0')
     expect(config.mailDirectory).toBe('/tmp/mail')
   })
+
+  it('should parse MAILDEV_AUTO_RELAY=true as boolean true', () => {
+    process.env.MAILDEV_AUTO_RELAY = 'true'
+
+    const config = loadEnvConfig()
+    expect(config.autoRelay).toBe(true)
+  })
+
+  it('should parse MAILDEV_AUTO_RELAY=1 as boolean true', () => {
+    process.env.MAILDEV_AUTO_RELAY = '1'
+
+    const config = loadEnvConfig()
+    expect(config.autoRelay).toBe(true)
+  })
+
+  it('should parse present-but-empty MAILDEV_AUTO_RELAY as boolean true', () => {
+    process.env.MAILDEV_AUTO_RELAY = ''
+
+    const config = loadEnvConfig()
+    expect(config.autoRelay).toBe(true)
+  })
+
+  it('should parse MAILDEV_AUTO_RELAY as a recipient email', () => {
+    process.env.MAILDEV_AUTO_RELAY = 'qa@example.com'
+
+    const config = loadEnvConfig()
+    expect(config.autoRelay).toBe('qa@example.com')
+  })
+
+  it('should load MAILDEV_AUTO_RELAY_RULES as a path string', () => {
+    process.env.MAILDEV_AUTO_RELAY_RULES = '/config/rules.json'
+
+    const config = loadEnvConfig()
+    expect(config.autoRelayRules).toBe('/config/rules.json')
+  })
+
+  it('should leave autoRelay and autoRelayRules unset when env vars are absent', () => {
+    delete process.env.MAILDEV_AUTO_RELAY
+    delete process.env.MAILDEV_AUTO_RELAY_RULES
+
+    const config = loadEnvConfig()
+    expect(config.autoRelay).toBeUndefined()
+    expect(config.autoRelayRules).toBeUndefined()
+  })
 })
 
 describe('getEnvVarName', () => {

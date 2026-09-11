@@ -32,6 +32,8 @@ const ENV_MAPPING: Record<string, keyof PartialMailDevConfig> = {
   MAILDEV_OUTGOING_PORT: 'outgoingPort',
   MAILDEV_OUTGOING_USER: 'outgoingUser',
   MAILDEV_OUTGOING_PASS: 'outgoingPass',
+  MAILDEV_AUTO_RELAY: 'autoRelay',
+  MAILDEV_AUTO_RELAY_RULES: 'autoRelayRules',
 
   // Storage
   MAILDEV_MAIL_DIRECTORY: 'mailDirectory',
@@ -73,6 +75,22 @@ function parseBoolean(value: string): boolean {
 }
 
 /**
+ * MAILDEV_AUTO_RELAY is boolean | string: true/1/empty enable relay to
+ * each mail's own recipients; false/0 disable; any other value is the
+ * override recipient.
+ * Do not put this in BOOLEAN_VARS — that would parse an email as false.
+ */
+function parseAutoRelay(value: string): boolean | string {
+  if (value === '' || value.toLowerCase() === 'true' || value === '1') {
+    return true
+  }
+  if (value.toLowerCase() === 'false' || value === '0') {
+    return false
+  }
+  return value
+}
+
+/**
  * Load configuration from environment variables
  *
  * @returns Partial configuration from environment
@@ -84,7 +102,9 @@ export function loadEnvConfig(): PartialMailDevConfig {
     const value = process.env[envVar]
     if (value === undefined) continue
 
-    if (NUMBER_VARS.has(envVar)) {
+    if (envVar === 'MAILDEV_AUTO_RELAY') {
+      config.autoRelay = parseAutoRelay(value)
+    } else if (NUMBER_VARS.has(envVar)) {
       const num = parseInt(value, 10)
       if (!isNaN(num)) {
         ;(config as Record<string, unknown>)[configKey] = num

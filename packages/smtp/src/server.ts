@@ -106,18 +106,26 @@ export class SMTPServer extends EventEmitter {
 
     this.smtp = new SMTPServerLib(config)
 
-    // Handle server errors
-    this.smtp.on('error', (err: NodeJS.ErrnoException) => {
-      this.handleServerError(err)
-    })
-
-    // Start listening
+    // Node's server.listen() callback is the 'listening' listener, not an
+    // error-first callback. Bind failures (EADDRINUSE, EACCES, …) arrive on
+    // 'error' instead, so reject start() from that event until we are listening.
     return new Promise((resolve, reject) => {
+      const onStartupError = (err: Error) => {
+        reject(err)
+      }
+      this.smtp!.once('error', onStartupError)
+
       this.smtp!.listen(this.port, this.host, (err?: Error) => {
         if (err) {
+          this.smtp!.off('error', onStartupError)
           reject(err)
           return
         }
+
+        this.smtp!.off('error', onStartupError)
+        this.smtp!.on('error', (e: NodeJS.ErrnoException) => {
+          this.handleServerError(e)
+        })
 
         // Record the port the OS actually bound. When `port: 0` was requested
         // this is the assigned ephemeral port; getAddress()/getPort() then let
@@ -866,8 +874,12 @@ export class SMTPServer extends EventEmitter {
       )
       this.logger.debug?.(err)
     } else {
-      this.emit('error', err)
-      throw err
+      // Do not throw: this runs from an event callback, so a throw is uncaught
+      // and kills the process. A bare emit('error') with no listener does too.
+      this.logger.error(err.message)
+      if (this.listenerCount('error') > 0) {
+        this.emit('error', err)
+      }
     }
   }
 

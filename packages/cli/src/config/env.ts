@@ -76,12 +76,16 @@ function parseBoolean(value: string): boolean {
 
 /**
  * MAILDEV_AUTO_RELAY is boolean | string: true/1/empty enable relay to
- * each mail's own recipients; any other value is the override recipient.
+ * each mail's own recipients; false/0 disable; any other value is the
+ * override recipient.
  * Do not put this in BOOLEAN_VARS — that would parse an email as false.
  */
 function parseAutoRelay(value: string): boolean | string {
   if (value === '' || value.toLowerCase() === 'true' || value === '1') {
     return true
+  }
+  if (value.toLowerCase() === 'false' || value === '0') {
+    return false
   }
   return value
 }

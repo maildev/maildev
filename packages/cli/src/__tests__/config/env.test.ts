@@ -142,6 +142,20 @@ describe('loadEnvConfig', () => {
     expect(config.autoRelay).toBe(true)
   })
 
+  it('should parse MAILDEV_AUTO_RELAY=false as boolean false', () => {
+    process.env.MAILDEV_AUTO_RELAY = 'false'
+
+    const config = loadEnvConfig()
+    expect(config.autoRelay).toBe(false)
+  })
+
+  it('should parse MAILDEV_AUTO_RELAY=0 as boolean false', () => {
+    process.env.MAILDEV_AUTO_RELAY = '0'
+
+    const config = loadEnvConfig()
+    expect(config.autoRelay).toBe(false)
+  })
+
   it('should parse MAILDEV_AUTO_RELAY as a recipient email', () => {
     process.env.MAILDEV_AUTO_RELAY = 'qa@example.com'
 

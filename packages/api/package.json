@@ -44,7 +44,7 @@
     "@maildev/mcp": "workspace:*",
     "@maildev/smtp": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.29.0",
-    "fastify": "^5.10.0",
+    "fastify": "^5.12.1",
     "fastify-plugin": "^5.0.1",
     "socket.io": "^4.8.3"
   },
@@ -52,6 +52,6 @@
     "@types/node": "^22.10.7",
     "tsx": "^4.19.0",
     "typescript": "^5.7.3",
-    "vitest": "^3.2.7"
+    "vitest": "^4.1.11"
   }
 }

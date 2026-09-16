@@ -53,10 +53,36 @@
     "eslint": "^9.18.0",
     "eslint-config-prettier": "^10.0.1",
     "globals": "^17.0.0",
-    "nodemailer": "^9.0.3",
+    "nodemailer": "^9.1.1",
     "prettier": "^3.4.2",
     "turbo": "^2.10.4",
     "typescript": "^5.7.3"
+  },
+  "pnpm": {
+    "overrides": {
+      "body-parser@<2.3": "^2.3.0",
+      "baseline-browser-mapping@<2.11": "^2.11.0",
+      "browserslist@<4.28.7": "^4.28.7",
+      "brace-expansion@<2": "^1.1.16",
+      "brace-expansion@>=2 <3": "^2.1.2",
+      "brace-expansion@>=4 <5.0.9": "^5.0.9",
+      "engine.io@<6.6.7": "^6.6.7",
+      "fast-uri@<3.1.6": "^3.1.6",
+      "find-my-way@<9.7": "^9.7.0",
+      "hono@<4.13.5": "^4.13.5",
+      "@hono/node-server@<1.19.15": "^1.19.15",
+      "@humanfs/node@<0.16.8": "^0.16.8",
+      "html-to-text@<10.0.1": "^10.0.1",
+      "ip-address@<10.3.1": "^10.3.1",
+      "js-yaml@<4": "^3.15.2",
+      "js-yaml@>=4 <4.3.2": "^4.3.2",
+      "nanoid@<4": "^3.3.18",
+      "nodemailer@<9.1.1": "^9.1.1",
+      "postcss@<8.5.23": "^8.5.23",
+      "qs@<6.16": "^6.16.0",
+      "socket.io-parser@<4.2.7": "^4.2.7",
+      "ws@<8.21": "^8.21.0"
+    }
   },
   "engines": {
     "node": ">=20.0.0"

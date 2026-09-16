@@ -1,8 +1,11 @@
 // Everything that used to be hand-maintained: sitemap.xml, llms.txt,
-// llms-full.txt, robots.txt, the RSS feed, and the .md mirrors.
+// llms-full.txt, robots.txt, the RSS feed, the per-page markdown mirrors, and
+// the .md pointer files.
 //
-// All output is deterministic — no build timestamps, no mtime-derived lastmod —
-// so rebuilding an unchanged tree produces an empty git diff.
+// All output is deterministic — no build timestamps, no mtimes, no
+// history-derived dates — so rebuilding an unchanged tree produces an empty git
+// diff. Sitemap <lastmod> comes only from `updated:` front matter, which is
+// part of the committed content.
 
 import { absolutize, absoluteUrl, esc, rfc822 } from './util.mjs'
 
@@ -10,7 +13,7 @@ function xmlEscape(value) {
   return String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
-export function sitemap({ site, docs, posts }) {
+export function sitemap({ site, docs, posts, lastmods }) {
   const entries = [
     { loc: '/', priority: '1.0' },
     { loc: '/docs/', priority: '0.9' },
@@ -21,13 +24,19 @@ export function sitemap({ site, docs, posts }) {
     ...(site.staticUrls || []).map((loc) => ({ loc, priority: '0.5' })),
   ]
 
+  // Pages without an `updated` date simply omit <lastmod>; fabricating one
+  // from build time would train crawlers to distrust the value.
   const urls = entries
-    .map(
-      (entry) => `  <url>
-    <loc>${xmlEscape(absoluteUrl(site.baseUrl, entry.loc))}</loc>
-    <priority>${entry.priority}</priority>
-  </url>`,
-    )
+    .map((entry) => {
+      const lastmod = lastmods?.get(entry.loc)
+      return [
+        '  <url>',
+        `    <loc>${xmlEscape(absoluteUrl(site.baseUrl, entry.loc))}</loc>`,
+        ...(lastmod ? [`    <lastmod>${xmlEscape(lastmod)}</lastmod>`] : []),
+        `    <priority>${entry.priority}</priority>`,
+        '  </url>',
+      ].join('\n')
+    })
     .join('\n')
 
   return `<?xml version="1.0" encoding="UTF-8"?>
@@ -82,6 +91,12 @@ export function llms({ site, intro, sections, posts }) {
 
 ${groups}${blog}
 
+## Markdown mirrors
+Every documentation page above is also published as plain markdown at the same
+path with the trailing slash replaced by \`.md\` — for example
+[docs/quickstart.md](${site.baseUrl}/docs/quickstart.md). Prefer a mirror when
+fetching a single page; llms-full.txt concatenates every page for one-shot reads.
+
 ## Full text
 - [llms-full.txt](${site.baseUrl}/llms-full.txt): Every documentation page concatenated as plain markdown.
 `
@@ -106,11 +121,29 @@ ${absolutize(doc.markdown.trim(), site.baseUrl)}`,
   return `# MailDev documentation — full text
 
 Every documentation page from ${site.baseUrl}/docs/, concatenated in navigation
-order. Generated; do not edit.
+order. Generated; do not edit. Each page is also published individually at its
+URL with the trailing slash replaced by \`.md\`.
 
 ---
 
 ${body}
+`
+}
+
+/**
+ * One docs page as standalone plain markdown — the per-page twin of the
+ * llms-full.txt blocks above. Links are absolutized so the file makes sense
+ * fetched in isolation. Same URL as the HTML page with the trailing slash
+ * replaced by `.md`.
+ */
+export function docMirror({ site, doc }) {
+  const section = doc.section ? `\nSection: ${doc.section.title}` : ''
+  return `# ${doc.title}
+Source: ${absoluteUrl(site.baseUrl, doc.permalink)}${section}
+
+${doc.description}
+
+${absolutize(doc.markdown.trim(), site.baseUrl)}
 `
 }
 

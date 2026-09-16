@@ -29,8 +29,7 @@ function head(ctx) {
     <title>${esc(documentTitle)}</title>
     <meta name="description" content="${esc(page.description)}" />
     <link rel="canonical" href="${esc(canonical)}" />
-${page.noindex ? '    <meta name="robots" content="noindex" />\n' : ''}
-    <meta property="og:type" content="${esc(ctx.ogType || 'website')}" />
+${page.noindex ? '    <meta name="robots" content="noindex" />\n' : ''}${ctx.markdownMirror ? `    <link rel="alternate" type="text/markdown" title="Markdown" href="${esc(ctx.markdownMirror)}" />\n` : ''}    <meta property="og:type" content="${esc(ctx.ogType || 'website')}" />
     <meta property="og:site_name" content="MailDev" />
     <meta property="og:title" content="${esc(ogTitle)}" />
     <meta property="og:description" content="${esc(ogDescription)}" />

@@ -1,10 +1,8 @@
----
-title: MailDev vs Mailcatcher
-description: A factual comparison of MailDev and Mailcatcher, two open-source local SMTP catchers — runtime, install, web UI, API surface, relaying, and AI agent support.
-ogTitle: MailDev vs Mailcatcher
-permalink: /docs/vs/mailcatcher/
-updated: 2026-08-25
----
+# MailDev vs Mailcatcher
+Source: https://maildev.github.io/maildev/docs/vs/mailcatcher/
+Section: Comparisons
+
+A factual comparison of MailDev and Mailcatcher, two open-source local SMTP catchers — runtime, install, web UI, API surface, relaying, and AI agent support.
 
 Both MailDev and [Mailcatcher](https://mailcatcher.me/) are open-source SMTP
 "catchers": you point your app at a local SMTP port and outgoing mail is trapped
@@ -49,11 +47,11 @@ websocket, and both are MIT licensed.
 ## Pick MailDev if
 
 - **You work in JavaScript or TypeScript.** `npx maildev` needs no Ruby toolchain, and MailDev can be a devDependency pinned in your lockfile.
-- **You care about the UI.** Search, a command palette, [responsive preview](/docs/web-ui/) at phone and tablet widths, and a dark theme.
-- **You script your inbox from tests.** The [REST API](/docs/reference/rest-api/) covers listing with pagination and search, reading, deleting in bulk, marking read, downloading, and relaying — see [testing email in CI](/docs/guides/testing-in-ci/).
-- **You want it in-process.** The [programmatic API](/docs/reference/node-api/) starts and stops MailDev inside a Node.js test suite and emits an event per message, which removes the polling from email assertions entirely.
-- **You want an AI agent to read the inbox.** The built-in [MCP server](/docs/ai/mcp/) gives Claude, Cursor, Codex, and other MCP clients tools for searching and reading your dev mail.
-- **You need to forward mail onward.** [Relay and auto-relay](/docs/reference/cli/) can push caught messages to a real SMTP server, with allow/deny rules.
+- **You care about the UI.** Search, a command palette, [responsive preview](https://maildev.github.io/maildev/docs/web-ui/) at phone and tablet widths, and a dark theme.
+- **You script your inbox from tests.** The [REST API](https://maildev.github.io/maildev/docs/reference/rest-api/) covers listing with pagination and search, reading, deleting in bulk, marking read, downloading, and relaying — see [testing email in CI](https://maildev.github.io/maildev/docs/guides/testing-in-ci/).
+- **You want it in-process.** The [programmatic API](https://maildev.github.io/maildev/docs/reference/node-api/) starts and stops MailDev inside a Node.js test suite and emits an event per message, which removes the polling from email assertions entirely.
+- **You want an AI agent to read the inbox.** The built-in [MCP server](https://maildev.github.io/maildev/docs/ai/mcp/) gives Claude, Cursor, Codex, and other MCP clients tools for searching and reading your dev mail.
+- **You need to forward mail onward.** [Relay and auto-relay](https://maildev.github.io/maildev/docs/reference/cli/) can push caught messages to a real SMTP server, with allow/deny rules.
 
 ## Mailcatcher fits if
 
@@ -74,7 +72,7 @@ The web UI moves from Mailcatcher's port `1080`… which is also MailDev's defau
 In practice the only change is which process you start.
 
 If you script against Mailcatcher's API, the endpoints differ — see the
-[REST API reference](/docs/reference/rest-api/) for MailDev's, which is under
+[REST API reference](https://maildev.github.io/maildev/docs/reference/rest-api/) for MailDev's, which is under
 `/api` and returns richer message objects.
 
 ## Other options

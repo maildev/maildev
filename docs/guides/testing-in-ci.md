@@ -1,9 +1,8 @@
----
-title: Testing email in CI
-description: Run MailDev as a GitHub Actions service container, assert on delivered mail over the REST API, and write end-to-end email tests with Playwright, Cypress, or Vitest.
-ogTitle: Testing email in CI with MailDev
-updated: 2026-08-25
----
+# Testing email in CI
+Source: https://maildev.github.io/maildev/docs/guides/testing-in-ci/
+Section: Guides
+
+Run MailDev as a GitHub Actions service container, assert on delivered mail over the REST API, and write end-to-end email tests with Playwright, Cypress, or Vitest.
 
 Email is one of the easier things to test end-to-end, once you have somewhere for
 it to land. MailDev gives you an SMTP endpoint your app can send to and an HTTP
@@ -15,7 +14,7 @@ its link work?" becomes an ordinary assertion.
 1. Start MailDev before the suite.
 2. Clear the inbox before each test that cares about mail.
 3. Trigger the action in your app.
-4. Poll the [REST API](/docs/reference/rest-api/) until the message shows up.
+4. Poll the [REST API](https://maildev.github.io/maildev/docs/reference/rest-api/) until the message shows up.
 5. Assert on it — subject, recipient, body, or a link extracted from the HTML.
 
 Step 4 needs a poll rather than a single read: SMTP delivery is asynchronous, so
@@ -206,7 +205,7 @@ await maildev.stop()
 
 The `new` event removes the polling problem completely — you get a callback the
 moment a message arrives. See the
-[programmatic API](/docs/reference/node-api/) for the full surface.
+[programmatic API](https://maildev.github.io/maildev/docs/reference/node-api/) for the full surface.
 
 ## Keeping CI fast
 

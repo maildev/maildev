@@ -41,6 +41,20 @@ function validateKeys(data, allowed, sourcePath) {
   }
 }
 
+/**
+ * Normalize the optional `updated` date to `YYYY-MM-DD`. It drives both the
+ * page-meta line and the sitemap `<lastmod>`, so a loose value would leak
+ * into XML; YAML dates arrive as Date instances and must be stringified.
+ */
+function normalizeUpdated(data, sourcePath) {
+  if (!data.updated) return
+  const value = data.updated instanceof Date ? data.updated.toISOString().slice(0, 10) : String(data.updated)
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(value)) {
+    throw new Error(`${sourcePath}: "updated" must be a YYYY-MM-DD date (got "${data.updated}")`)
+  }
+  data.updated = value
+}
+
 /** `content/docs/guides/docker.md` -> `docs/guides/docker` */
 function idFor(sourcePath) {
   return sourcePath.replace(/^content\//, '').replace(/\.md$/, '')
@@ -55,6 +69,7 @@ function loadDoc(sourcePath) {
   const raw = fs.readFileSync(path.join(ROOT, sourcePath), 'utf8')
   const { data, content } = matter(raw)
   validateKeys(data, DOC_KEYS, sourcePath)
+  normalizeUpdated(data, sourcePath)
 
   const id = idFor(sourcePath)
   const permalink = data.permalink || defaultPermalink(id)
@@ -82,6 +97,7 @@ function loadPost(sourcePath) {
   const raw = fs.readFileSync(path.join(ROOT, sourcePath), 'utf8')
   const { data, content } = matter(raw)
   validateKeys(data, POST_KEYS, sourcePath)
+  normalizeUpdated(data, sourcePath)
   if (!data.date) throw new Error(`${sourcePath}: blog posts require a "date"`)
 
   const filename = path.basename(sourcePath, '.md')

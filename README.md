@@ -64,9 +64,11 @@ git add -A && git commit
 
 Optional front matter: `permalink` (defaults to `/docs/<section>/<slug>/`),
 `ogTitle`, `ogDescription`, `ogImage`, `sidebarLabel`, `toc: false`, `noindex`,
-`aliases` (each generates a redirect stub), `updated`,
-`sourceUrl` (marks a page as vendored). Unknown keys are a build error, which
-catches typos like `desciption:` that would otherwise ship an empty description.
+`aliases` (each generates a redirect stub), `updated` (a `YYYY-MM-DD` date that
+drives the "Last updated" line and the sitemap `<lastmod>`; pages without it
+omit the lastmod rather than fabricating one), `sourceUrl` (marks a page as
+vendored). Unknown keys are a build error, which catches typos like
+`desciption:` that would otherwise ship an empty description.
 
 ### Adding a blog post
 
@@ -117,10 +119,11 @@ being a draft.
 
 Generated, listed in `build.manifest.json` — never edit:
 
-`index.html` · `docs/**` · `blog/**` · `setup/` `mcp/` `vs/mailcatcher/`
-(redirect stubs) · `index.md` `setup.md` `mcp.md` `vs-mailcatcher.md` (one-line
-pointers at previously published URLs) · `404.html` · `sitemap.xml` ·
-`robots.txt` · `llms.txt` · `llms-full.txt` · `assets/js/site.js`
+`index.html` · `docs/**` (HTML pages and `.md` mirrors) · `blog/**` · `setup/`
+`mcp/` `vs/mailcatcher/` (redirect stubs) · `index.md` `setup.md` `mcp.md`
+`vs-mailcatcher.md` (one-line pointers at previously published URLs) ·
+`404.html` · `sitemap.xml` · `robots.txt` · `llms.txt` · `llms-full.txt` ·
+`assets/js/site.js`
 
 Source, hand-maintained:
 
@@ -152,13 +155,22 @@ them upstream and re-sync; never edit them here.
 
 ## Notes
 
-- **Agent/LLM consumption is via `llms.txt` and `llms-full.txt`.** Per-page
-  markdown twins (`docs/install.md` beside `docs/install/index.html`) were
-  emitted at one point and have been retired — they duplicated the source
-  almost verbatim. `llms-full.txt` carries every page's markdown in navigation
-  order. The four `.md` URLs published before that change (`index.md`,
-  `setup.md`, `mcp.md`, `vs-mailcatcher.md`) remain as one-line pointers so
-  they do not 404.
+- **Agent/LLM consumption is via `llms.txt`, `llms-full.txt`, and per-page
+  markdown mirrors.** Every docs page is emitted twice: `docs/install/` (HTML)
+  and `docs/install.md` (plain markdown with absolute links). The mirror is
+  linked from its HTML page (`rel="alternate" type="text/markdown"` and a
+  "View as markdown" link in the page meta) and from `llms.txt`. Mirrors are
+  not in the sitemap — they are alternate formats of pages already listed,
+  not URLs of their own. `llms-full.txt` still concatenates every page for
+  one-shot reads. The four `.md` URLs published before the mirrors existed
+  (`index.md`, `setup.md`, `mcp.md`, `vs-mailcatcher.md`) remain one-line
+  pointers so they do not 404.
+- **Sitemap `<lastmod>` comes only from `updated:` front matter.** Deriving it
+  from mtimes would break the deterministic-build rule (fresh clones get fresh
+  mtimes), and git dates are invisible to uncommitted working-tree edits,
+  which would force a commit → rebuild → recommit cycle on every content
+  change. Pages without `updated:` omit the lastmod; the build refuses loose
+  values.
 - **`.nojekyll` must stay.** Without it GitHub Pages runs Jekyll over this
   branch, which converts the markdown under `content/` and can fail the build
   outright if a code fence contains Liquid syntax (`{{`, `{%`).

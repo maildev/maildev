@@ -1,13 +1,11 @@
----
-title: Claude Code walkthrough
-description: A complete development loop with Claude Code driving MailDev over MCP — connect the server, build an email flow, and let the agent verify delivery and follow the link it finds.
-ogTitle: Building email flows with Claude Code and MailDev
-permalink: /docs/ai/claude-code/
-updated: 2026-08-25
----
+# Claude Code walkthrough
+Source: https://maildev.github.io/maildev/docs/ai/claude-code/
+Section: AI & agents
+
+A complete development loop with Claude Code driving MailDev over MCP — connect the server, build an email flow, and let the agent verify delivery and follow the link it finds.
 
 This is the whole loop, start to finish: wire MailDev's
-[MCP server](/docs/ai/mcp/) into Claude Code, build a signup-verification flow,
+[MCP server](https://maildev.github.io/maildev/docs/ai/mcp/) into Claude Code, build a signup-verification flow,
 and let the agent check its own work by reading the email that arrives.
 
 The interesting part is the last step. Without inbox access an agent writes the
@@ -55,7 +53,7 @@ Confirm it connected:
 ```
 
 <figure class="figure-todo">
-  <img src="/assets/img/claude-code/mcp-status.png"/>
+  <img src="https://maildev.github.io/maildev/assets/img/claude-code/mcp-status.png"/>
   <figcaption>Claude Code's <code>/mcp</code> output showing the <code>maildev</code> server connected, with its five tools listed.</figcaption>
 </figure>
 
@@ -63,8 +61,8 @@ Confirm it connected:
 
 Whatever your stack, the settings are the same three: host `localhost`, port
 `1025`, no auth and no TLS. See the
-[quick start](/docs/quickstart/) for your framework, or
-[Nodemailer](/docs/integrations/nodemailer/) if you are on Node.
+[quick start](https://maildev.github.io/maildev/docs/quickstart/) for your framework, or
+[Nodemailer](https://maildev.github.io/maildev/docs/integrations/nodemailer/) if you are on Node.
 
 ```js
 const transport = nodemailer.createTransport({
@@ -87,7 +85,7 @@ sentence is what changes its behavior — instead of stopping at "I've implement
 this, you should test it", it goes and checks.
 
 <figure class="figure-todo">
-  <img src="/assets/img/claude-code/verify-tool-use.png"/>
+  <img src="https://maildev.github.io/maildev/assets/img/claude-code/verify-tool-use.png"/>
   <figcaption>Claude Code calling <code>maildev_get_latest_email</code> and reporting the verification link it extracted.</figcaption>
 </figure>
 
@@ -108,7 +106,7 @@ link (`http://localhost:1080/#/email/<id>`) that opens the exact message the
 agent read.
 
 <figure class="figure-todo">
-  <img src="/assets/img/claude-code/tool-use-expanded.png"/>
+  <img src="https://maildev.github.io/maildev/assets/img/claude-code/tool-use-expanded.png"/>
   <figcaption>The MailDev inbox showing the verification email the agent just read, with the HTML preview and the verification link visible.</figcaption>
 </figure>
 
@@ -156,15 +154,15 @@ the session makes "did the email arrive?" ambiguous.
 An agent reading the inbox is for the development loop — fast, conversational,
 exploratory. It is not a substitute for assertions that run in CI. Once a flow
 works, write it down as a test: see
-[testing email in CI](/docs/guides/testing-in-ci/) for the REST-API patterns, and
-the [programmatic API](/docs/reference/node-api/) if you would rather start
+[testing email in CI](https://maildev.github.io/maildev/docs/guides/testing-in-ci/) for the REST-API patterns, and
+the [programmatic API](https://maildev.github.io/maildev/docs/reference/node-api/) if you would rather start
 MailDev in-process.
 
 ## Other MCP clients
 
 Nothing here is Claude Code-specific beyond the config file location. Cursor,
 Codex, Windsurf, and Claude Desktop all connect to the same server — see
-[the MCP guide](/docs/ai/mcp/) for each one's configuration path and the stdio
+[the MCP guide](https://maildev.github.io/maildev/docs/ai/mcp/) for each one's configuration path and the stdio
 transport option.
 
 :::warn

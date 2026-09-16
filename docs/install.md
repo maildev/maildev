@@ -1,9 +1,8 @@
----
-title: Install MailDev
-description: Run MailDev with npx, install it globally with npm, or pull the Docker image. Node.js 20 or newer is the only requirement.
-permalink: /docs/install/
-updated: 2026-08-25
----
+# Install MailDev
+Source: https://maildev.github.io/maildev/docs/install/
+Section: Getting started
+
+Run MailDev with npx, install it globally with npm, or pull the Docker image. Node.js 20 or newer is the only requirement.
 
 ## Run it without installing
 
@@ -41,7 +40,7 @@ No Node.js toolchain required:
 docker run -p 1080:1080 -p 1025:1025 maildev/maildev
 ```
 
-See the [Docker guide](/docs/guides/docker/) for Compose, environment variables,
+See the [Docker guide](https://maildev.github.io/maildev/docs/guides/docker/) for Compose, environment variables,
 and the image's health check.
 
 ## As a project dependency
@@ -64,7 +63,7 @@ Then wire it into a script:
 }
 ```
 
-You can also [start and stop it from Node.js directly](/docs/reference/node-api/),
+You can also [start and stop it from Node.js directly](https://maildev.github.io/maildev/docs/reference/node-api/),
 which is usually the better shape for integration tests.
 
 ## Requirements
@@ -73,7 +72,7 @@ which is usually the better shape for integration tests.
 - **Nothing** for the Docker image beyond a container runtime.
 
 Ports `1025` and `1080` need to be free. Both are configurable — see
-[`--smtp` and `--web`](/docs/reference/cli/) if something else already owns them.
+[`--smtp` and `--web`](https://maildev.github.io/maildev/docs/reference/cli/) if something else already owns them.
 
 ## Verify the install
 
@@ -92,7 +91,7 @@ curl http://localhost:1080/api/healthz
 
 MailDev 3.0 is a complete TypeScript rewrite: React web UI, Fastify API, and the
 new MCP server. If you are upgrading from 2.x, the CLI flags are unchanged but
-the [programmatic API moved from callbacks to promises](/docs/reference/node-api/).
+the [programmatic API moved from callbacks to promises](https://maildev.github.io/maildev/docs/reference/node-api/).
 
 :::note
 Hit a regression in 3.0? The 2.x line is still available — `npm install -g maildev@2`
@@ -102,4 +101,4 @@ is genuinely useful.
 
 ## Next
 
-Point an application at it: **[Quick start](/docs/quickstart/)**.
+Point an application at it: **[Quick start](https://maildev.github.io/maildev/docs/quickstart/)**.

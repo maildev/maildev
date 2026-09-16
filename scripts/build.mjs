@@ -38,6 +38,11 @@ function readIfExists(relative) {
   return fs.existsSync(absolute) ? fs.readFileSync(absolute, 'utf8') : null
 }
 
+/** `/docs/quickstart/` -> `docs/quickstart.md` */
+function mirrorPath(permalink) {
+  return `${permalink.replace(/^\//, '').replace(/\/$/, '')}.md`
+}
+
 function previousManifest() {
   const raw = readIfExists(MANIFEST)
   if (!raw) return []
@@ -96,6 +101,15 @@ function buildOutputs({ site: rawSite, sections, docs, posts, nav }) {
     add(page.outputPath, pages.doc({ site, page, sections }))
   }
 
+  // ---- Per-page markdown mirrors ------------------------------------------
+  // A plain-markdown twin beside every docs page (`/docs/install/` also at
+  // `/docs/install.md`), so an agent can fetch one page without parsing HTML.
+  // Deliberately not in the sitemap: they are alternate formats of pages that
+  // are already listed, not URLs of their own.
+  for (const doc of docs) {
+    add(mirrorPath(doc.permalink), artifacts.docMirror({ site, doc }))
+  }
+
   // ---- Blog --------------------------------------------------------------
   if (hasBlog) {
     const blogPage = {
@@ -147,8 +161,12 @@ function buildOutputs({ site: rawSite, sections, docs, posts, nav }) {
   }
 
   // ---- Derived artifacts -------------------------------------------------
+  const lastmods = new Map()
+  for (const doc of docs) if (doc.updated) lastmods.set(doc.permalink, doc.updated)
+  for (const post of posts) if (post.updated) lastmods.set(post.permalink, post.updated)
+
   add('404.html', pages.notFound({ site, sections }))
-  add('sitemap.xml', artifacts.sitemap({ site, docs, posts }))
+  add('sitemap.xml', artifacts.sitemap({ site, docs, posts, lastmods }))
   add('robots.txt', artifacts.robots(site))
   add('llms.txt', artifacts.llms({
     site,
@@ -220,6 +238,7 @@ function checkLegacyUrls(outputs) {
     'index.html', 'index.md',
     'setup/index.html', 'mcp/index.html', 'vs/mailcatcher/index.html',
     'setup.md', 'mcp.md', 'vs-mailcatcher.md',
+    'docs.md', 'docs/quickstart.md',
     'sitemap.xml', 'robots.txt', 'llms.txt',
   ]
   const missing = required.filter((file) => !outputs.has(file))

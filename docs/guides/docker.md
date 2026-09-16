@@ -1,9 +1,8 @@
----
-title: Docker & Docker Compose
-description: Run MailDev as a container, wire it into a Compose stack so your app can reach it by service name, pass CLI flags and environment variables, and use the built-in health check.
-ogTitle: Running MailDev with Docker
-updated: 2026-08-25
----
+# Docker & Docker Compose
+Source: https://maildev.github.io/maildev/docs/guides/docker/
+Section: Guides
+
+Run MailDev as a container, wire it into a Compose stack so your app can reach it by service name, pass CLI flags and environment variables, and use the built-in health check.
 
 The official image is [`maildev/maildev`](https://hub.docker.com/r/maildev/maildev)
 on Docker Hub. It is built on `node:22-alpine`, runs as the unprivileged `node`
@@ -49,7 +48,7 @@ Set `TZ` if you want received timestamps in your own timezone:
 docker run -p 1080:1080 -p 1025:1025 -e TZ=Europe/Berlin maildev/maildev
 ```
 
-The [CLI reference](/docs/reference/cli/) lists every other variable.
+The [CLI reference](https://maildev.github.io/maildev/docs/reference/cli/) lists every other variable.
 
 ## Docker Compose
 
@@ -87,7 +86,7 @@ If MailDev runs in Compose and your app runs on the host, publish the SMTP port
 ## Reaching the host from MailDev's container
 
 The reverse — an app on the host, MailDev in a container — needs no special
-setup, but if you configure [relaying](/docs/reference/cli/) to an SMTP server on
+setup, but if you configure [relaying](https://maildev.github.io/maildev/docs/reference/cli/) to an SMTP server on
 the host, use `host.docker.internal` rather than `localhost` on Docker Desktop.
 On Linux, add:
 
@@ -163,5 +162,5 @@ livenessProbe:
 MailDev has no authentication by default and accepts mail from anyone who can
 reach the port. Keep it inside your cluster or development network — never behind
 a public ingress. If you must expose the UI, put
-[basic auth](/docs/reference/cli/) on it with `--web-user` and `--web-pass`.
+[basic auth](https://maildev.github.io/maildev/docs/reference/cli/) on it with `--web-user` and `--web-pass`.
 :::

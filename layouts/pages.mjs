@@ -49,6 +49,7 @@ ${tocHtml}
     page,
     body,
     ogType: 'article',
+    markdownMirror: `${page.permalink.replace(/\/$/, '')}.md`,
     jsonLd: {
       '@context': 'https://schema.org',
       '@type': 'BreadcrumbList',

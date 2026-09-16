@@ -1,9 +1,8 @@
----
-title: Ruby on Rails
-description: Point Action Mailer at MailDev in development, preview mailers in the browser, and assert on delivered mail in system tests.
-ogTitle: Using MailDev with Ruby on Rails
-updated: 2026-08-25
----
+# Ruby on Rails
+Source: https://maildev.github.io/maildev/docs/integrations/rails/
+Section: Integrations
+
+Point Action Mailer at MailDev in development, preview mailers in the browser, and assert on delivered mail in system tests.
 
 Add this to `config/environments/development.rb`:
 
@@ -39,7 +38,7 @@ config.action_mailer.smtp_settings = {
 ```
 
 Necessary as soon as Rails or MailDev runs in a container — see
-[Docker](/docs/guides/docker/).
+[Docker](https://maildev.github.io/maildev/docs/guides/docker/).
 
 ## Send a test message
 
@@ -119,7 +118,7 @@ For unit tests, `ActionMailer::Base.deliveries` is the right tool and needs no
 external process.
 
 MailDev is for the end-to-end case, where a real server process sends the mail.
-Read the [REST API](/docs/reference/rest-api/):
+Read the [REST API](https://maildev.github.io/maildev/docs/reference/rest-api/):
 
 ```ruby
 require 'net/http'
@@ -146,7 +145,7 @@ def wait_for_email(subject, timeout: 10)
 end
 ```
 
-More patterns in [testing email in CI](/docs/guides/testing-in-ci/).
+More patterns in [testing email in CI](https://maildev.github.io/maildev/docs/guides/testing-in-ci/).
 
 ## Letter Opener, and why you might still want MailDev
 
@@ -156,7 +155,7 @@ frictionless for a solo Rails app.
 MailDev is the better fit when mail comes from more than one service, when you
 want an inbox rather than a stream of tabs, when you need to assert on delivery
 from a test suite over HTTP, or when you want an
-[AI agent to read the mail](/docs/ai/mcp/). They also compose fine — nothing stops
+[AI agent to read the mail](https://maildev.github.io/maildev/docs/ai/mcp/). They also compose fine — nothing stops
 you using previews, `letter_opener`, and MailDev on different environments.
 
 ## Troubleshooting

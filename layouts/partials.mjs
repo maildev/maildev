@@ -89,5 +89,6 @@ export function pageMeta(doc, site) {
   } else {
     bits.push(`<a href="${esc(site.links.editBase)}/${esc(doc.sourcePath)}">Edit this page</a>`)
   }
+  bits.push(`<a href="${esc(doc.permalink.replace(/\/$/, ''))}.md">View as markdown</a>`)
   return `        <p class="page-meta">${bits.join('<span class="sep" aria-hidden="true">·</span>')}</p>`
 }

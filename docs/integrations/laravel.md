@@ -1,9 +1,8 @@
----
-title: Laravel
-description: Configure Laravel's mail driver to send development email to MailDev, use Mailable previews alongside it, and assert on delivered mail in Dusk and Pest tests.
-ogTitle: Using MailDev with Laravel
-updated: 2026-08-25
----
+# Laravel
+Source: https://maildev.github.io/maildev/docs/integrations/laravel/
+Section: Integrations
+
+Configure Laravel's mail driver to send development email to MailDev, use Mailable previews alongside it, and assert on delivered mail in Dusk and Pest tests.
 
 Laravel reads its mail configuration from the environment. Add this to `.env`:
 
@@ -139,7 +138,7 @@ MAIL_HOST=maildev
 MAIL_PORT=1025
 ```
 
-See the [Docker guide](/docs/guides/docker/) for the general rule.
+See the [Docker guide](https://maildev.github.io/maildev/docs/guides/docker/) for the general rule.
 
 ## Testing
 
@@ -147,7 +146,7 @@ For unit tests, `Mail::fake()` and `Mail::assertSent()` are the right tool — n
 external process, and assertions on the Mailable itself.
 
 MailDev belongs in **browser and end-to-end tests**, where mail leaves a real
-server process. Read the [REST API](/docs/reference/rest-api/):
+server process. Read the [REST API](https://maildev.github.io/maildev/docs/reference/rest-api/):
 
 ```php
 function clearInbox(): void
@@ -194,7 +193,7 @@ it('emails a verification link on registration', function () {
 });
 ```
 
-More patterns in [testing email in CI](/docs/guides/testing-in-ci/).
+More patterns in [testing email in CI](https://maildev.github.io/maildev/docs/guides/testing-in-ci/).
 
 ## Symfony Mailer directly
 
@@ -215,7 +214,7 @@ config file overrides the environment.
 
 **`Expected response code 250 but got an empty response`** — usually
 `MAIL_ENCRYPTION` is set to `tls` against a plaintext listener. Set it to `null`,
-or [configure TLS on MailDev](/docs/guides/https/).
+or [configure TLS on MailDev](https://maildev.github.io/maildev/docs/guides/https/).
 
 **Nothing arrives from a job or notification.** No queue worker is running. Set
 `QUEUE_CONNECTION=sync` or start `queue:work`.

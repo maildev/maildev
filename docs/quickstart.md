@@ -1,10 +1,8 @@
----
-title: Quick start
-description: Point your app's mail transport at localhost:1025, send a message, and read it at localhost:1080. Copy-paste configuration for Node.js, Django, Rails, Laravel, Spring Boot, and anything else that speaks SMTP.
-ogTitle: Connect your app to MailDev
-permalink: /docs/quickstart/
-updated: 2026-08-25
----
+# Quick start
+Source: https://maildev.github.io/maildev/docs/quickstart/
+Section: Getting started
+
+Point your app's mail transport at localhost:1025, send a message, and read it at localhost:1080. Copy-paste configuration for Node.js, Django, Rails, Laravel, Spring Boot, and anything else that speaks SMTP.
 
 MailDev runs an SMTP server on port **1025** and a web inbox on **1080**. Point
 your framework's mail transport at `localhost:1025` — no authentication, no TLS —
@@ -41,7 +39,7 @@ await transport.sendMail({
 ```
 
 More detail, including how to switch transports per environment, in the
-[Nodemailer guide](/docs/integrations/nodemailer/).
+[Nodemailer guide](https://maildev.github.io/maildev/docs/integrations/nodemailer/).
 
 ### Django
 
@@ -53,7 +51,7 @@ EMAIL_HOST_PASSWORD = ''
 EMAIL_USE_TLS = False
 ```
 
-See the [Django guide](/docs/integrations/django/).
+See the [Django guide](https://maildev.github.io/maildev/docs/integrations/django/).
 
 ### Ruby on Rails
 
@@ -66,7 +64,7 @@ config.action_mailer.smtp_settings = {
 }
 ```
 
-See the [Rails guide](/docs/integrations/rails/).
+See the [Rails guide](https://maildev.github.io/maildev/docs/integrations/rails/).
 
 ### Laravel
 
@@ -79,7 +77,7 @@ MAIL_PASSWORD=null
 MAIL_ENCRYPTION=null
 ```
 
-See the [Laravel guide](/docs/integrations/laravel/).
+See the [Laravel guide](https://maildev.github.io/maildev/docs/integrations/laravel/).
 
 ### Spring Boot
 
@@ -123,7 +121,7 @@ pushed over a websocket, so there is nothing to refresh.
 
 For each message you get the rendered HTML, the plain-text alternative, the raw
 source with full headers, attachments, and a responsive preview at phone and
-tablet widths. Details in [the web inbox](/docs/web-ui/).
+tablet widths. Details in [the web inbox](https://maildev.github.io/maildev/docs/web-ui/).
 
 ## Anything else
 
@@ -131,20 +129,20 @@ MailDev speaks plain SMTP, so any language or framework works the same way. If
 your stack is not listed above, look for the setting that overrides the mail host
 and port, and turn off authentication and STARTTLS.
 
-- [REST API](/docs/reference/rest-api/) — read and assert on mail from a test suite
-- [Programmatic API](/docs/reference/node-api/) — embed MailDev in a Node.js process
-- [Testing email in CI](/docs/guides/testing-in-ci/) — run it as a service container
-- [MCP server](/docs/ai/mcp/) — let an AI agent read the inbox
+- [REST API](https://maildev.github.io/maildev/docs/reference/rest-api/) — read and assert on mail from a test suite
+- [Programmatic API](https://maildev.github.io/maildev/docs/reference/node-api/) — embed MailDev in a Node.js process
+- [Testing email in CI](https://maildev.github.io/maildev/docs/guides/testing-in-ci/) — run it as a service container
+- [MCP server](https://maildev.github.io/maildev/docs/ai/mcp/) — let an AI agent read the inbox
 
 ## Troubleshooting
 
 **Connection refused.** MailDev is not running, or it is bound somewhere your app
 cannot reach. Inside Docker, `localhost` is the container — use the service name
-or `host.docker.internal`; see the [Docker guide](/docs/guides/docker/).
+or `host.docker.internal`; see the [Docker guide](https://maildev.github.io/maildev/docs/guides/docker/).
 
 **The app hangs when sending.** Almost always a TLS mismatch: the client is
 trying to negotiate STARTTLS or connect over implicit TLS. Turn encryption off
-for development, or configure [SMTP TLS](/docs/guides/https/) on MailDev.
+for development, or configure [SMTP TLS](https://maildev.github.io/maildev/docs/guides/https/) on MailDev.
 
 **Mail sends but the inbox is empty.** Check which port your app actually used.
 Frameworks default to `25` or `587`, and a stray default will silently connect

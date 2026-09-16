@@ -4,6 +4,7 @@ description: MailDev is a local SMTP server and web inbox for developers. Catch 
 ogTitle: MailDev documentation
 permalink: /docs/
 toc: false
+updated: 2026-08-25
 ---
 
 MailDev sits between your application and the outside world during development.

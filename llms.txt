@@ -43,5 +43,11 @@ Key facts:
 ## Comparisons
 - [MailDev vs Mailcatcher](https://maildev.github.io/maildev/docs/vs/mailcatcher/): A factual comparison of MailDev and Mailcatcher, two open-source local SMTP catchers — runtime, install, web UI, API surface, relaying, and AI agent support.
 
+## Markdown mirrors
+Every documentation page above is also published as plain markdown at the same
+path with the trailing slash replaced by `.md` — for example
+[docs/quickstart.md](https://maildev.github.io/maildev/docs/quickstart.md). Prefer a mirror when
+fetching a single page; llms-full.txt concatenates every page for one-shot reads.
+
 ## Full text
 - [llms-full.txt](https://maildev.github.io/maildev/llms-full.txt): Every documentation page concatenated as plain markdown.

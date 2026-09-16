@@ -1,9 +1,8 @@
----
-title: Django
-description: Configure Django's email backend to send development mail to MailDev, keep production settings separate, and test outgoing email with the Django test client.
-ogTitle: Using MailDev with Django
-updated: 2026-08-25
----
+# Django
+Source: https://maildev.github.io/maildev/docs/integrations/django/
+Section: Integrations
+
+Configure Django's email backend to send development mail to MailDev, keep production settings separate, and test outgoing email with the Django test client.
 
 Django's SMTP backend needs four settings. Add them to your development settings
 module:
@@ -25,8 +24,8 @@ the console or locmem backend.
 
 ## Reading it from the environment
 
-The version that also works in [Docker](/docs/guides/docker/) and
-[CI](/docs/guides/testing-in-ci/), where MailDev is not on `localhost`:
+The version that also works in [Docker](https://maildev.github.io/maildev/docs/guides/docker/) and
+[CI](https://maildev.github.io/maildev/docs/guides/testing-in-ci/), where MailDev is not on `localhost`:
 
 ```python
 import os
@@ -120,7 +119,7 @@ they need no external process and the test suite sets them up automatically.
 
 MailDev earns its place in **end-to-end** tests, where the mail is sent by a real
 server process that your test cannot reach into. Point the app at MailDev and read
-the [REST API](/docs/reference/rest-api/):
+the [REST API](https://maildev.github.io/maildev/docs/reference/rest-api/):
 
 ```python
 import time
@@ -144,7 +143,7 @@ def clear_inbox():
     requests.delete(f'{MAILDEV}/api/email/all')
 ```
 
-More patterns in [testing email in CI](/docs/guides/testing-in-ci/).
+More patterns in [testing email in CI](https://maildev.github.io/maildev/docs/guides/testing-in-ci/).
 
 ## Celery
 
@@ -159,7 +158,7 @@ in a container and pointing at its own `localhost`.
 
 **`SMTPNotSupportedError: STARTTLS extension not supported`** — you have
 `EMAIL_USE_TLS = True` against a listener that does not require it. Set it to
-`False`, or [configure TLS on MailDev](/docs/guides/https/).
+`False`, or [configure TLS on MailDev](https://maildev.github.io/maildev/docs/guides/https/).
 
 **Nothing arrives and no error is raised.** Something set
 `EMAIL_BACKEND` to `console` or `locmem` — check your settings chain, including

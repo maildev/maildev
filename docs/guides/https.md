@@ -1,9 +1,8 @@
----
-title: HTTPS & TLS
-description: Serve the MailDev web inbox over HTTPS with a self-signed certificate, and configure TLS on the SMTP listener for clients that insist on an encrypted connection.
-ogTitle: Serving MailDev over HTTPS
-updated: 2026-08-25
----
+# HTTPS & TLS
+Source: https://maildev.github.io/maildev/docs/guides/https/
+Section: Guides
+
+Serve the MailDev web inbox over HTTPS with a self-signed certificate, and configure TLS on the SMTP listener for clients that insist on an encrypted connection.
 
 There are two independent TLS surfaces in MailDev, and they are configured
 separately:
@@ -53,8 +52,8 @@ environment:
 ```
 
 :::note
-Enabling HTTPS changes the scheme for the [REST API](/docs/reference/rest-api/)
-and the [MCP endpoint](/docs/ai/mcp/) too, since they are served by the same
+Enabling HTTPS changes the scheme for the [REST API](https://maildev.github.io/maildev/docs/reference/rest-api/)
+and the [MCP endpoint](https://maildev.github.io/maildev/docs/ai/mcp/) too, since they are served by the same
 process. Update any client that hardcodes `http://localhost:1080`. With a
 self-signed certificate, non-browser clients typically also need their TLS
 verification relaxed — `curl -k`, or `NODE_TLS_REJECT_UNAUTHORIZED=0` for Node.

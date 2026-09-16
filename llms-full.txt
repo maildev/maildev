@@ -1,7 +1,8 @@
 # MailDev documentation — full text
 
 Every documentation page from https://maildev.github.io/maildev/docs/, concatenated in navigation
-order. Generated; do not edit.
+order. Generated; do not edit. Each page is also published individually at its
+URL with the trailing slash replaced by `.md`.
 
 ---
 

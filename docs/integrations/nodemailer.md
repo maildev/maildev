@@ -1,9 +1,8 @@
----
-title: Nodemailer
-description: Configure Nodemailer to send development mail to MailDev, switch transports per environment, and verify the connection before your app starts sending.
-ogTitle: Using MailDev with Nodemailer
-updated: 2026-08-25
----
+# Nodemailer
+Source: https://maildev.github.io/maildev/docs/integrations/nodemailer/
+Section: Integrations
+
+Configure Nodemailer to send development mail to MailDev, switch transports per environment, and verify the connection before your app starts sending.
 
 Nodemailer needs three settings to talk to MailDev, and two of them are defaults.
 
@@ -56,8 +55,8 @@ function createMailTransport() {
 
 Reading host and port from the environment even in development is worth the extra
 line: it is what lets the same code run against a
-[Compose service](/docs/guides/docker/) or a
-[CI service container](/docs/guides/testing-in-ci/), where MailDev is not on
+[Compose service](https://maildev.github.io/maildev/docs/guides/docker/) or a
+[CI service container](https://maildev.github.io/maildev/docs/guides/testing-in-ci/), where MailDev is not on
 `localhost`.
 
 ## Verify the connection
@@ -111,7 +110,7 @@ await transport.sendMail({
 
 MailDev advertises STARTTLS by default, so a transport with `requireTLS: true`
 will upgrade and work. For implicit TLS you need to
-[give MailDev a certificate](/docs/guides/https/) and relax verification on the
+[give MailDev a certificate](https://maildev.github.io/maildev/docs/guides/https/) and relax verification on the
 client:
 
 ```js
@@ -141,21 +140,21 @@ await transport.sendMail({
 })
 ```
 
-The [responsive preview](/docs/web-ui/) is the part worth using here — a template
+The [responsive preview](https://maildev.github.io/maildev/docs/web-ui/) is the part worth using here — a template
 that looks right at desktop width and collapses at 320px is the most common email
 bug there is.
 
 ## Testing
 
 For assertions in a test suite, either read the
-[REST API](/docs/reference/rest-api/) or skip the separate process entirely and
-[embed MailDev](/docs/reference/node-api/) — its `new` event fires the moment a
+[REST API](https://maildev.github.io/maildev/docs/reference/rest-api/) or skip the separate process entirely and
+[embed MailDev](https://maildev.github.io/maildev/docs/reference/node-api/) — its `new` event fires the moment a
 message lands, which is much less fiddly than polling.
 
 ## Troubleshooting
 
 **`ECONNREFUSED 127.0.0.1:1025`** — MailDev is not running, or it is in a
-container and your app is not. See [Docker](/docs/guides/docker/).
+container and your app is not. See [Docker](https://maildev.github.io/maildev/docs/guides/docker/).
 
 **The send hangs, then times out.** The transport is trying implicit TLS against a
 plaintext listener. Remove `secure: true`.

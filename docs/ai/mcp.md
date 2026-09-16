@@ -1,10 +1,8 @@
----
-title: MCP server
-description: Enable MailDev's Model Context Protocol server so Claude, Cursor, Codex, and any other MCP client can search your development inbox, pull verification links out of emails, and confirm delivery.
-ogTitle: Email testing with AI agents
-permalink: /docs/ai/mcp/
-updated: 2026-08-25
----
+# MCP server
+Source: https://maildev.github.io/maildev/docs/ai/mcp/
+Section: AI & agents
+
+Enable MailDev's Model Context Protocol server so Claude, Cursor, Codex, and any other MCP client can search your development inbox, pull verification links out of emails, and confirm delivery.
 
 MailDev 3.0 ships a Model Context Protocol server. Your coding agent gets tools
 for searching and reading the same development inbox you have open in the
@@ -29,7 +27,7 @@ against your own dev inbox — never against anything holding real mail.
 
 :::note
 **Don't want to use MCP?** Everything the MCP server does is also available over
-the plain [REST API](/docs/reference/rest-api/), which is a better fit for scripts
+the plain [REST API](https://maildev.github.io/maildev/docs/reference/rest-api/), which is a better fit for scripts
 and test suites.
 :::
 
@@ -123,7 +121,7 @@ If MailDev is not installed globally, use `npx`:
 | Claude Desktop (Windows) | `%APPDATA%\Claude\claude_desktop_config.json` |
 | Claude Desktop (Linux) | `~/.config/Claude/claude_desktop_config.json` |
 
-For Claude Code specifically, the [step-by-step walkthrough](/docs/ai/claude-code/)
+For Claude Code specifically, the [step-by-step walkthrough](https://maildev.github.io/maildev/docs/ai/claude-code/)
 covers setup and a real development loop.
 
 ## What your agent can do
@@ -192,7 +190,7 @@ is `http://localhost:1080/maildev/mcp`.
 package. Install it globally, or use the `npx` form above.
 
 **Tools appear but every call fails.** The stdio server talks to MailDev over
-HTTP; if MailDev has [basic auth](/docs/reference/cli/) enabled, pass
+HTTP; if MailDev has [basic auth](https://maildev.github.io/maildev/docs/reference/cli/) enabled, pass
 `--api-key` or drop the auth in development.
 
 ## Full reference

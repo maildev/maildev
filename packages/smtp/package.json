@@ -41,9 +41,9 @@
   "dependencies": {
     "@maildev/core": "workspace:*",
     "smtp-server": "^3.19.2",
-    "nodemailer": "^9.0.3",
+    "nodemailer": "^9.1.1",
     "mailparser": "^3.9.14",
-    "dompurify": "^3.4.11",
+    "dompurify": "^3.4.13",
     "jsdom": "^26.0.0",
     "wildstring": "^1.0.8"
   },
@@ -53,7 +53,7 @@
     "@types/mailparser": "^3.4.5",
     "@types/nodemailer": "6.4.17",
     "@types/smtp-server": "^3.5.10",
-    "vitest": "^3.2.7",
+    "vitest": "^4.1.11",
     "typescript": "^5.7.3"
   }
 }

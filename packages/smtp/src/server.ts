@@ -258,7 +258,7 @@ export class SMTPServer extends EventEmitter {
 
     // Replace CID references with actual URLs
     if (email.attachments && email.attachments.length > 0) {
-      html = replaceCidReferences(html, id, email.attachments, options.baseUrl)
+      html = replaceCidReferences(html, id, email.attachments, options.baseUrl, options.basePath)
     }
 
     return html

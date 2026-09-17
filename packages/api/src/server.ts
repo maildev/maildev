@@ -457,11 +457,11 @@ export class APIServer extends EventEmitter {
       `${apiPath}/email/:id/html`,
       async (request, reply) => {
         const { id } = request.params
-        const baseUrl = request.headers.host ?? ''
 
         try {
           if (this.smtp) {
-            const html = await this.smtp.getEmailHtml(id, { baseUrl })
+            // No host: the HTML is rendered for a browser already on this origin
+            const html = await this.smtp.getEmailHtml(id, { basePath })
             if (!html) {
               return reply.status(404).send({ error: 'Email has no HTML content' })
             }

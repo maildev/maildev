@@ -94,7 +94,8 @@ function buildAttachmentUrl(
   basePath?: string
 ): string {
   const base = baseUrl ? `//${baseUrl}` : ''
-  const prefix = basePath ? `/${basePath.replace(/^\/|\/$/g, '')}` : ''
+  const segments = basePath ? basePath.replace(/^\/+|\/+$/g, '') : ''
+  const prefix = segments ? `/${segments}` : ''
   return `${base}${prefix}/api/email/${emailId}/attachment/${encodeURIComponent(filename)}`
 }
 

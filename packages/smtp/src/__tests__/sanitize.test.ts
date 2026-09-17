@@ -122,6 +122,20 @@ describe('replaceCidReferences', () => {
     }
   })
 
+  it('should treat basePath "/" as no prefix', () => {
+    const html = '<img src="cid:image123">'
+    const attachments = [{ contentId: 'image123', generatedFileName: 'abc.png' }]
+    const result = replaceCidReferences(html, 'email1', attachments, undefined, '/')
+    expect(result).toContain('src="/api/email/email1/attachment/abc.png"')
+  })
+
+  it('should combine baseUrl and basePath', () => {
+    const html = '<img src="cid:image123">'
+    const attachments = [{ contentId: 'image123', generatedFileName: 'abc.png' }]
+    const result = replaceCidReferences(html, 'email1', attachments, 'example.com', '/mail')
+    expect(result).toContain('src="//example.com/mail/api/email/email1/attachment/abc.png"')
+  })
+
   it('should replace multiple cid references', () => {
     const html = '<img src="cid:img1"><img src="cid:img2">'
     const attachments = [

@@ -6,6 +6,7 @@
 
 import createDOMPurify from 'dompurify'
 import { JSDOM } from 'jsdom'
+import { normalizeContentId } from './attachments.js'
 
 // Create a window object for DOMPurify
 const { window } = new JSDOM('')
@@ -68,9 +69,12 @@ export function replaceCidReferences(
   for (const attachment of embeddedAttachments) {
     if (!attachment.contentId) continue
 
+    const cid = normalizeContentId(attachment.contentId)
+    if (!cid) continue
+
     // Match src="cid:xxx" or src='cid:xxx'
     const regex = new RegExp(
-      `src=("|')cid:${escapeRegExp(attachment.contentId)}("|')`,
+      `src=("|')cid:${escapeRegExp(cid)}("|')`,
       'g'
     )
 

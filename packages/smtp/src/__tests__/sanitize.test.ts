@@ -173,4 +173,52 @@ describe('replaceCidReferences', () => {
     expect(result).toContain('abc.png')
     expect(result).not.toContain('other.png')
   })
+
+  it('should strip angle brackets from stored contentId when matching', () => {
+    const html = '<img src="cid:image123@host">'
+    const attachments = [
+      { contentId: '<image123@host>', generatedFileName: 'abc.png' },
+    ]
+
+    const result = replaceCidReferences(html, 'email1', attachments)
+
+    expect(result).toContain('/api/email/email1/attachment/abc.png')
+    expect(result).not.toContain('cid:')
+  })
+
+  it('should strip angle brackets with single-quoted src', () => {
+    const html = "<img src='cid:image123@host'>"
+    const attachments = [
+      { contentId: '<image123@host>', generatedFileName: 'abc.png' },
+    ]
+
+    const result = replaceCidReferences(html, 'email1', attachments)
+
+    expect(result).toContain('/api/email/email1/attachment/abc.png')
+    expect(result).not.toContain('cid:')
+  })
+
+  it('should strip angle brackets and rewrite under a base path', () => {
+    const html = '<img src="cid:svg-part@maildev.test">'
+    const attachments = [
+      { contentId: '<svg-part@maildev.test>', generatedFileName: 'abc.svg' },
+    ]
+
+    const result = replaceCidReferences(html, 'email1', attachments, undefined, '/mail')
+
+    expect(result).toContain('src="/mail/api/email/email1/attachment/abc.svg"')
+    expect(result).not.toContain('cid:')
+  })
+
+  it('should tolerate whitespace around the bracketed contentId', () => {
+    const html = '<img src="cid:image123">'
+    const attachments = [
+      { contentId: '< image123 >', generatedFileName: 'abc.png' },
+    ]
+
+    const result = replaceCidReferences(html, 'email1', attachments)
+
+    expect(result).toContain('/api/email/email1/attachment/abc.png')
+    expect(result).not.toContain('cid:')
+  })
 })

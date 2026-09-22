@@ -9,6 +9,21 @@ import { extname, join, format as formatPath } from 'node:path'
 import type { ParsedAttachment, TransformedAttachment } from './types.js'
 
 /**
+ * Normalize a Content-ID to its bare value
+ *
+ * mailparser keeps the angle brackets from the `Content-ID` header in
+ * `attachment.contentId` (`<id@host>`), while HTML references the bare
+ * `cid:id@host`. This mirrors mailparser's own stripping so both forms
+ * can be matched against each other.
+ *
+ * @param contentId - Raw Content-ID value, with or without angle brackets
+ * @returns Bare content ID
+ */
+export function normalizeContentId(contentId: string): string {
+  return contentId.trim().replace(/^<|>$/g, '').trim()
+}
+
+/**
  * Generate a secure filename for an attachment
  * Uses MD5 hash of contentId to prevent path traversal attacks
  *

@@ -8,6 +8,7 @@ import { simpleParser } from 'mailparser'
 import type { ParsedMail, Attachment as MailparserAttachment, AddressObject, EmailAddress } from 'mailparser'
 import { createReadStream } from 'node:fs'
 import type { Readable } from 'node:stream'
+import { normalizeContentId } from './attachments.js'
 import type { ParsedEmail, ParsedAttachment, Address } from './types.js'
 
 /**
@@ -134,7 +135,9 @@ function transformAttachment(attachment: MailparserAttachment): ParsedAttachment
     filename: attachment.filename,
     contentType: attachment.contentType,
     contentDisposition: attachment.contentDisposition,
-    contentId: attachment.contentId,
+    contentId: attachment.contentId
+      ? normalizeContentId(attachment.contentId)
+      : attachment.contentId,
     size: attachment.size,
     content: attachment.content,
     checksum: attachment.checksum,

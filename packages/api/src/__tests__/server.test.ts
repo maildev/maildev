@@ -725,6 +725,64 @@ describe('APIServer', () => {
       expect(attachment.statusCode).toBe(200)
       expect(attachment.headers['content-type']).toBe('image/png')
     })
+
+    it('rewrites cid attachments whose stored contentId keeps the Content-ID angle brackets', async () => {
+      mailDir = await mkdtemp(join(tmpdir(), 'maildev-html-cid-'))
+      const smtp = new SMTPServer({ storage, mailDir })
+      server = createAPIServer({ storage, port: 0, basePath: '/base', smtp })
+      await server.start()
+
+      const testEmail: Email = {
+        id: 'test-bracket-123',
+        time: new Date(),
+        read: false,
+        subject: 'Inline CID Email',
+        source: '/path/to/email.eml',
+        size: 1024,
+        sizeHuman: '1.0 KB',
+        from: [{ address: 'sender@example.com' }],
+        to: [{ address: 'recipient@example.com' }],
+        headers: {},
+        html: '<img src="cid:logo@example.com">',
+        attachments: [
+          {
+            filename: 'logo.png',
+            generatedFileName: 'logo.png',
+            contentType: 'image/png',
+            contentDisposition: 'inline',
+            contentId: '<logo@example.com>',
+            size: 4,
+          },
+        ],
+        envelope: {
+          from: { address: 'sender@example.com' },
+          to: [{ address: 'recipient@example.com' }],
+        },
+        calculatedBcc: [],
+      }
+      await storage.save(testEmail)
+
+      await mkdir(join(mailDir, 'test-bracket-123'))
+      await writeFile(join(mailDir, 'test-bracket-123', 'logo.png'), Buffer.from('logo'))
+
+      const html = await server.server.inject({
+        method: 'GET',
+        url: '/base/api/email/test-bracket-123/html',
+      })
+
+      expect(html.statusCode).toBe(200)
+      expect(html.body).not.toContain('cid:')
+
+      const src = html.body.match(/src="([^"]+)"/)?.[1]
+      expect(src).toBe('/base/api/email/test-bracket-123/attachment/logo.png')
+
+      const attachment = await server.server.inject({
+        method: 'GET',
+        url: src!,
+      })
+      expect(attachment.statusCode).toBe(200)
+      expect(attachment.headers['content-type']).toBe('image/png')
+    })
   })
 
   describe('MCP server', () => {

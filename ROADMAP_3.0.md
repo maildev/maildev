@@ -8,6 +8,8 @@
 
 Transform MailDev from AngularJS + callbacks → TypeScript + React + modern stack while maintaining backward compatibility.
 
+**Growth wedge:** AI agent integration (MCP) — a capability no competitor (Mailpit, MailHog, Mailtrap) offers. Position 3.0 as *email testing for the AI era* (see [Growth Priorities](#growth-priorities-ranked-by-roi)).
+
 ---
 
 ## Key Changes
@@ -121,14 +123,17 @@ packages/
 **Deliverable:** `maildev@3.0.0-alpha.1` - **COMPLETE**
 
 ### Phase 7: Advanced Features (Weeks 20-23) ⚡
-**Power user features**
+**Power user features (ROI-ranked — see [Growth Priorities](#growth-priorities-ranked-by-roi))**
+- ⭐ Convenience test endpoints: `GET /api/email/latest?query=...` returning rendered HTML/text, plus `?embed=1` iframe mode — makes Playwright/Cypress/Vitest integration trivial
+- ⭐ Chaos mode in `@maildev/smtp`: configurable SMTP error injection (delays, rejects, mid-message disconnects) — combined with MCP enables agent-driven resilience testing
+- Webhooks on new mail (CI pipelines, n8n, Zapier) — table stakes vs Mailpit
 - Plugin system with hooks
-- Webhooks for integrations
-- Email scenarios/templates
-- Team features (multi-user)
 - Advanced search operators
+- Email scenarios/templates
 
-**Deliverable:** Plugin SDK + 3-5 official plugins
+*(Team features deferred to 3.2 per decision log.)*
+
+**Deliverable:** Test endpoints + chaos mode + webhooks + Plugin SDK + 3-5 official plugins
 
 ### Phase 8: Testing & Polish (Weeks 24-26) ✅
 **Production ready**
@@ -152,9 +157,9 @@ packages/
 ### Phase 10: Launch (Weeks 29-30) 🚢
 **Go live**
 - Final release `@3.0.0`
-- Documentation site
+- ✅ Documentation site (complete)
 - Migration guides
-- Marketing campaign
+- Marketing campaign — lead with the MCP/AI-agent story (see [Growth Priorities](#growth-priorities-ranked-by-roi))
 
 **Deliverable:** MailDev 3.0.0 released!
 
@@ -233,6 +238,55 @@ export const slackNotifier: Plugin = {
 - Email device previews
 - Keyboard navigation (j/k for Gmail-like nav)
 - Virtualized lists (handle 10k+ emails)
+
+---
+
+## Competitive Analysis: MailDev vs Mailpit
+
+Mailpit (~10.4k GitHub stars vs MailDev's ~3.5k) grew largely on: a single Go
+binary, a polished docs site, fast storage, and email QA checks. MailDev can't
+match the static binary, but it has a wedge Mailpit lacks: **AI agent
+integration**. All growth messaging should lead with that.
+
+### Feature parity snapshot
+
+| Feature | Mailpit | MailDev |
+|---------|---------|---------|
+| MCP / AI agent integration | ❌ | ✅ **5 tools, 3 resources, 4 prompts (stdio + HTTP)** |
+| Programmatic embedding (`new MailDev()`) | ❌ (standalone binary) | ✅ |
+| Command palette (Cmd+K), keyboard-first UI, dark mode | ❌ | ✅ |
+| TypeScript monorepo — hackable in JS, packages usable standalone | ❌ (Go) | ✅ |
+| HTML check (client compatibility scoring) | ✅ | ❌ (defer to 3.1) |
+| Link check (broken links / linked images) | ✅ | ❌ (defer to 3.1) |
+| Chaos mode (SMTP error injection) | ✅ | ❌ → Phase 7 |
+| Webhook on new mail | ✅ | ❌ → Phase 7 |
+| Convenience test endpoints (`latest?query=`, `?embed=1`) | ✅ | ❌ → Phase 7 |
+| Message tagging (manual + auto via plus-addressing) | ✅ | ❌ (defer to 3.2) |
+| HTML screenshots, SpamAssassin check, POP3 | ✅ | ❌ (not worth chasing — see below) |
+| Single static binary / `brew install` + brew services | ✅ | ❌ (Node 20+); Homebrew formula pending |
+| Docs website | ✅ | ✅ Complete |
+| Published benchmarks (200–300 emails/sec) | ✅ | ❌ |
+
+### Growth Priorities (Ranked by ROI)
+
+**Tier 1 — Quick wins (low effort, high visibility)**
+1. **Lead all messaging with MCP** — the differentiator Mailpit can't copy: MCP headline in README, demo GIF of Claude verifying a signup link, copy-paste configs for Claude Desktop/Cursor/Codex/Windsurf, list in the MCP Registry
+2. **Convenience test endpoints** — `GET /api/email/latest?query=...` (rendered HTML/text) + `?embed=1` iframe mode; trivial to add on the existing API, and the #1 unlock for Playwright/Cypress/Vitest integration (Phase 7)
+3. **Homebrew formula** — already pending from Phase 6; low effort, big Mac adoption
+4. **"MailDev vs Mailpit vs MailHog" comparison table** — high-traffic SEO draw for README/docs site
+
+**Tier 2 — Medium effort, strong differentiators**
+5. **Chaos mode in `@maildev/smtp`** — cheap to build; combined with MCP enables a story nobody else can tell: *"Claude, make SMTP fail and verify our app retries"*
+6. **Webhooks** — promote from 3.1 into Phase 7; table stakes for CI/n8n integrations
+7. **Test-framework recipes** — Playwright/Cypress/Vitest guides, plus optional first-party `@maildev/test` helpers (Mailpit relies on a community Cypress package; first-party is better)
+8. **Published benchmarks** — throughput (emails/sec) + memory vs Mailpit's published numbers
+
+**Tier 3 — Bigger builds (defer to 3.1+)**
+9. **HTML check / link check** — Mailpit's real moat; leverage the npm ecosystem (e.g., caniemail data) rather than porting Mailpit's approach
+10. **HTML screenshots** — via Playwright (already in the stack for E2E)
+11. **OpenAPI spec** — machine-readable REST API for client codegen
+
+**Not worth chasing:** POP3, SpamAssassin integration, sendmail shim — niche relative to MailDev's Node/AI positioning.
 
 ---
 
@@ -326,7 +380,10 @@ These features are intentionally deferred to maintain focus on core modernizatio
 
 ### Version 3.1 - Persistence & Integration (Q4 2026)
 - **Database Storage**: SQLite, PostgreSQL, PGLite drivers
-- **Webhooks**: Integration with Zapier, Make, n8n
+- **HTML Check**: Email client compatibility scoring (leverage caniemail data)
+- **Link Check**: Validate message links (HTML & text) and linked images
+- **HTML Screenshots**: Capture message screenshots via Playwright (already in the stack)
+- **OpenAPI Spec**: Machine-readable REST API spec for client codegen
 - **Cloud Storage**: S3-compatible attachment storage
 - **Advanced Persistence**: Automatic migration to databases
 
@@ -373,6 +430,11 @@ These features are intentionally deferred to maintain focus on core modernizatio
 | 2026-01-13 | React over Vue/Svelte | Larger ecosystem, team familiarity |
 | 2026-01-13 | Defer database storage to 3.1 | Focus on core modernization first |
 | 2026-01-13 | Defer team features to 3.2 | Prioritize individual developer experience |
+| 2026-09-22 | Lead all marketing with the MCP/AI-agent story | Mailpit (and all competitors) have no AI story; MailDev's unique wedge |
+| 2026-09-22 | Add chaos mode + latest-email test endpoints to Phase 7 | Cheap, high-ROI additions vs Mailpit; enable agent-driven resilience testing |
+| 2026-09-22 | Move webhooks from 3.1 into Phase 7 | Table stakes for CI integrations; Mailpit already ships it |
+| 2026-09-22 | Defer HTML/link checks to 3.1 | Big build; keep 3.0 scope focused |
+| 2026-09-22 | Documentation site complete | Pulled forward from Phase 10 |
 
 ---
 
@@ -380,7 +442,7 @@ These features are intentionally deferred to maintain focus on core modernizatio
 
 - **Full Specification**: [MODERNIZATION_SPEC.md](./MODERNIZATION_SPEC.md)
 - **Claude Integration**: [CLAUDE.md](./CLAUDE.md)
-- **Current Docs**: [docs/](./docs/)
+- **Docs Site**: ✅ Live (see [docs/](./docs/))
 - **GitHub Issues**: https://github.com/maildev/maildev/issues
 - **Discussions**: https://github.com/maildev/maildev/discussions
 
@@ -464,9 +526,9 @@ pnpm dev
 
 ---
 
-**Last Updated:** 2026-02-26
-**Document Version:** 1.8
-**Status:** Phase 6 Complete - Ready for Phase 7 (Advanced Features)
+**Last Updated:** 2026-09-22
+**Document Version:** 1.9
+**Status:** Phase 6 Complete (docs site live) — Ready for Phase 7 (Advanced Features, ROI-ranked)
 
 ---
 

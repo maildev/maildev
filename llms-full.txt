@@ -195,9 +195,12 @@ Leave it running. Every other step assumes it is up.
 ## 2. Point your app at it
 
 The universal answer is three settings: host `localhost`, port `1025`, auth and
-TLS off. Here is what that looks like in the common stacks.
+TLS off. Pick your stack below — the choice follows you through the rest of
+this page, and other pages remember it too.
 
-### Node.js (Nodemailer)
+
+**Nodemailer**
+
 
 ```js
 // No auth or TLS needed against MailDev in development
@@ -217,7 +220,9 @@ await transport.sendMail({
 More detail, including how to switch transports per environment, in the
 [Nodemailer guide](https://maildev.github.io/maildev/docs/integrations/nodemailer/).
 
-### Django
+
+**Django**
+
 
 ```python
 EMAIL_HOST = 'localhost'
@@ -229,7 +234,9 @@ EMAIL_USE_TLS = False
 
 See the [Django guide](https://maildev.github.io/maildev/docs/integrations/django/).
 
-### Ruby on Rails
+
+**Rails**
+
 
 ```ruby
 config.action_mailer.delivery_method = :smtp
@@ -242,7 +249,9 @@ config.action_mailer.smtp_settings = {
 
 See the [Rails guide](https://maildev.github.io/maildev/docs/integrations/rails/).
 
-### Laravel
+
+**Laravel**
+
 
 ```ini
 MAIL_MAILER=smtp
@@ -255,7 +264,9 @@ MAIL_ENCRYPTION=null
 
 See the [Laravel guide](https://maildev.github.io/maildev/docs/integrations/laravel/).
 
-### Spring Boot
+
+**Spring Boot**
+
 
 ```properties
 spring.mail.host=localhost
@@ -264,24 +275,103 @@ spring.mail.properties.mail.smtp.auth=false
 spring.mail.properties.mail.smtp.starttls.enable=false
 ```
 
+
 ## 3. Send a test message
 
 If you would rather check MailDev before touching your app, send something by
-hand. With Python's standard library:
+hand — using the same stack you picked above:
+
+
+**Nodemailer**
+
+
+```js
+// save as send-test.js, then: node send-test.js
+const nodemailer = require('nodemailer')
+
+const transport = nodemailer.createTransport({
+  host: 'localhost',
+  port: 1025,
+})
+
+transport.sendMail({
+  from: 'app@example.com',
+  to: 'user@test.com',
+  subject: 'Hello from MailDev',
+  text: 'It works!',
+}).then(() => console.log('Sent — check http://localhost:1080'))
+```
+
+
+**Django**
+
+
+```console
+python manage.py shell
+```
 
 ```python
-import smtplib
-from email.message import EmailMessage
+from django.core.mail import send_mail
 
-message = EmailMessage()
-message['From'] = 'app@example.com'
-message['To'] = 'user@test.com'
-message['Subject'] = 'Hello from MailDev'
-message.set_content('It works!')
-
-with smtplib.SMTP('localhost', 1025) as smtp:
-    smtp.send_message(message)
+send_mail(
+    'Hello from MailDev',
+    'It works!',
+    'app@example.com',
+    ['user@test.com'],
+)
 ```
+
+
+**Rails**
+
+
+```console
+bin/rails runner
+```
+
+```ruby
+ActionMailer::Base.mail(
+  from: 'app@example.com',
+  to: 'user@test.com',
+  subject: 'Hello from MailDev',
+  body: 'It works!'
+).deliver_now
+```
+
+
+**Laravel**
+
+
+```console
+php artisan tinker
+```
+
+```php
+Mail::raw('It works!', function ($message) {
+    $message->to('user@test.com')
+        ->from('app@example.com')
+        ->subject('Hello from MailDev');
+});
+```
+
+
+**Spring Boot**
+
+
+```java
+// With spring-boot-starter-mail on the classpath, run from a test or a
+// CommandLineRunner:
+@Autowired JavaMailSender mailSender;
+
+// ...
+SimpleMailMessage message = new SimpleMailMessage();
+message.setFrom("app@example.com");
+message.setTo("user@test.com");
+message.setSubject("Hello from MailDev");
+message.setText("It works!");
+mailSender.send(message);
+```
+
 
 Or with `curl`, which speaks SMTP:
 

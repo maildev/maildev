@@ -148,8 +148,18 @@ then watch mail arrive at <code>http://localhost:1080</code>.</p>
 <p>Leave it running. Every other step assumes it is up.</p>
 <h2 id="2-point-your-app-at-it" tabindex="-1">2. Point your app at it <a class="heading-anchor" href="#2-point-your-app-at-it" aria-hidden="true">#</a></h2>
 <p>The universal answer is three settings: host <code>localhost</code>, port <code>1025</code>, auth and
-TLS off. Here is what that looks like in the common stacks.</p>
-<h3 id="nodejs-nodemailer" tabindex="-1">Node.js (Nodemailer) <a class="heading-anchor" href="#nodejs-nodemailer" aria-hidden="true">#</a></h3>
+TLS off. Pick your stack below — the choice follows you through the rest of
+this page, and other pages remember it too.</p>
+<div class="code-tabs" data-sync="framework">
+<div class="code-tabs-bar" role="tablist" aria-label="Code examples">
+<button type="button" role="tab" id="ct-0-0" aria-controls="ct-0-0-pane" aria-selected="true" tabindex="0">Nodemailer</button>
+<button type="button" role="tab" id="ct-0-1" aria-controls="ct-0-1-pane" aria-selected="false" tabindex="0">Django</button>
+<button type="button" role="tab" id="ct-0-2" aria-controls="ct-0-2-pane" aria-selected="false" tabindex="0">Rails</button>
+<button type="button" role="tab" id="ct-0-3" aria-controls="ct-0-3-pane" aria-selected="false" tabindex="0">Laravel</button>
+<button type="button" role="tab" id="ct-0-4" aria-controls="ct-0-4-pane" aria-selected="false" tabindex="0">Spring Boot</button>
+</div>
+<div class="code-tab-pane" role="tabpanel" id="ct-0-0-pane" aria-labelledby="ct-0-0">
+<p class="code-tab-label">Nodemailer</p>
 <pre class="shiki github-dark-default" tabindex="0"><code><span class="line"><span style="color:#8B949E">// No auth or TLS needed against MailDev in development</span></span>
 <span class="line"><span style="color:#FF7B72">const</span><span style="color:#79C0FF"> transport</span><span style="color:#FF7B72"> =</span><span style="color:#E6EDF3"> nodemailer.</span><span style="color:#D2A8FF">createTransport</span><span style="color:#E6EDF3">({</span></span>
 <span class="line"><span style="color:#E6EDF3">  host: </span><span style="color:#A5D6FF">'localhost'</span><span style="color:#E6EDF3">,</span></span>
@@ -164,14 +174,18 @@ TLS off. Here is what that looks like in the common stacks.</p>
 <span class="line"><span style="color:#E6EDF3">})</span></span></code></pre>
 <p>More detail, including how to switch transports per environment, in the
 <a href="../../docs/integrations/nodemailer/">Nodemailer guide</a>.</p>
-<h3 id="django" tabindex="-1">Django <a class="heading-anchor" href="#django" aria-hidden="true">#</a></h3>
+</div>
+<div class="code-tab-pane" role="tabpanel" id="ct-0-1-pane" aria-labelledby="ct-0-1">
+<p class="code-tab-label">Django</p>
 <pre class="shiki github-dark-default" tabindex="0"><code><span class="line"><span style="color:#79C0FF">EMAIL_HOST</span><span style="color:#FF7B72"> =</span><span style="color:#A5D6FF"> 'localhost'</span></span>
 <span class="line"><span style="color:#79C0FF">EMAIL_PORT</span><span style="color:#FF7B72"> =</span><span style="color:#79C0FF"> 1025</span></span>
 <span class="line"><span style="color:#79C0FF">EMAIL_HOST_USER</span><span style="color:#FF7B72"> =</span><span style="color:#A5D6FF"> ''</span></span>
 <span class="line"><span style="color:#79C0FF">EMAIL_HOST_PASSWORD</span><span style="color:#FF7B72"> =</span><span style="color:#A5D6FF"> ''</span></span>
 <span class="line"><span style="color:#79C0FF">EMAIL_USE_TLS</span><span style="color:#FF7B72"> =</span><span style="color:#79C0FF"> False</span></span></code></pre>
 <p>See the <a href="../../docs/integrations/django/">Django guide</a>.</p>
-<h3 id="ruby-on-rails" tabindex="-1">Ruby on Rails <a class="heading-anchor" href="#ruby-on-rails" aria-hidden="true">#</a></h3>
+</div>
+<div class="code-tab-pane" role="tabpanel" id="ct-0-2-pane" aria-labelledby="ct-0-2">
+<p class="code-tab-label">Rails</p>
 <pre class="shiki github-dark-default" tabindex="0"><code><span class="line"><span style="color:#E6EDF3">config.</span><span style="color:#D2A8FF">action_mailer</span><span style="color:#E6EDF3">.</span><span style="color:#D2A8FF">delivery_method</span><span style="color:#FF7B72"> =</span><span style="color:#79C0FF"> :smtp</span></span>
 <span class="line"><span style="color:#E6EDF3">config.</span><span style="color:#D2A8FF">action_mailer</span><span style="color:#E6EDF3">.</span><span style="color:#D2A8FF">smtp_settings</span><span style="color:#FF7B72"> =</span><span style="color:#E6EDF3"> {</span></span>
 <span class="line"><span style="color:#79C0FF">  address:</span><span style="color:#A5D6FF"> 'localhost'</span><span style="color:#E6EDF3">,</span></span>
@@ -179,7 +193,9 @@ TLS off. Here is what that looks like in the common stacks.</p>
 <span class="line"><span style="color:#79C0FF">  enable_starttls_auto:</span><span style="color:#79C0FF"> false</span></span>
 <span class="line"><span style="color:#E6EDF3">}</span></span></code></pre>
 <p>See the <a href="../../docs/integrations/rails/">Rails guide</a>.</p>
-<h3 id="laravel" tabindex="-1">Laravel <a class="heading-anchor" href="#laravel" aria-hidden="true">#</a></h3>
+</div>
+<div class="code-tab-pane" role="tabpanel" id="ct-0-3-pane" aria-labelledby="ct-0-3">
+<p class="code-tab-label">Laravel</p>
 <pre class="shiki github-dark-default" tabindex="0"><code><span class="line"><span style="color:#FF7B72">MAIL_MAILER</span><span style="color:#E6EDF3">=smtp</span></span>
 <span class="line"><span style="color:#FF7B72">MAIL_HOST</span><span style="color:#E6EDF3">=127.0.0.1</span></span>
 <span class="line"><span style="color:#FF7B72">MAIL_PORT</span><span style="color:#E6EDF3">=1025</span></span>
@@ -187,25 +203,89 @@ TLS off. Here is what that looks like in the common stacks.</p>
 <span class="line"><span style="color:#FF7B72">MAIL_PASSWORD</span><span style="color:#E6EDF3">=null</span></span>
 <span class="line"><span style="color:#FF7B72">MAIL_ENCRYPTION</span><span style="color:#E6EDF3">=null</span></span></code></pre>
 <p>See the <a href="../../docs/integrations/laravel/">Laravel guide</a>.</p>
-<h3 id="spring-boot" tabindex="-1">Spring Boot <a class="heading-anchor" href="#spring-boot" aria-hidden="true">#</a></h3>
+</div>
+<div class="code-tab-pane" role="tabpanel" id="ct-0-4-pane" aria-labelledby="ct-0-4">
+<p class="code-tab-label">Spring Boot</p>
 <pre class="shiki github-dark-default" tabindex="0"><code><span class="line"><span style="color:#FF7B72">spring.mail.host</span><span style="color:#E6EDF3">=localhost</span></span>
 <span class="line"><span style="color:#FF7B72">spring.mail.port</span><span style="color:#E6EDF3">=1025</span></span>
 <span class="line"><span style="color:#FF7B72">spring.mail.properties.mail.smtp.auth</span><span style="color:#E6EDF3">=false</span></span>
 <span class="line"><span style="color:#FF7B72">spring.mail.properties.mail.smtp.starttls.enable</span><span style="color:#E6EDF3">=false</span></span></code></pre>
+</div>
+</div>
 <h2 id="3-send-a-test-message" tabindex="-1">3. Send a test message <a class="heading-anchor" href="#3-send-a-test-message" aria-hidden="true">#</a></h2>
 <p>If you would rather check MailDev before touching your app, send something by
-hand. With Python's standard library:</p>
-<pre class="shiki github-dark-default" tabindex="0"><code><span class="line"><span style="color:#FF7B72">import</span><span style="color:#E6EDF3"> smtplib</span></span>
-<span class="line"><span style="color:#FF7B72">from</span><span style="color:#E6EDF3"> email.message </span><span style="color:#FF7B72">import</span><span style="color:#E6EDF3"> EmailMessage</span></span>
+hand — using the same stack you picked above:</p>
+<div class="code-tabs" data-sync="framework">
+<div class="code-tabs-bar" role="tablist" aria-label="Code examples">
+<button type="button" role="tab" id="ct-1-0" aria-controls="ct-1-0-pane" aria-selected="true" tabindex="0">Nodemailer</button>
+<button type="button" role="tab" id="ct-1-1" aria-controls="ct-1-1-pane" aria-selected="false" tabindex="0">Django</button>
+<button type="button" role="tab" id="ct-1-2" aria-controls="ct-1-2-pane" aria-selected="false" tabindex="0">Rails</button>
+<button type="button" role="tab" id="ct-1-3" aria-controls="ct-1-3-pane" aria-selected="false" tabindex="0">Laravel</button>
+<button type="button" role="tab" id="ct-1-4" aria-controls="ct-1-4-pane" aria-selected="false" tabindex="0">Spring Boot</button>
+</div>
+<div class="code-tab-pane" role="tabpanel" id="ct-1-0-pane" aria-labelledby="ct-1-0">
+<p class="code-tab-label">Nodemailer</p>
+<pre class="shiki github-dark-default" tabindex="0"><code><span class="line"><span style="color:#8B949E">// save as send-test.js, then: node send-test.js</span></span>
+<span class="line"><span style="color:#FF7B72">const</span><span style="color:#79C0FF"> nodemailer</span><span style="color:#FF7B72"> =</span><span style="color:#D2A8FF"> require</span><span style="color:#E6EDF3">(</span><span style="color:#A5D6FF">'nodemailer'</span><span style="color:#E6EDF3">)</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E6EDF3">message </span><span style="color:#FF7B72">=</span><span style="color:#E6EDF3"> EmailMessage()</span></span>
-<span class="line"><span style="color:#E6EDF3">message[</span><span style="color:#A5D6FF">'From'</span><span style="color:#E6EDF3">] </span><span style="color:#FF7B72">=</span><span style="color:#A5D6FF"> 'app@example.com'</span></span>
-<span class="line"><span style="color:#E6EDF3">message[</span><span style="color:#A5D6FF">'To'</span><span style="color:#E6EDF3">] </span><span style="color:#FF7B72">=</span><span style="color:#A5D6FF"> 'user@test.com'</span></span>
-<span class="line"><span style="color:#E6EDF3">message[</span><span style="color:#A5D6FF">'Subject'</span><span style="color:#E6EDF3">] </span><span style="color:#FF7B72">=</span><span style="color:#A5D6FF"> 'Hello from MailDev'</span></span>
-<span class="line"><span style="color:#E6EDF3">message.set_content(</span><span style="color:#A5D6FF">'It works!'</span><span style="color:#E6EDF3">)</span></span>
+<span class="line"><span style="color:#FF7B72">const</span><span style="color:#79C0FF"> transport</span><span style="color:#FF7B72"> =</span><span style="color:#E6EDF3"> nodemailer.</span><span style="color:#D2A8FF">createTransport</span><span style="color:#E6EDF3">({</span></span>
+<span class="line"><span style="color:#E6EDF3">  host: </span><span style="color:#A5D6FF">'localhost'</span><span style="color:#E6EDF3">,</span></span>
+<span class="line"><span style="color:#E6EDF3">  port: </span><span style="color:#79C0FF">1025</span><span style="color:#E6EDF3">,</span></span>
+<span class="line"><span style="color:#E6EDF3">})</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#FF7B72">with</span><span style="color:#E6EDF3"> smtplib.SMTP(</span><span style="color:#A5D6FF">'localhost'</span><span style="color:#E6EDF3">, </span><span style="color:#79C0FF">1025</span><span style="color:#E6EDF3">) </span><span style="color:#FF7B72">as</span><span style="color:#E6EDF3"> smtp:</span></span>
-<span class="line"><span style="color:#E6EDF3">    smtp.send_message(message)</span></span></code></pre>
+<span class="line"><span style="color:#E6EDF3">transport.</span><span style="color:#D2A8FF">sendMail</span><span style="color:#E6EDF3">({</span></span>
+<span class="line"><span style="color:#E6EDF3">  from: </span><span style="color:#A5D6FF">'app@example.com'</span><span style="color:#E6EDF3">,</span></span>
+<span class="line"><span style="color:#E6EDF3">  to: </span><span style="color:#A5D6FF">'user@test.com'</span><span style="color:#E6EDF3">,</span></span>
+<span class="line"><span style="color:#E6EDF3">  subject: </span><span style="color:#A5D6FF">'Hello from MailDev'</span><span style="color:#E6EDF3">,</span></span>
+<span class="line"><span style="color:#E6EDF3">  text: </span><span style="color:#A5D6FF">'It works!'</span><span style="color:#E6EDF3">,</span></span>
+<span class="line"><span style="color:#E6EDF3">}).</span><span style="color:#D2A8FF">then</span><span style="color:#E6EDF3">(() </span><span style="color:#FF7B72">=></span><span style="color:#E6EDF3"> console.</span><span style="color:#D2A8FF">log</span><span style="color:#E6EDF3">(</span><span style="color:#A5D6FF">'Sent — check http://localhost:1080'</span><span style="color:#E6EDF3">))</span></span></code></pre>
+</div>
+<div class="code-tab-pane" role="tabpanel" id="ct-1-1-pane" aria-labelledby="ct-1-1">
+<p class="code-tab-label">Django</p>
+<pre><code><span class="cmd">python manage.py shell</span></code></pre>
+<pre class="shiki github-dark-default" tabindex="0"><code><span class="line"><span style="color:#FF7B72">from</span><span style="color:#E6EDF3"> django.core.mail </span><span style="color:#FF7B72">import</span><span style="color:#E6EDF3"> send_mail</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#E6EDF3">send_mail(</span></span>
+<span class="line"><span style="color:#A5D6FF">    'Hello from MailDev'</span><span style="color:#E6EDF3">,</span></span>
+<span class="line"><span style="color:#A5D6FF">    'It works!'</span><span style="color:#E6EDF3">,</span></span>
+<span class="line"><span style="color:#A5D6FF">    'app@example.com'</span><span style="color:#E6EDF3">,</span></span>
+<span class="line"><span style="color:#E6EDF3">    [</span><span style="color:#A5D6FF">'user@test.com'</span><span style="color:#E6EDF3">],</span></span>
+<span class="line"><span style="color:#E6EDF3">)</span></span></code></pre>
+</div>
+<div class="code-tab-pane" role="tabpanel" id="ct-1-2-pane" aria-labelledby="ct-1-2">
+<p class="code-tab-label">Rails</p>
+<pre><code><span class="cmd">bin/rails runner</span></code></pre>
+<pre class="shiki github-dark-default" tabindex="0"><code><span class="line"><span style="color:#79C0FF">ActionMailer</span><span style="color:#E6EDF3">::</span><span style="color:#79C0FF">Base</span><span style="color:#E6EDF3">.</span><span style="color:#D2A8FF">mail</span><span style="color:#E6EDF3">(</span></span>
+<span class="line"><span style="color:#79C0FF">  from:</span><span style="color:#A5D6FF"> 'app@example.com'</span><span style="color:#E6EDF3">,</span></span>
+<span class="line"><span style="color:#79C0FF">  to:</span><span style="color:#A5D6FF"> 'user@test.com'</span><span style="color:#E6EDF3">,</span></span>
+<span class="line"><span style="color:#79C0FF">  subject:</span><span style="color:#A5D6FF"> 'Hello from MailDev'</span><span style="color:#E6EDF3">,</span></span>
+<span class="line"><span style="color:#79C0FF">  body:</span><span style="color:#A5D6FF"> 'It works!'</span></span>
+<span class="line"><span style="color:#E6EDF3">).</span><span style="color:#D2A8FF">deliver_now</span></span></code></pre>
+</div>
+<div class="code-tab-pane" role="tabpanel" id="ct-1-3-pane" aria-labelledby="ct-1-3">
+<p class="code-tab-label">Laravel</p>
+<pre><code><span class="cmd">php artisan tinker</span></code></pre>
+<pre class="shiki github-dark-default" tabindex="0"><code><span class="line"><span style="color:#79C0FF">Mail</span><span style="color:#FF7B72">::</span><span style="color:#D2A8FF">raw</span><span style="color:#E6EDF3">(</span><span style="color:#A5D6FF">'It works!'</span><span style="color:#E6EDF3">, </span><span style="color:#FF7B72">function</span><span style="color:#E6EDF3"> ($message) {</span></span>
+<span class="line"><span style="color:#E6EDF3">    $message</span><span style="color:#FF7B72">-></span><span style="color:#D2A8FF">to</span><span style="color:#E6EDF3">(</span><span style="color:#A5D6FF">'user@test.com'</span><span style="color:#E6EDF3">)</span></span>
+<span class="line"><span style="color:#FF7B72">        -></span><span style="color:#D2A8FF">from</span><span style="color:#E6EDF3">(</span><span style="color:#A5D6FF">'app@example.com'</span><span style="color:#E6EDF3">)</span></span>
+<span class="line"><span style="color:#FF7B72">        -></span><span style="color:#D2A8FF">subject</span><span style="color:#E6EDF3">(</span><span style="color:#A5D6FF">'Hello from MailDev'</span><span style="color:#E6EDF3">);</span></span>
+<span class="line"><span style="color:#E6EDF3">});</span></span></code></pre>
+</div>
+<div class="code-tab-pane" role="tabpanel" id="ct-1-4-pane" aria-labelledby="ct-1-4">
+<p class="code-tab-label">Spring Boot</p>
+<pre class="shiki github-dark-default" tabindex="0"><code><span class="line"><span style="color:#8B949E">// With spring-boot-starter-mail on the classpath, run from a test or a</span></span>
+<span class="line"><span style="color:#8B949E">// CommandLineRunner:</span></span>
+<span class="line"><span style="color:#E6EDF3">@</span><span style="color:#FF7B72">Autowired</span><span style="color:#E6EDF3"> JavaMailSender</span><span style="color:#E6EDF3"> mailSender;</span></span>
+<span class="line"></span>
+<span class="line"><span style="color:#8B949E">// ...</span></span>
+<span class="line"><span style="color:#E6EDF3">SimpleMailMessage</span><span style="color:#E6EDF3"> message</span><span style="color:#FF7B72"> =</span><span style="color:#FF7B72"> new</span><span style="color:#D2A8FF"> SimpleMailMessage</span><span style="color:#E6EDF3">();</span></span>
+<span class="line"><span style="color:#E6EDF3">message.</span><span style="color:#D2A8FF">setFrom</span><span style="color:#E6EDF3">(</span><span style="color:#A5D6FF">"app@example.com"</span><span style="color:#E6EDF3">);</span></span>
+<span class="line"><span style="color:#E6EDF3">message.</span><span style="color:#D2A8FF">setTo</span><span style="color:#E6EDF3">(</span><span style="color:#A5D6FF">"user@test.com"</span><span style="color:#E6EDF3">);</span></span>
+<span class="line"><span style="color:#E6EDF3">message.</span><span style="color:#D2A8FF">setSubject</span><span style="color:#E6EDF3">(</span><span style="color:#A5D6FF">"Hello from MailDev"</span><span style="color:#E6EDF3">);</span></span>
+<span class="line"><span style="color:#E6EDF3">message.</span><span style="color:#D2A8FF">setText</span><span style="color:#E6EDF3">(</span><span style="color:#A5D6FF">"It works!"</span><span style="color:#E6EDF3">);</span></span>
+<span class="line"><span style="color:#E6EDF3">mailSender.</span><span style="color:#D2A8FF">send</span><span style="color:#E6EDF3">(message);</span></span></code></pre>
+</div>
+</div>
 <p>Or with <code>curl</code>, which speaks SMTP:</p>
 <pre><code><span class="cmd">curl smtp://localhost:1025 --mail-from app@example.com --mail-rcpt user@test.com \</span>
 <span class="cmd">  --upload-file - &lt;&lt;&lt; $&#39;Subject: Hello from MailDev\r\n\r\nIt works!&#39;</span></code></pre>
@@ -249,18 +329,13 @@ credentials anyway; MailDev accepts any credentials when none are configured.</p
             <span class="prev-next-title">The web inbox</span>
           </a>
         </nav>
-        <p class="page-meta"><span>Last updated 2026-08-25</span><span class="sep" aria-hidden="true">·</span><a href="https://github.com/maildev/maildev/edit/gh-pages/content/docs/getting-started/quickstart.md">Edit this page</a><span class="sep" aria-hidden="true">·</span><a href="../../docs/quickstart.md">View as markdown</a></p>
+        <p class="page-meta"><span>Last updated 2026-09-16</span><span class="sep" aria-hidden="true">·</span><a href="https://github.com/maildev/maildev/edit/gh-pages/content/docs/getting-started/quickstart.md">Edit this page</a><span class="sep" aria-hidden="true">·</span><a href="../../docs/quickstart.md">View as markdown</a></p>
       </article>
       <nav class="docs-toc" aria-label="On this page">
         <p class="docs-nav-title">On this page</p>
         <ul>
           <li class="lvl-2"><a href="#1-start-maildev">1. Start MailDev</a></li>
           <li class="lvl-2"><a href="#2-point-your-app-at-it">2. Point your app at it</a></li>
-          <li class="lvl-3"><a href="#nodejs-nodemailer">Node.js (Nodemailer)</a></li>
-          <li class="lvl-3"><a href="#django">Django</a></li>
-          <li class="lvl-3"><a href="#ruby-on-rails">Ruby on Rails</a></li>
-          <li class="lvl-3"><a href="#laravel">Laravel</a></li>
-          <li class="lvl-3"><a href="#spring-boot">Spring Boot</a></li>
           <li class="lvl-2"><a href="#3-send-a-test-message">3. Send a test message</a></li>
           <li class="lvl-2"><a href="#4-read-it">4. Read it</a></li>
           <li class="lvl-2"><a href="#anything-else">Anything else</a></li>

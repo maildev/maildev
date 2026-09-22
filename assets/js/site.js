@@ -2,6 +2,9 @@
 (function () {
   "use strict";
 
+  // Lets CSS tell JS-apart-from-no-JS apart (tab bars are useless without it).
+  document.documentElement.classList.add("js");
+
   // ---- Copy button on every code block -------------------------------------
   var COPY_ICON =
     '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="9" width="12" height="12" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg>';
@@ -50,6 +53,96 @@
     } catch (e) {}
     document.body.removeChild(area);
   });
+
+  // ---- Tabbed code groups ---------------------------------------------------
+  // The static HTML ships every pane visible; here we hide the inactive ones,
+  // switch every group sharing a data-sync key together, and persist the
+  // choice so it follows the reader across pages. Groups without a key are
+  // independent. Static markup follows the WAI-ARIA tabs pattern.
+  (function () {
+    var groups = Array.prototype.slice.call(document.querySelectorAll(".code-tabs"));
+    if (!groups.length) return;
+
+    var read = function (key) {
+      if (!key) return null;
+      try { return localStorage.getItem("maildev.tabs." + key); } catch (e) { return null; }
+    };
+    var write = function (key, label) {
+      if (!key) return;
+      try { localStorage.setItem("maildev.tabs." + key, label); } catch (e) {}
+    };
+
+    var tabsOf = function (group) {
+      return Array.prototype.slice.call(group.querySelectorAll("[role='tab']"));
+    };
+
+    // Activate the pane matching "label" in one group; false if absent, which
+    // is how a synced group falls back when it lacks the shared selection.
+    var show = function (group, label) {
+      var tabs = tabsOf(group);
+      var panes = Array.prototype.slice.call(group.querySelectorAll("[role='tabpanel']"));
+      var index = -1;
+      for (var i = 0; i < tabs.length; i++) {
+        if (tabs[i].textContent === label) { index = i; break; }
+      }
+      if (index < 0) return false;
+      tabs.forEach(function (tab, i) {
+        tab.setAttribute("aria-selected", i === index ? "true" : "false");
+        tab.tabIndex = i === index ? 0 : -1;
+      });
+      panes.forEach(function (pane, i) {
+        if (i === index) pane.removeAttribute("hidden");
+        else pane.setAttribute("hidden", "");
+      });
+      return true;
+    };
+
+    var select = function (tab) {
+      var group = tab.closest(".code-tabs");
+      if (!group) return;
+      var label = tab.textContent;
+      var key = group.getAttribute("data-sync");
+      show(group, label);
+      if (key) {
+        write(key, label);
+        groups.forEach(function (other) {
+          if (other !== group && other.getAttribute("data-sync") === key) show(other, label);
+        });
+      }
+    };
+
+    groups.forEach(function (group) {
+      group.classList.add("code-tabs-live");
+      var tabs = tabsOf(group);
+      if (!tabs.length) return;
+
+      var saved = read(group.getAttribute("data-sync"));
+      var initial = tabs[0].textContent;
+      for (var i = 0; i < tabs.length; i++) {
+        if (tabs[i].textContent === saved) { initial = saved; break; }
+      }
+      show(group, initial);
+
+      group.addEventListener("click", function (event) {
+        var tab = event.target.closest ? event.target.closest("[role='tab']") : null;
+        if (tab && group.contains(tab)) select(tab);
+      });
+      group.addEventListener("keydown", function (event) {
+        var tab = event.target.closest ? event.target.closest("[role='tab']") : null;
+        if (!tab) return;
+        var index = tabs.indexOf(tab);
+        var next = null;
+        if (event.key === "ArrowRight") next = tabs[(index + 1) % tabs.length];
+        else if (event.key === "ArrowLeft") next = tabs[(index - 1 + tabs.length) % tabs.length];
+        else if (event.key === "Home") next = tabs[0];
+        else if (event.key === "End") next = tabs[tabs.length - 1];
+        if (!next) return;
+        event.preventDefault();
+        next.focus();
+        select(next);
+      });
+    });
+  })();
 
   // ---- Live GitHub star count (6h cache) -----------------------------------
   (function () {

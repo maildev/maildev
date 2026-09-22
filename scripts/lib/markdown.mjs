@@ -65,6 +65,69 @@ function renderShiki(code, lang) {
   return `${html.replace(/(<pre[^>]*?) style="[^"]*"/, '$1').replace(/(<code[^>]*?) style="[^"]*"/, '$1')}\n`
 }
 
+// ---- Tabbed code groups ----------------------------------------------------
+//
+// Authoring:
+//
+//   ::::tabs framework        <- optional sync key; groups sharing a key
+//   :::tab Nodemailer            switch together. No key: independent group.
+//   ...any markdown...
+//   :::
+//   :::tab Django
+//   ...any markdown...
+//   :::
+//   ::::
+//
+// The outer container takes four colons so a bare `:::` — a pane close, or a
+// nested callout close — never terminates the group early: markdown-it-container
+// only closes a container on a marker at least as long as its opening one.
+// Panes require a label. The emitted markup follows the WAI-ARIA tabs pattern
+// with every pane visible in the static HTML, so the content survives without
+// JS; site.js then hides inactive panes, switches every group that shares a
+// data-sync key together, and persists the choice in localStorage.
+
+let tabGroupCount = 0
+
+function renderTabsOpen(tokens, idx) {
+  if (tokens[idx].nesting === -1) return '</div>\n'
+
+  const sync = (tokens[idx].info.trim().split(/\s+/)[1] || '').toLowerCase()
+  const buttons = []
+
+  for (let i = idx + 1; i < tokens.length && tokens[i].type !== 'container_tabs_close'; i += 1) {
+    const token = tokens[i]
+    if (token.type !== 'container_tab_open') continue
+    // token.info is everything after the colons, i.e. "tab <label>".
+    const label = token.info.trim().replace(/^tab\b\s*/, '')
+    if (!label) throw new Error('code tab needs a label: `:::tab <Label>`')
+    const id = `ct-${tabGroupCount}-${buttons.length}`
+    token.meta = { ...token.meta, id, label }
+    buttons.push(
+      `<button type="button" role="tab" id="${id}" aria-controls="${id}-pane"` +
+        ` aria-selected="${buttons.length === 0}" tabindex="0">${esc(label)}</button>`,
+    )
+  }
+  tabGroupCount += 1
+
+  return (
+    `<div class="code-tabs"${sync ? ` data-sync="${esc(sync)}"` : ''}>\n` +
+    `<div class="code-tabs-bar" role="tablist" aria-label="Code examples">\n` +
+    `${buttons.join('\n')}\n</div>\n`
+  )
+}
+
+function renderTabPane(tokens, idx) {
+  if (tokens[idx].nesting === 1) {
+    const { id, label } = tokens[idx].meta || {}
+    if (!id) throw new Error('`:::tab` used outside a `::::tabs` group')
+    return (
+      `<div class="code-tab-pane" role="tabpanel" id="${id}-pane" aria-labelledby="${id}">\n` +
+      `<p class="code-tab-label">${esc(label)}</p>\n`
+    )
+  }
+  return '</div>\n'
+}
+
 function createRenderer() {
   const md = new MarkdownIt({ html: true, linkify: true, breaks: false })
 
@@ -90,6 +153,9 @@ function createRenderer() {
       },
     })
   }
+
+  md.use(container, 'tabs', { render: renderTabsOpen })
+  md.use(container, 'tab', { render: renderTabPane })
 
   md.renderer.rules.fence = (tokens, idx) => {
     const token = tokens[idx]
@@ -132,6 +198,9 @@ function classifyCells(html) {
  */
 export function renderMarkdown(source) {
   if (!md) md = createRenderer()
+  // Per-page ids: two builds of the same content must produce the same bytes
+  // regardless of how many pages were rendered before this one.
+  tabGroupCount = 0
   const env = {}
   const tokens = md.parse(source, env)
 

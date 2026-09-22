@@ -73,7 +73,7 @@ describe('replaceCidReferences', () => {
 
     const result = replaceCidReferences(html, 'email1', attachments)
 
-    expect(result).toContain('/email/email1/attachment/abc.png')
+    expect(result).toContain('/api/email/email1/attachment/abc.png')
     expect(result).not.toContain('cid:')
   })
 
@@ -85,7 +85,7 @@ describe('replaceCidReferences', () => {
 
     const result = replaceCidReferences(html, 'email1', attachments)
 
-    expect(result).toContain('/email/email1/attachment/abc.png')
+    expect(result).toContain('/api/email/email1/attachment/abc.png')
   })
 
   it('should include baseUrl when provided', () => {
@@ -96,7 +96,44 @@ describe('replaceCidReferences', () => {
 
     const result = replaceCidReferences(html, 'email1', attachments, 'example.com')
 
-    expect(result).toContain('//example.com/email/email1/attachment/abc.png')
+    expect(result).toContain('//example.com/api/email/email1/attachment/abc.png')
+  })
+
+  it('should include basePath when MailDev is mounted under a subpath', () => {
+    const html = '<img src="cid:image123">'
+    const attachments = [
+      { contentId: 'image123', generatedFileName: 'abc.png' },
+    ]
+
+    const result = replaceCidReferences(html, 'email1', attachments, undefined, '/mail')
+
+    expect(result).toContain('src="/mail/api/email/email1/attachment/abc.png"')
+  })
+
+  it('should normalize a basePath given with or without slashes', () => {
+    const html = '<img src="cid:image123">'
+    const attachments = [
+      { contentId: 'image123', generatedFileName: 'abc.png' },
+    ]
+
+    for (const basePath of ['mail', '/mail', '/mail/']) {
+      const result = replaceCidReferences(html, 'email1', attachments, undefined, basePath)
+      expect(result).toContain('src="/mail/api/email/email1/attachment/abc.png"')
+    }
+  })
+
+  it('should treat basePath "/" as no prefix', () => {
+    const html = '<img src="cid:image123">'
+    const attachments = [{ contentId: 'image123', generatedFileName: 'abc.png' }]
+    const result = replaceCidReferences(html, 'email1', attachments, undefined, '/')
+    expect(result).toContain('src="/api/email/email1/attachment/abc.png"')
+  })
+
+  it('should combine baseUrl and basePath', () => {
+    const html = '<img src="cid:image123">'
+    const attachments = [{ contentId: 'image123', generatedFileName: 'abc.png' }]
+    const result = replaceCidReferences(html, 'email1', attachments, 'example.com', '/mail')
+    expect(result).toContain('src="//example.com/mail/api/email/email1/attachment/abc.png"')
   })
 
   it('should replace multiple cid references', () => {

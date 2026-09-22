@@ -45,14 +45,16 @@ export function sanitizeHtml(html: string | undefined): string | undefined {
  * @param html - HTML content with cid: references
  * @param emailId - ID of the email
  * @param attachments - Array of attachments with contentId
- * @param baseUrl - Optional base URL for attachment URLs
+ * @param baseUrl - Optional host to prefix as `//host/...`; unset gives a root-relative URL
+ * @param basePath - Optional pathname the API is mounted under, e.g. `/mail`
  * @returns HTML with cid: references replaced with actual URLs
  */
 export function replaceCidReferences(
   html: string,
   emailId: string,
   attachments: Array<{ contentId?: string; generatedFileName: string }>,
-  baseUrl?: string
+  baseUrl?: string,
+  basePath?: string
 ): string {
   if (!attachments || attachments.length === 0) {
     return html
@@ -72,7 +74,7 @@ export function replaceCidReferences(
       'g'
     )
 
-    const url = buildAttachmentUrl(emailId, attachment.generatedFileName, baseUrl)
+    const url = buildAttachmentUrl(emailId, attachment.generatedFileName, baseUrl, basePath)
     const replacement = `src="${url}"`
 
     result = result.replace(regex, replacement)
@@ -82,15 +84,19 @@ export function replaceCidReferences(
 }
 
 /**
- * Build URL for an attachment
+ * Build URL for an attachment. The API serves these from `${basePath}/api/email/...`,
+ * so both parts belong here or the src 404s.
  */
 function buildAttachmentUrl(
   emailId: string,
   filename: string,
-  baseUrl?: string
+  baseUrl?: string,
+  basePath?: string
 ): string {
   const base = baseUrl ? `//${baseUrl}` : ''
-  return `${base}/email/${emailId}/attachment/${encodeURIComponent(filename)}`
+  const segments = basePath ? basePath.replace(/^\/+|\/+$/g, '') : ''
+  const prefix = segments ? `/${segments}` : ''
+  return `${base}${prefix}/api/email/${emailId}/attachment/${encodeURIComponent(filename)}`
 }
 
 /**

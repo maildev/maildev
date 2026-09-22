@@ -218,8 +218,10 @@ export interface RelayResult {
  * HTML rendering options for email
  */
 export interface HTMLRenderOptions {
-  /** Base URL for attachment URLs */
+  /** Host to prefix attachment URLs with; unset gives a root-relative URL */
   baseUrl?: string
+  /** Pathname the API is mounted under, e.g. `/mail` */
+  basePath?: string
 }
 
 /**

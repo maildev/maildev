@@ -1,6 +1,10 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+import { mkdtemp, mkdir, rm, writeFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import { APIServer, createAPIServer } from '../server.js'
 import { MemoryStorage, type Email } from '@maildev/core'
+import { SMTPServer } from '@maildev/smtp'
 
 describe('APIServer', () => {
   let server: APIServer
@@ -649,6 +653,77 @@ describe('APIServer', () => {
       })
 
       expect(response.statusCode).toBe(404)
+    })
+  })
+
+  describe('email html route cid rewrite', () => {
+    let mailDir: string
+
+    afterEach(async () => {
+      if (mailDir) {
+        await rm(mailDir, { recursive: true, force: true })
+      }
+    })
+
+    it('rewrites inline cid attachments to URLs that resolve under the base path', async () => {
+      mailDir = await mkdtemp(join(tmpdir(), 'maildev-html-cid-'))
+      const smtp = new SMTPServer({ storage, mailDir })
+      server = createAPIServer({ storage, port: 0, basePath: '/base', smtp })
+      await server.start()
+
+      const testEmail: Email = {
+        id: 'test-123',
+        time: new Date(),
+        read: false,
+        subject: 'Inline CID Email',
+        source: '/path/to/email.eml',
+        size: 1024,
+        sizeHuman: '1.0 KB',
+        from: [{ address: 'sender@example.com' }],
+        to: [{ address: 'recipient@example.com' }],
+        headers: {},
+        html: '<img src="cid:logo">',
+        attachments: [
+          {
+            filename: 'logo.png',
+            generatedFileName: 'logo.png',
+            contentType: 'image/png',
+            contentDisposition: 'inline',
+            contentId: 'logo',
+            size: 4,
+          },
+        ],
+        envelope: {
+          from: { address: 'sender@example.com' },
+          to: [{ address: 'recipient@example.com' }],
+        },
+        calculatedBcc: [],
+      }
+      await storage.save(testEmail)
+
+      // The attachment route streams the file from mailDir/:id/:generatedFileName
+      await mkdir(join(mailDir, 'test-123'))
+      await writeFile(join(mailDir, 'test-123', 'logo.png'), Buffer.from('logo'))
+
+      const html = await server.server.inject({
+        method: 'GET',
+        url: '/base/api/email/test-123/html',
+      })
+
+      expect(html.statusCode).toBe(200)
+      expect(html.body).not.toContain('cid:')
+
+      // The rewrite and the attachment route must agree on the URL shape —
+      // this is the pairing #582 fixed.
+      const src = html.body.match(/src="([^"]+)"/)?.[1]
+      expect(src).toBe('/base/api/email/test-123/attachment/logo.png')
+
+      const attachment = await server.server.inject({
+        method: 'GET',
+        url: src!,
+      })
+      expect(attachment.statusCode).toBe(200)
+      expect(attachment.headers['content-type']).toBe('image/png')
     })
   })
 

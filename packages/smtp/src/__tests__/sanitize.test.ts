@@ -88,6 +88,29 @@ describe('replaceCidReferences', () => {
     expect(result).toContain('/api/email/email1/attachment/abc.png')
   })
 
+  it('should replace cid references in href attributes', () => {
+    const html = '<a href="cid:document123">Open document</a>'
+    const attachments = [
+      { contentId: 'document123', generatedFileName: 'document.pdf' },
+    ]
+
+    const result = replaceCidReferences(html, 'email1', attachments)
+
+    expect(result).toContain('href="/api/email/email1/attachment/document.pdf"')
+    expect(result).not.toContain('cid:')
+  })
+
+  it('should leave unmatched cid href references untouched', () => {
+    const html = '<a href="cid:missing-document">Missing document</a>'
+    const attachments = [
+      { contentId: 'document123', generatedFileName: 'document.pdf' },
+    ]
+
+    const result = replaceCidReferences(html, 'email1', attachments)
+
+    expect(result).toBe(html)
+  })
+
   it('should include baseUrl when provided', () => {
     const html = '<img src="cid:image123">'
     const attachments = [

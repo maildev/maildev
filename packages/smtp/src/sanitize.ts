@@ -72,16 +72,15 @@ export function replaceCidReferences(
     const cid = normalizeContentId(attachment.contentId)
     if (!cid) continue
 
-    // Match src="cid:xxx" or src='cid:xxx'
+    // Match src/href="cid:xxx" or src/href='cid:xxx'
     const regex = new RegExp(
-      `src=("|')cid:${escapeRegExp(cid)}("|')`,
+      `(src|href)=("|')cid:${escapeRegExp(cid)}\\2`,
       'g'
     )
 
     const url = buildAttachmentUrl(emailId, attachment.generatedFileName, baseUrl, basePath)
-    const replacement = `src="${url}"`
 
-    result = result.replace(regex, replacement)
+    result = result.replace(regex, (_match, attribute: string) => `${attribute}="${url}"`)
   }
 
   return result

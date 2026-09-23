@@ -24,7 +24,8 @@
       "items": [
         "docs/guides/docker",
         "docs/guides/https",
-        "docs/guides/testing-in-ci"
+        "docs/guides/testing-in-ci",
+        "docs/guides/upgrading"
       ]
     },
     {

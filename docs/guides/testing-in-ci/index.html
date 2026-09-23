@@ -109,6 +109,7 @@
             <li><a href="../../../docs/guides/docker/">Docker &amp; Docker Compose</a></li>
             <li><a href="../../../docs/guides/https/">HTTPS &amp; TLS</a></li>
             <li><a href="../../../docs/guides/testing-in-ci/" aria-current="page">Testing email in CI</a></li>
+            <li><a href="../../../docs/guides/upgrading/">Upgrading from 2.x to 3.0</a></li>
           </ul>
         </div>
         <div class="docs-nav-group">
@@ -292,12 +293,12 @@ use the service name <code>maildev</code> instead.</p>
 <h2 id="or-skip-the-container-entirely" tabindex="-1">Or skip the container entirely <a class="heading-anchor" href="#or-skip-the-container-entirely" aria-hidden="true">#</a></h2>
 <p>For a Node.js test suite, starting MailDev in-process is faster and needs no
 service definition at all — no ports to publish, no readiness race:</p>
-<pre class="shiki github-dark-default" tabindex="0"><code><span class="line"><span style="color:#FF7B72">import</span><span style="color:#E6EDF3"> MailDev </span><span style="color:#FF7B72">from</span><span style="color:#A5D6FF"> 'maildev'</span></span>
+<pre class="shiki github-dark-default" tabindex="0"><code><span class="line"><span style="color:#FF7B72">import</span><span style="color:#E6EDF3"> { MailDev } </span><span style="color:#FF7B72">from</span><span style="color:#A5D6FF"> 'maildev'</span></span>
 <span class="line"></span>
 <span class="line"><span style="color:#FF7B72">const</span><span style="color:#79C0FF"> maildev</span><span style="color:#FF7B72"> =</span><span style="color:#FF7B72"> new</span><span style="color:#D2A8FF"> MailDev</span><span style="color:#E6EDF3">({ smtp: </span><span style="color:#79C0FF">1025</span><span style="color:#E6EDF3">, disableWeb: </span><span style="color:#79C0FF">true</span><span style="color:#E6EDF3"> })</span></span>
-<span class="line"><span style="color:#FF7B72">await</span><span style="color:#E6EDF3"> maildev.</span><span style="color:#D2A8FF">start</span><span style="color:#E6EDF3">()</span></span>
+<span class="line"><span style="color:#FF7B72">const</span><span style="color:#E6EDF3"> { </span><span style="color:#79C0FF">smtp</span><span style="color:#E6EDF3"> } </span><span style="color:#FF7B72">=</span><span style="color:#FF7B72"> await</span><span style="color:#E6EDF3"> maildev.</span><span style="color:#D2A8FF">start</span><span style="color:#E6EDF3">()</span></span>
 <span class="line"></span>
-<span class="line"><span style="color:#E6EDF3">maildev.</span><span style="color:#D2A8FF">on</span><span style="color:#E6EDF3">(</span><span style="color:#A5D6FF">'new'</span><span style="color:#E6EDF3">, (</span><span style="color:#FFA657">email</span><span style="color:#E6EDF3">) </span><span style="color:#FF7B72">=></span><span style="color:#E6EDF3"> {</span></span>
+<span class="line"><span style="color:#E6EDF3">smtp.</span><span style="color:#D2A8FF">on</span><span style="color:#E6EDF3">(</span><span style="color:#A5D6FF">'new'</span><span style="color:#E6EDF3">, (</span><span style="color:#FFA657">email</span><span style="color:#E6EDF3">) </span><span style="color:#FF7B72">=></span><span style="color:#E6EDF3"> {</span></span>
 <span class="line"><span style="color:#E6EDF3">  console.</span><span style="color:#D2A8FF">log</span><span style="color:#E6EDF3">(</span><span style="color:#A5D6FF">'caught'</span><span style="color:#E6EDF3">, email.subject)</span></span>
 <span class="line"><span style="color:#E6EDF3">})</span></span>
 <span class="line"></span>
@@ -319,9 +320,9 @@ moment a message arrives. See the
             <span class="prev-next-dir">Previous</span>
             <span class="prev-next-title">HTTPS &amp; TLS</span>
           </a>
-          <a class="prev-next-card" href="../../../docs/integrations/nodemailer/" rel="next">
+          <a class="prev-next-card" href="../../../docs/guides/upgrading/" rel="next">
             <span class="prev-next-dir">Next</span>
-            <span class="prev-next-title">Nodemailer</span>
+            <span class="prev-next-title">Upgrading from 2.x to 3.0</span>
           </a>
         </nav>
         <p class="page-meta"><span>Last updated 2026-08-25</span><span class="sep" aria-hidden="true">·</span><a href="https://github.com/maildev/maildev/edit/gh-pages/content/docs/guides/testing-in-ci.md">Edit this page</a><span class="sep" aria-hidden="true">·</span><a href="../../../docs/guides/testing-in-ci.md">View as markdown</a></p>

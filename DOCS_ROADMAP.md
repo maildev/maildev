@@ -8,7 +8,7 @@ Scope is this branch only (the website). Application roadmaps live on `main`.
 
 ## Content
 
-The docs shipped with 17 pages. These were scoped and deliberately deferred.
+The docs shipped with 18 pages. These were scoped and deliberately deferred.
 
 ### Integration guides
 
@@ -41,7 +41,6 @@ testing note, troubleshooting.
 | Storage & persistence | `--mail-directory`, `--max-emails`, eviction, restore-on-startup |
 | Reverse proxy | `--base-pathname` behind nginx/Traefik/Caddy. The websocket upgrade headers are the part people get wrong; there's a partial nginx example in the HTTPS guide |
 | Email template development | React Email, MJML, Handlebars — the iterate-and-preview loop. Partly covered in the Nodemailer page |
-| Upgrading v2 → v3 | Node 20+, ESM-only, callbacks → promises. Scattered across the install page and the release post |
 | Troubleshooting / FAQ | Each page has its own troubleshooting section; a single cross-cutting page would catch searches those don't |
 
 ### Comparisons

@@ -198,10 +198,10 @@ a parser problem; do not leave it on in a shared log.
 
 :::note
 A handful of flags have no environment-variable equivalent in 3.0 —
-`--auto-relay`, `--auto-relay-rules`, `--hide-extensions`,
-`--log-mail-contents`, `--incoming-cert`, and `--incoming-key`. Set those on the
-command line, or in a [configuration file](#configuration-files), which is the
-better answer in Docker anyway.
+`--hide-extensions`, `--log-mail-contents`, `--incoming-cert`, and
+`--incoming-key`. Set those on the command line, or in a
+[configuration file](#configuration-files), which is the better answer in
+Docker anyway.
 :::
 
 ## Examples

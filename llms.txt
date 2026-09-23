@@ -28,6 +28,7 @@ Key facts:
 - [Docker & Docker Compose](https://maildev.github.io/maildev/docs/guides/docker/): Run MailDev as a container, wire it into a Compose stack so your app can reach it by service name, pass CLI flags and environment variables, and use the built-in health check.
 - [HTTPS & TLS](https://maildev.github.io/maildev/docs/guides/https/): Serve the MailDev web inbox over HTTPS with a self-signed certificate, and configure TLS on the SMTP listener for clients that insist on an encrypted connection.
 - [Testing email in CI](https://maildev.github.io/maildev/docs/guides/testing-in-ci/): Run MailDev as a GitHub Actions service container, assert on delivered mail over the REST API, and write end-to-end email tests with Playwright, Cypress, or Vitest.
+- [Upgrading from 2.x to 3.0](https://maildev.github.io/maildev/docs/guides/upgrading/): Move a MailDev 2.x setup to 3.0 — what needs Node 20+, what changed for the CLI, the REST API, the programmatic API, and Docker, and what did not change at all.
 
 ## Integrations
 - [Nodemailer](https://maildev.github.io/maildev/docs/integrations/nodemailer/): Configure Nodemailer to send development mail to MailDev, switch transports per environment, and verify the connection before your app starts sending.

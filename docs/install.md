@@ -91,7 +91,8 @@ curl http://localhost:1080/api/healthz
 
 MailDev 3.0 is a complete TypeScript rewrite: React web UI, Fastify API, and the
 new MCP server. If you are upgrading from 2.x, the CLI flags are unchanged but
-the [programmatic API moved from callbacks to promises](https://maildev.github.io/maildev/docs/reference/node-api/).
+the [programmatic API moved from callbacks to promises](https://maildev.github.io/maildev/docs/reference/node-api/)
+— the full checklist is in [Upgrading from 2.x to 3.0](https://maildev.github.io/maildev/docs/guides/upgrading/).
 
 :::note
 Hit a regression in 3.0? The 2.x line is still available — `npm install -g maildev@2`

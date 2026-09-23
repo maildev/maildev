@@ -190,12 +190,12 @@ For a Node.js test suite, starting MailDev in-process is faster and needs no
 service definition at all — no ports to publish, no readiness race:
 
 ```ts
-import MailDev from 'maildev'
+import { MailDev } from 'maildev'
 
 const maildev = new MailDev({ smtp: 1025, disableWeb: true })
-await maildev.start()
+const { smtp } = await maildev.start()
 
-maildev.on('new', (email) => {
+smtp.on('new', (email) => {
   console.log('caught', email.subject)
 })
 

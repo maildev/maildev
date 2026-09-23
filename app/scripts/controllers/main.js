@@ -43,6 +43,30 @@ app.controller('MainCtrl', [
     }
     $scope.settings = loadSettings(defaultSettings)
 
+    // TODO(v2.3.0): confirm this URL once the 3.0 announcement post is published on the site
+    $scope.updateNoticeUrl = 'https://maildev.github.io/maildev/blog/maildev-3-0/'
+
+    const updateNoticeKey = 'maildevUpdateNoticeDismissed'
+    const updateNoticeDismissed = function () {
+      try {
+        return window.localStorage && window.localStorage.getItem(updateNoticeKey) === 'true'
+      } catch (err) {
+        return false
+      }
+    }
+    $scope.updateNoticeDismissed = updateNoticeDismissed()
+
+    $scope.dismissUpdateNotice = function () {
+      $scope.updateNoticeDismissed = true
+      try {
+        if (window.localStorage) {
+          window.localStorage.setItem(updateNoticeKey, 'true')
+        }
+      } catch (err) {
+        console.error('Error saving MailDev settings', err)
+      }
+    }
+
     const countUnread = function () {
       $scope.unreadItems = $scope.items.filter(function (email) {
         return !email.read

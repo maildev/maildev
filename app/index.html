@@ -11,8 +11,11 @@
     </head>
     <body ng-class="{'dark-theme': settings.darkThemeEnabled}">
 
-
-
+        <div class="update-notice ng-cloak" ng-if="!updateNoticeDismissed">
+            <span class="update-notice-text">MailDev 3.0 is out — new inbox UI, persistent mail storage, and an MCP server for coding agents.</span>
+            <a class="update-notice-link" ng-href="{{updateNoticeUrl}}" target="_blank" rel="noopener">Read the announcement</a>
+            <button type="button" class="update-notice-dismiss" ng-click="dismissUpdateNotice()" aria-label="Dismiss announcement" title="Dismiss">&times;</button>
+        </div>
 
         <div class="application-container">
 

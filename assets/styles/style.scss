@@ -38,6 +38,8 @@ body {
 }
 
 body {
+    display: flex;
+    flex-direction: column;
     font-family:
         -apple-system,
         BlinkMacSystemFont,
@@ -92,9 +94,64 @@ body.dark-theme {
     @include display-flex();
     @include align-items(stretch);
     flex-flow: row nowrap;
-    height: 100%;
+    flex: 1 1 auto;
+    min-height: 0;
     width: 100%;
     overflow: hidden;
+}
+
+.update-notice {
+    @include display-flex();
+    @include align-items(center);
+    box-sizing: border-box;
+    flex: none;
+    width: 100%;
+    padding: 0.5em 1em;
+    font-size: 12px;
+    line-height: 1.5;
+    color: darken($brand, 30);
+    background: lighten($brand, 40);
+    border-bottom: 1px solid darken($brand, 10);
+
+    .update-notice-link {
+        margin: 0 0.6em;
+        color: darken($brand, 14);
+        text-decoration: underline;
+        white-space: nowrap;
+    }
+
+    .update-notice-dismiss {
+        padding: 0;
+        margin-left: auto;
+        background: none;
+        border: none;
+        color: darken($brand, 20);
+        font-size: 1.4em;
+        line-height: 1;
+        cursor: pointer;
+
+        &:hover {
+            color: darken($brand, 34);
+        }
+    }
+
+    body.dark-theme & {
+        color: lighten($brand, 30);
+        background: darken($brand, 30);
+        border-bottom-color: darken($brand, 22);
+
+        .update-notice-link {
+            color: lighten($brand, 20);
+        }
+
+        .update-notice-dismiss {
+            color: lighten($brand, 10);
+
+            &:hover {
+                color: lighten($brand, 36);
+            }
+        }
+    }
 }
 
 

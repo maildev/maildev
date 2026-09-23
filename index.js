@@ -13,10 +13,15 @@ const mailserver = require('./lib/mailserver')
 const logger = require('./lib/logger')
 const { options, appendOptions } = require('./lib/options')
 
+// TODO(v2.3.0): confirm this URL once the 3.0 announcement post is published on the site
+const NOTICE_3_0_URL = 'https://maildev.github.io/maildev/blog/maildev-3-0/'
+const NOTICE_3_0 = 'MailDev 3.0 is out — new inbox UI, persistent mail storage, and an MCP server so coding agents can read your dev inbox. Announcement: ' + NOTICE_3_0_URL
+
 module.exports = function (config) {
   const version = pkg.version
+  const isCli = !config
 
-  if (!config) {
+  if (isCli) {
     // CLI
     config = appendOptions(program.version(version).allowUnknownOption(true), options)
       .parse(process.argv)
@@ -107,6 +112,17 @@ module.exports = function (config) {
     ], function () {
       process.exit(0)
     })
+  }
+
+  // CLI only: bin/maildev calls this once the servers are up, so the notice
+  // appears after the startup lines. Library consumers (config passed in)
+  // never see it.
+  if (isCli) {
+    mailserver.showUpdateNotice = function () {
+      if (config.updateNotice && !process.env.MAILDEV_NO_UPDATE_NOTICE) {
+        logger.info(NOTICE_3_0)
+      }
+    }
   }
 
   process.on('SIGTERM', shutdown)

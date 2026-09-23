@@ -6,14 +6,14 @@ MailDev 3.0 is a **pnpm + turbo monorepo**. This guide covers local development 
 
 The publishable packages live under `packages/*`:
 
-| Package | npm name | Purpose |
-| --- | --- | --- |
-| `core` | `@maildev/core` | Core types, utilities, and storage abstraction |
-| `smtp` | `@maildev/smtp` | SMTP server |
-| `api` | `@maildev/api` | REST API + WebSocket server |
-| `ui` | `@maildev/ui` | React web interface |
-| `mcp` | `@maildev/mcp` | MCP server for Claude integration |
-| `cli` | `maildev` | The `maildev` CLI binary (bundles all of the above) |
+| Package | npm name        | Purpose                                             |
+| ------- | --------------- | --------------------------------------------------- |
+| `core`  | `@maildev/core` | Core types, utilities, and storage abstraction      |
+| `smtp`  | `@maildev/smtp` | SMTP server                                         |
+| `api`   | `@maildev/api`  | REST API + WebSocket server                         |
+| `ui`    | `@maildev/ui`   | React web interface                                 |
+| `mcp`   | `@maildev/mcp`  | MCP server for Claude integration                   |
+| `cli`   | `maildev`       | The `maildev` CLI binary (bundles all of the above) |
 
 The root `package.json` is `private` (legacy v2 code) and is **not** published.
 
@@ -61,17 +61,17 @@ pnpm --filter maildev cli   # runs dist/bin/maildev.js
 
 ## Key commands
 
-| Command | What it does |
-| --- | --- |
-| `pnpm install` | Install workspace dependencies |
-| `pnpm dev` | Start all packages in watch mode |
-| `pnpm build` | `turbo run build` — build every package |
-| `pnpm test` | `turbo run test` — build, then run vitest in every package |
-| `pnpm typecheck` | `turbo run typecheck` |
-| `pnpm lint` | `turbo run lint` |
-| `pnpm lint:fix` | Lint with `--fix` |
-| `pnpm format` | Format all files with prettier |
-| `pnpm format:check` | Check formatting without writing |
+| Command             | What it does                                               |
+| ------------------- | ---------------------------------------------------------- |
+| `pnpm install`      | Install workspace dependencies                             |
+| `pnpm dev`          | Start all packages in watch mode                           |
+| `pnpm build`        | `turbo run build` — build every package                    |
+| `pnpm test`         | `turbo run test` — build, then run vitest in every package |
+| `pnpm typecheck`    | `turbo run typecheck`                                      |
+| `pnpm lint`         | `turbo run lint`                                           |
+| `pnpm lint:fix`     | Lint with `--fix`                                          |
+| `pnpm format`       | Format all files with prettier                             |
+| `pnpm format:check` | Check formatting without writing                           |
 
 ### Testing a single package
 
@@ -156,6 +156,49 @@ git push --follow-tags           # push commits + version tags
 Commit the version bump (the updated `package.json`s and `CHANGELOG.md`s) before publishing, so the pushed tag points at the changelog the release notes are extracted from.
 
 > Note: the repo's `pnpm release` script (`turbo run build && changeset publish && git push --follow-tags`) publishes to `latest` and pushes tags. Use the `--tag`/pre-mode flow above for prereleases so you don't overwrite the stable `latest`.
+
+### Publishing the Docker image
+
+The `maildev/maildev` image is built and published with the scripts in `scripts/`:
+
+| Command             | What it does                                                                            |
+| ------------------- | --------------------------------------------------------------------------------------- |
+| `pnpm docker-build` | Build the image (multi-arch by default) and load it into the local Docker daemon        |
+| `pnpm docker-run`   | Run the locally built image with ports `1080` (web UI) and `1025` (SMTP) mapped         |
+| `pnpm docker-push`  | Build `linux/amd64` + `linux/arm64` and push the multi-arch manifest list to Docker Hub |
+
+The image version is resolved from the **git tag on the current commit** by
+`scripts/dockerVersion.sh` — not from `package.json`, which is only updated
+when `changeset version` runs. It prefers the changesets tag (`maildev@X.Y.Z`),
+falls back to any other tag pointing at `HEAD` (legacy `vX.Y.Z` → `X.Y.Z`),
+and **fails if `HEAD` is untagged**, so an image can never be built or pushed
+under a stale or unknown version. This slots the Docker push naturally after
+the npm release, which creates the tag:
+
+```bash
+pnpm changeset publish   # publishes to npm and tags HEAD (maildev@<version>)
+git push --follow-tags
+
+docker login             # needs push access to maildev/maildev on Docker Hub
+pnpm docker-push
+```
+
+`docker-push` runs a single `docker buildx build --push` — the registry is
+the merge point for the multi-arch manifest list, so no separate `docker push`
+is needed. The image is published as `maildev/maildev:<version>` and
+`:latest`, with provenance and SBOM attestations and inline layer caching.
+
+Notes:
+
+- The tag must point at `HEAD`: run the Docker scripts on the tagged release
+  commit. To build or push an arbitrary commit, tag it first
+  (e.g. `git tag maildev@1.2.3`).
+- `pnpm docker-build` defaults to a multi-platform build with `--load`, which
+  requires the containerd image store (default on recent Docker Desktop). On
+  older setups, build a single platform: `pnpm docker-build linux/arm64`.
+- Linux hosts need `qemu-user-static` for arm64 emulation; Docker Desktop
+  ships with it. The `docker-container` driver builder used for multi-arch
+  builds (`multiarch`) is created automatically on first run.
 
 ### Drafting the GitHub Release
 

@@ -7,7 +7,7 @@
 [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-black.svg)](https://standardjs.com)
 
 > [!WARNING]
-> This is is the 2.x release branch. This branch exists for any backcompat fixes, but it's recommended to use [the 3.x version of MailDev](https://github.com/maildev/maildev/tree/main) which is a complete re-write with many improvements including updated APIs and UIs and a new MCP server.
+> This is the 2.x release branch, maintained for backcompat and security fixes — 2.3.0 is its final planned release. **[MailDev 3.0 is out now](https://github.com/maildev/maildev/tree/main)**: a complete rewrite with a new inbox UI, persistent mail storage, and a built-in MCP server so coding agents can read your dev inbox. Read the [announcement](https://maildev.github.io/maildev/blog/maildev-3-0/) and the [upgrade guide](https://maildev.github.io/maildev/docs/guides/upgrading/).
 
 
 > MailDev is sponsored by ⭐️ **[inngest/inngest](https://github.com/inngest/inngest)**.
@@ -28,42 +28,41 @@ For a guide for usage with Docker,
     $ docker run -p 1080:1080 -p 1025:1025 maildev/maildev
 
 ## Usage
-
 ```
 Usage: maildev [options]
 ```
 
-| Options                          | Environment variable       | Description                                                                               |
-| -------------------------------- | -------------------------- | ----------------------------------------------------------------------------------------- |
-| `-s, --smtp <port>`              | `MAILDEV_SMTP_PORT`        | SMTP port to catch mail                                                                   |
-| `-w, --web <port>`               | `MAILDEV_WEB_PORT`         | Port to run the Web GUI                                                                   |
-| `--mail-directory <path>`        | `MAILDEV_MAIL_DIRECTORY`   | Directory for persisting mail                                                             |
-| `--https`                        | `MAILDEV_HTTPS`            | Switch from http to https protocol                                                        |
-| `--https-key <file>`             | `MAILDEV_HTTPS_KEY`        | The file path to the ssl private key                                                      |
-| `--https-cert <file>`            | `MAILDEV_HTTPS_CERT`       | The file path to the ssl cert file                                                        |
-| `--ip <ip address>`              | `MAILDEV_IP`               | IP Address to bind SMTP service to, defaults to `::` (any IPv4/v6)                        |
-| `--outgoing-host <host>`         | `MAILDEV_OUTGOING_HOST`    | SMTP host for outgoing mail                                                               |
-| `--outgoing-port <port>`         | `MAILDEV_OUTGOING_PORT`    | SMTP port for outgoing mail                                                               |
-| `--outgoing-user <user>`         | `MAILDEV_OUTGOING_USER`    | SMTP user for outgoing mail                                                               |
-| `--outgoing-pass <password>`     | `MAILDEV_OUTGOING_PASS`    | SMTP password for outgoing mail                                                           |
-| `--outgoing-secure`              | `MAILDEV_OUTGOING_SECURE`  | Use SMTP SSL for outgoing mail                                                            |
-| `--auto-relay [email]`           | `MAILDEV_AUTO_RELAY`       | Use auto-relay mode. Optional relay email address                                         |
-| `--auto-relay-rules <file>`      | `MAILDEV_AUTO_RELAY_RULES` | Filter rules for auto relay mode                                                          |
-| `--incoming-user <user>`         | `MAILDEV_INCOMING_USER`    | SMTP user for incoming mail                                                               |
-| `--incoming-pass <pass>`         | `MAILDEV_INCOMING_PASS`    | SMTP password for incoming mail                                                           |
-| `--incoming-secure`              | `MAILDEV_INCOMING_SECURE`  | Use SMTP SSL for incoming emails                                                          |
-| `--incoming-cert <path>`         | `MAILDEV_INCOMING_CERT`    | Cert file location for incoming SSL                                                       |
-| `--incoming-key <path>`          | `MAILDEV_INCOMING_KEY`     | Key file location for incoming SSL                                                        |
-| `--web-ip <ip address>`          | `MAILDEV_WEB_IP`           | IP Address to bind HTTP service to, defaults to --ip                                      |
-| `--web-user <user>`              | `MAILDEV_WEB_USER`         | HTTP user for GUI                                                                         |
-| `--web-pass <password>`          | `MAILDEV_WEB_PASS`         | HTTP password for GUI                                                                     |
-| `--base-pathname <path>`         | `MAILDEV_BASE_PATHNAME`    | Base path for URLs                                                                        |
-| `--disable-web`                  | `MAILDEV_DISABLE_WEB`      | Disable the use of the web interface. Useful for unit testing                             |
-| `--hide-extensions <extensions>` | `MAILDEV_HIDE_EXTENSIONS`  | Comma separated list of SMTP extensions to NOT advertise (SMTPUTF8, PIPELINING, 8BITMIME) |
-| `-o, --open`                     |                            | Open the Web GUI after startup                                                            |
-| `-v, --verbose`                  |                            |                                                                                           |
-| `--silent`                       |                            |                                                                                           |
-| `--log-mail-contents`            |                            | Log a JSON representation of each incoming mail                                           |
+|Options|Environment variable|Description|
+|---|---|---|
+|`-s, --smtp <port>`|`MAILDEV_SMTP_PORT`|SMTP port to catch emails|
+|`-w, --web <port>`|`MAILDEV_WEB_PORT`|Port to run the Web GUI|
+|`--mail-directory <path>`|`MAILDEV_MAIL_DIRECTORY`|Directory for persisting mails|
+|`--https`|`MAILDEV_HTTPS`|Switch from http to https protocol|
+|`--https-key <file>`|`MAILDEV_HTTPS_KEY`|The file path to the ssl private key|
+|`--https-cert <file>`|`MAILDEV_HTTPS_CERT`|The file path to the ssl cert file|
+|`--ip <ip address>`|`MAILDEV_IP`|IP Address to bind SMTP service to|
+|`--outgoing-host <host>`|`MAILDEV_OUTGOING_HOST`|SMTP host for outgoing emails|
+|`--outgoing-port <port>`|`MAILDEV_OUTGOING_PORT`|SMTP port for outgoing emails|
+|`--outgoing-user <user>`|`MAILDEV_OUTGOING_USER`|SMTP user for outgoing emails|
+|`--outgoing-pass <password>`|`MAILDEV_OUTGOING_PASS`|SMTP password for outgoing emails|
+|`--outgoing-secure`|`MAILDEV_OUTGOING_SECURE`|Use SMTP SSL for outgoing emails|
+|`--auto-relay [email]`|`MAILDEV_AUTO_RELAY`|Use auto-relay mode. Optional relay email address|
+|`--auto-relay-rules <file>`|`MAILDEV_AUTO_RELAY_RULES`|Filter rules for auto relay mode|
+|`--incoming-user <user>`|`MAILDEV_INCOMING_USER`|SMTP user for incoming emails|
+|`--incoming-pass <pass>`|`MAILDEV_INCOMING_PASS`|SMTP password for incoming emails|
+|`--incoming-secure`|`MAILDEV_INCOMING_SECURE`|Use SMTP SSL for incoming emails|
+|`--incoming-cert <path>`|`MAILDEV_INCOMING_CERT`|Cert file location for incoming SSL|
+|`--incoming-key <path>`|`MAILDEV_INCOMING_KEY`|Key file location for incoming SSL|
+|`--web-ip <ip address>`|`MAILDEV_WEB_IP`|IP Address to bind HTTP service to, defaults to --ip|
+|`--web-user <user>`|`MAILDEV_WEB_USER`|HTTP user for GUI|
+|`--web-pass <password>`|`MAILDEV_WEB_PASS`|HTTP password for GUI|
+|`--base-pathname <path>`|`MAILDEV_BASE_PATHNAME`|Base path for URLs|
+|`--disable-web`|`MAILDEV_DISABLE_WEB`|Disable the use of the web interface. Useful for unit testing|
+|`--hide-extensions <extensions>`|`MAILDEV_HIDE_EXTENSIONS`|Comma separated list of SMTP extensions to NOT advertise (SMTPUTF8, PIPELINING, 8BITMIME)|
+|`-v, --verbose`|||
+|`--silent`|||
+|`--log-mail-contents`|`Log a JSON representation of each incoming email`||
+|`--no-update-notice`||Suppress the MailDev 3.0 upgrade notice (env: MAILDEV_NO_UPDATE_NOTICE)|
 
 ## API
 

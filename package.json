@@ -1,7 +1,7 @@
 {
   "name": "maildev",
   "description": "SMTP Server and Web Interface for reading and testing emails during development",
-  "version": "2.2.1",
+  "version": "2.3.0",
   "keywords": [
     "email",
     "e-mail",
@@ -54,14 +54,26 @@
     "iconv-lite": "0.5.0",
     "jsdom": "^24.1.1",
     "mime": "2.4.4",
-    "nodemailer": "^6.9.14",
+    "nodemailer": "^9.1.1",
     "smtp-server": "^3.13.4",
     "socket.io": "^4.7.5",
     "uue": "3.1.2",
     "wildstring": "1.0.9"
   },
   "overrides": {
-    "socket.io-adapter": "2.5.5"
+    "socket.io-adapter": "^2.5.8",
+    "mocha": {
+      "diff": "^5.2.2",
+      "js-yaml": "^4.3.2",
+      "minimatch": "^4.2.6",
+      "nanoid": "^3.3.19",
+      "serialize-javascript": "^7.0.5"
+    },
+    "nyc": {
+      "istanbul-lib-processinfo": {
+        "uuid": "^11.1.1"
+      }
+    }
   },
   "devDependencies": {
     "expect": "^29.7.0",

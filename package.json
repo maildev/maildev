@@ -39,7 +39,7 @@
     "release": "turbo run build && changeset publish && git push --follow-tags",
     "send-test-emails": "node ./scripts/send.js",
     "docker-build": "./scripts/dockerBuild.sh",
-    "docker-run": "docker run --rm -p 1080:1080 -p 1025:1025 maildev/maildev:$(jq -r .version packages/cli/package.json)",
+    "docker-run": "docker run --rm -p 1080:1080 -p 1025:1025 maildev/maildev:$(scripts/dockerVersion.sh)",
     "docker-push": "./scripts/dockerPush.sh"
   },
   "license": "MIT",

@@ -21,6 +21,12 @@ Now the MailDev UI will be running at port `1080` on your virtual machine
 running at `192.168.99.100`, you can head over to `http://192.168.99.100:1080`
 to visit the interface.
 
+## Easypanel
+
+[Easypanel](https://easypanel.io) is a self-hosted Docker deployment platform, and it maintains a one-click deployment template for MailDev:
+
+[![Deploy on Easypanel](https://easypanel.io/img/deploy-on-easypanel-40.svg)](https://easypanel.io/templates/maildev)
+
 ## Timezone
 
 Is it possible to set the timezone to match your local time via the environment variable TZ.

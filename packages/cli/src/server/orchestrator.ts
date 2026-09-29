@@ -4,14 +4,13 @@
  * Main class that manages all MailDev servers (Storage, SMTP, API)
  */
 
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
 import { readFile } from 'node:fs/promises'
 import { MemoryStorage, FileStorage, type Storage } from '@maildev/core'
 import { createSMTPServer, type SMTPServer, type RelayConfig, type AutoRelayConfig, type RelayRule } from '@maildev/smtp'
 import { createAPIServer, type APIServer } from '@maildev/api'
 import { registerUI } from '@maildev/ui/server'
 import type { MailDevConfig } from '../config/types.js'
+import { defaultMailDir } from '../config/defaults.js'
 import { Logger } from '../utils/logger.js'
 
 /**
@@ -63,7 +62,7 @@ export class Orchestrator {
     this.logger.debug('Storage initialized')
 
     // 2. Create mail directory path
-    const mailDir = this.config.mailDirectory || join(tmpdir(), 'maildev')
+    const mailDir = this.config.mailDirectory || defaultMailDir()
 
     // 3. Create SMTP server
     const smtpOptions: Parameters<typeof createSMTPServer>[0] = {

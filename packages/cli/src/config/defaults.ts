@@ -4,6 +4,8 @@
  * Default values matching v2 behavior for backward compatibility
  */
 
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
 import type { MailDevConfig } from './types.js'
 
 /**
@@ -11,6 +13,22 @@ import type { MailDevConfig } from './types.js'
  * single message so a maliciously large multipart body can't tie up the server.
  */
 export const DEFAULT_MAX_MESSAGE_SIZE = 50 * 1024 * 1024
+
+/**
+ * Default on-disk spool when `--mail-directory` is unset.
+ *
+ * Namespaced by uid so two users sharing `os.tmpdir()` (typically `/tmp` on
+ * Linux) do not collide on a single `maildev` directory. Windows has no
+ * `getuid`; fall back to `shared`.
+ *
+ * This is the SMTP spool path only. It is not assigned to
+ * `DEFAULT_CONFIG.mailDirectory` — that field staying unset keeps the
+ * in-memory store. File storage is used only when `--mail-directory` or
+ * `MAILDEV_MAIL_DIRECTORY` is set.
+ */
+export function defaultMailDir(): string {
+  return join(tmpdir(), `maildev-${process.getuid?.() ?? 'shared'}`)
+}
 
 /**
  * Default configuration values

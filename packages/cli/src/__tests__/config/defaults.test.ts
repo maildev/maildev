@@ -1,5 +1,7 @@
 import { describe, it, expect } from 'vitest'
-import { DEFAULT_CONFIG, getDefaultConfig } from '../../config/defaults.js'
+import { tmpdir } from 'node:os'
+import { basename, join } from 'node:path'
+import { DEFAULT_CONFIG, defaultMailDir, getDefaultConfig } from '../../config/defaults.js'
 
 describe('DEFAULT_CONFIG', () => {
   it('should have correct SMTP defaults', () => {
@@ -30,6 +32,18 @@ describe('DEFAULT_CONFIG', () => {
     expect(DEFAULT_CONFIG.webPass).toBeUndefined()
     expect(DEFAULT_CONFIG.mailDirectory).toBeUndefined()
     expect(DEFAULT_CONFIG.outgoingHost).toBeUndefined()
+  })
+})
+
+describe('defaultMailDir', () => {
+  it('should namespace the default spool with the process uid', () => {
+    const uid = process.getuid?.() ?? 'shared'
+    expect(defaultMailDir()).toBe(join(tmpdir(), `maildev-${uid}`))
+  })
+
+  it('should not use a shared maildev directory under tmpdir', () => {
+    expect(defaultMailDir()).not.toBe(join(tmpdir(), 'maildev'))
+    expect(basename(defaultMailDir())).not.toBe('maildev')
   })
 })
 

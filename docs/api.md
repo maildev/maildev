@@ -274,6 +274,7 @@ interface Email {
   cc?: Address[]
   bcc?: Address[]
   calculatedBcc?: Address[]
+  replyTo?: Address[]
   date?: Date
   html?: string
   text?: string

@@ -51,6 +51,7 @@ function transformParsedMail(parsed: ParsedMail): ParsedEmail {
     to: transformAddressField(parsed.to),
     cc: transformAddressField(parsed.cc),
     bcc: transformAddressField(parsed.bcc),
+    replyTo: transformAddressObject(parsed.replyTo),
     date: parsed.date,
     html: parsed.html || undefined,
     text: parsed.text,

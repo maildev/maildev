@@ -131,6 +131,7 @@ export interface ParsedEmail {
   to?: Address[] | undefined
   cc?: Address[] | undefined
   bcc?: Address[] | undefined
+  replyTo?: Address[] | undefined
   date?: Date | undefined
   html?: string | undefined
   text?: string | undefined

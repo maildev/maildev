@@ -84,6 +84,8 @@ export interface Email {
   bcc?: Address[]
   /** Calculated BCC addresses (derived from envelope vs headers) */
   calculatedBcc?: Address[]
+  /** Parsed Reply-To header addresses */
+  replyTo?: Address[]
 
   /** Date header from the email */
   date?: Date
@@ -152,6 +154,8 @@ export interface EmailInput {
   to: Address[]
   /** Parsed CC header addresses */
   cc?: Address[]
+  /** Parsed Reply-To header addresses */
+  replyTo?: Address[]
   /** Date header from the email */
   date?: Date
   /** HTML body content */

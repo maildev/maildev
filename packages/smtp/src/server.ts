@@ -763,6 +763,9 @@ export class SMTPServer extends EventEmitter {
     if (parsed.cc && parsed.cc.length > 0) {
       email.cc = parsed.cc
     }
+    if (parsed.replyTo && parsed.replyTo.length > 0) {
+      email.replyTo = parsed.replyTo
+    }
     if (parsed.html) {
       email.html = parsed.html
     }

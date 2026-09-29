@@ -47,6 +47,31 @@ describe('loadMailsFromDirectory', () => {
     expect(emails[0]?.subject).toBe('The ex-presidents are surfers')
   })
 
+  it('stores Reply-To as replyTo on the restored email', async () => {
+    const eml = [
+      'From: Angelo Pappas <angelo.pappas@fbi.gov>',
+      'To: Johnny Utah <johnny.utah@fbi.gov>',
+      'Reply-To: Desk <desk@fbi.gov>',
+      'Subject: The ex-presidents are surfers',
+      'Message-ID: <restore-reply-to@example.com>',
+      'Date: Mon, 27 Jul 2026 19:46:05 +0000',
+      'MIME-Version: 1.0',
+      'Content-Type: text/plain; charset=utf-8',
+      '',
+      'The wax at the bank was surfer wax!!!',
+      '',
+    ].join('\r\n')
+    await writeFile(join(mailDir, 'replyto1.eml'), eml)
+
+    await server.loadMailsFromDirectory()
+
+    const emails = await storage.getAll()
+    expect(emails).toHaveLength(1)
+    expect(emails[0]?.replyTo).toEqual([
+      { address: 'desk@fbi.gov', name: 'Desk' },
+    ])
+  })
+
   it('ignores non-.eml files', async () => {
     await writeFile(join(mailDir, 'notes.txt'), 'not an email')
     await writeFile(join(mailDir, 'valid.eml'), EML)

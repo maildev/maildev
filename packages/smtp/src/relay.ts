@@ -100,6 +100,7 @@ export class RelayClient {
 
     // Fail silently if no recipients
     if (recipients.length === 0) {
+      emailStream.destroy()
       return {
         success: false,
         message: 'Email had no recipients after filtering',
@@ -132,6 +133,9 @@ export class RelayClient {
         error: err,
       }
     } finally {
+      // The stream holds an open file descriptor until it is fully read or
+      // destroyed; on a failed relay it was never (fully) piped to the server.
+      emailStream.destroy()
       await this.disconnect()
     }
   }

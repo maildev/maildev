@@ -145,6 +145,7 @@ function envVarToConfigKey(envVar: string): keyof PartialMailDevConfig | null {
     webPort: 'web',
     incomingSecure: 'incomingSecure',
     outgoingSecure: 'outgoingSecure',
+    https: 'https',
     disableWeb: 'disableWeb',
     verbose: 'verbose',
     silent: 'silent',

@@ -160,8 +160,10 @@ export class RelayClient {
         debug: false,
       })
 
+      // A failed connection is reported here, not through the connect callback
       this.client.on('error', (err: Error) => {
         this.logger.error('SMTP Connection error:', err)
+        reject(err)
       })
 
       this.client.connect((err?: Error) => {

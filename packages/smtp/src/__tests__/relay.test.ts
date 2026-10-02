@@ -147,6 +147,17 @@ describe('relay raw email stream', () => {
     expect(stream.destroyed).toBe(true)
   })
 
+  it('closes the stream when the outgoing server cannot be reached', async () => {
+    const client = new RelayClient({ host: '127.0.0.1', port: await freePort() }, false)
+    const stream = createReadStream(emlPath)
+
+    const result = await client.relay(email, stream)
+
+    expect(result.success).toBe(false)
+    expect(result.error).toBeInstanceOf(Error)
+    expect(stream.destroyed).toBe(true)
+  })
+
   it('closes the stream when the outgoing server rejects the recipient', async () => {
     const port = await freePort()
     const rejecting = new SMTPServerLib({

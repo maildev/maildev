@@ -59,6 +59,7 @@ function cliOptionsToConfig(options: CLIOptions): PartialMailDevConfig {
   if (options.disableWeb !== undefined) config.disableWeb = options.disableWeb
   if (options.https !== undefined) config.https = options.https
   if (options.outgoingSecure !== undefined) config.outgoingSecure = options.outgoingSecure
+  if (options.outgoingIgnoreTls !== undefined) config.outgoingIgnoreTls = options.outgoingIgnoreTls
   if (options.verbose !== undefined) config.verbose = options.verbose
   if (options.silent !== undefined) config.silent = options.silent
   if (options.logMailContents !== undefined)

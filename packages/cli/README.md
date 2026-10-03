@@ -59,6 +59,7 @@ Usage: maildev [options]
 | `--outgoing-user <user>`         | `MAILDEV_OUTGOING_USER`    | SMTP user for outgoing mail                                                               |
 | `--outgoing-pass <password>`     | `MAILDEV_OUTGOING_PASS`    | SMTP password for outgoing mail                                                           |
 | `--outgoing-secure`              | `MAILDEV_OUTGOING_SECURE`  | Use SMTP SSL for outgoing mail                                                            |
+| `--outgoing-ignore-tls`          | `MAILDEV_OUTGOING_IGNORE_TLS` | Never use STARTTLS for outgoing mail, even if the server offers it                        |
 | `--auto-relay [email]`           | `MAILDEV_AUTO_RELAY`       | Use auto-relay mode. Optional relay email address                                         |
 | `--auto-relay-rules <file>`      | `MAILDEV_AUTO_RELAY_RULES` | Filter rules for auto relay mode                                                          |
 | `--web-user <user>`              | `MAILDEV_WEB_USER`         | HTTP user for GUI                                                                         |
@@ -175,6 +176,9 @@ maildev --outgoing-host smtp.gmail.com \
         --outgoing-user 'you@gmail.com' \
         --outgoing-pass '<pass>'
 ```
+
+MailDev upgrades a non-secure relay connection with STARTTLS whenever the server offers it. Add
+`--outgoing-ignore-tls` to keep it on cleartext, e.g. for a relay on port 587 that does not support TLS.
 
 ### Auto Relay Mode
 

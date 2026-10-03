@@ -60,6 +60,7 @@ const NUMBER_VARS = new Set([
 const BOOLEAN_VARS = new Set([
   'MAILDEV_INCOMING_SECURE',
   'MAILDEV_OUTGOING_SECURE',
+  'MAILDEV_OUTGOING_IGNORE_TLS',
   'MAILDEV_HTTPS',
   'MAILDEV_DISABLE_WEB',
   'MAILDEV_MCP',
@@ -149,6 +150,7 @@ function envVarToConfigKey(envVar: string): keyof PartialMailDevConfig | null {
     verbose: 'verbose',
     silent: 'silent',
     mcp: 'mcp',
+    outgoingIgnoreTls: 'outgoingIgnoreTls',
   }
 
   return mapping[camelCase] || null

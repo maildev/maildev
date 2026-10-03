@@ -160,6 +160,7 @@ describe('resolveConfig', () => {
       outgoingUser: 'relay_user',
       outgoingPass: 'relay_pass',
       outgoingSecure: true,
+      outgoingIgnoreTls: true,
     })
 
     expect(config.outgoingHost).toBe('smtp.example.com')
@@ -167,6 +168,7 @@ describe('resolveConfig', () => {
     expect(config.outgoingUser).toBe('relay_user')
     expect(config.outgoingPass).toBe('relay_pass')
     expect(config.outgoingSecure).toBe(true)
+    expect(config.outgoingIgnoreTls).toBe(true)
   })
 
   it('should handle mail directory option', async () => {

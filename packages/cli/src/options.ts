@@ -114,6 +114,10 @@ export function configureOptions(program: Command): void {
       'Use TLS/SSL for outgoing relay'
     )
     .option(
+      '--outgoing-ignore-tls',
+      'Never use STARTTLS for outgoing relay, even if the server offers it'
+    )
+    .option(
       '--auto-relay [email]',
       'Enable auto-relay mode (optionally specify recipient email)'
     )

@@ -68,6 +68,7 @@ const maildev = new MailDev({
   outgoingUser: 'user',
   outgoingPass: 'pass',
   outgoingSecure: true,
+  outgoingIgnoreTls: false, // Never upgrade the relay connection with STARTTLS
   autoRelay: true,         // Auto-forward emails
 
   // Logging

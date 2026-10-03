@@ -306,6 +306,9 @@ export class Orchestrator {
     if (this.config.outgoingSecure !== undefined) {
       config.secure = this.config.outgoingSecure
     }
+    if (this.config.outgoingIgnoreTls !== undefined) {
+      config.ignoreTLS = this.config.outgoingIgnoreTls
+    }
     if (this.config.outgoingUser && this.config.outgoingPass) {
       config.auth = {
         user: this.config.outgoingUser,

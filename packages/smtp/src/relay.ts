@@ -36,6 +36,7 @@ export class RelayClient {
       host: config.host || 'localhost',
       port: config.port || (config.secure ? 465 : 25),
       secure: config.secure || false,
+      ignoreTLS: config.ignoreTLS || false,
       auth: config.auth,
     }
     this.logger = createLogger(logger)
@@ -152,6 +153,7 @@ export class RelayClient {
         port: this.config.port,
         host: this.config.host,
         secure: this.config.secure,
+        ignoreTLS: this.config.ignoreTLS,
         tls: { rejectUnauthorized: false },
         debug: false,
       })

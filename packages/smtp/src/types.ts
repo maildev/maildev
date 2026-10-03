@@ -86,6 +86,8 @@ export interface RelayConfig {
   port: number
   /** Enable TLS/SSL */
   secure?: boolean
+  /** Never upgrade a non-secure connection with STARTTLS, even if the server offers it */
+  ignoreTLS?: boolean
   /** Authentication credentials */
   auth?: SMTPAuth | undefined
 }

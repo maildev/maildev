@@ -87,6 +87,14 @@ describe('loadEnvConfig', () => {
     expect(config.outgoingPass).toBe('relay_pass')
   })
 
+  it('should parse MAILDEV_OUTGOING_IGNORE_TLS as boolean', () => {
+    process.env.MAILDEV_OUTGOING_IGNORE_TLS = 'true'
+    expect(loadEnvConfig().outgoingIgnoreTls).toBe(true)
+
+    process.env.MAILDEV_OUTGOING_IGNORE_TLS = 'false'
+    expect(loadEnvConfig().outgoingIgnoreTls).toBe(false)
+  })
+
   it('should load MAILDEV_MAIL_DIRECTORY', () => {
     process.env.MAILDEV_MAIL_DIRECTORY = '/var/mail'
 

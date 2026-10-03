@@ -226,6 +226,12 @@ export interface MailDevConfig {
   outgoingSecure?: boolean
 
   /**
+   * Never upgrade the outgoing relay connection with STARTTLS
+   * CLI: --outgoing-ignore-tls
+   */
+  outgoingIgnoreTls?: boolean
+
+  /**
    * Enable auto-relay mode
    * CLI: --auto-relay [email]
    * If email provided, all emails relay to that address
@@ -330,6 +336,7 @@ export interface CLIOptions {
   outgoingUser?: string
   outgoingPass?: string
   outgoingSecure?: boolean
+  outgoingIgnoreTls?: boolean
   autoRelay?: boolean | string
   autoRelayRules?: string
   mailDirectory?: string

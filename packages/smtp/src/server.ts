@@ -524,6 +524,9 @@ export class SMTPServer extends EventEmitter {
       logger: false,
       hideSTARTTLS: true,
       disabledCommands: ['AUTH'] as string[],
+      // The client hostname is never used, and without a network the lookup
+      // stalls every connection before the greeting (#104).
+      disableReverseLookup: true,
     }
 
     // Advertise and enforce a maximum message size. smtp-server rejects

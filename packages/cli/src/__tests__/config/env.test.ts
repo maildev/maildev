@@ -101,6 +101,29 @@ describe('loadEnvConfig', () => {
     expect(config.basePathname).toBe('/mail/')
   })
 
+  it('should parse MAILDEV_HTTPS=true as boolean true', () => {
+    process.env.MAILDEV_HTTPS = 'true'
+
+    const config = loadEnvConfig()
+    expect(config.https).toBe(true)
+  })
+
+  it('should parse MAILDEV_HTTPS=false as boolean false', () => {
+    process.env.MAILDEV_HTTPS = 'false'
+
+    const config = loadEnvConfig()
+    expect(config.https).toBe(false)
+  })
+
+  it('should load MAILDEV_HTTPS_CERT and MAILDEV_HTTPS_KEY as path strings', () => {
+    process.env.MAILDEV_HTTPS_CERT = '/ssl/cert.pem'
+    process.env.MAILDEV_HTTPS_KEY = '/ssl/key.pem'
+
+    const config = loadEnvConfig()
+    expect(config.httpsCert).toBe('/ssl/cert.pem')
+    expect(config.httpsKey).toBe('/ssl/key.pem')
+  })
+
   it('should ignore invalid port numbers', () => {
     process.env.MAILDEV_SMTP_PORT = 'not-a-number'
 

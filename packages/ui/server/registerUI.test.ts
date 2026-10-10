@@ -50,6 +50,17 @@ describe('registerUI', () => {
       await app.close()
     })
 
+    it('serves index.html at the root for generic Accept headers', async () => {
+      const app = await buildServer(basePath)
+      for (const headers of [{ accept: '*/*' }, {}]) {
+        const res = await app.inject({ method: 'GET', url: root, headers })
+        expect(res.statusCode).toBe(200)
+        expect(res.headers['content-type']).toContain('text/html')
+        expect(res.body).toContain(`<base href="${basePath}/" />`)
+      }
+      await app.close()
+    })
+
     it('serves hashed assets under the base path prefix', async () => {
       const app = await buildServer(basePath)
       const res = await app.inject({ method: 'GET', url: `${basePath}/assets/app.js` })
@@ -76,6 +87,18 @@ describe('registerUI', () => {
         method: 'GET',
         url: `${basePath}/api/missing`,
         headers: { accept: 'application/json' },
+      })
+      expect(res.statusCode).toBe(404)
+      expect(res.json()).toEqual({ error: 'Not found' })
+      await app.close()
+    })
+
+    it('keeps wildcard requests to unknown routes as JSON 404s', async () => {
+      const app = await buildServer(basePath)
+      const res = await app.inject({
+        method: 'GET',
+        url: `${basePath}/api/missing`,
+        headers: { accept: '*/*' },
       })
       expect(res.statusCode).toBe(404)
       expect(res.json()).toEqual({ error: 'Not found' })

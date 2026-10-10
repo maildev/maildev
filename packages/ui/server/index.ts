@@ -59,7 +59,13 @@ export async function registerUI(
   // base path root itself, which `index: false` no longer auto-serves).
   fastify.setNotFoundHandler(async (request, reply) => {
     const acceptHeader = request.headers.accept || ''
-    if (request.method === 'GET' && acceptHeader.includes('text/html')) {
+    const requestPath = request.url.split('?')[0] ?? ''
+    const isBasePathRoot = stripTrailingSlash(requestPath) === basePath
+    const acceptsAny = !acceptHeader || acceptHeader.trim() === '*/*'
+    if (
+      request.method === 'GET' &&
+      (acceptHeader.includes('text/html') || (isBasePathRoot && acceptsAny))
+    ) {
       return sendIndex(reply)
     }
     return reply.status(404).send({ error: 'Not found' })

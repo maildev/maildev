@@ -29,6 +29,9 @@ let requestedUrls: string[] = []
 /** Intersection observers created by the component, so tests can trigger them */
 let observerCallbacks: IntersectionObserverCallback[] = []
 
+/** The options each of those observers was created with */
+let observerOptions: (IntersectionObserverInit | undefined)[] = []
+
 function renderList(ui: ReactNode = <EmailList />): void {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false } },
@@ -64,13 +67,15 @@ async function scrollToEnd(): Promise<void> {
 beforeEach(() => {
   requestedUrls = []
   observerCallbacks = []
+  observerOptions = []
   useUIStore.setState({ searchQuery: '', selectedEmailId: null })
 
   vi.stubGlobal(
     'IntersectionObserver',
     class {
-      constructor(callback: IntersectionObserverCallback) {
+      constructor(callback: IntersectionObserverCallback, options?: IntersectionObserverInit) {
         observerCallbacks.push(callback)
+        observerOptions.push(options)
       }
       observe() {}
       disconnect() {}
@@ -147,6 +152,20 @@ describe('EmailList', () => {
     })
     expect(screen.getAllByRole('button')).toHaveLength(100)
     expect(requestedUrls[1]).toContain('skip=50')
+  })
+
+  it('should observe the sentinel against the scroll container, not the viewport', async () => {
+    renderList(
+      <div data-testid="scroll-container" style={{ overflowY: 'auto' }}>
+        <EmailList />
+      </div>
+    )
+    await screen.findByText('Message 119')
+
+    // With the viewport as root the container clips the sentinel, rootMargin
+    // never applies and the list stopped loading after the second page
+    expect(observerOptions.length).toBeGreaterThan(0)
+    expect(observerOptions.at(-1)?.root).toBe(screen.getByTestId('scroll-container'))
   })
 
   it('should stop requesting pages once everything is loaded', async () => {

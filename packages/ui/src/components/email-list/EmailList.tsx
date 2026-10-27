@@ -6,6 +6,17 @@ import { EmailListItem } from './EmailListItem'
 /** How far ahead of the end of the list to start loading the next page */
 const PREFETCH_MARGIN = '400px'
 
+/** The nearest ancestor that scrolls vertically, or null when only the page does */
+function findScrollParent(element: HTMLElement): HTMLElement | null {
+  for (let parent = element.parentElement; parent; parent = parent.parentElement) {
+    const { overflowY } = getComputedStyle(parent)
+    if (overflowY === 'auto' || overflowY === 'scroll') {
+      return parent
+    }
+  }
+  return null
+}
+
 export function EmailList() {
   const { items, total, isLoading, error, hasNextPage, isFetchingNextPage, fetchNextPage } =
     useEmailList()
@@ -21,13 +32,17 @@ export function EmailList() {
       return
     }
 
+    // Observe against the list's own scroll container. With the viewport as
+    // root, the container clips the sentinel before rootMargin can apply, and
+    // the zero-height sentinel never counts as visible once the list is
+    // scrolled to the bottom: loading stopped after the second page.
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries.some((entry) => entry.isIntersecting) && !isFetchingNextPage) {
           void fetchNextPage()
         }
       },
-      { rootMargin: PREFETCH_MARGIN }
+      { root: findScrollParent(sentinel), rootMargin: PREFETCH_MARGIN }
     )
 
     observer.observe(sentinel)

@@ -58,6 +58,7 @@ export interface LogConfig {
   verbose: boolean
   silent: boolean
   logMailContents: boolean
+  logFormat?: 'text' | 'json'
 }
 
 /**
@@ -281,6 +282,9 @@ export interface MailDevConfig {
    */
   logMailContents?: boolean
 
+  /** Log output format. CLI: --log-format; env: MAILDEV_LOG_FORMAT */
+  logFormat?: 'text' | 'json'
+
   // === v3 New Options ===
 
   /**
@@ -337,6 +341,7 @@ export interface CLIOptions {
   verbose?: boolean
   silent?: boolean
   logMailContents?: boolean
+  logFormat?: 'text' | 'json'
   mcp?: boolean
   config?: string
 }

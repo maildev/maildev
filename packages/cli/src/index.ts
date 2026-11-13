@@ -61,6 +61,7 @@ export class MailDev {
     const logger = createLogger({
       verbose: fullConfig.verbose ?? false,
       silent: fullConfig.silent ?? false,
+      format: fullConfig.logFormat ?? 'text',
     })
 
     this.orchestrator = createOrchestrator({

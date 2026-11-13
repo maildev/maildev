@@ -43,6 +43,7 @@ program.action(async (options: CLIOptions) => {
   const logger = createLogger({
     verbose: options.verbose ?? false,
     silent: options.silent ?? false,
+    format: options.logFormat ?? (process.env.MAILDEV_LOG_FORMAT === 'json' ? 'json' : 'text'),
   })
 
   try {
@@ -53,6 +54,7 @@ program.action(async (options: CLIOptions) => {
     logger.configure({
       verbose: config.verbose ?? false,
       silent: config.silent ?? false,
+      format: config.logFormat ?? 'text',
     })
 
     // Log config file if found

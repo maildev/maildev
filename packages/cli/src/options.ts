@@ -145,6 +145,7 @@ export function configureOptions(program: Command): void {
       '--log-mail-contents',
       'Log JSON representation of received emails'
     )
+    .option('--log-format <format>', 'Log output format: text or json (default: text)')
 
     // === v3 New Options ===
     .option(
@@ -173,6 +174,7 @@ Environment Variables:
   MAILDEV_MAIL_DIRECTORY Directory for persisting emails
   MAILDEV_MAX_MESSAGE_SIZE Max accepted message size in bytes (default: 52428800)
   MAILDEV_MAX_EMAILS    Maximum emails to keep (0 = unlimited, the default)
+  MAILDEV_LOG_FORMAT    Log output format: text (default) or json
 `
 
 /**

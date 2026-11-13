@@ -53,6 +53,7 @@ function cliOptionsToConfig(options: CLIOptions): PartialMailDevConfig {
   if (options.autoRelayRules !== undefined) config.autoRelayRules = options.autoRelayRules
   if (options.mailDirectory !== undefined) config.mailDirectory = options.mailDirectory
   if (options.config !== undefined) config.config = options.config
+  if (options.logFormat !== undefined) config.logFormat = options.logFormat
 
   // Boolean options
   if (options.incomingSecure !== undefined) config.incomingSecure = options.incomingSecure

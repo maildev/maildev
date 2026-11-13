@@ -20,6 +20,55 @@ describe('Logger', () => {
     vi.restoreAllMocks()
   })
 
+  describe('JSON format', () => {
+    it('emits single-line records for every logger method', () => {
+      const logger = new Logger({ format: 'json', verbose: true })
+      logger.debug('debug %s', 'argument')
+      logger.info('line one\nline two', { id: 1 })
+      logger.success('ready')
+      logger.warn('warning')
+      logger.error('failure', new Error('details'))
+      logger.banner(['MailDev', 'Ready'])
+      logger.keyValue('SMTP', '1025')
+      logger.email('from@example.com', 'to@example.com', 'hello\nworld')
+      logger.emailContents({ subject: 'hello\nworld' })
+      const records = [
+        ...consoleSpy.log.mock.calls,
+        ...consoleSpy.warn.mock.calls,
+        ...consoleSpy.error.mock.calls,
+      ].map(([line, ...args]) => {
+        expect(args).toEqual([])
+        expect(line).not.toContain('\n')
+        expect(line).not.toContain(String.fromCharCode(27))
+        const record = JSON.parse(line)
+        expect(new Date(record.timestamp).toISOString()).toBe(record.timestamp)
+        expect(record.message).toEqual(expect.any(String))
+        return record
+      })
+      expect(records).toHaveLength(9)
+      expect(records.map((record) => record.level)).toEqual([
+        'debug', 'info', 'info', 'info', 'info', 'info', 'info', 'warn', 'error',
+      ])
+      expect(records[0].message).toBe('debug argument')
+      expect(records[1].message).toContain('line one\nline two')
+      expect(records[8].message).toContain('details')
+    })
+
+    it('keeps verbose and silent filtering when configured at runtime', () => {
+      const logger = new Logger()
+      logger.configure({ format: 'json' })
+      logger.debug('hidden')
+      expect(consoleSpy.log).not.toHaveBeenCalled()
+      logger.info('visible')
+      expect(JSON.parse(consoleSpy.log.mock.calls[0][0]).message).toBe('visible')
+      logger.configure({ silent: true, verbose: true })
+      logger.debug('hidden')
+      logger.error('hidden')
+      expect(consoleSpy.log).toHaveBeenCalledTimes(1)
+      expect(consoleSpy.error).not.toHaveBeenCalled()
+    })
+  })
+
   describe('constructor', () => {
     it('should create logger with default options', () => {
       const logger = new Logger()

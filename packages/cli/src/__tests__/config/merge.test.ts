@@ -24,6 +24,13 @@ describe('resolveConfig', () => {
     vi.clearAllMocks()
   })
 
+  it('resolves log format from environment with CLI precedence', async () => {
+    expect((await resolveConfig()).config.logFormat).toBe('text')
+    process.env.MAILDEV_LOG_FORMAT = 'json'
+    expect((await resolveConfig()).config.logFormat).toBe('json')
+    expect((await resolveConfig({ logFormat: 'text' })).config.logFormat).toBe('text')
+  })
+
   it('should return default config when no options provided', async () => {
     const { config } = await resolveConfig({})
 

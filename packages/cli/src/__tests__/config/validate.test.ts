@@ -9,6 +9,15 @@ describe('validateConfig', () => {
     ...overrides,
   })
 
+  it('accepts JSON logging and rejects unknown log formats', () => {
+    expect(validateConfig(createConfig({ logFormat: 'json' })).valid).toBe(true)
+    const config = createConfig()
+    Object.assign(config, { logFormat: 'xml' })
+    expect(validateConfig(config).errors).toContainEqual({
+      field: 'logFormat', message: 'logFormat must be text or json',
+    })
+  })
+
   describe('valid configurations', () => {
     it('should accept default configuration', () => {
       const result = validateConfig(getDefaultConfig())

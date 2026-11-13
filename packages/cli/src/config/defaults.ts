@@ -37,6 +37,7 @@ export const DEFAULT_CONFIG: MailDevConfig = {
   verbose: false,
   silent: false,
   logMailContents: false,
+  logFormat: 'text',
 
   // v3 features (off by default for compatibility)
   mcp: false,

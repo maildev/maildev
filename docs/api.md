@@ -490,6 +490,14 @@ const maildev = new MailDev({
 })
 ```
 
+Use `maildev --log-format json` or `MAILDEV_LOG_FORMAT=json` for log aggregators.
+The default is `text`. The same setting is available as `logFormat: 'json'` on
+`MailDev` or `format: 'json'` on `createLogger`. Each JSON record occupies one
+line with `level`, an ISO `timestamp`, and `message`; embedded newlines are
+escaped, and colors are disabled. Warnings and errors still use stderr.
+`verbose` and `silent` retain their usual behavior, including with
+`--log-mail-contents`.
+
 ### Middleware Integration
 
 You can run MailDev behind a proxy or within an existing Express/Fastify app:

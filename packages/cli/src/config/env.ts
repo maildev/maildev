@@ -39,6 +39,8 @@ const ENV_MAPPING: Record<string, keyof PartialMailDevConfig> = {
   MAILDEV_MAIL_DIRECTORY: 'mailDirectory',
   MAILDEV_MAX_EMAILS: 'maxEmails',
 
+  MAILDEV_LOG_FORMAT: 'logFormat',
+
   // API URL (for MCP client mode)
   MAILDEV_API_URL: 'webIp', // Special handling needed
 }

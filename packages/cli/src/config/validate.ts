@@ -177,6 +177,10 @@ export function validateConfig(config: MailDevConfig): ValidationResult {
     })
   }
 
+  if (config.logFormat !== undefined && !['text', 'json'].includes(config.logFormat)) {
+    errors.push({ field: 'logFormat', message: 'logFormat must be text or json' })
+  }
+
   // Validate auto-relay rules file
   if (config.autoRelayRules) {
     const rulesError = validateFilePath(config.autoRelayRules, 'autoRelayRules')
